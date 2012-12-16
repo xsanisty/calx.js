@@ -82,7 +82,7 @@
                 var $index  = 0;
                 //console.log($pieces);
                 $.each($pieces,function($k, $v){
-                    $kv             = $v.split('=');
+                    $kv             = $v.split(':');
                     $keyval[$index] = '"'+$kv[0]+'":"'+$kv[1]+'"';
                     $index++;
                 });
