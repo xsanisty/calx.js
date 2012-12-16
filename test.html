@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html" />
+	<meta name="author" content="ikhsan" />
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="jquery.calx.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#calx').calx();
+        });
+    </script>
+	<title>jQuery Calx Test</title>
+</head>
+
+<body>
+    <form id="calx">
+        A = <input type="text" id="A" value="3" /><br />
+        B = <input type="text" id="B" value="4" /><br />
+        C = <input type="text" id="C" data-formula="$A+$B" data-format="format=currency;decimal=2;prefix=%" /> (A + B)<br />
+        D = <input type="text" id="D" data-formula="$A/$E" /> (A / E)<br />
+        E = <input type="text" id="E" data-formula="$B*$C" /> (B * C)<br />
+        F = <input type="text" id="F" data-formula="$A^$B" /> (A ^ B)<br />
+        G = <input type="text" id="G" data-formula="$A+$D" /> (A + D)<br />
+        <input type="button" onclick="calculate()" value="exec" />
+    </form>
+</body>
+</html>
