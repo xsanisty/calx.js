@@ -740,18 +740,14 @@
     			return s.join(dec);
     		},
     		getNumber: function(formattedNumber, options) {
-    		  console.log(options);
-    			var reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
+          		var reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
     			var reDec   = new RegExp(this._escapeRegex(options.decsep), 'g');
     			//var reSuf   = new RegExp(this._escapeRegex(options.suffix), 'g');
     			//var rePref  = new RegExp(this._escapeRegex(options.prefix), 'g');
     			var $number = formattedNumber.substring(options.prefix.length); //remove prefix
                 $number = $number.substring(options.suffix*-1); //remove suffix
-                console.log($number);
     			$number = $number.replace(reNum, ''); //remove thousand separator
-                console.log($number);
     			$number = $number.replace(reDec, '.'); //change decimal delimiter to default '.'
-                console.log($number);
                 $number = parseFloat($number);
                 if(isNaN($number)){
                     return formattedNumber;
