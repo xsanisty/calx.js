@@ -1,7 +1,8 @@
 ## Overview 
 jQuery Calx is simple jQuery plugin for building javascript based calculation form. This is the first initial release, so there is still lack of features and still changed recently. In the core of jQuery Calx, it uses standard calculator jison parser <
 
-http://zaach.github.com/jison/try/ which is generated using standard jison calculator grammar. If you are interested about developing this plugin, please kindly fork it on github <a href="https://github.com/ikhsan017/calx" target="_blank">https://github.com/ikhsan017/calx</a> 
+http://zaach.github.com/jison/try/ which is generated using standard jison calculator grammar. 
+
 ## Documentation 
 Since this plugin is still under intensive development, the documentation is very limited 
 
@@ -20,11 +21,11 @@ Since this plugin is still under intensive development, the documentation is ver
 *   Every input field that contain data-formula attribute, will be marked as readonly and "readonly" class added to the input element
 *   Every input field that have no data-formula defined, will have "writeable" class added to the input element
 
-<form id="calx">
-         A = <input id="A" type="text" value="3" /> 
-         B = <input id="B" type="text" value="4" /> 
-        (A+B)= <input id="C" type="text" data-formula="$A+$B" />
-</form>
+&lt;form id="calx"&gt;
+         A = &lt;input id="A" type="text" value="3" /&gt; 
+         B = &lt;input id="B" type="text" value="4" /&gt; 
+        (A+B)= &lt;input id="C" type="text" data-formula="$A+$B" /&gt;
+&lt;/form&gt;
 
 #### CSS class 
 Css class is optional, you can define class for readonly, writeable, and absolute type of input field 
