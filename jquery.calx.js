@@ -757,6 +757,9 @@
                 }
     		},
     		formatNumber: function(number, $format) {
+    		    if((number+'').trim()==''){
+    		        return '';
+    		    }
     			switch ($format.format.toLowerCase()) {
     			case 'percent':
     				var $val = this._percent(number, $format.decimal);
@@ -836,9 +839,14 @@
                 
                 //replace the formula with the value
                 if(typeof(matrix.data[$key].formula)!='undefined'){
+                    var $replaceVal = {};
+                    $.each(matrix.data[$key].dependency,function($k,$v){
+                        $replaceVal['$'+$v]=matrix.value[$v];
+                    });
+                    //console.log($replaceVal);
                     if(matrix.data[$key].formula.trim()!=''){
                         var $equation = matrix.data[$key].formula.replace(/\$\w+/g, function(all) {
-                            return matrix.value[all] || all;
+                            return $replaceVal[all] || '0';
                         });
                         
                         //console.log('formula for '+$key+': '+matrix.data[$key].formula);
@@ -848,22 +856,39 @@
                         if($equation.indexOf('$') < 0){
                             matrix.data[$key].value = utility.parser.parse($equation);
                             //console.log('equation result: '+matrix.data[$key].value);
-                            matrix.value['$'+$key] = matrix.data[$key].value.toString();
+                            matrix.value[$key] = matrix.data[$key].value.toString();
                         }
                     }
                 }
                 //console.log('cell '+$key+' updated!');
                 //console.log($dataObj);
             }
-                if(matrix.value['$'+$key] < 0 && matrix.data[$key].format.absolute!=false){
+            matrix.data[$key].updated=true;
+            matrix.apply($key);
+                
+        },
+        apply   : function($key){
+            if(typeof($key) == 'undefined'){
+                $.each(matrix.value,function($index,$val){
+                    $key = $index.replace(/\$/g,'');
+                    
+                    if($val < 0 && matrix.data[$key].format.absolute!=false){
+                        $('#'+$key).addClass('absolute');
+                        $('#'+$key).val(utility.formatter.formatNumber(Math.abs(matrix.value[$key]),matrix.data[$key].format));
+                    }else{
+                        $('#'+$key).removeClass('absolute');
+                        $('#'+$key).val(utility.formatter.formatNumber(matrix.value[$key],matrix.data[$key].format));
+                    }
+                });
+            }else{
+                if(matrix.value[$key] < 0 && matrix.data[$key].format.absolute!=false){
                     $('#'+$key).addClass('absolute');
-                    $('#'+$key).val(utility.formatter.formatNumber(Math.abs(matrix.value['$'+$key]),matrix.data[$key].format));
+                    $('#'+$key).val(utility.formatter.formatNumber(Math.abs(matrix.value[$key]),matrix.data[$key].format));
                 }else{
                     $('#'+$key).removeClass('absolute');
-                    $('#'+$key).val(utility.formatter.formatNumber(matrix.value['$'+$key],matrix.data[$key].format));
+                    $('#'+$key).val(utility.formatter.formatNumber(matrix.value[$key],matrix.data[$key].format));
                 }
-                matrix.data[$key].updated=true;
-                
+            }
         },
         data    : {}, //detail data attribute of each cell
         value   : {}  //native numberic value of each cell
@@ -900,8 +925,11 @@
                     $input.addClass('writeable');
                 }
                 
-                var $matrixVal  = parseFloat(utility.formatter.getNumber($value,$format));
-                matrix.value['$'+$id]=isNaN($matrixVal)? '0' : $matrixVal.toString();
+                var $matrixVal  = parseFloat($value);
+                //console.log($matrixVal);
+                $matrixVal = (isNaN($matrixVal)) ? utility.formatter.getNumber($value,$format) : $matrixVal;
+                //console.log($matrixVal);
+                matrix.value[$id]=isNaN($matrixVal)? '' : $matrixVal.toString();
                 matrix.data[$id] = {
                     'updated'   : false,
                     'value'     : $value,
@@ -925,10 +953,9 @@
                 var $formatVal  = utility.formatter.formatNumber($intVal,matrix.data[$id].format);
                 
                 //console.log($nativeVal+' => '+$intVal+' => '+$formatVal);
-                if($intVal!=matrix.value['$'+$id]){
-                    matrix.value['$'+$id] = $intVal.toString();
+                if($intVal!=matrix.value[$id]){
+                    matrix.value[$id] = $intVal.toString();
                     matrix.update();
-                    console.log(matrix);
                 }
                 $input.val($formatVal);
             });
@@ -941,18 +968,18 @@
                 
                 //console.log($intVal);
                 if(matrix.data[$id].format.format=='percent'){
-                    $input.val(matrix.value['$'+$id]*100);
+                    $input.val(matrix.value[$id]*100);
                 //    $input.val($intVal*100);
                 }else{
-                    $input.val(matrix.value['$'+$id]);
+                    $input.val(matrix.value[$id]);
                 //    $input.val($intVal);
                 }
                 
             });
             
             //console.log(matrix);
-            matrix.update();
-            console.log(matrix);
+            matrix.apply();
+            //console.log(matrix);
         });
     }
     
