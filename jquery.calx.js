@@ -12,6 +12,7 @@
         event   : 'blur'
     }
     
+    
 	var defaultFormat = {
 		format    : 'decimal',    //currency, percent
 		decimal   : 0,            //digit decimal after number (xxx.00)
@@ -740,7 +741,7 @@
     			return s.join(dec);
     		},
     		getNumber: function(formattedNumber, options) {
-          		var reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
+    			var reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
     			var reDec   = new RegExp(this._escapeRegex(options.decsep), 'g');
     			//var reSuf   = new RegExp(this._escapeRegex(options.suffix), 'g');
     			//var rePref  = new RegExp(this._escapeRegex(options.prefix), 'g');
@@ -927,6 +928,7 @@
                 if($intVal!=matrix.value['$'+$id]){
                     matrix.value['$'+$id] = $intVal.toString();
                     matrix.update();
+                    console.log(matrix);
                 }
                 $input.val($formatVal);
             });
@@ -934,20 +936,23 @@
             $input_rw.bind('focus',function(){
                 var $input      = $(this);
                 var $id         = $input.attr('id');
-                var $nativeVal  = $input.val();
-                var $intVal     = utility.formatter.getNumber($nativeVal,matrix.data[$id].format);
+                //var $nativeVal  = $input.val();
+                //var $intVal     = utility.formatter.getNumber($nativeVal,matrix.data[$id].format);
                 
                 //console.log($intVal);
                 if(matrix.data[$id].format.format=='percent'){
-                    $input.val($intVal*100);
+                    $input.val(matrix.value['$'+$id]*100);
+                //    $input.val($intVal*100);
                 }else{
-                    $input.val($intVal);
+                    $input.val(matrix.value['$'+$id]);
+                //    $input.val($intVal);
                 }
+                
             });
             
             //console.log(matrix);
             matrix.update();
-            //console.log(matrix);
+            console.log(matrix);
         });
     }
     
