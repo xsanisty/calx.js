@@ -708,18 +708,18 @@
     			return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     		},
     		_decimal: function(number, decimal) {
-    			$number = parseFloat(number);
+    			var $number = parseFloat(number);
     			return (isNaN($number)) ? false : $number.toFixed(decimal);
     		},
     		_percent: function(number, decimal) {
-    			$number = parseFloat(number);
+    			var $number = parseFloat(number);
     			return (isNaN($number)) ? false : ($number * 100).toFixed(decimal);
     		},
             /** number format, courtesy of phpjs.org with little modification
              *  http://phpjs.org/functions/number_format:481
              */
     		_number: function(number, decimals, decimalSeparator, thousandSeparator) {
-    			number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    			var number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
     			var n = !isFinite(+number) ? 0 : +number,
     				prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
     				sep = (typeof thousandSeparator === 'undefined') ? ',' : thousandSeparator,
@@ -741,11 +741,11 @@
     			return s.join(dec);
     		},
     		getNumber: function(formattedNumber, options) {
-    			reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
-    			reDec   = new RegExp(this._escapeRegex(options.decsep), 'g');
-    			reSuf   = new RegExp(this._escapeRegex(options.suffix), 'g');
-    			rePref  = new RegExp(this._escapeRegex(options.prefix), 'g');
-    			$number = formattedNumber.replace(rePref, ''); //remove prefix
+    			var reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
+    			var reDec   = new RegExp(this._escapeRegex(options.decsep), 'g');
+    			var reSuf   = new RegExp(this._escapeRegex(options.suffix), 'g');
+    			var rePref  = new RegExp(this._escapeRegex(options.prefix), 'g');
+    			var $number = formattedNumber.replace(rePref, ''); //remove prefix
                 $number = $number.replace(reSuf, ''); //remove suffix
     			$number = $number.replace(reNum, ''); //remove thousand separator
     			$number = $number.replace(reDec, '.'); //change decimal delimiter to default '.'
@@ -759,15 +759,15 @@
     		formatNumber: function(number, $format) {
     			switch ($format.format.toLowerCase()) {
     			case 'percent':
-    				$val = this._percent(number, $format.decimal);
+    				var $val = this._percent(number, $format.decimal);
     				break;
     			case 'currency':
     			case 'number':
-    				$val = this._number(parseFloat(number), $format.decimal, $format.decimalSeparator, $format.thousandSeparator);
+    				var $val = this._number(parseFloat(number), $format.decimal, $format.decimalSeparator, $format.thousandSeparator);
     				break;
     			case 'decimal':
     			default:
-    				$val = this._decimal(number, $format.decimal);
+    				var $val = this._decimal(number, $format.decimal);
     				break;
     			}
     			return (!$val) ? number : $format.prefix + $val + $format.suffix;
@@ -780,18 +780,18 @@
                         var $index  = 0;
                         //console.log($pieces);
                         $.each($pieces,function($k, $v){
-                            $kv             = $v.split(':');
+                            var $kv             = $v.split(':');
                             $keyval[$index] = '"'+$kv[0]+'":"'+$kv[1]+'"';
                             $index++;
                         });
-                        $format = $.parseJSON('{'+$keyval.join(',')+'}');
+                        var $format = $.parseJSON('{'+$keyval.join(',')+'}');
                         //console.log($format);
                     }
                 }else{
-                    $format = {}
+                    var $format = {}
                 }
                 
-                $defFormat = $.parseJSON(JSON.stringify(defaultFormat));
+                var $defFormat = $.parseJSON(JSON.stringify(defaultFormat));
                 return $.extend($defFormat,$format);
             }
     	}
@@ -824,16 +824,16 @@
                     $.each(matrix.data[$key].dependency,function($dkey, $dval){
                         if(!matrix.data[$dval].updated){
                             matrix.calculate($dval);
-                        }else{
+                        }//else{
                             //console.log('dependency :'+$dval+' already updated!');
-                        }
+                        //}
                     });
                 }
                 
                 //replace the formula with the value
                 if(typeof(matrix.data[$key].formula)!='undefined'){
                     if(matrix.data[$key].formula.trim()!=''){
-                        $equation = matrix.data[$key].formula.replace(/\$\w+/g, function(all) {
+                        var $equation = matrix.data[$key].formula.replace(/\$\w+/g, function(all) {
                             return matrix.value[all] || all;
                         });
                         
@@ -848,6 +848,9 @@
                         }
                     }
                 }
+                //console.log('cell '+$key+' updated!');
+                //console.log($dataObj);
+            }
                 if(matrix.value['$'+$key] < 0 && matrix.data[$key].format.absolute!=false){
                     $('#'+$key).addClass('absolute');
                     $('#'+$key).val(utility.formatter.formatNumber(Math.abs(matrix.value['$'+$key]),matrix.data[$key].format));
@@ -856,9 +859,7 @@
                     $('#'+$key).val(utility.formatter.formatNumber(matrix.value['$'+$key],matrix.data[$key].format));
                 }
                 matrix.data[$key].updated=true;
-                //console.log('cell '+$key+' updated!');
-                //console.log($dataObj);
-            }
+                
         },
         data    : {}, //detail data attribute of each cell
         value   : {}  //native numberic value of each cell
@@ -866,23 +867,23 @@
     
     $.fn.calx = function(action, options){
         return this.each(function(){
-            $form = $(this);
+            var $form = $(this);
             //scan for input type=text
-            $form.find('input[type=text]').each(function(){
-                $input      = $(this);
-                $formula    = $input.attr('data-formula');
-                $format     = $input.attr('data-format');
-                $format     = utility.formatter.parseFormat($format);
-                $id         = $input.attr('id');
-                $value      = $input.val();
-                $dependency = [];
+            $form.find('input, select').each(function(){
+                var $input      = $(this);
+                var $formula    = $input.attr('data-formula');
+                var $format     = $input.attr('data-format');
+                var $format     = utility.formatter.parseFormat($format);
+                var $id         = $input.attr('id');
+                var $value      = $input.val();
+                var $dependency = [];
                 
                 
                 if($formula){
                     $input.attr('readonly',true);
-                    $placeholder  = /\$\w+/g;
+                    var $placeholder  = /\$\w+/g;
                     while (match = $placeholder.exec($formula)){
-                        $key = match[0].replace('$','');
+                        var $key = match[0].replace('$','');
                         if($dependency.indexOf($key) < 0){
                             $dependency.push($key);
                         }
@@ -892,7 +893,7 @@
                     $input.addClass('writeable');
                 }
                 
-                $matrixVal  = parseFloat(utility.formatter.getNumber($value,$format));
+                var $matrixVal  = parseFloat(utility.formatter.getNumber($value,$format));
                 matrix.value['$'+$id]=isNaN($matrixVal)? '0' : $matrixVal.toString();
                 matrix.data[$id] = {
                     'updated'   : false,
@@ -907,14 +908,16 @@
             
                 
             //later change to options.event
-            $input_rw = $form.find('input:not([readonly])'); //the writeable input
+            var $input_rw = $form.find('input:not([readonly])'); //the writeable input
             $input_rw.bind('blur',function(){
-                $input      = $(this);
-                $id         = $input.attr('id');
-                $nativeVal  = $input.val();
-                $intVal     = isNaN(parseFloat($nativeVal)) ? 0 : parseFloat($nativeVal);
-                $formatVal  = utility.formatter.formatNumber($nativeVal,matrix.data[$id].format);
+                var $input      = $(this);
+                var $id         = $input.attr('id');
+                var $nativeVal  = $input.val();
+                var $intVal     = isNaN(parseFloat($nativeVal)) ? 0 : parseFloat($nativeVal);
+                $intVal         = (matrix.data[$id].format.format=='percent') ? $intVal/100 : $intVal;
+                var $formatVal  = utility.formatter.formatNumber($intVal,matrix.data[$id].format);
                 
+                //console.log($nativeVal+' => '+$intVal+' => '+$formatVal);
                 if($intVal!=matrix.value['$'+$id]){
                     matrix.value['$'+$id] = $intVal.toString();
                     matrix.update();
@@ -923,11 +926,17 @@
             });
             
             $input_rw.bind('focus',function(){
-                $input      = $(this);
-                $id         = $input.attr('id');
-                $nativeVal  = $input.val();
-                $intVal     = utility.formatter.getNumber($nativeVal,matrix.data[$id].format);
-                $input.val($intVal);
+                var $input      = $(this);
+                var $id         = $input.attr('id');
+                var $nativeVal  = $input.val();
+                var $intVal     = utility.formatter.getNumber($nativeVal,matrix.data[$id].format);
+                
+                //console.log($intVal);
+                if(matrix.data[$id].format.format=='percent'){
+                    $input.val($intVal*100);
+                }else{
+                    $input.val($intVal);
+                }
             });
             
             //console.log(matrix);
