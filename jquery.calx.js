@@ -12,7 +12,6 @@
         event   : 'blur'
     }
     
-    
 	var defaultFormat = {
 		format    : 'decimal',    //currency, percent
 		decimal   : 0,            //digit decimal after number (xxx.00)
@@ -741,14 +740,18 @@
     			return s.join(dec);
     		},
     		getNumber: function(formattedNumber, options) {
+    		  console.log(options);
     			var reNum   = new RegExp(this._escapeRegex(options.digitsep), 'g');
     			var reDec   = new RegExp(this._escapeRegex(options.decsep), 'g');
-    			var reSuf   = new RegExp(this._escapeRegex(options.suffix), 'g');
-    			var rePref  = new RegExp(this._escapeRegex(options.prefix), 'g');
-    			var $number = formattedNumber.replace(rePref, ''); //remove prefix
-                $number = $number.replace(reSuf, ''); //remove suffix
+    			//var reSuf   = new RegExp(this._escapeRegex(options.suffix), 'g');
+    			//var rePref  = new RegExp(this._escapeRegex(options.prefix), 'g');
+    			var $number = formattedNumber.substring(options.prefix.length); //remove prefix
+                $number = $number.substring(options.suffix*-1); //remove suffix
+                console.log($number);
     			$number = $number.replace(reNum, ''); //remove thousand separator
+                console.log($number);
     			$number = $number.replace(reDec, '.'); //change decimal delimiter to default '.'
+                console.log($number);
                 $number = parseFloat($number);
                 if(isNaN($number)){
                     return formattedNumber;
@@ -763,7 +766,7 @@
     				break;
     			case 'currency':
     			case 'number':
-    				var $val = this._number(parseFloat(number), $format.decimal, $format.decimalSeparator, $format.thousandSeparator);
+    				var $val = this._number(parseFloat(number), $format.decimal, $format.decsep, $format.digitsep);
     				break;
     			case 'decimal':
     			default:
@@ -792,7 +795,11 @@
                 }
                 
                 var $defFormat = $.parseJSON(JSON.stringify(defaultFormat));
-                return $.extend($defFormat,$format);
+                $format = $.extend($defFormat,$format);
+                if($format.decsep == $format.digitsep){
+                    return false;
+                }
+                return $format;
             }
     	}
     }
@@ -878,6 +885,9 @@
                 var $value      = $input.val();
                 var $dependency = [];
                 
+                if(!$format){
+                    $.error("Digit separator and decimal separator should be different charracter, found at #"+$id);
+                }
                 
                 if($formula){
                     $input.attr('readonly',true);
