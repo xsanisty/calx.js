@@ -35,7 +35,7 @@ Firstly, of course you need to build the form structure, its simple enough to ma
     <input type="text" id="discount" value="15" data-format="format:percent;decimal:2;suffix: %" /><br />
     Total :<br />
     <input type="text" id="total" data-formula="($price*$qty)*(1-$discount)" data-format="format:currency;decimal:2;prefix:$ " /><br />
-    </form>
+</form>
 ```
 
 #### CSS Classes
