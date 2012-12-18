@@ -38,7 +38,6 @@ Firstly, of course you need to build the form structure, its simple enough to ma
     </form>
 ```
 
-
 #### CSS Classes
 Css classew is optional, you can define class for readonly, writeable, and absolute type of input field. Below is the sample input classes
 
