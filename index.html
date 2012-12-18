@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Calx : Simple jQuery plugin for building calculation form" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Calx</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ikhsan017/calx">View on GitHub</a>
+
+          <h1 id="project_title">Calx</h1>
+          <h2 id="project_tagline">Simple jQuery plugin for building calculation form</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ikhsan017/calx/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ikhsan017/calx/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>Overview</h2>
+
+<p>jQuery Calx is simple jQuery plugin for building javascript based calculation form. This is the initial release, so there is still lack of features and still changed recently. In the core of jQuery Calx, it uses standard calculator jison parser</p>
+
+<p><a href="http://zaach.github.com/jison/try/">http://zaach.github.com/jison/try/</a> which is generated using standard jison calculator grammar. But you can extend the parser to use your own parser (this feature still in dev)</p>
+
+<h2>Documentation</h2>
+
+<p>Since this plugin is still under intensive development, the documentation is very limited </p>
+
+<h4>HTML Structure</h4>
+
+<p>Firstly, of course you need to build the form structure, its simple enough to make the calculation form work </p>
+
+<ul>
+<li>  Specify the form id and the id for each form element, this id attribute will be used as formula reference. ( e.g. :  )</li>
+<li>  Specify data-formula attribute for the calculation formula. the variable placeholder format is dollar sign [$+reference_id] followed by standard calculation operators [+-/*^()] ( e.g. )</li>
+<li>  Specify data-format attribute if you want to format the value of the form, data-ormat syntax use css like syntax with key:value pair and delimited by semicolon (;). ( e.g.  ) Below is available data format:<br><ul>
+<li>  format, define how the number should be formatted (default : number)
+
+<ul>
+<li>  number : format input value as number without any formatting ( e.g. 109878.2345 )</li>
+<li>  percent : format input value as percentage and will be divided by 100 on calculation process ( e.g. value of 10 will be parsed as 0.1 when calculation is performed )</li>
+<li>  currency : format input value as currency, the decimal separator and thousand separator depend on decsep and digitsep</li>
+</ul>
+</li>
+<li>  decimal, define how many decimal place at the end of number ( default: 0 )</li>
+<li>  prefix, append prefix to the value, useful for currency format ( e.g. $ 1,000.00 | default: '' )</li>
+<li>  suffix, append prefix to the value, useful for percentage, measurement unit, etc ( e.g. 100 miles, 80 % | default: '' )</li>
+<li>  digitsep, digit separator per thousand ( e.g. 1,000,987 | default: , )</li>
+<li>  decsep, decimal separator ( e.g. 1,000,987.34 | default: .  )</li>
+<li>  absolute, mark negative number as absolute number (will add "absolute" class to the input | default:false)</li>
+</ul>
+</li>
+<li>  Every input field that contain data-formula attribute, will be marked as readonly and "readonly" class added to the input element</li>
+<li>  Every input field that have no data-formula defined, will have "writeable" class added to the input element</li>
+</ul><div class="highlight"><pre><span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">"calx"</span><span class="nt">&gt;</span>
+    Price :<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"price"</span> <span class="na">value=</span><span class="s">"29.5"</span> <span class="na">data-format=</span><span class="s">"format:currency;decimal:2;prefix:$ "</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;</span>
+    Qty :<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"qty"</span> <span class="na">value=</span><span class="s">"4"</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;</span>
+    Discount :<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"discount"</span> <span class="na">value=</span><span class="s">"15"</span> <span class="na">data-format=</span><span class="s">"format:percent;decimal:2;suffix: %"</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;</span>
+    Total :<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"total"</span> <span class="na">data-formula=</span><span class="s">"($price*$qty)*(1-$discount)"</span> <span class="na">data-format=</span><span class="s">"format:currency;decimal:2;prefix:$ "</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+</pre></div>
+
+<h4>CSS Classes</h4>
+
+<p>Css classew is optional, you can define class for readonly, writeable, and absolute type of input field. Below is the sample input classes</p>
+
+<div class="highlight"><pre><span class="nt">input</span><span class="nc">.writeable</span><span class="p">{</span>
+    <span class="k">background</span><span class="o">:</span><span class="m">#ffffcc</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">input</span><span class="nc">.readonly</span><span class="p">{</span>
+    <span class="k">background</span><span class="o">:</span><span class="m">#f8f8f8</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">input</span><span class="nc">.absolute</span><span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span><span class="nb">red</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>Javascript Section</h4>
+
+<p>Finally, after building the HTML structure and CSS rule, you can apply the calculator by simply type </p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="nx">$</span><span class="p">(</span><span class="s1">'#calx'</span><span class="p">).</span><span class="nx">calx</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>That's all, now your calculation form should work.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Calx maintained by <a href="https://github.com/ikhsan017">ikhsan017</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
