@@ -912,6 +912,7 @@
                     $.error("Digit separator and decimal separator should be different charracter, found at #"+$id);
                 }
                 
+                //add class dependency based on formula
                 if($formula){
                     $input.attr('readonly',true);
                     var $placeholder  = /\$\w+/g;
@@ -926,14 +927,18 @@
                     $input.addClass('writeable');
                 }
                 
+                var $matrixVal  = $value.replace($format.digitsep,'');
+                $matrixVal      = $matrixVal.replace($format.decsep,'.');
                 if($format.format.toLowerCase()=='percent'){
-                    var $matrixVal  = parseFloat($value)/100;
+                    $matrixVal      = parseFloat($matrixVal)/100;
                 }else{
-                    var $matrixVal  = parseFloat($value)
+                    $matrixVal  = parseFloat($matrixVal)
                 }
                 //console.log($matrixVal);
                 $matrixVal = (isNaN($matrixVal)) ? utility.formatter.getNumber($value,$format) : $matrixVal;
                 //console.log($matrixVal);
+                
+                //calculate actual value based on data-format, place it on matrix.value
                 matrix.value[$id]=isNaN($matrixVal)? '' : $matrixVal;
                 matrix.data[$id] = {
                     'updated'   : false,
@@ -975,7 +980,7 @@
                 //var $intVal     = utility.formatter.getNumber($nativeVal,matrix.data[$id].format);
                 
                 //console.log($intVal);
-                if(matrix.data[$id].format.format=='percent'){
+                if(matrix.data[$id].format.format=='percent' && matrix.value[$id]!=''){
                     $input.val(matrix.value[$id]*100);
                 //    $input.val($intVal*100);
                 }else{
