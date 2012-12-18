@@ -845,8 +845,8 @@
                     });
                     //console.log($replaceVal);
                     if(matrix.data[$key].formula.trim()!=''){
-                        var $equation = matrix.data[$key].formula.replace(/\$\w+/g, function(all) {
-                            return $replaceVal[all] || '0';
+                        var $equation = matrix.data[$key].formula.replace(/\$\w+/g, function($key) {
+                            return $replaceVal[$key] || '0';
                         });
                         
                         //console.log('formula for '+$key+': '+matrix.data[$key].formula);
@@ -926,7 +926,11 @@
                     $input.addClass('writeable');
                 }
                 
-                var $matrixVal  = parseFloat($value);
+                if($format.format.toLowerCase()=='percent'){
+                    var $matrixVal  = parseFloat($value)/100;
+                }else{
+                    var $matrixVal  = parseFloat($value)
+                }
                 //console.log($matrixVal);
                 $matrixVal = (isNaN($matrixVal)) ? utility.formatter.getNumber($value,$format) : $matrixVal;
                 //console.log($matrixVal);
@@ -957,7 +961,7 @@
                 if($intVal!=matrix.value[$id]){
                     matrix.value[$id] = $intVal;
                     matrix.update();
-                    console.log(matrix);
+                    //console.log(matrix);
                 }
                 if($nativeVal.trim()!=''){
                     $input.val($formatVal);
@@ -972,7 +976,7 @@
                 
                 //console.log($intVal);
                 if(matrix.data[$id].format.format=='percent'){
-                    if(matrix.value[$id].trim()!='') $input.val(matrix.value[$id]*100);
+                    $input.val(matrix.value[$id]*100);
                 //    $input.val($intVal*100);
                 }else{
                     $input.val(matrix.value[$id]);
