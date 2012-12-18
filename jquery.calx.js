@@ -757,7 +757,7 @@
                 }
     		},
     		formatNumber: function(number, $format) {
-    		    if((number+'').trim()==''){
+    		    if((number+'').trim()=='' || isNaN(number)){
     		        return '';
     		    }
     			switch ($format.format.toLowerCase()) {
@@ -854,9 +854,10 @@
                         
                         //if all value matched, execute the formula
                         if($equation.indexOf('$') < 0){
-                            matrix.data[$key].value = utility.parser.parse($equation);
+                            $result = utility.parser.parse($equation);
                             //console.log('equation result: '+matrix.data[$key].value);
-                            matrix.value[$key] = matrix.data[$key].value.toString();
+                            matrix.data[$key].value = isNaN($result) ? 0 : $result;
+                            matrix.value[$key] = isNaN($result) ? '' : matrix.data[$key].value;
                         }
                     }
                 }
@@ -929,7 +930,7 @@
                 //console.log($matrixVal);
                 $matrixVal = (isNaN($matrixVal)) ? utility.formatter.getNumber($value,$format) : $matrixVal;
                 //console.log($matrixVal);
-                matrix.value[$id]=isNaN($matrixVal)? '' : $matrixVal.toString();
+                matrix.value[$id]=isNaN($matrixVal)? '' : $matrixVal;
                 matrix.data[$id] = {
                     'updated'   : false,
                     'value'     : $value,
@@ -954,10 +955,13 @@
                 
                 //console.log($nativeVal+' => '+$intVal+' => '+$formatVal);
                 if($intVal!=matrix.value[$id]){
-                    matrix.value[$id] = $intVal.toString();
+                    matrix.value[$id] = $intVal;
                     matrix.update();
+                    console.log(matrix);
                 }
-                $input.val($formatVal);
+                if($nativeVal.trim()!=''){
+                    $input.val($formatVal);
+                }
             });
             
             $input_rw.bind('focus',function(){
@@ -968,7 +972,7 @@
                 
                 //console.log($intVal);
                 if(matrix.data[$id].format.format=='percent'){
-                    $input.val(matrix.value[$id]*100);
+                    if(matrix.value[$id].trim()!='') $input.val(matrix.value[$id]*100);
                 //    $input.val($intVal*100);
                 }else{
                     $input.val(matrix.value[$id]);
