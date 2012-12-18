@@ -9,7 +9,8 @@
 (function($) {
     /** default option */
     var defaultOptions   = {
-        event   : 'blur'
+        event   : 'blur',   //event that trigger the calculation
+        parser  : 'parser', //use eval or parser
     }
     
     
