@@ -7,6 +7,23 @@
 * lisence:  WTFPL
 */
 (function($) {
+    //ie support for Array.indexOf and Sstring.trim method
+    if (!Array.indexOf) {
+      Array.prototype.indexOf = function (obj, start) {
+        for (var i = (start || 0); i < this.length; i++) {
+          if (this[i] == obj) {
+            return i;
+          }
+        }
+        return -1;
+      }
+    }
+    if(typeof String.prototype.trim !== 'function') {
+      String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, ''); 
+      }
+    }
+
     /** default option */
     var defaultOptions   = {
         event   : 'blur',   //event that trigger the calculation
