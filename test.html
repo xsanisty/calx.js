@@ -19,8 +19,9 @@
     <form id="calx">
         Price :<br /> <input type="text" id="price" value="29" data-format="format:currency;decimal:2;prefix:$ " /><br />
         Qty :<br /> <input type="text" id="qty" value="4" /><br />
-        Discount :<br /> <input type="text" id="discount" value="15" data-format="format:percent;decimal:2;suffix: %" /><br />
-        Total (($price*$qty)*(1-$discount)):<br /> <input type="text" id="total" data-formula="($price*$qty)*(1-$discount)" data-format="format:currency;decimal:2;prefix:$ " /><br />
+        Discount :<br /> <input type="text" id="discount" data-formula="IF($qty >= 5 , IF($qty >= 10, 0.2, 0.1), 0)" data-format="format:percent;decimal:2;suffix: %" /><br />
+        Total (($price*$qty)*(1-$discount)):<br />
+	<input type="text" id="total" data-formula="($price*$qty)*(1-$discount)" data-format="format:currency;decimal:2;prefix:$ " /><br />
     </form>
 </body>
 </html>
