@@ -11,12 +11,16 @@
 "-"                   return '-'
 "+"                   return '+'
 "^"                   return '^'
-"mod"                 return 'mod'
+"MOD"                 return 'MOD'
 "("                   return '('
 ")"                   return ')'
-"%"                   return '%'
+","                   return ','
+">"                   return '>'
+"<"                   return '<'
+"="                   return '='
 "PI"                  return 'PI'
 "E"                   return 'E'
+"IF"                  return 'IF'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -24,12 +28,13 @@
 
 /* operator associations and precedence */
 
+%left ',' '='
+%left '<=' '>=' '<>' 
+%left '>' '<'
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' 'MOD'
 %left '^'
-%left 'mod'
-%left '%'
-%left UMINUS UPLUS
+%left UMINUS IF
 
 %start expressions
 
@@ -51,16 +56,22 @@ e
         {$$ = $1/$3;}
     | e '^' e
         {$$ = Math.pow($1, $3);}
-    | e 'mod' e
+    | e 'MOD' e
         {$$ = $1%$3;}
     | '-' e %prec UMINUS
         {$$ = -$2;}
-    | '+' e %prec UPLUS
-        {$$ = Math.abs($2);}
-    | NUMBER '%'
-        {$$ = $1 * 0.01;}
     | '(' e ')'
         {$$ = $2;}
+    | e '>' e
+        {$$ = $1 > $3}
+    | e '<' e
+        {$$ = $1 < $3}
+    | e '=' e
+        {$$ = $1 == $3}
+    | e '<''>' e
+        {$$ = $1 != $4}
+    | 'IF' '(' e ',' e ',' e ')'
+        {$$ = ($3) ? $5 : $7}
     | NUMBER
         {$$ = Number(yytext);}
     | E
