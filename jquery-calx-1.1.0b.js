@@ -2676,7 +2676,6 @@
 		}else{
 		    $value = $this.text();
 		    if ($value != '' && typeof($value)!='undefined') {
-			console.log('not form elm')
 			calx.setLang($formkey);
 			$value = ($.isNumeric($value)) ? $value : utility.formatter().unformat($value) ;
 			    
