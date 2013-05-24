@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Calx with autocalculate : false</title>
+    <title>Calx on the form with checkbox</title>
     <script type="application/x-javascript" src="../jquery-1.9.1.min.js"></script>
     <script type="application/x-javascript" src="../jquery-calx-1.1.0b.min.js"></script>
     <script type="application/x-javascript">
@@ -18,6 +18,7 @@
 	}
     </style>
 </head>
+<body>
     <form id="calx">
 	<h3>Build your own PC</h3>
 	<table>
@@ -61,7 +62,7 @@
 		</tr>
 		<tr>
 		    <td colspan="2">Discount:</td>
-		    <td><input type="text" id="discount" data-format="0[.]0 %" /></td>
+		    <td><input type="text" id="discount" data-format="0[.]0 %" value="0.1" /></td>
 		</tr>
 		<tr>
 		    <td colspan="2">Total:</td>
@@ -70,6 +71,5 @@
 	    </tbody>
 	</table>
     </form>
-<body>
 </body>
 </html>

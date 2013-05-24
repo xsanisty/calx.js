@@ -2654,9 +2654,10 @@
 		var $placeholder= /\$\w+/g;
 		var $dependency	= [];
 		var $value	= '';
+		var $tagname	= $this.prop('tagName').toLowerCase();
 		
-		if (form_element.indexOf($this.prop('tagName').toLowerCase()) > -1) {
-		    var $type = $this.attr('type').toLowerCase();
+		if (form_element.indexOf($tagname) > -1) {
+		    var $type = ($tagname == 'input') ? $this.attr('type').toLowerCase() : '';
 		    if ($type == 'checkbox' || $type == 'radio' ) {
 			var $value_checked 	= $this.attr('value');
 			var $value_unchecked	= $this.attr('data-unchecked');
@@ -2674,6 +2675,13 @@
 		    }
 		}else{
 		    $value = $this.text();
+		    if ($value != '' && typeof($value)!='undefined') {
+			console.log('not form elm')
+			calx.setLang($formkey);
+			$value = ($.isNumeric($value)) ? $value : utility.formatter().unformat($value) ;
+			    
+			$this.html(utility.formatter($value).format($format));
+		    }
 		}
 		
                 /** scan for cell dependency by it's formula */

@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Calx with autocalculate : false</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Calx with custom language</title>
     <script type="application/x-javascript" src="../jquery-1.9.1.min.js"></script>
     <script type="application/x-javascript" src="../jquery-calx-1.1.0b.min.js"></script>
     <script type="application/x-javascript">
 	$(document).ready(function(){
-	    $('#calx').calx({
-		autocalculate: false
+	    
+	    //register new language config
+	    $().calx('language',{
+		id : 'fr',
+		config: {
+		    delimiters: {
+			thousands: ' ',
+			decimal: ','
+		    },
+		    abbreviations: {
+			thousand: 'k',
+			million: 'm',
+			billion: 'b',
+			trillion: 't'
+		    },
+		    ordinal : function (number) {
+			return number === 1 ? 'er' : 'ème';
+		    },
+		    currency: {
+			symbol: '€'
+		    }
+	        }
 	    });
 	    
-	    $('#calculate').click(function(){
-		$('#calx').calx('update');
+	    //load the language
+	    $('#calx').calx({
+		language : 'fr'
 	    });
 	});
     </script>
@@ -39,9 +61,9 @@
 	    <tbody>
 		<tr>
 		    <td><input id="item1" type="text" name="item[]" value="HDD Baracuda Black 2TB" /></td>
-		    <td><input id="price1" type="text" name="price[]" value="150" data-format="$ 0,0[.]00" /></td>
-		    <td><input id="qty1" type="text" name="qty[]" value="1" data-format="0" /></td>
-		    <td><input id="disc1" type="text" name="disc[]" value="0.15" data-format="0.00 %" /></td>
+		    <td><input id="price1" type="text" name="price[]" value="152.65" data-format="$ 0,0[.]00" /></td>
+		    <td><input id="qty1" type="text" name="qty[]" value="4" data-format="0" /></td>
+		    <td><input id="disc1" type="text" name="disc[]" value="0" data-format="0.00 %" /></td>
 		    <td><input id="subtotal1" type="text" name="subtotal[]" value="" data-format="$ 0,0[.]00" data-formula="($price1*$qty1)*(1-$disc1)" /></td>
 		</tr>
 		<tr>
@@ -74,7 +96,7 @@
 		</tr>
 		
 		<tr>
-		    <td><input id="calculate" type="button" value="calculate" /></td>
+		    <td>&nbsp;</td>
 		    <td><input id="price_total" type="text" name="price_total" data-format="$ 0,0[.]00" data-formula="($price1+$price2+$price3+$price4+$price5)" /></td>
 		    <td colspan="2">Total Price :</td>
 		    <td><input id="total" type="text" name="total" value="" data-format="$ 0,0[.]00" data-formula="($subtotal1+$subtotal2+$subtotal3+$subtotal4+$subtotal5)" /></td>
