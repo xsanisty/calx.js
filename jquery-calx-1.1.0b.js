@@ -2489,16 +2489,23 @@
 	    var $val	= [];
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
-	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
-	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
-	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
-	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
+	    for (a in $start) {
+		$start[a] = parseInt($start[a]);
+		$stop[a]  = parseInt($stop[a]);
+	    }
+	    
+	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
+	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
+	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
+	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
 	    
 	    for (col = $c_start; col <= $c_stop; col++) {
 		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
-		    $val.push(calx.matrix[formula.key].value[$rowIndex]);
+		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
+		    $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
+		    $val.push($cellValue);
 		}
 	    }
 	    
@@ -2508,16 +2515,23 @@
 	    var $val	= [];
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
-	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
-	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
-	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
-	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
+	    for (a in $start) {
+		$start[a] = parseInt($start[a]);
+		$stop[a]  = parseInt($stop[a]);
+	    }
+	    
+	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
+	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
+	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
+	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
 	    
 	    for (col = $c_start; col <= $c_stop; col++) {
 		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
-		    $val.push(calx.matrix[formula.key].value[$rowIndex]);
+		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
+		    $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
+		    $val.push($cellValue);
 		}
 	    }
 	    
@@ -2527,16 +2541,22 @@
 	    var $val	= 0;
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
-	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
-	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
-	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
-	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
+	    for (a in $start) {
+		$start[a] = parseInt($start[a]);
+		$stop[a]  = parseInt($stop[a]);
+	    }
+	    
+	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
+	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
+	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
+	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
 	    
 	    for (col = $c_start; col <= $c_stop; col++) {
 		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
-		    $val+= parseFloat(calx.matrix[formula.key].value[$rowIndex]);
+		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
+		    $val+= ($cellValue) ? parseFloat($cellValue) : 0;
 		}
 	    }
 	    
@@ -2547,16 +2567,24 @@
 	    var $count	= 0;
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
-	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
-	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
-	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
-	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
+	    for (a in $start) {
+		$start[a] = parseInt($start[a]);
+		$stop[a]  = parseInt($stop[a]);
+	    }
+	    
+	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
+	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
+	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
+	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
 	    
 	    for (col = $c_start; col <= $c_stop; col++) {
 		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
-		    $val+= parseFloat(calx.matrix[formula.key].value[$rowIndex]);
+		    
+		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
+		    $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
+		    $val+= $cellValue;
 		    $count++;
 		}
 	    }
@@ -2640,7 +2668,7 @@
                             return $replaceVal[$key] || '0';
                         });
 			
-                        //if all value matched, execute the formula
+			//if all value matched, execute the formula
                         if($equation.indexOf('$') < 0){
 			    formula.key = this.key;
                             var $result = utility.parser.parse($equation);
@@ -2696,6 +2724,7 @@
 	
 	/** initialize the plugin */
 	init: function($options){
+	    console.log(calx);
 	    return this.each(function(){
 		var $form 		= $(this);
 		var $key		= new Date().valueOf();
@@ -2712,6 +2741,7 @@
 	
 	/** calculate the matrix and apply */
 	update: function($formkey){
+	    console.log(calx);
 	    if (typeof($formkey) == 'undefined') {
 		return this.each(function(){
 		    var $form 	= $(this);
