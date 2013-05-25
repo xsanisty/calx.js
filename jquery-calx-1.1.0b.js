@@ -4,6 +4,7 @@
 * credit :  jison parser generator by Zach Carter <https://github.com/zaach/jison>, 
 	    numeral.js for number formatting by Adam Drapper <https://github.com/adamwdraper/Numeral-js>
 *           stackoverflow community :D
+*           thanks for the formula_regex http://stackoverflow.com/users/1957251/khanh-to
 * lisence:  WTFPL
 */
 
@@ -2488,9 +2489,14 @@
 	    var $val	= [];
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
+	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
+	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
+	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
+	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
-	    for (col = $start[0]; col <= $stop[0]; col++) {
-		for (row = $start[1]; row <= $stop[1]; row++) {
+	    
+	    for (col = $c_start; col <= $c_stop; col++) {
+		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
 		    $val.push(calx.matrix[formula.key].value[$rowIndex]);
 		}
@@ -2502,9 +2508,14 @@
 	    var $val	= [];
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
+	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
+	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
+	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
+	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
-	    for (col = $start[0]; col <= $stop[0]; col++) {
-		for (row = $start[1]; row <= $stop[1]; row++) {
+	    
+	    for (col = $c_start; col <= $c_stop; col++) {
+		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
 		    $val.push(calx.matrix[formula.key].value[$rowIndex]);
 		}
@@ -2516,9 +2527,14 @@
 	    var $val	= 0;
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
+	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
+	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
+	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
+	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
-	    for (col = $start[0]; col <= $stop[0]; col++) {
-		for (row = $start[1]; row <= $stop[1]; row++) {
+	    
+	    for (col = $c_start; col <= $c_stop; col++) {
+		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
 		    $val+= parseFloat(calx.matrix[formula.key].value[$rowIndex]);
 		}
@@ -2531,9 +2547,14 @@
 	    var $count	= 0;
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
+	    var $c_start= parseInt(($start[0] > $stop[0]) ? $start[0] : $stop[0]);
+	    var $c_stop = parseInt(($start[0] < $stop[0]) ? $start[0] : $stop[0]);
+	    var $r_start= parseInt(($start[1] > $stop[1]) ? $start[1] : $stop[1]);
+	    var $r_stop = parseInt(($start[1] < $stop[1]) ? $start[1] : $stop[1]);
 	    
-	    for (col = $start[0]; col <= $stop[0]; col++) {
-		for (row = $start[1]; row <= $stop[1]; row++) {
+	    
+	    for (col = $c_start; col <= $c_stop; col++) {
+		for (row = $r_start; row <= $r_stop; row++) {
 		    var $rowIndex = utility.toChr(col)+row;
 		    $val+= parseFloat(calx.matrix[formula.key].value[$rowIndex]);
 		    $count++;
@@ -2603,7 +2624,8 @@
                 
                     if(this.data[$key].formula.trim()!=''){
 			var $equation 		= '';
-			var $formula_regex 	= new RegExp('['+formula.member.join('|')+']+\(([^]+)\)','g');
+			var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
+			var $formula_regex 	= new RegExp($regex,'g');
 			
 			$equation = this.data[$key].formula.replace($formula_regex,function($range){
 			    $range = $range.replace(/\$\w+/g, function($key) {
@@ -2614,7 +2636,7 @@
 			    return($range);
 			});
 			
-                        $equation = $equation.replace(/\$\w+/g, function($key) {
+			$equation = $equation.replace(/\$\w+/g, function($key) {
                             return $replaceVal[$key] || '0';
                         });
 			
@@ -2764,6 +2786,26 @@
 			}
 			if(calx.cell[$formkey].indexOf('#'+$key) < 0){
 			    calx.cell[$formkey].push('#'+$key);
+			}
+		    }
+		    
+		    var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
+		    var $formula_regex 	= new RegExp($regex,'g');
+		    while (match = $formula_regex.exec($formula)){
+			var $range = match[2].replace(/\$/g,'').split(',');
+			var $start = utility.translateCell($range[0]);
+			var $stop  = utility.translateCell($range[1]);
+			
+			for (col = $start.col; col <= $stop.col; col++) {
+			    for (row = $start.row; row <= $stop.row; row++) {
+				var $rowIndex = utility.toChr(col)+row;
+				if($dependency.indexOf($rowIndex) < 0){
+				    $dependency.push($rowIndex);
+				}
+				if(calx.cell[$formkey].indexOf('#'+$rowIndex) < 0){
+				    calx.cell[$formkey].push('#'+$rowIndex);
+				}
+			    }
 			}
 		    }
 		
