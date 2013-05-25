@@ -6,12 +6,18 @@
     <script type="application/x-javascript" src="../jquery-calx-1.1.0b.min.js"></script>
     <script type="application/x-javascript">
 	$(document).ready(function(){
-	    $('#calx').calx({});
+	    $('#applycalx').click(function(){
+		$('#calx').calx();		
+	    });
 	});
     </script>
     <style>
 	td{
 	    padding:5px 10px;
+	    border:solid 1px black;
+	}
+	th td{
+	    background: #ddd;
 	}
     </style>
 </head>
@@ -20,7 +26,7 @@
 	<table>
 	    <thead>
 		<tr>
-		    <td style="width:250px">Item Name</td>
+		    <td style="width:300px">Item Name</td>
 		    <td style="width:80px">Price</td>
 		    <td style="width:30px">Qty</td>
 		    <td style="width:30px">Discount</td>
@@ -72,6 +78,7 @@
 		</tr>
 	    </tbody>
 	</table>
+	<input type="button" id="applycalx" value="Apply Calx" />
     </form>
 </body>
 </html>

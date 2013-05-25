@@ -2423,13 +2423,19 @@
 	},
 	
 	/** translate cell into row-col pair for easy range iteration, e.g B20 => {row:20, col:2} */
-	translateCell: function($cell){
+	translateCell: function($cell,$type){
 	    var num	= $cell.match(/\d+$/);
 	    var alpha	= $cell.replace(num,'');
 	    
-	    return {
+	    $return = {
 		row : parseInt(num[0]),
 		col : utility.toNum(alpha)
+	    }
+	    
+	    if ($type=='string') {
+		return $return.col+'.'+$return.row;
+	    }else{
+		return $return;
 	    }
 	},
     }
@@ -2471,17 +2477,70 @@
     
     //formula function
     var formula = {
+	/** list of registered member, capitalized */
+	member:['MAX','MIN','SUM','AVG'],
+	key: '',
+	
+	/** member function declaration, function name must be in lower case
+	 *  instead of A3 or C7 as parameter, function will recieve 1.3 or 3.7 as parameter (col.row)
+	**/
 	max: function(a,b){
+	    var $val	= [];
+	    var $start	= (''+a).split('.');
+	    var $stop	= (''+b).split('.');
 	    
+	    for (col = $start[0]; col <= $stop[0]; col++) {
+		for (row = $start[1]; row <= $stop[1]; row++) {
+		    var $rowIndex = utility.toChr(col)+row;
+		    $val.push(calx.matrix[formula.key].value[$rowIndex]);
+		}
+	    }
+	    
+	    return Math.max.apply(Math,$val);
 	},
 	min: function(a,b){
+	    var $val	= [];
+	    var $start	= (''+a).split('.');
+	    var $stop	= (''+b).split('.');
 	    
+	    for (col = $start[0]; col <= $stop[0]; col++) {
+		for (row = $start[1]; row <= $stop[1]; row++) {
+		    var $rowIndex = utility.toChr(col)+row;
+		    $val.push(calx.matrix[formula.key].value[$rowIndex]);
+		}
+	    }
+	    
+	    return Math.min.apply(Math,$val);
 	},
 	sum: function(a,b){
+	    var $val	= 0;
+	    var $start	= (''+a).split('.');
+	    var $stop	= (''+b).split('.');
 	    
+	    for (col = $start[0]; col <= $stop[0]; col++) {
+		for (row = $start[1]; row <= $stop[1]; row++) {
+		    var $rowIndex = utility.toChr(col)+row;
+		    $val+= parseFloat(calx.matrix[formula.key].value[$rowIndex]);
+		}
+	    }
+	    
+	    return $val;
 	},
 	avg: function(a,b){
+	    var $val	= 0;
+	    var $count	= 0;
+	    var $start	= (''+a).split('.');
+	    var $stop	= (''+b).split('.');
 	    
+	    for (col = $start[0]; col <= $stop[0]; col++) {
+		for (row = $start[1]; row <= $stop[1]; row++) {
+		    var $rowIndex = utility.toChr(col)+row;
+		    $val+= parseFloat(calx.matrix[formula.key].value[$rowIndex]);
+		    $count++;
+		}
+	    }
+	    
+	    return ($val/$count);
 	}
     }
     
@@ -2543,13 +2602,25 @@
 		    }
                 
                     if(this.data[$key].formula.trim()!=''){
-                        var $equation = this.data[$key].formula.replace(/\$\w+/g, function($key) {
+			var $equation 		= '';
+			var $formula_regex 	= new RegExp('['+formula.member.join('|')+']+\(([^]+)\)','g');
+			
+			$equation = this.data[$key].formula.replace($formula_regex,function($range){
+			    $range = $range.replace(/\$\w+/g, function($key) {
+				$key = $key.replace('$','');
+				$key = utility.translateCell($key,'string');
+				return $key;
+			    });
+			    return($range);
+			});
+			
+                        $equation = $equation.replace(/\$\w+/g, function($key) {
                             return $replaceVal[$key] || '0';
                         });
 			
-                        
                         //if all value matched, execute the formula
                         if($equation.indexOf('$') < 0){
+			    formula.key = this.key;
                             var $result = utility.parser.parse($equation);
                             this.data[$key].value = isNaN($result) ? 0 : $result;
                             this.value[$key] = isNaN($result) ? '' : this.data[$key].value;
