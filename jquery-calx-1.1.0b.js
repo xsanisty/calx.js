@@ -2724,7 +2724,6 @@
 	
 	/** initialize the plugin */
 	init: function($options){
-	    console.log(calx);
 	    return this.each(function(){
 		var $form 		= $(this);
 		var $key		= new Date().valueOf();
@@ -2741,7 +2740,6 @@
 	
 	/** calculate the matrix and apply */
 	update: function($formkey){
-	    console.log(calx);
 	    if (typeof($formkey) == 'undefined') {
 		return this.each(function(){
 		    var $form 	= $(this);
