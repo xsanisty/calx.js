@@ -3,11 +3,15 @@
 <head>
     <title>Calx on html element other than form</title>
     <script type="application/x-javascript" src="../jquery-1.9.1.min.js"></script>
-    <script type="application/x-javascript" src="../jquery-calx-1.1.0b.min.js"></script>
+    <script type="application/x-javascript" src="../jquery-calx-1.1.0b.js"></script>
     <script type="application/x-javascript">
 	$(document).ready(function(){
 	    $('#applycalx').click(function(){
 		$('#calx').calx();		
+	    });
+	    
+	    $('#detachcalx').click(function(){
+		$('#calx').calx('detach');	
 	    });
 	});
     </script>
@@ -79,6 +83,8 @@
 	    </tbody>
 	</table>
 	<input type="button" id="applycalx" value="Apply Calx" />
+	<input type="button" id="detachcalx" value="Detach Calx" />
+
     </form>
 </body>
 </html>

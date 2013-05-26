@@ -2947,6 +2947,41 @@
 		utility.formatter.language($option);
 	    }
 	    
+	},
+	
+	/** detach calx from the form */
+	detach: function(){
+	    return this.each(function(){
+		var $form 	= $(this);
+		var $formkey	= $form.attr('data-key');
+		
+		if ($formkey) {
+		    $.each(calx.matrix[$formkey].data,function($k,$v){
+			$el = $('#'+$k);
+			$el.unbind('blur, focus, change');
+			if ($el.prop('tagName') == 'input') {
+			    if ($el.attr('type') == 'text') {
+				if ($v.formula) {
+				    $el.val(calx.matrix[$formkey].value[$el.attr('id')]);
+				}else{
+				    $el.val('');
+				}
+			    }
+			}else{
+			    if ($v.formula) {
+			       $el.html('');
+			    }else{
+				$el.html(calx.matrix[$formkey].value[$el.attr('id')]);
+			    }
+			}
+		    });
+		    calx.matrix[$formkey]=undefined;
+		    calx.cell[$formkey]=undefined;
+		    calx.settings[$formkey]=undefined;
+		    
+		    $form.attr('data-key','');
+		}
+	    });
 	}
     };
     
