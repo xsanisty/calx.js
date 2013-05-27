@@ -2423,7 +2423,7 @@
 	    return s.toUpperCase();
 	},
 	
-	/** translate cell into row-col pair for easy range iteration, e.g B20 => {row:20, col:2} */
+	/** translate cell into row-col pair for easy range iteration, e.g B20 => {row:20, col:2} , or 20.2 when type='string'*/
 	translateCell: function($cell,$type){
 	    var num	= $cell.match(/\d+$/);
 	    var alpha	= $cell.replace(num,'');
@@ -2439,15 +2439,50 @@
 		return $return;
 	    }
 	},
+	
+	/** iterating cell range, 1.1 type index, throw $return object to callback*/
+	iterateCell: function(a,b,callback){
+	    var $return = {
+		index	: [],	//list of cell index, A1,A2,A3 and so on
+		value	: []	//list of cell values
+	    }
+	    
+	    var $start	= (''+a).split('.');
+	    var $stop	= (''+b).split('.');
+	    
+	    for (a in $start) {
+		$start[a] = parseInt($start[a]);
+		$stop[a]  = parseInt($stop[a]);
+	    }
+	    
+	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
+	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
+	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
+	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
+	    
+	    for (col = $c_start; col <= $c_stop; col++) {
+		for (row = $r_start; row <= $r_stop; row++) {
+		    var $cellIndex = utility.toChr(col)+row;
+		    var $cellValue = calx.matrix[formula.key].value[$cellIndex];
+		        $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
+		    
+		    $return.index.push($cellIndex);
+		    $return.value.push($cellValue);
+		}
+	    }
+	    
+	    return callback.apply(callback,[$return]);
+	}
     }
     
     
     //default plugin configuration
     var defaults = {
-	autocalculate 	: true,
-	trigger		: 'blur',
-	format		: '0[.]00',
-	language	: {
+	autocalculate 	: true,		//autocalculate value on form change when used on form
+	trigger		: 'blur',	//autocalculate trigger: not yet implemented
+	format		: '0[.]00',	//default format used when no data-format found
+	readonly	: true,		//mark input with data-formula attribute as readonly
+	language	: {		//default language id
 	    id		: 'en',
 	    config	: {
 		delimiters: {
@@ -2478,7 +2513,7 @@
     
     //formula function
     var formula = {
-	/** list of registered member, capitalized */
+	/** list of registered member that use range as parameter, capitalized */
 	member:['MAX','MIN','SUM','AVG'],
 	key: '',
 	
@@ -2486,110 +2521,34 @@
 	 *  instead of A3 or C7 as parameter, function will recieve 1.3 or 3.7 as parameter (col.row)
 	**/
 	max: function(a,b){
-	    var $val	= [];
-	    var $start	= (''+a).split('.');
-	    var $stop	= (''+b).split('.');
-	    
-	    for (a in $start) {
-		$start[a] = parseInt($start[a]);
-		$stop[a]  = parseInt($stop[a]);
-	    }
-	    
-	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
-	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
-	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
-	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
-	    
-	    for (col = $c_start; col <= $c_stop; col++) {
-		for (row = $r_start; row <= $r_stop; row++) {
-		    var $rowIndex = utility.toChr(col)+row;
-		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
-		    $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
-		    $val.push($cellValue);
-		}
-	    }
-	    
-	    return Math.max.apply(Math,$val);
+	    return utility.iterateCell(a,b,function($cell){
+		return Math.max.apply(Math, $cell.value);
+	    });
 	},
 	min: function(a,b){
-	    var $val	= [];
-	    var $start	= (''+a).split('.');
-	    var $stop	= (''+b).split('.');
-	    
-	    for (a in $start) {
-		$start[a] = parseInt($start[a]);
-		$stop[a]  = parseInt($stop[a]);
-	    }
-	    
-	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
-	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
-	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
-	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
-	    
-	    for (col = $c_start; col <= $c_stop; col++) {
-		for (row = $r_start; row <= $r_stop; row++) {
-		    var $rowIndex = utility.toChr(col)+row;
-		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
-		    $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
-		    $val.push($cellValue);
-		}
-	    }
-	    
-	    return Math.min.apply(Math,$val);
+	    return utility.iterateCell(a,b,function($cell){
+		return Math.min.apply(Math, $cell.value);
+	    });
 	},
 	sum: function(a,b){
-	    var $val	= 0;
-	    var $start	= (''+a).split('.');
-	    var $stop	= (''+b).split('.');
-	    
-	    for (a in $start) {
-		$start[a] = parseInt($start[a]);
-		$stop[a]  = parseInt($stop[a]);
-	    }
-	    
-	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
-	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
-	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
-	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
-	    
-	    for (col = $c_start; col <= $c_stop; col++) {
-		for (row = $r_start; row <= $r_stop; row++) {
-		    var $rowIndex = utility.toChr(col)+row;
-		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
-		    $val+= ($cellValue) ? parseFloat($cellValue) : 0;
+	    return utility.iterateCell(a,b,function($cell){
+		var $result = 0;
+		for (a in $cell.value) {
+		    $result += $cell.value[a];
 		}
-	    }
-	    
-	    return $val;
+		
+		return $result;
+	    });
 	},
 	avg: function(a,b){
-	    var $val	= 0;
-	    var $count	= 0;
-	    var $start	= (''+a).split('.');
-	    var $stop	= (''+b).split('.');
-	    
-	    for (a in $start) {
-		$start[a] = parseInt($start[a]);
-		$stop[a]  = parseInt($stop[a]);
-	    }
-	    
-	    var $c_start= ($start[0] < $stop[0]) ? $start[0] : $stop[0];
-	    var $c_stop = ($start[0] > $stop[0]) ? $start[0] : $stop[0];
-	    var $r_start= ($start[1] < $stop[1]) ? $start[1] : $stop[1];
-	    var $r_stop = ($start[1] > $stop[1]) ? $start[1] : $stop[1];
-	    
-	    for (col = $c_start; col <= $c_stop; col++) {
-		for (row = $r_start; row <= $r_stop; row++) {
-		    var $rowIndex = utility.toChr(col)+row;
-		    
-		    var $cellValue= calx.matrix[formula.key].value[$rowIndex];
-		    $cellValue = ($cellValue) ? parseFloat($cellValue) : 0;
-		    $val+= $cellValue;
-		    $count++;
+	    return utility.iterateCell(a,b,function($cell){
+		var $result = 0;
+		for (a in $cell.value) {
+		    $result += $cell.value[a];
 		}
-	    }
-	    
-	    return ($val/$count);
+		
+		return ($result/$cell.value.length);
+	    });
 	}
     }
     
@@ -2601,105 +2560,95 @@
 	this.value   	= {};  //native numberic value of each cell
     }
     
-	/** update matrix value when form data changed */
-	matrix.prototype.update  = function($apply){
-	    var $dataKey;
-	    
-	    if (typeof($apply)=='undefined') {
-		$apply = false;
-	    }
-	    
-	    /** prepare update status for each cell */
-	    for ($dataKey in this.data) {
-                if(this.data[$dataKey].dependency.length == 0){
-                    this.data[$dataKey].updated = true; 
-                }else{
-                    this.data[$dataKey].updated = false; 
-                }
-	    }
-	    
-            /** for each element with formula in it, process the formula */
-            for ($dataKey in this.data){
-                if(typeof(this.data[$dataKey].formula)!='undefined'){              
-                    this.calculate($dataKey, $apply);
-                }
-            }
-        }
+    /** update matrix value when form data changed */
+    matrix.prototype.update  = function($apply){
+	var $dataKey;
 	
-        /** calculate single matrix data member, include it's dependencies */
-	matrix.prototype.calculate = function($key,$apply){
-	    /** if cell not updated, calculate it! */
-            if(!this.data[$key].updated){
-                if(this.data[$key].dependency.length!=0){
-		    var $dkey;
-		    for ($dkey in this.data[$key].dependency) {
-			var $dval = this.data[$key].dependency[$dkey];
-			
-                        if(!this.data[$dval].updated){
-                            this.calculate($dval);
-                        }
-                    }
-                }
-                
-		//replace the formula with the value
-                if(typeof(this.data[$key].formula)!='undefined'){
-                    var $replaceVal = {};
-		    var $k;
-		    for ($k in this.data[$key].dependency) {
-			var $v = this.data[$key].dependency[$k];
-			$replaceVal['$'+$v]=this.value[$v];
+	if (typeof($apply)=='undefined') {
+	    $apply = false;
+	}
+	
+	/** prepare update status for each cell */
+	for ($dataKey in this.data) {
+	    if(this.data[$dataKey].dependency.length == 0){
+		this.data[$dataKey].updated = true; 
+	    }else{
+		this.data[$dataKey].updated = false; 
+	    }
+	}
+	
+	/** for each element with formula in it, process the formula */
+	for ($dataKey in this.data){
+	    if(typeof(this.data[$dataKey].formula)!='undefined'){              
+		this.calculate($dataKey, $apply);
+	    }
+	}
+    }
+    
+    /** calculate single matrix data member, including it's dependencies */
+    matrix.prototype.calculate = function($key,$apply){
+	/** if cell not updated, calculate it! */
+	if(!this.data[$key].updated){
+	    if(this.data[$key].dependency.length!=0){
+		var $dkey;
+		for ($dkey in this.data[$key].dependency) {
+		    var $dval = this.data[$key].dependency[$dkey];
+		    
+		    if(!this.data[$dval].updated){
+			this.calculate($dval);
 		    }
-                
-                    if(this.data[$key].formula.trim()!=''){
-			var $equation 		= '';
-			var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
-			var $formula_regex 	= new RegExp($regex,'g');
-			
-			$equation = this.data[$key].formula.replace($formula_regex,function($range){
-			    $range = $range.replace(/\$\w+/g, function($key) {
-				$key = $key.replace('$','');
-				$key = utility.translateCell($key,'string');
-				return $key;
-			    });
-			    return($range);
+		}
+	    }
+	    
+	    //replace the formula with the value
+	    if(typeof(this.data[$key].formula)!='undefined'){
+		var $replaceVal = {};
+		var $k;
+		for ($k in this.data[$key].dependency) {
+		    var $v = this.data[$key].dependency[$k];
+		    $replaceVal['$'+$v]=this.value[$v];
+		}
+	    
+		if(this.data[$key].formula.trim()!=''){
+		    var $equation 		= '';
+		    var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
+		    var $formula_regex 	= new RegExp($regex,'g');
+		    
+		    $equation = this.data[$key].formula.replace($formula_regex,function($range){
+			$range = $range.replace(/\$\w+/g, function($key) {
+			    $key = $key.replace('$','');
+			    $key = utility.translateCell($key,'string');
+			    return $key;
 			});
-			
-			$equation = $equation.replace(/\$\w+/g, function($key) {
-                            return $replaceVal[$key] || '0';
-                        });
-			
-			//if all value matched, execute the formula
-                        if($equation.indexOf('$') < 0){
-			    formula.key = this.key;
-                            var $result = utility.parser.parse($equation);
-                            this.data[$key].value = isNaN($result) ? 0 : $result;
-                            this.value[$key] = isNaN($result) ? '' : this.data[$key].value;
-                        }
-                    }
-                }
-            }
-            this.data[$key].updated=true;
-	    if ($apply) {
-		this.apply($key);
-	    }
-            
-        }
-	
-	matrix.prototype.apply   = function($key){
-	    utility.formatter.language(this.lang);
-            if(typeof($key) == 'undefined'){
-                $.each(this.value,function($index,$val){
-                    var $key 	= $index.replace(/\$/g,'');
-		    var $el	= $('#'+$key);
+			return($range);
+		    });
 		    
-		    if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
-			$el.val(utility.formatter(this.value[$key]).format(this.data[$key].format));
-		    }else{
-			$el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
+		    $equation = $equation.replace(/\$\w+/g, function($key) {
+			return $replaceVal[$key] || '0';
+		    });
+		    
+		    //if all value matched, execute the formula
+		    if($equation.indexOf('$') < 0){
+			formula.key = this.key;
+			var $result = utility.parser.parse($equation);
+			this.data[$key].value = isNaN($result) ? 0 : $result;
+			this.value[$key] = isNaN($result) ? '' : this.data[$key].value;
 		    }
-		    
-                });
-            }else{
+		}
+	    }
+	}
+	this.data[$key].updated=true;
+	if ($apply) {
+	    this.apply($key);
+	}
+	
+    }
+    
+    matrix.prototype.apply   = function($key){
+	utility.formatter.language(this.lang);
+	if(typeof($key) == 'undefined'){
+	    $.each(this.value,function($index,$val){
+		var $key 	= $index.replace(/\$/g,'');
 		var $el	= $('#'+$key);
 		
 		if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
@@ -2707,8 +2656,18 @@
 		}else{
 		    $el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
 		}
-            }
-        }
+		
+	    });
+	}else{
+	    var $el	= $('#'+$key);
+	    
+	    if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
+		$el.val(utility.formatter(this.value[$key]).format(this.data[$key].format));
+	    }else{
+		$el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
+	    }
+	}
+    }
     
     
     /** calx function member */
@@ -2836,8 +2795,11 @@
 			    }
 			}
 		    }
-		
-		    $this.attr('readonly',true).addClass('readonly');
+		    
+		    if (calx.settings[$formkey].readonly) {
+			$this.attr('readonly',true).addClass('readonly');
+		    }
+		    
 		}
 		/*if(calx.cell[$formkey].indexOf('#'+$id) < 0){
 		    calx.cell[$formkey].push('#'+$id);
