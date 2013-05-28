@@ -2695,12 +2695,10 @@
 		
 		calx.scan($form);
 		calx.update($formkey);
-		
-		console.log(calx);
 	    });
 	},
 	
-	/** scan the form and build the matrix */
+	/** scan the form and build the calculation matrix */
 	scan:function($form){
 	    var $formkey = $form.attr('data-key');
 	    
@@ -2712,7 +2710,6 @@
 		
 		if (form_element.indexOf($tag) > -1) {
 		    var $type= $el.attr('type');
-		    
 		    
 		    $el.unbind('change').change(function(){
 			if ($type == 'checkbox') {
@@ -2767,7 +2764,7 @@
 		var $dependency	= [];
 		var $value	= '';
 		
-		/** scan cell dependency and refister it to calculation matrix */
+		/** scan cell dependency and register it to calculation matrix */
 		var registerDependency = function(){
 		    var match;
 		    while (match = $placeholder.exec($formula)){
@@ -2801,7 +2798,7 @@
 		    }
 		}
 		
-		/** if cell is not registered in the matrix, in case of refreshing dyamic form */
+		/** if cell is not registered in the matrix, in case of refreshing dyamic form, register it and it's dependencies! */
 		if (typeof(calx.matrix[$formkey].data[$id]) == 'undefined') {
 		    registerEvent.apply(this);
 		    
@@ -2814,7 +2811,7 @@
 			var $type = ($tagname == 'input') ? $this.attr('type').toLowerCase() : '';
 			if ($type == 'checkbox' || $type == 'radio' ) {
 			    var $value_checked 	= $this.attr('value');
-			    var $value_unchecked	= $this.attr('data-unchecked');
+			    var $value_unchecked= $this.attr('data-unchecked');
 			    $value_unchecked	= ($value_unchecked) ? $value_unchecked : 0;
 			    
 			    $value = ($this.is(':checked')) ?  $value_checked : $value_unchecked;
@@ -2863,8 +2860,6 @@
 		    
 		/** or if formula has been changed */
 		}else if(calx.matrix[$formkey].data[$id].formula != $formula){
-		    console.log('updating dependency and formula of '+$id+' from '+calx.matrix[$formkey].data[$id].formula+' become '+$formula);
-		    
 		    if($formula){
 			registerDependency();
 			if (calx.settings[$formkey].readonly) {
