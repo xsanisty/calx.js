@@ -5,7 +5,7 @@
 	    numeral.js for number formatting by Adam Drapper <https://github.com/adamwdraper/Numeral-js>
 *           stackoverflow community :D
 *           thanks for the formula_regex http://stackoverflow.com/users/1957251/khanh-to
-* lisence:  WTFPL
+* lisence:  MIT
 */
 
 (function($) {
@@ -2579,10 +2579,12 @@
 	    //replace the formula with the value
 	    if(typeof(this.data[$key].formula)!='undefined'){
 		var $replaceVal = {};
+		var $stringVal	= '';
 		var $k;
 		for ($k in this.data[$key].dependency) {
 		    var $v = this.data[$key].dependency[$k];
 		    $replaceVal['$'+$v]=this.value[$v];
+		    $stringVal +=this.value[$v];;
 		}
 	    
 		if(this.data[$key].formula.trim()!=''){
@@ -2738,16 +2740,20 @@
 			    calx.matrix[$formkey].value[$id] = $value;
 			}
 			
-			if (calx.settings[$formkey].autocalculate) {
-			    calx.matrix[$formkey].update(true);
-			}
+			calx.matrix[$formkey].update(calx.settings[$formkey].autocalculate);
 		    });
 			
 		    if ($type == 'text') {
 		        $el.unbind('blur,focus').focus(function(){
 			    $el.val(calx.matrix[$formkey].value[$id]);
 			}).blur(function(){
-			    calx.matrix[$formkey].value[$id] = $el.val();
+			    var $value = $el.val();
+			    /*
+			    if ($value.indexOf('%') > -1 && calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
+				$value = utility.formatter().unformat($value);
+			    }
+			    */
+			    calx.matrix[$formkey].value[$id] = $value;
 			    calx.setLang($formkey);
 			    $el.val(utility.formatter(calx.matrix[$formkey].value[$id]).format(calx.matrix[$formkey].data[$id].format));
 			});
