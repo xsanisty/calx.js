@@ -2428,7 +2428,7 @@
 	    var num	= $cell.match(/\d+$/);
 	    var alpha	= $cell.replace(num,'');
 	    
-	    $return = {
+	    var $return = {
 		row : parseInt(num[0]),
 		col : utility.toNum(alpha)
 	    }
@@ -2482,31 +2482,7 @@
 	trigger		: 'blur',	//autocalculate trigger: not yet implemented
 	format		: '0[.]00',	//default format used when no data-format found
 	readonly	: true,		//mark input with data-formula attribute as readonly
-	language	: {		//default language id
-	    id		: 'en',
-	    config	: {
-		delimiters: {
-		    thousands: ',',
-		    decimal: '.'
-		},
-		abbreviations: {
-		    thousand: 'k',
-		    million: 'm',
-		    billion: 'b',
-		    trillion: 't'
-		},
-		ordinal: function (number) {
-		    var b = number % 10;
-		    return (~~ (number % 100 / 10) === 1) ? 'th' :
-			(b === 1) ? 'st' :
-			(b === 2) ? 'nd' :
-			(b === 3) ? 'rd' : 'th';
-		},
-		currency: {
-		    symbol: '$'
-		}
-	    }
-	}
+	language	: 'en'		//default language id
     }
     
     var form_element = ['input', 'button', 'select', 'textarea'];
@@ -2719,105 +2695,16 @@
 		
 		calx.scan($form);
 		calx.update($formkey);
+		
+		console.log(calx);
 	    });
 	},
 	
 	/** scan the form and build the matrix */
 	scan:function($form){
 	    var $formkey = $form.attr('data-key');
-	    var registerMatrix = function(){
-		var $this 	= $(this);
-		var $id		= $this.attr('id');
-		var $formula	= $this.attr('data-formula');
-		var $format	= $this.attr('data-format');
-		    $format	= (typeof($format) == 'undefined') ? calx.settings[$formkey].format : $format ;
-		var $placeholder= /\$\w+/g;
-		var $dependency	= [];
-		var $value	= '';
-		var $tagname	= $this.prop('tagName').toLowerCase();
-		
-		if (form_element.indexOf($tagname) > -1) {
-		    var $type = ($tagname == 'input') ? $this.attr('type').toLowerCase() : '';
-		    if ($type == 'checkbox' || $type == 'radio' ) {
-			var $value_checked 	= $this.attr('value');
-			var $value_unchecked	= $this.attr('data-unchecked');
-			$value_unchecked	= ($value_unchecked) ? $value_unchecked : 0;
-			
-			$value = ($this.is(':checked')) ?  $value_checked : $value_unchecked;
-		    }else{
-			$value = $this.val();
-			if ($value != '' && typeof($value)!='undefined') {
-			    calx.setLang($formkey);
-			    $value = ($.isNumeric($value)) ? $value : utility.formatter().unformat($value) ;
-			    
-			    $this.val(utility.formatter($value).format($format));
-			}
-		    }
-		}else{
-		    $value = $this.text();
-		    if ($value != '' && typeof($value)!='undefined') {
-			calx.setLang($formkey);
-			$value = ($.isNumeric($value)) ? $value : utility.formatter().unformat($value) ;
-			    
-			$this.html(utility.formatter($value).format($format));
-		    }
-		}
-		
-                /** scan for cell dependency by it's formula */
-		if($formula){
-		    var match;
-		    while (match = $placeholder.exec($formula)){
-			var $key = match[0].replace('$','');
-			if($dependency.indexOf($key) < 0){
-			    $dependency.push($key);
-			}
-			if(calx.cell[$formkey].indexOf('#'+$key) < 0){
-			    calx.cell[$formkey].push('#'+$key);
-			}
-		    }
-		    
-		    var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
-		    var $formula_regex 	= new RegExp($regex,'g');
-		    while (match = $formula_regex.exec($formula)){
-			var $range = match[2].replace(/\$/g,'').split(',');
-			var $start = utility.translateCell($range[0]);
-			var $stop  = utility.translateCell($range[1]);
-			
-			for (col = $start.col; col <= $stop.col; col++) {
-			    for (row = $start.row; row <= $stop.row; row++) {
-				var $rowIndex = utility.toChr(col)+row;
-				if($dependency.indexOf($rowIndex) < 0){
-				    $dependency.push($rowIndex);
-				}
-				if(calx.cell[$formkey].indexOf('#'+$rowIndex) < 0){
-				    calx.cell[$formkey].push('#'+$rowIndex);
-				}
-			    }
-			}
-		    }
-		    
-		    if (calx.settings[$formkey].readonly) {
-			$this.attr('readonly',true).addClass('readonly');
-		    }
-		    
-		}
-		/*if(calx.cell[$formkey].indexOf('#'+$id) < 0){
-		    calx.cell[$formkey].push('#'+$id);
-		}*/
-		
-		/** cache all info to matrix */
-		calx.matrix[$formkey].data[$id] = {
-                    'updated'   : false,
-                    'value'     : $value,
-                    'id'        : $id,
-                    'formula'   : $formula,
-                    'format'    : $format,
-                    'dependency': $dependency
-                }
-		
-		calx.matrix[$formkey].value[$id] = $value;
-	    }
 	    
+	    /** registering onChange event for affected elements */
 	    var registerEvent = function(){
 		var $el = $(this);
 		var $tag= $el.prop('tagName').toLowerCase();
@@ -2871,12 +2758,133 @@
 	        }
 	    }
 	    
+	    /** register new found element to the calculation matrix */
+	    var registerMatrix = function(){
+		var $this 	= $(this);
+		var $id		= $this.attr('id');
+		var $formula	= $this.attr('data-formula');
+		var $placeholder= /\$\w+/g;
+		var $dependency	= [];
+		var $value	= '';
+		
+		/** scan cell dependency and refister it to calculation matrix */
+		var registerDependency = function(){
+		    var match;
+		    while (match = $placeholder.exec($formula)){
+			var $key = match[0].replace('$','');
+			if($dependency.indexOf($key) < 0){
+			    $dependency.push($key);
+			}
+			if(calx.cell[$formkey].indexOf('#'+$key) < 0){
+			    calx.cell[$formkey].push('#'+$key);
+			}
+		    }
+		    
+		    var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
+		    var $formula_regex 	= new RegExp($regex,'g');
+		    while (match = $formula_regex.exec($formula)){
+			var $range = match[2].replace(/\$/g,'').split(',');
+			var $start = utility.translateCell($range[0]);
+			var $stop  = utility.translateCell($range[1]);
+			
+			for (col = $start.col; col <= $stop.col; col++) {
+			    for (row = $start.row; row <= $stop.row; row++) {
+				var $rowIndex = utility.toChr(col)+row;
+				if($dependency.indexOf($rowIndex) < 0){
+				    $dependency.push($rowIndex);
+				}
+				if(calx.cell[$formkey].indexOf('#'+$rowIndex) < 0){
+				    calx.cell[$formkey].push('#'+$rowIndex);
+				}
+			    }
+			}
+		    }
+		}
+		
+		/** if cell is not registered in the matrix, in case of refreshing dyamic form */
+		if (typeof(calx.matrix[$formkey].data[$id]) == 'undefined') {
+		    registerEvent.apply(this);
+		    
+		    var $format	= $this.attr('data-format');
+			$format	= (typeof($format) == 'undefined') ? calx.settings[$formkey].format : $format ;
+		    
+		    var $tagname	= $this.prop('tagName').toLowerCase();
+		    
+		    if (form_element.indexOf($tagname) > -1) {
+			var $type = ($tagname == 'input') ? $this.attr('type').toLowerCase() : '';
+			if ($type == 'checkbox' || $type == 'radio' ) {
+			    var $value_checked 	= $this.attr('value');
+			    var $value_unchecked	= $this.attr('data-unchecked');
+			    $value_unchecked	= ($value_unchecked) ? $value_unchecked : 0;
+			    
+			    $value = ($this.is(':checked')) ?  $value_checked : $value_unchecked;
+			}else{
+			    $value = $this.val();
+			    if ($value != '' && typeof($value)!='undefined') {
+				calx.setLang($formkey);
+				$value = ($.isNumeric($value)) ? $value : utility.formatter().unformat($value) ;
+				
+				$this.val(utility.formatter($value).format($format));
+			    }
+			}
+		    }else{
+			$value = $this.text();
+			if ($value != '' && typeof($value)!='undefined') {
+			    calx.setLang($formkey);
+			    $value = ($.isNumeric($value)) ? $value : utility.formatter().unformat($value) ;
+				
+			    $this.html(utility.formatter($value).format($format));
+			}
+		    }
+		    
+		    /** scan for cell dependency by it's formula */
+		    if($formula){
+			registerDependency();
+			if (calx.settings[$formkey].readonly) {
+			    $this.attr('readonly',true).addClass('readonly');
+			}
+			
+		    }
+		    /*if(calx.cell[$formkey].indexOf('#'+$id) < 0){
+			calx.cell[$formkey].push('#'+$id);
+		    }*/
+		    
+		    /** cache all info to matrix */
+		    calx.matrix[$formkey].data[$id] = {
+			'updated'   : false,
+			'value'     : $value,
+			'id'        : $id,
+			'formula'   : $formula,
+			'format'    : $format,
+			'dependency': $dependency
+		    }
+		    
+		    calx.matrix[$formkey].value[$id] = $value;
+		    
+		/** or if formula has been changed */
+		}else if(calx.matrix[$formkey].data[$id].formula != $formula){
+		    console.log('updating dependency and formula of '+$id+' from '+calx.matrix[$formkey].data[$id].formula+' become '+$formula);
+		    
+		    if($formula){
+			registerDependency();
+			if (calx.settings[$formkey].readonly) {
+			    $this.attr('readonly',true).addClass('readonly');
+			}
+			calx.matrix[$formkey].data[$id].formula 	= $formula;
+			calx.matrix[$formkey].data[$id].dependency 	= $dependency;
+		    
+		    }
+		    
+		    calx.matrix[$formkey].value[$id] = $value;
+		}
+	    }
+	    
 	    var $resultContainer = $form.find('[data-formula]');
 	    $resultContainer.each(registerMatrix);
 	    
 	    var $cells = $(calx.cell[$formkey].join(','));
 	    $cells.each(registerMatrix);
-	    $cells.each(registerEvent);
+	    //$cells.each(registerEvent); <-- moved inside register matrix
 	    
 	    if (calx.settings[$formkey].autocalculate) {
 		calx.update($formkey);
@@ -2908,7 +2916,6 @@
 	    }else if (typeof($option) == 'string') {
 		utility.formatter.language($option);
 	    }
-	    
 	},
 	
 	/** detach calx from the form */
