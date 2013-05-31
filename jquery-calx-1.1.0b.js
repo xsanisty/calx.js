@@ -2440,7 +2440,7 @@
 	    }
 	},
 	
-	/** iterating cell range, 1.1 type index, throw $return object to callback*/
+	/** iterating cell range, 1.101 type index, throw $return object to callback*/
 	iterateCell: function(a,b,callback){
 	    var $return = {
 		index	: [],	//list of cell index, A1,A2,A3 and so on
@@ -2449,6 +2449,9 @@
 	    
 	    var $start	= (''+a).split('.');
 	    var $stop	= (''+b).split('.');
+	    
+	    $start[1]	= $start[1].substring(0,$start[1].length-1);
+	    $stop[1]	= $stop[1].substring(0,$stop[1].length-1);
 	    
 	    for (a in $start) {
 		$start[a] = parseInt($start[a]);
@@ -2494,7 +2497,7 @@
 	key: '',
 	
 	/** member function declaration, function name must be in lower case
-	 *  instead of A3 or C7 as parameter, function will recieve 1.3 or 3.7 as parameter (col.row)
+	 *  instead of A3 or C10 as parameter, function will recieve 1.3+'1' => 1.31 or 3.10+'1" => 3.101 as parameter (col.row)
 	**/
 	max: function(a,b){
 	    return utility.iterateCell(a,b,function($cell){
@@ -2526,6 +2529,23 @@
 		return ($result/$cell.value.length);
 	    });
 	}
+    }
+    
+    /** planned for future added formula */
+    formula.financial = {
+	
+    }
+    
+    formula.math = {
+	
+    }
+    
+    formula.statistic = {
+	
+    }
+    
+    formula.logic = {
+	
     }
     
     /** matrix contain cache of all form element value and format */
@@ -2588,7 +2608,7 @@
 		}
 	    
 		if(this.data[$key].formula.trim()!=''){
-		    var $equation 		= '';
+		    var $equation 	= '';
 		    var $regex		= '('+formula.member.join('|')+')\\(([^(^)]*)\\)';
 		    var $formula_regex 	= new RegExp($regex,'g');
 		    
@@ -2596,7 +2616,7 @@
 			$range = $range.replace(/\$\w+/g, function($key) {
 			    $key = $key.replace('$','');
 			    $key = utility.translateCell($key,'string');
-			    return $key;
+			    return $key+'1';
 			});
 			return($range);
 		    });
@@ -2697,6 +2717,7 @@
 		
 		calx.scan($form);
 		calx.update($formkey);
+		console.log(calx.matrix[$formkey]);
 	    });
 	},
 	
