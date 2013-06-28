@@ -28,6 +28,21 @@
 		}
 	}
 
+	//ie support for getPrototypeOf
+    if ( typeof Object.getPrototypeOf !== "function" ) {
+      if ( typeof "test".__proto__ === "object" ) {
+        Object.getPrototypeOf = function(object){
+          return object.__proto__;
+        };
+      } else {
+        Object.getPrototypeOf = function(object){
+          // May break if the constructor has been tampered with
+          return object.constructor.prototype;
+        };
+      }
+    }
+
+
 	//utility function
 	var utility = {
 
@@ -2459,9 +2474,9 @@
 			$start[1] = $start[1].substring(0, $start[1].length - 1);
 			$stop[1] = $stop[1].substring(0, $stop[1].length - 1);
 
-			for (a in $start) {
-				$start[a] = parseInt($start[a]);
-				$stop[a] = parseInt($stop[a]);
+			for (var ax=0; ax < $start.length; ax++) {
+				$start[ax] = parseInt($start[ax]);
+				$stop[ax] = parseInt($stop[ax]);
 			}
 
 			var $c_start = ($start[0] < $stop[0]) ? $start[0] : $stop[0];
@@ -2530,18 +2545,17 @@
 		sum: function(a, b) {
 			return utility.iterateCell(a, b, function($cell) {
 				var $result = 0;
-				for (a in $cell.value) {
-					$result += $cell.value[a];
+				for (var i=0; i < $cell.value.length; i++) {
+					$result += $cell.value[i];
 				}
-
 				return $result;
 			});
 		},
 		avg: function(a, b) {
 			return utility.iterateCell(a, b, function($cell) {
 				var $result = 0;
-				for (a in $cell.value) {
-					$result += $cell.value[a];
+				for (var i=0; i < $cell.value.length; i++) {
+					$result += $cell.value[i];
 				}
 
 				return ($result / $cell.value.length);
@@ -2606,16 +2620,18 @@
 
 	/** calculate single matrix data member, including it's dependencies */
 	matrix.prototype.calculate = function($key, $apply) { 
-
 		/** if cell not updated, calculate it! */
 		if (!this.data[$key].updated) {
 			if (this.data[$key].dependency.length != 0) {
 				var $dkey;
-				for ($dkey in this.data[$key].dependency) {
+
+				for ($dkey=0; $dkey <this.data[$key].dependency.length; $dkey++) {
 					var $dval = this.data[$key].dependency[$dkey];
 
-					if (!this.data[$dval].updated) {
-						this.calculate($dval);
+					if(typeof(this.data[$dval])=='object'){
+						if (!this.data[$dval].updated) {
+							this.calculate($dval);
+						}
 					}
 				}
 			}
