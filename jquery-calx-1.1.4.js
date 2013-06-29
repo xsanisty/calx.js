@@ -1,5 +1,5 @@
 /**
- * jQuery Calx 1.1.2
+ * jQuery Calx 1.1.4
  * author :  Ikhsan Agustian <ikhsan017@gmail.com>
  * credit :  jison parser generator by Zach Carter <https://github.com/zaach/jison>,
  * 			 numeral.js for number formatting by Adam Drapper <https://github.com/adamwdraper/Numeral-js>
@@ -10,7 +10,7 @@
 
 (function($) {
 	//ie support for Array.indexOf
-	if (!Array.indexOf) {
+	if (typeof Array.indexOf !== "function") {
 		Array.prototype.indexOf = function(obj, start) {
 			for (var i = (start || 0); i < this.length; i++) {
 				if (this[i] == obj) {
@@ -2423,7 +2423,8 @@
 
 		/** convert string char to number, e.g A => 1, Z => 26, AA => 27 */
 		toNum: function(chr) {
-			var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+			chr = chr.split();
+			var base = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
 				i, j, result = 0;
 
 			for (i = 0, j = chr.length - 1; i < chr.length; i += 1, j -= 1) {
@@ -2467,7 +2468,6 @@
 				//list of cell index, A1,A2,A3 and so on
 				value: [] //list of cell values
 			}
-
 			var $start = ('' + a).split('.');
 			var $stop = ('' + b).split('.');
 
@@ -2619,7 +2619,7 @@
 	}
 
 	/** calculate single matrix data member, including it's dependencies */
-	matrix.prototype.calculate = function($key, $apply) { 
+	matrix.prototype.calculate = function($key, $apply) {
 		/** if cell not updated, calculate it! */
 		if (!this.data[$key].updated) {
 			if (this.data[$key].dependency.length != 0) {
@@ -2709,7 +2709,7 @@
 
 
 	/** calx function member */
-	var calx = { 
+	var calx = {
 		/** list of affected elements for each form */
 		cell: {},
 
@@ -2756,7 +2756,7 @@
 				//calx.setLang($formkey);
 				calx.scan($form);
 				calx.update($formkey);
-				
+
 			});
 		},
 
@@ -2813,7 +2813,7 @@
 							if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
 								var $percent = (calx.matrix[$formkey].value[$id] * 100);
 								var $orivalue = ($percent % 1 > 0) ? $percent.toFixed(2) : $percent.toFixed(0);
-								
+
 								$el.val($orivalue);
 							} else {
 								$el.val(calx.matrix[$formkey].value[$id]);
