@@ -2887,7 +2887,7 @@
 					var $tagname = $this.prop('tagName').toLowerCase();
 
 					if (form_element.indexOf($tagname) > -1) {
-						var $type = ($tagname == 'input') ? $this.attr('type').toLowerCase() : '';
+						var $type = ($tagname == 'input' && typeof($this.attr('type')) != 'undefined') ? $this.attr('type').toLowerCase() : '';
 						if ($type == 'checkbox' || $type == 'radio') {
 							var $value_checked = $this.attr('value');
 							var $value_unchecked = $this.attr('data-unchecked');
