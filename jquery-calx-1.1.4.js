@@ -2797,6 +2797,7 @@
 							});
 						} else {
 							var $value = $el.val();
+							$value = ($value) ? utility.formatter().unformat($value) : $value;
 							if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
 								calx.matrix[$formkey].value[$id] = parseFloat($value) / 100;
 							} else {
@@ -2821,6 +2822,8 @@
 
 						}).blur(function() {
 							var $value = $el.val();
+
+							$value = ($value) ? utility.formatter().unformat($value) : $value;
 
 							if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
 								calx.matrix[$formkey].value[$id] = parseFloat($value) / 100;
