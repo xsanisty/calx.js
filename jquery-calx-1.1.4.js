@@ -2647,6 +2647,8 @@
 					$stringVal += this.value[$v];;
 				}
 
+				console.log($replaceVal);
+
 				if (this.data[$key].formula.trim() != '') {
 					var $equation = '';
 					var $regex = '(' + formula.member.join('|') + ')\\(([^(^)]*)\\)';
@@ -2666,6 +2668,7 @@
 					});
 
 					//if all value matched, execute the formula
+					console.log('equation :'+$equation);
 					if ($equation.indexOf('$') < 0) {
 						formula.key = this.key;
 						var $result = utility.parser.parse($equation);
@@ -2822,9 +2825,12 @@
 
 						}).blur(function() {
 							var $value = $el.val();
+							console.log($value);
 
 							if(!$.isNumeric($value)){
 								$value = ($value) ? utility.formatter().unformat($value) : $value;
+							}else{
+								$value = parseFloat($value);
 							}
 
 							if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
@@ -2832,6 +2838,9 @@
 							} else {
 								calx.matrix[$formkey].value[$id] = $value;
 							}
+
+							console.log(calx.matrix[$formkey].value[$id]);
+							console.log('---');
 							calx.setLang($formkey);
 							$el.val(utility.formatter(calx.matrix[$formkey].value[$id]).format(calx.matrix[$formkey].data[$id].format));
 						});
