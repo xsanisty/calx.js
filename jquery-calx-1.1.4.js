@@ -2976,8 +2976,6 @@
 				}
 			});
 
-			console.log(calx.matrix[$formkey]);
-
 			//$cells.each(registerEvent); <-- moved inside registerMatrix
 			if (calx.settings[$formkey].autocalculate) {
 				calx.update($formkey);
