@@ -2924,7 +2924,6 @@
 						if (calx.settings[$formkey].readonly) {
 							$this.attr('readonly', true).addClass('readonly');
 						}
-
 					}
 					/*if(calx.cell[$formkey].indexOf('#'+$id) < 0){
 					calx.cell[$formkey].push('#'+$id);
@@ -2969,6 +2968,15 @@
 			/** register all cells with data-format attribute to the matrix */
 			var $formattedCell = $form.find('[data-format]');
 			$formattedCell.each(registerMatrix);
+
+			/** iterate matrix for removing cells which is not present in the dom */
+			$.each(calx.matrix[$formkey].data, function($id, $obj){
+				if($form.find('#'+$id).length == 0){
+					delete calx.matrix[$formkey].data[$id];
+				}
+			});
+
+			console.log(calx.matrix[$formkey]);
 
 			//$cells.each(registerEvent); <-- moved inside registerMatrix
 			if (calx.settings[$formkey].autocalculate) {
