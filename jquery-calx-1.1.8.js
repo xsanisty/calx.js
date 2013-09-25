@@ -2882,7 +2882,7 @@
                     registerEvent.apply(this);
 
                     var $format = $this.attr('data-format');
-                    $format = (typeof($format) == 'undefined') ? calx.settings[$formkey].format : $format;
+                    $format = (typeof($format) == 'undefined' || $format==='') ? calx.settings[$formkey].format : $format;
 
                     var $tagname = $this.prop('tagName').toLowerCase();
 
