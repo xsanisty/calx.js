@@ -1,5 +1,5 @@
 /**
- * jQuery Calx 1.1.7
+ * jQuery Calx 1.1.8
  * author :  Ikhsan Agustian <ikhsan017@gmail.com>
  * credit :  jison parser generator by Zach Carter <https://github.com/zaach/jison>,
  *              numeral.js for number formatting by Adam Drapper <https://github.com/adamwdraper/Numeral-js>
@@ -2709,7 +2709,7 @@
         init: function($options) {
             return this.each(function() {
                 var $form = $(this);
-                if(!$form.attr('data-calx-enable')){
+                if($form.attr('data-calx-enable')!='1'){
                     var $key = new Date().valueOf();
                     calx.matrix[$key] = new matrix($key);
                     calx.cell[$key] = [];
@@ -2775,7 +2775,7 @@
                             $value_unchecked = ($value_unchecked) ? $value_unchecked : 0;
 
                             var $value = ($el.is(':checked')) ? $value_checked : $value_unchecked;
-                            calx.matrix[$formkey].value[$id] = $value;
+                            calx.matrix[$formkey].value[$id] = $.isNumeric($value) ? parseFloat($value) : $value;
                         } else if ($type == 'radio') {
                             var $name = $el.attr('name');
                             var $radiogroup = $('[name=' + $name + ']');
@@ -2788,7 +2788,7 @@
                                 $value_unchecked = ($value_unchecked) ? $value_unchecked : 0;
 
                                 var $value = ($r.is(':checked')) ? $value_checked : $value_unchecked;
-                                calx.matrix[$formkey].value[$rid] = $value;
+                                calx.matrix[$formkey].value[$rid] = $.isNumeric($value) ? parseFloat($value) : $value;
                             });
                         } else {
                             var $value = $el.val();
@@ -2796,7 +2796,7 @@
                             if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
                                 calx.matrix[$formkey].value[$id] = parseFloat($value) / 100;
                             } else {
-                                calx.matrix[$formkey].value[$id] = $value;
+                                calx.matrix[$formkey].value[$id] = $.isNumeric($value) ? parseFloat($value) : $value;
                             }
                         }
 
@@ -2804,7 +2804,7 @@
                     });
 
                     if ($type == 'text') {
-                        $el.unbind('blur,focus').focus(function() {
+                        $el.unbind('blur,focus,change').focus(function() {
 
                             if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
                                 var $percent = (calx.matrix[$formkey].value[$id] * 100);
@@ -2825,7 +2825,7 @@
                             if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
                                 calx.matrix[$formkey].value[$id] = parseFloat($value) / 100;
                             } else {
-                                calx.matrix[$formkey].value[$id] = $value;
+                                calx.matrix[$formkey].value[$id] = $.isNumeric($value) ? parseFloat($value) : $value;
                             }
                             calx.setLang($formkey);
                             $el.val(utility.formatter(calx.matrix[$formkey].value[$id]).format(calx.matrix[$formkey].data[$id].format));
@@ -2934,7 +2934,7 @@
                         'dependency': $dependency
                     };
 
-                    calx.matrix[$formkey].value[$id] = $value;
+                    calx.matrix[$formkey].value[$id] = $.isNumeric($value) ? parseFloat($value) : $value;
 
                     /** or if formula has been changed */
                 } else if (calx.matrix[$formkey].data[$id].formula != $formula) {
@@ -2948,7 +2948,7 @@
 
                     }
 
-                    calx.matrix[$formkey].value[$id] = $value;
+                    calx.matrix[$formkey].value[$id] = $.isNumeric($value) ? parseFloat($value) : $value;
                 }
             };
 
@@ -3008,7 +3008,7 @@
                 var $form = $(this);
                 var $formkey = $form.attr('data-key');
 
-                if ($formkey) {
+                if ($formkey!=='') {
                     $.each(calx.matrix[$formkey].data, function($k, $v) {
                         $el = $('#' + $k);
                         $el.unbind('blur, focus, change');
@@ -3028,11 +3028,12 @@
                             }
                         }
                     });
-                    calx.matrix[$formkey] = undefined;
-                    calx.cell[$formkey] = undefined;
-                    calx.settings[$formkey] = undefined;
+                    delete calx.matrix[$formkey];
+                    delete calx.cell[$formkey];
+                    delete calx.settings[$formkey];
 
                     $form.attr('data-key', '');
+                    $form.attr('data-calx-enable', '0');
                 }
             });
         },
