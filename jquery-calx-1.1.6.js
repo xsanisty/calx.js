@@ -1,5 +1,5 @@
 /**
- * jQuery Calx 1.1.4
+ * jQuery Calx 1.1.6
  * author :  Ikhsan Agustian <ikhsan017@gmail.com>
  * credit :  jison parser generator by Zach Carter <https://github.com/zaach/jison>,
  * 			 numeral.js for number formatting by Adam Drapper <https://github.com/adamwdraper/Numeral-js>
