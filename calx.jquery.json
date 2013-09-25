@@ -3,7 +3,7 @@
     "title": "jQuery Calx",
     "description": "jQuery plugin for creating calculation form or calculation table with user provided formula",
     "keywords": ["form", "calculator", "excel", "formula"],
-    "version": "1.1.6",
+    "version": "1.1.8",
     "author": {
         "name": "Ikhsan Agustian",
         "url": "http://www.xsanisty.com/"
