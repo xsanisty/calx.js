@@ -2590,7 +2590,7 @@
 		this.lang = 'en';
 		this.zeroformat = null;
 		this.data = {}; //detail data attribute of each cell
-		this.value = {}; //native numberic value of each cell
+		this.value = {}; //native numeric value of each cell
 	}
 
 	/** update matrix value when form data changed */
@@ -2689,23 +2689,37 @@
 				var $key = $index.replace(/\$/g, '');
 				var $el = $('#' + $key);
 
-				if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
-					$el.val(utility.formatter(this.value[$key]).format(this.data[$key].format));
-				} else {
-					$el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
+				if($el.length!=0){
+					if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
+						$el.val(utility.formatter(this.value[$key]).format(this.data[$key].format));
+					} else {
+						$el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
+					}
 				}
 
 			});
 		} else {
 			var $el = $('#' + $key);
 
-			if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
-				$el.val(utility.formatter(this.value[$key]).format(this.data[$key].format));
-			} else {
-				$el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
+			if($el.length!=0){
+				if (form_element.indexOf($el.prop('tagName').toLowerCase()) > -1) {
+					$el.val(utility.formatter(this.value[$key]).format(this.data[$key].format));
+				} else {
+					$el.html(utility.formatter(this.value[$key]).format(this.data[$key].format));
+				}
 			}
 		}
-	}
+	};
+
+	matrix.prototype.clean = function(){
+		var $this = this;
+		$.each($this.value, function(id,val){
+			if($('#'+id).length == 0){
+				delete $this.data[id];
+				delete $this.value[id];
+			}
+		});
+	};
 
 
 	/** calx function member */
@@ -2723,15 +2737,20 @@
 		init: function($options) {
 			return this.each(function() {
 				var $form = $(this);
-				var $key = new Date().valueOf();
-				calx.matrix[$key] = new matrix($key);
-				calx.cell[$key] = [];
-				calx.settings[$key] = $.extend({}, defaults, $options);
+				if(!$form.attr('data-calx-enable')){
+					var $key = new Date().valueOf();
+					calx.matrix[$key] = new matrix($key);
+					calx.cell[$key] = [];
+					calx.settings[$key] = $.extend({}, defaults, $options);
 
-				$form.attr('data-key', $key);
-				var $lang = calx.setLang($key);
-				calx.matrix[$key].lang = $lang;
-				calx.scan($form);
+					$form.attr('data-key', $key);
+					$form.attr('data-calx-enable', 1);
+					var $lang = calx.setLang($key);
+					calx.matrix[$key].lang = $lang;
+					calx.scan($form);
+				}else{
+					calx.scan($form);
+				}
 			});
 		},
 
@@ -2755,12 +2774,16 @@
 				var $formkey = $form.attr('data-key');
 				//calx.setLang($formkey);
 				calx.scan($form);
-				calx.update($formkey);
+				//calx.update($formkey);
 
 			});
 		},
 
-		/** scan the form and build the calculation matrix */
+		/** 
+		 * scan the form and build the calculation matrix
+		 * @param  {[type]} $form [description]
+		 * @return {[type]}       [description]
+		 */
 		scan: function($form) {
 			var $formkey = $form.attr('data-key');
 
@@ -2837,7 +2860,7 @@
 						});
 					}
 				}
-			}
+			};
 
 			/** register new found element to the calculation matrix */
 			var registerMatrix = function() {
@@ -2880,7 +2903,7 @@
 							}
 						}
 					}
-				}
+				};
 
 				/** if cell is not registered in the matrix, in case of refreshing dynamic form, register it and it's dependencies! */
 				if (typeof(calx.matrix[$formkey].data[$id]) == 'undefined') {
@@ -2955,9 +2978,14 @@
 
 					calx.matrix[$formkey].value[$id] = $value;
 				}
-			}
+			};
 
 			/** register all cells with data-formula attribute to the matrix */
+
+
+			/** iterate matrix for removing cells which is not present in the dom */
+			calx.matrix[$formkey].clean();
+
 			var $resultContainer = $form.find('[data-formula]');
 			$resultContainer.each(registerMatrix);
 
@@ -2968,13 +2996,6 @@
 			/** register all cells with data-format attribute to the matrix */
 			var $formattedCell = $form.find('[data-format]');
 			$formattedCell.each(registerMatrix);
-
-			/** iterate matrix for removing cells which is not present in the dom */
-			$.each(calx.matrix[$formkey].data, function($id, $obj){
-				if($form.find('#'+$id).length == 0){
-					delete calx.matrix[$formkey].data[$id];
-				}
-			});
 
 			//$cells.each(registerEvent); <-- moved inside registerMatrix
 			if (calx.settings[$formkey].autocalculate) {
@@ -3042,6 +3063,20 @@
 					$form.attr('data-key', '');
 				}
 			});
+		},
+
+		value : function($cell){
+			var $form = $(this);
+			var $formkey = $form.attr('data-key');
+			if(typeof($cell) != 'undefined'){
+				if($formkey && calx.matrix[$formkey].data[$cell]){
+					return calx.matrix[$formkey].value[$cell];
+				}else{
+					return false;
+				}
+			}else{
+				return calx.matrix[$formkey].value;
+			}
 		}
 	};
 
