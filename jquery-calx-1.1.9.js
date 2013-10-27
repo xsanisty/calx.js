@@ -1,6 +1,7 @@
 /**
  * jQuery Calx 1.1.9
  * author :  Ikhsan Agustian <ikhsan017@gmail.com>
+ * website:  http://www.xsanisty.com/calx
  * credit :  jison parser generator by Zach Carter <https://github.com/zaach/jison>,
  *              numeral.js for number formatting by Adam Drapper <https://github.com/adamwdraper/Numeral-js>
  *           stackoverflow community :D
@@ -2683,7 +2684,10 @@
         language: 'en',
 
         //zero formatting
-        zeroformat: null
+        zeroformat: null,
+
+        //display value round
+        round : 3
     };
 
     var form_element = ['input', 'button', 'select', 'textarea'];
@@ -2998,14 +3002,23 @@
 
                     if ($type == 'text') {
                         $el.unbind('blur,focus,change').focus(function() {
-
+                            var $haveFormula = (typeof($el.attr('data-formula')) == 'undefined' || $el.attr('data-formula') === '') ? false : true;
+                                
                             if (calx.matrix[$formkey].data[$id].format.indexOf('%') > -1) {
                                 var $percent = (calx.matrix[$formkey].value[$id] * 100);
                                 var $orivalue = ($percent % 1 > 0) ? $percent.toFixed(2) : $percent.toFixed(0);
 
-                                $el.val($orivalue);
+                                if($haveFormula){
+                                    $el.val($orivalue.toFixed(calx.settings[$formkey].round));
+                                }else{
+                                    $el.val($orivalue);
+                                }
                             } else {
-                                $el.val(calx.matrix[$formkey].value[$id]);
+                                if($haveFormula){
+                                    $el.val(calx.matrix[$formkey].value[$id].toFixed(calx.settings[$formkey].round));
+                                }else{
+                                    $el.val(calx.matrix[$formkey].value[$id]);
+                                }
                             }
 
                         }).blur(function() {
