@@ -2690,7 +2690,7 @@
         round : 3,
 
         //update callback
-        onUpdate : false
+        onupdate : false
     };
 
     var form_element = ['input', 'button', 'select', 'textarea'];
@@ -2937,10 +2937,10 @@
                 return this.each(function() {
                     var $form = $(this);
                     var $formkey = $form.attr('data-key');
-                    calx.matrix[$formkey].update(true, calx.settings[$formkey].onUpdate);
+                    calx.matrix[$formkey].update(true, calx.settings[$formkey].onupdate);
                 });
             } else {
-                calx.matrix[$formkey].update(true, calx.settings[$formkey].onUpdate);
+                calx.matrix[$formkey].update(true, calx.settings[$formkey].onupdate);
             }
         },
 
@@ -3005,7 +3005,7 @@
                             }
                         }
 
-                        calx.matrix[$formkey].update(calx.settings[$formkey].autocalculate, calx.settings[$formkey].onUpdate);
+                        calx.matrix[$formkey].update(calx.settings[$formkey].autocalculate, calx.settings[$formkey].onupdate);
                     });
 
                     if ($type == 'text') {
