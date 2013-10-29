@@ -2687,7 +2687,10 @@
         zeroformat: null,
 
         //display value round
-        round : 3
+        round : 3,
+
+        //update callback
+        onUpdate : false
     };
 
     var form_element = ['input', 'button', 'select', 'textarea'];
@@ -2763,7 +2766,7 @@
     };
 
     /** update matrix value when form data changed */
-    matrix.prototype.update = function($apply) {
+    matrix.prototype.update = function($apply, $callback) {
         var $dataKey;
 
         if (typeof($apply) == 'undefined') {
@@ -2784,6 +2787,11 @@
             if (typeof(this.data[$dataKey].formula) != 'undefined') {
                 this.calculate($dataKey, $apply);
             }
+        }
+
+
+        if(typeof($callback) == 'function' && $apply){
+            $callback.call(this, []);
         }
     };
 
@@ -2929,10 +2937,10 @@
                 return this.each(function() {
                     var $form = $(this);
                     var $formkey = $form.attr('data-key');
-                    calx.matrix[$formkey].update(true);
+                    calx.matrix[$formkey].update(true, calx.settings[$formkey].onUpdate);
                 });
             } else {
-                calx.matrix[$formkey].update(true);
+                calx.matrix[$formkey].update(true, calx.settings[$formkey].onUpdate);
             }
         },
 
@@ -2997,7 +3005,7 @@
                             }
                         }
 
-                        calx.matrix[$formkey].update(calx.settings[$formkey].autocalculate);
+                        calx.matrix[$formkey].update(calx.settings[$formkey].autocalculate, calx.settings[$formkey].onUpdate);
                     });
 
                     if ($type == 'text') {
