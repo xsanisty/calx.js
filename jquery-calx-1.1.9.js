@@ -2589,7 +2589,7 @@
 
         /** convert string char to number, e.g A => 1, Z => 26, AA => 27 */
         toNum: function(chr) {
-            chr = chr.split();
+            chr = chr.split('');
             var base = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
                 i, j, result = 0;
 
