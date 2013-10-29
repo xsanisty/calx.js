@@ -2791,7 +2791,7 @@
 
 
         if(typeof($callback) == 'function' && $apply){
-            $callback.call(this, []);
+            $callback.apply(undefined, [this.value]);
         }
     };
 
