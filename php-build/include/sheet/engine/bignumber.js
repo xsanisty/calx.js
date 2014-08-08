@@ -1,0 +1,3 @@
+bignumber : function (argument) {
+    // body...
+}

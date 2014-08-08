@@ -1,0 +1,3 @@
+registerFunction : function (argument) {
+    // body...
+}

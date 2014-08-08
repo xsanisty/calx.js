@@ -1,0 +1,60 @@
+<html>
+<head>
+	<title>console test</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jstat.min.js"></script>
+    <script type="text/javascript" src="js/md5.js"></script>
+    <script type="text/javascript" src="js/lodash.min.js"></script>
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/numeral.min.js"></script>
+    <script type="text/javascript" src="js/numeric.min.js"></script>
+    <script type="text/javascript" src="js/underscore.string.min.js"></script>
+
+    <script>
+        var startup = performance.now();
+        console.log(startup);
+    </script>
+    <script src="php-build/jquery-calx-2.0.min.js"></script>
+    <script>
+        var secondCheckPoint = performance.now();
+        console.log(secondCheckPoint);
+        console.log('building calx engine in: '+(secondCheckPoint-startup)+' miliseconds');
+    </script>
+</head>
+<body>
+
+    <div id="form">
+        <input data-cell="A1" value="10.28394"> +
+        <input data-cell="A2" value="15.39485"> =
+        <span  data-cell="A3" data-formula="A1+A2">hi</span>
+        <span  data-cell="A4" data-formula="A3">hi</span>
+        <span  data-cell="A5" data-formula="A4">hi</span>
+        <span  data-cell="A6" data-formula="A5">hi</span>
+    </div>
+
+    <div id="form2">
+        <input type="text" data-cell="A1" value="sample string"> -
+        <input type="text" data-cell="A2" value="another string"> =
+        <span data-cell="A3" data-formula="A1-A2"></span>
+        <span data-formula="A1+A2">hi</span>
+        <span data-formula="A1+A2">hi</span>
+        <span data-formula="#form > A1+A2">hi</span>
+    </div>
+
+    <script type="text/javascript">
+        var thirdCheckPoint = performance.now();
+
+        console.log(thirdCheckPoint);
+        console.log('processing dom in: '+(thirdCheckPoint-secondCheckPoint)+' miliseconds');
+        $('#form, #form2').calx({
+            'default' : 0
+        });
+
+        var fourthCheckPoint = performance.now();
+
+        console.log(fourthCheckPoint);
+        console.log('building calx registry in: '+(fourthCheckPoint-thirdCheckPoint)+' miliseconds');
+    </script>
+
+</body>
+</html>

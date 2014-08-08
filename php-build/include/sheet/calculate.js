@@ -1,0 +1,3 @@
+sheet.prototype.calculate = function(){
+
+};
