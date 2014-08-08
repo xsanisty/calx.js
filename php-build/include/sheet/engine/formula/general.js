@@ -3,10 +3,10 @@ general: {
     	var result = 0, cell;
 
     	for(cell in arguments){
-    		if(typeof(arguments[cell]) == 'object' && arguments[cell].constructor.name !== 'cell'){
+    		if(typeof(arguments[cell]) == 'object'){
                 result += this.engine.formula.general.SUM.apply(this, arguments[cell]);
     		}else{
-                result += arguments[cell].getFloatValue();
+                result += (arguments[cell] * 1);
             }
     	}
 

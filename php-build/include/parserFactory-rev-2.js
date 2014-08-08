@@ -157,7 +157,7 @@ function parserFactory(sheet){
 
                     break;
                 case 8:
-                    this.$ = ($$[$0 - 2].getFloatValue()) + ($$[$0].getFloatValue());
+                    this.$ = ($$[$0 - 2] *1) + ($$[$0] *1);
 
                     break;
                 case 9:
@@ -234,27 +234,27 @@ function parserFactory(sheet){
 
                     break;
                 case 29:
-                    this.$ = sheet.getCell($$[$0]);
+                    this.$ = sheet.getCellValue($$[$0]);
 
                     break;
                 case 30:
-                    this.$ = sheet.getCellRange($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.getCellRangeValue($$[$0 - 2], $$[$0]);
 
                     break;
                 case 31:
-                    this.$ = sheet.getCell($$[$0]);
+                    this.$ = sheet.getCellValue($$[$0]);
 
                     break;
                 case 32:
-                    this.$ = sheet.getCellRange($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.getCellRangeValue($$[$0 - 2], $$[$0]);
 
                     break;
                 case 33:
-                    this.$ = sheet.getRemoteCell($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.getRemoteCellValue($$[$0 - 2], $$[$0]);
 
                     break;
                 case 34:
-                    this.$ = sheet.getRemoteCellRange($$[$0 - 4], $$[$0 - 2], $$[$0]);
+                    this.$ = sheet.getRemoteCellRangeValue($$[$0 - 4], $$[$0 - 2], $$[$0]);
 
                     break;
                 case 35:

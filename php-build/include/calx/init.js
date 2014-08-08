@@ -5,9 +5,17 @@
  */
 init : function (option) {
     this.each(function(){
-        var sheetIdentifier = 'CALX'+(new Date()).valueOf();
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        console.log(sheetIdentifier);
 
-        calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
+        if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+            sheetIdentifier = 'CALX'+(new Date()).valueOf();
+
+            calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
+        }else{
+            console.log('second call should be refresh');
+            calx.sheetRegistry[sheetIdentifier].refresh();
+        }
     });
 
     for(var a in calx.sheetRegistry){
@@ -28,5 +36,6 @@ init : function (option) {
         }
     }
 
+    console.log(calx);
     return this;
 }
