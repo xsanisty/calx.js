@@ -1,5 +1,5 @@
 /**
- * destroy calx intance and remove reference from the element
+ * Destroy calx instance and remove reference from the element
  * @return {object}     jQuery Object
  */
 destroy : function(){

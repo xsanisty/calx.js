@@ -1,3 +1,8 @@
+/**
+ * initialize sheet object and register to internal calx.sheetRegistry
+ * @param  {object} option      option to override the default option
+ * @return {object}             jQuery object for chaining
+ */
 init : function (option) {
     this.each(function(){
         var sheetIdentifier = 'CALX'+(new Date()).valueOf();

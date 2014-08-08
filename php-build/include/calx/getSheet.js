@@ -1,3 +1,7 @@
+/**
+ * get sheet object bound to the element
+ * @return {object}             the sheet object
+ */
 getSheet : function(){
     var $this       = $(this),
         $identifier = $this.attr('data-calx-identifier');
