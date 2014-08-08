@@ -11,7 +11,7 @@
         require 'include/cell.js';
         require 'include/cell/init.js';
         require 'include/cell/buildDependency.js';
-        require 'include/cell/buildDependency.js';
+        require 'include/cell/removeDependency.js';
         require 'include/cell/registerDependant.js';
         require 'include/cell/removeDependant.js';
         require 'include/cell/checkCircularReference.js';
