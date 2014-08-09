@@ -44,6 +44,10 @@ cell.prototype.attachEvent = function(){
                 this.el.focus(function(){
                     $(this).trigger('calxFocus');
                 });
+
+                this.el.keyup(function(){
+                    $(this).trigger('calxBlur');
+                });
             }else if(tagName == 'select'){
 
                 this.el.change(function(){
