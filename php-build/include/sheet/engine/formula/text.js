@@ -6,7 +6,7 @@ text:{
             if(typeof(arguments[cell]) == 'object'){
                 result += this.engine.formula.text.CONCAT.apply(this, arguments[cell]);
             }else{
-                result += arguments[cell].getStringValue();
+                result += arguments[cell];
             }
         }
 
