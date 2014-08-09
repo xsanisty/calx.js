@@ -23,23 +23,26 @@
 </head>
 <body>
 
+
     <div id="form">
-        <input data-cell="A1" value="10.28394"> +
-        <input data-cell="A2" value="15.39485"> =
-        <span  data-cell="A3" data-formula="A1+A2">hi</span>
-        <span  data-cell="A4" data-formula="A3">hi</span>
-        <span  data-cell="A5" data-formula="A4">hi</span>
-        <span  data-cell="A6" data-formula="A5">hi</span>
+        <h3>Form 1 (#form)</h3>
+        A1 = <input data-cell="A1" value="10.28394"><br>
+        A2 = <input data-cell="A2" value="15.39485"><br>
+        A3 (A1+A2) = <span  data-cell="A3" data-formula="A1+A2">hi</span><br>
+        A4 (A3) = <span  data-cell="A4" data-formula="A3">hi</span><br>
+        A5 (A4) = <span  data-cell="A5" data-formula="A4">hi</span><br>
+        A6 (A5) = <span  data-cell="A6" data-formula="A5">hi</span><br>
     </div>
 
     <div id="form2">
-        <input type="text" data-cell="A1" value="sample string"> -
-        <input type="text" data-cell="A2" value="another string"> =
-        <span data-cell="A3" data-formula="A1-A2"></span>
-        <span data-formula="A1+A2">hi</span>
-        <span data-formula="A1+A2">hi</span>
-        <span data-formula="#form > A1+A2">hi</span>
-        <span data-formula="CONCAT(A1,' ',A2)"></span>
+        <h3>Form 2 (#form2)</h3>
+        A1 = <input type="text" data-cell="A1" value="sample string"><br>
+        A2 = <input type="text" data-cell="A2" value="another string"><br>
+        A3 (A1-A2) = <span data-cell="A3" data-formula="A1-A2"></span><br>
+        no address (A1+A2) = <span data-formula="A1+A2">hi</span><br>
+        no address (A1*A2) = <span data-formula="A1*A2">hi</span><br>
+        no address (#form>A1 + A2) = <span data-formula="#form > A1+A2">hi</span><br>
+        no address (CONCAT('A1 value is: ',A1,', A2 value is: ',A2)) = <span data-formula="CONCAT('A1 value is: ',A1,', A2 value is: ',A2)"></span><br>
     </div>
 
     <script type="text/javascript">
