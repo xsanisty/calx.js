@@ -3,8 +3,7 @@ sheet.prototype.getCellValue = function(address){
     if(typeof(this.cells[cell]) == 'undefined'){
         return false;
     }
-
-    return this.cells[cell].value;
+    return this.cells[cell].getValue();
 };
 
 sheet.prototype.getCellRangeValue = function(addressStart, addressStop){
