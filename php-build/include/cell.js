@@ -21,6 +21,6 @@
         this.affected           = false;
         this.dependencies       = {};
         this.dependant          = {};
-        this.conditionalStyle   = {};
+        this.conditionalStyle   = false;
         this.init();
     };

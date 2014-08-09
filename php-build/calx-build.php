@@ -11,9 +11,11 @@
         require 'include/cell.js';
         require 'include/cell/init.js';
         require 'include/cell/buildDependency.js';
-        require 'include/cell/removeDependency.js';
+        require 'include/cell/removeDependant.js';
+        require 'include/cell/processDependency.js';
         require 'include/cell/registerDependant.js';
         require 'include/cell/removeDependant.js';
+        require 'include/cell/processDependant.js';
         require 'include/cell/checkCircularReference.js';
         require 'include/cell/evaluateFormula.js';
         require 'include/cell/attachEvent.js';
@@ -30,6 +32,7 @@
         require 'include/cell/getFloatValue.js';
         require 'include/cell/setAffected.js';
         require 'include/cell/isAffected.js';
+        require 'include/cell/renderComputedValue.js';
 
 
         /** sheet reference */

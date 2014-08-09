@@ -6,4 +6,4 @@ cell.prototype.processDependency = function(){
     }
 
     this.evaluateFormula();
-}
+};

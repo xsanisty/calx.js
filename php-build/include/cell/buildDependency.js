@@ -1,6 +1,6 @@
 /**
  * build inter-cell dependency and dependant list, used for triggerring calculation that related to other cell
- * @return {[type]} [description]
+ * @return {void}
  */
 cell.prototype.buildDependency = function(){
     var pattern = {
