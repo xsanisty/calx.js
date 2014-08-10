@@ -28,10 +28,19 @@
         <h3>Form 1 (#form)</h3>
         A1 = <input data-cell="A1" value="10.28394"><br>
         A2 = <input data-cell="A2" value="15.39485"><br>
+        B1 = <select data-cell="B1" id="">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select><br>
         A3 (A1+A2) = <span  data-cell="A3" data-formula="A1+A2">hi</span><br>
-        A4 (A3) = <span  data-cell="A4" data-formula="A3">hi</span><br>
+        A4 (A3+B1) = <span  data-cell="A4" data-formula="A3+B1">hi</span><br>
         A5 (A4) = <span  data-cell="A5" data-formula="A4">hi</span><br>
         A6 (A5) = <span  data-cell="A6" data-formula="A5">hi</span><br>
+
+
     </div>
 
     <div id="form2">
@@ -46,18 +55,10 @@
     </div>
 
     <script type="text/javascript">
-        var thirdCheckPoint = performance.now();
-
-        console.log(thirdCheckPoint);
-        console.log('processing dom in: '+(thirdCheckPoint-secondCheckPoint)+' miliseconds');
         $('#form, #form2').calx({
-            'default' : 0
+            'default' : 0,
+            'autoCalculate' : true
         });
-
-        var fourthCheckPoint = performance.now();
-
-        console.log(fourthCheckPoint);
-        console.log('building calx registry in: '+(fourthCheckPoint-thirdCheckPoint)+' miliseconds');
     </script>
 
 </body>
