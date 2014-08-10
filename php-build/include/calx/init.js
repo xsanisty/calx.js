@@ -4,8 +4,9 @@
  * @return {object}             jQuery object for chaining
  */
 init : function (option) {
+    var a, sheetIdentifier;
     this.each(function(){
-        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        sheetIdentifier = $(this).attr('data-calx-identifier');
         console.log(sheetIdentifier);
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
@@ -18,9 +19,13 @@ init : function (option) {
         }
     });
 
-    for(var a in calx.sheetRegistry){
+    /** build dependency tree */
+    for(a in calx.sheetRegistry){
         calx.sheetRegistry[a].buildCellDependency();
+    }
 
+    /** check circular reference after tree has been built */
+    for(a in calx.sheetRegistry){
         var reference = calx.sheetRegistry[a].checkCircularReference();
 
         if(reference.isCircular){
@@ -34,8 +39,9 @@ init : function (option) {
             alert(errorMessage);
             $.error(errorMessage);
         }
+
+        calx.sheetRegistry[a].processDependencyTree();
     }
 
-    console.log(calx);
     return this;
 }
