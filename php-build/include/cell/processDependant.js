@@ -5,7 +5,10 @@
  */
 cell.prototype.processDependant = function(){
     this.evaluateFormula();
-    this.renderComputedValue();
+
+    if(this.sheet.config.autoCalculate){
+        this.renderComputedValue();
+    }
 
     for(var a in this.dependant){
         this.dependant[a].processDependant();
