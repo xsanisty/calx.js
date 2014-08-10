@@ -12,11 +12,6 @@ cell.prototype.attachEvent = function(){
          * attach event only if it is form element
          */
         if(isFormTag){
-
-            this.el.on('calxChange', function(){
-                this.setValue(this.el.val());
-            });
-
             if(tagName == 'input'){
                 this.el.on('claxFocus', function(){
                     this.el.val(currentCell.getValue());
@@ -24,16 +19,7 @@ cell.prototype.attachEvent = function(){
 
                 this.el.on('calxBlur', function(){
                     currentCell.setValue(currentCell.el.val());
-                    console.log(currentCell);
                     currentCell.processDependant();
-                });
-
-                this.el.on('calxKeyDown', function(){
-
-                });
-
-                this.el.on('calxKeyUp', function(){
-
                 });
 
                 /** bind to internal event, so no need to unbind the real event on destroy */
@@ -50,6 +36,10 @@ cell.prototype.attachEvent = function(){
                 });
             }else if(tagName == 'select'){
 
+                this.el.on('calxChange', function(){
+                    currentCell.setValue(currentCell.el.val());
+                    currentCell.processDependant();
+                });
                 this.el.change(function(){
                     $(this).trigger('calxChange');
                 });
