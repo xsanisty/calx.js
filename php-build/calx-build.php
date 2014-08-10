@@ -40,6 +40,7 @@
         require 'include/sheet/init.js';
         require 'include/sheet/checkCircularReference.js';
         require 'include/sheet/buildCellDependency.js';
+        require 'include/sheet/processDependencyTree.js';
         require 'include/sheet/handler.js';
         require 'include/sheet/evaluate.js';
         require 'include/sheet/update.js';
