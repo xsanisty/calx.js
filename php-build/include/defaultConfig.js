@@ -11,6 +11,6 @@ var defaultConfig = {
     'onAfterApply'          : function(data){return data},
     'zeroFormat'            : null,
     'precision'             : 2,
-    'defaultFormat'         : '0[.]00',
+    'defaultFormat'         : false,
     'ajaxUrl'               : null
 };
