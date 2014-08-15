@@ -6,6 +6,7 @@
         <?php require 'include/sheet/engine/formatter.js' ?>,
         <?php require 'include/sheet/engine/bignumber.js' ?>,
         formula : {
+            <?php require 'include/sheet/engine/formula/date.js' ?>,
             <?php require 'include/sheet/engine/formula/math.js' ?>,
             <?php require 'include/sheet/engine/formula/financial.js' ?>,
             <?php require 'include/sheet/engine/formula/statistic.js' ?>,
