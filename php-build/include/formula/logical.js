@@ -54,7 +54,7 @@ logical : {
 
             if (switchCount) {
                 for (var index = 0; index < switchCount; index++) {
-                    if (targetValue === arguments[index * 2 + 1]) {
+                    if (targetValue == arguments[index * 2 + 1]) {
                         result = arguments[index * 2 + 2];
                         switchSatisfied = true;
                         break;
