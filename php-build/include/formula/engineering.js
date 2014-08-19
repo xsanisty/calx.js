@@ -260,7 +260,7 @@ engineering: {
      * @param {integer} number1 [description]
      * @param {integer} number2 [description]
      */
-    BITXOR = function(number1, number2) {
+    BITXOR : function(number1, number2) {
         number1 = parseFloat(number1, 10);
         number2 = parseFloat(number2, 10);
 
@@ -286,7 +286,7 @@ engineering: {
 
         // Return bitwise XOR of two numbers
         return number1 ^ number2;
-    }
+    },
 
     /**
      * Implement CONVERT function, part of the stoic's formula.js (http://www.stoic.com/pages/formula)
