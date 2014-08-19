@@ -7,7 +7,7 @@ sheet.prototype.getCellValue = function(address){
 };
 
 sheet.prototype.getCellRangeValue = function(addressStart, addressStop){
-    var cellRangeAddress= this.engine.utility.cellRange(addressStart, addressStop),
+    var cellRangeAddress= utility.cellRange(addressStart, addressStop),
         cellRangeLength = cellRangeAddress.length,
         cellRangeValue  = {},
         i;
@@ -65,13 +65,13 @@ sheet.prototype.callFunction = function(functionName, params){
     var category, func;
 
     func = functionName.toUpperCase();
-    if(typeof(this.engine.formula[func]) == 'function'){
-        return this.engine.formula[func].apply(this, params);
+    if(typeof(formula[func]) == 'function'){
+        return formula[func].apply(this, params);
     }
 
-    for(category in this.engine.formula){
-        if(typeof(this.engine.formula[category][func]) == 'function' ){
-            return this.engine.formula[category][func].apply(this, params);
+    for(category in formula){
+        if(typeof(formula[category][func]) == 'function' ){
+            return formula[category][func].apply(this, params);
         }
     }
 
@@ -102,6 +102,10 @@ sheet.prototype.getVariable = function(varName){
 sheet.prototype.comparator = {
     greater: function(a, b){
         return a > b;
+    },
+
+    equal: function(a,b){
+        return a == b;
     }
 }
 

@@ -6,6 +6,8 @@
         require 'include/ieHack.js';
         require 'include/defaultConfig.js';
         require 'include/parserFactory-rev-2.js';
+        require 'include/formula.js';
+        require 'include/utility.js';
 
         /** cell reference */
         require 'include/cell.js';
