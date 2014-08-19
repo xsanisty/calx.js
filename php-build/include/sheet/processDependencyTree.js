@@ -1,3 +1,7 @@
+/**
+ * processing each cell's dependency list
+ * @return {void}
+ */
 sheet.prototype.processDependencyTree = function(){
     var a;
 

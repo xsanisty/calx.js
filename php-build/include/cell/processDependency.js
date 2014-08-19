@@ -1,6 +1,13 @@
+/**
+ * process cell's dependency list and mark it as processed
+ * @return {void}
+ */
 cell.prototype.processDependency = function(){
 
-    /** process all dependencies first, then evaluate the formula */
+    /**
+     * process all affected dependencies first, then evaluate the formula
+     * mark each cell as processed by setting the affected flag as false
+     */
     for (var a in this.dependencies){
         if(this.dependencies[a].isAffected()){
             this.dependencies[a].processDependency();

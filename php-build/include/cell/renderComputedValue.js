@@ -6,6 +6,7 @@ cell.prototype.renderComputedValue = function(){
     if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1;
+
         if(this.formula){
             if(isFormTag){
                 this.el.val(this.computedValue);

@@ -9,17 +9,7 @@
     <script type="text/javascript" src="js/numeral.min.js"></script>
     <script type="text/javascript" src="js/numeric.min.js"></script>
     <script type="text/javascript" src="js/underscore.string.min.js"></script>
-
-    <script>
-        var startup = performance.now();
-        console.log(startup);
-    </script>
     <script src="php-build/calx-build.php"></script>
-    <script>
-        var secondCheckPoint = performance.now();
-        console.log(secondCheckPoint);
-        console.log('building calx engine in: '+(secondCheckPoint-startup)+' miliseconds');
-    </script>
 </head>
 <body>
 
@@ -52,6 +42,7 @@
         no address (A1*A2) = <span data-formula="A1*A2">hi</span><br>
         no address (#form>A1 + A2) = <span data-formula="#form > A1+A2">hi</span><br>
         no address (CONCAT('A1 value is: ',A1,', A2 value is: ',A2)) = <span data-formula="CONCAT('A1 value is: ',A1,', A2 value is: ',A2)"></span><br>
+        no address = <span data-formula="IF(A1='string', 'A1 is string', 'A1 not string')"></span>
     </div>
 
     <script type="text/javascript">

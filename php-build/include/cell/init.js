@@ -1,3 +1,7 @@
+/**
+ * Initialize the cell object, preparing all necessary variables
+ * @return {void}
+ */
 cell.prototype.init = function(){
     var $address = (this.el) ? this.el.attr('data-cell') : '',
         $formula = (this.el) ? this.el.attr('data-formula') : '',
@@ -23,7 +27,7 @@ cell.prototype.init = function(){
     }
 
     if(!$format || $.trim($format) == ''){
-        $format = false;
+        $format = this.sheet.config.defaultFormat;
     }
 
     this.value      = $value;
