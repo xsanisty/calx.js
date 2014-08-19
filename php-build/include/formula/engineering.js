@@ -216,6 +216,79 @@ engineering: {
     },
 
     /**
+     * Implement BITRSHIFT function, part of the stoic's formula.js (http://www.stoic.com/pages/formula)
+     * Bitwise Right Shift operator
+     * @param {integer} number1 [description]
+     * @param {integer} shift   [description]
+     */
+    BITRSHIFT : function(number, shift) {
+        number = parseFloat(number, 10);
+        shift  = parseFloat(shift,  10);
+
+        // Return error if either number is a non-numeric value
+        if (isNaN(number) || isNaN(shift)) {
+            return '#VALUE!';
+        }
+
+        // Return error if number is less than 0
+        if (number < 0) {
+            return '#NUM!';
+        }
+
+        // Return error if number is a non-integer
+        if (Math.floor(number) !== number) {
+            return '#NUM!';
+        }
+
+        // Return error if number is greater than (2^48)-1
+        if (number > 281474976710655) {
+            return '#NUM!';
+        }
+
+        // Return error if the absolute value of shift is greater than 53
+        if (Math.abs(shift) > 53) {
+            return '#NUM!';
+        }
+
+        // Return number shifted by shift bits to the right or to the left if shift is negative
+        return (shift >= 0) ? number >> shift : number << -shift;
+    },
+
+    /**
+     * Implement BITXOR function, part of the stoic's formula.js (http://www.stoic.com/pages/formula)
+     * Bitwise XOR operator
+     * @param {integer} number1 [description]
+     * @param {integer} number2 [description]
+     */
+    BITXOR = function(number1, number2) {
+        number1 = parseFloat(number1, 10);
+        number2 = parseFloat(number2, 10);
+
+        // Return error if either number is a non-numeric value
+        if (isNaN(number1) || isNaN(number2)) {
+            return '#VALUE!';
+        }
+
+        // Return error if either number is less than 0
+        if (number1 < 0 || number2 < 0) {
+            return '#NUM!';
+        }
+
+        // Return error if either number is a non-integer
+        if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
+            return '#NUM!';
+        }
+
+        // Return error if either number is greater than (2^48)-1
+        if (number1 > 281474976710655 || number2 > 281474976710655) {
+            return '#NUM!';
+        }
+
+        // Return bitwise XOR of two numbers
+        return number1 ^ number2;
+    }
+
+    /**
      * Implement CONVERT function, part of the stoic's formula.js (http://www.stoic.com/pages/formula)
      * Converting value from one measurement unit to another measurement unit
      * @param {int}     number      [value in first unit]
