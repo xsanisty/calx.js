@@ -75,7 +75,7 @@ sheet.prototype.callFunction = function(functionName, params){
         }
     }
 
-    return '#UNDEFINED_FORMULA'
+    return '#NAME?'
 };
 
 sheet.prototype.time = function(time){
@@ -93,7 +93,7 @@ sheet.prototype.getVariable = function(varName){
     var varIndex = varName[0];
 
     if(typeof(this.variables[varIndex]) == 'undefined'){
-        return '#UNDEFINED_VARIABLE';
+        return '#NAME?';
     }else{
         return this.variables[varIndex];
     }
