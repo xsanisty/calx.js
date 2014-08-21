@@ -8,6 +8,5 @@ var formula = {
     <?php require 'include/formula/text.js' ?>,
     <?php require 'include/formula/trigonometry.js' ?>,
     <?php require 'include/formula/general.js' ?>,
-    <?php require 'include/formula/engineering.js' ?>,
-    <?php require 'include/formula/stoic.js' ?>
+    <?php require 'include/formula/engineering.js' ?>
 };

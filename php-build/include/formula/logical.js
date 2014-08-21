@@ -1,3 +1,9 @@
+/**
+ * logical formula group.
+ * adapted from stoic's formula.js (http://www.stoic.com/pages/formula)
+ * with modification to adapt Calx environment
+ * @type {Object}
+ */
 logical : {
     AND : function() {
         var result = true;
