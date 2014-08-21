@@ -2,54 +2,194 @@
 <head>
 	<title>console test</title>
     <script src="jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/jstat.min.js"></script>
-    <script type="text/javascript" src="js/md5.js"></script>
-    <script type="text/javascript" src="js/lodash.min.js"></script>
-    <script type="text/javascript" src="js/moment.min.js"></script>
-    <script type="text/javascript" src="js/numeral.min.js"></script>
-    <script type="text/javascript" src="js/numeric.min.js"></script>
-    <script type="text/javascript" src="js/underscore.string.min.js"></script>
+    <script src="js/numeral.min.js"></script>
     <script src="php-build/calx-build.php"></script>
+    <style>
+        thead > tr > td{
+            text-align:center;
+            background: #eee;
+        }
+
+        td.num{
+            background: #eee;
+            width: 25px;
+            text-align: center
+        }
+
+        input[type="text"]{
+            width: 120px;
+        }
+
+        h5{
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
+    <table id="sheet1">
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <td>A</td>
+                <td>B</td>
+                <td>C</td>
+                <td>D</td>
+                <td>E</td>
+                <td>F</td>
+                <td><span style="font-weight:bold">Test your formula here</span></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="num">1</td>
+                <td><input type="text" data-cell="A1"></td>
+                <td><input type="text" data-cell="B1"></td>
+                <td><input type="text" data-cell="C1"></td>
+                <td><input type="text" data-cell="D1"></td>
+                <td><input type="text" data-cell="E1"></td>
+                <td><input type="text" data-cell="F1"></td>
+                <td rowspan="4" style="vertical-align:top">
+                    <table>
+                        <tr>
+                            <td><label for="formula_test">Formula :</label></td>
+                            <td><input type="text" style="width:100%" id="formula_test"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:center"><button id="formula_button">Apply Formula!</button></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><input data-cell="G1" type="text" style="width:100%" readonly></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="num">2</td>
+                <td><input type="text" data-cell="A2"></td>
+                <td><input type="text" data-cell="B2"></td>
+                <td><input type="text" data-cell="C2"></td>
+                <td><input type="text" data-cell="D2"></td>
+                <td><input type="text" data-cell="E2"></td>
+                <td><input type="text" data-cell="F2"></td>
+            </tr>
+            <tr>
+                <td class="num">3</td>
+                <td><input type="text" data-cell="A3"></td>
+                <td><input type="text" data-cell="B3"></td>
+                <td><input type="text" data-cell="C3"></td>
+                <td><input type="text" data-cell="D3"></td>
+                <td><input type="text" data-cell="E3"></td>
+                <td><input type="text" data-cell="F3"></td>
+            </tr>
+            <tr>
+                <td class="num">4</td>
+                <td><input type="text" data-cell="A4"></td>
+                <td><input type="text" data-cell="B4"></td>
+                <td><input type="text" data-cell="C4"></td>
+                <td><input type="text" data-cell="D4"></td>
+                <td><input type="text" data-cell="E4"></td>
+                <td><input type="text" data-cell="F4"></td>
+            </tr>
+            <tr>
+                <td class="num">5</td>
+                <td><input type="text" data-cell="A5"></td>
+                <td><input type="text" data-cell="B5"></td>
+                <td><input type="text" data-cell="C5"></td>
+                <td><input type="text" data-cell="D5"></td>
+                <td><input type="text" data-cell="E5"></td>
+                <td><input type="text" data-cell="F5"></td>
+            </tr>
+            <tr>
+                <td class="num">6</td>
+                <td><input type="text" data-cell="A6"></td>
+                <td><input type="text" data-cell="B6"></td>
+                <td><input type="text" data-cell="C6"></td>
+                <td><input type="text" data-cell="D6"></td>
+                <td><input type="text" data-cell="E6"></td>
+                <td><input type="text" data-cell="F6"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="sheet2">
 
-    <div id="form">
-        <h3>Form 1 (#form)</h3>
-        A1 = <input data-cell="A1" value="10.28394"><br>
-        A2 = <input data-cell="A2" value="15.39485"><br>
-        B1 = <select data-cell="B1" id="">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select><br>
-        A3 (A1+A2) = <span  data-cell="A3" data-formula="A1+A2">hi</span><br>
-        A4 (A3+B1) = <span  data-cell="A4" data-formula="A3+B1">hi</span><br>
-        A5 (A4) = <span  data-cell="A5" data-formula="A4">hi</span><br>
-        A6 (A5) = <span  data-cell="A6" data-formula="A5">hi</span><br>
-
-
-    </div>
-
-    <div id="form2">
-        <h3>Form 2 (#form2)</h3>
-        A1 = <input type="text" data-cell="A1" value="sample string"><br>
-        A2 = <input type="text" data-cell="A2" value="another string"><br>
-        A3 (A1-A2) = <span data-cell="A3" data-formula="A1-A2"></span><br>
-        no address (A1+A2) = <span data-formula="A1+A2">hi</span><br>
-        no address (A1*A2) = <span data-formula="A1*A2">hi</span><br>
-        no address (#form>A1 + A2) = <span data-formula="#form > A1+A2">hi</span><br>
-        no address (CONCAT('A1 value is: ',A1,', A2 value is: ',A2)) = <span data-formula="CONCAT('A1 value is: ',A1,', A2 value is: ',A2)"></span><br>
-        no address = <span data-formula="IF(A1='string', 'A1 is string', 'A1 not string')"></span>
-    </div>
-
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <td>A</td>
+                <td>B</td>
+                <td>C</td>
+                <td>D</td>
+                <td>E</td>
+                <td>F</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="num">1</td>
+                <td><input type="text" data-cell="A1"></td>
+                <td><input type="text" data-cell="B1"></td>
+                <td><input type="text" data-cell="C1"></td>
+                <td><input type="text" data-cell="D1"></td>
+                <td><input type="text" data-cell="E1"></td>
+                <td><input type="text" data-cell="F1"></td>
+            </tr>
+            <tr>
+                <td class="num">2</td>
+                <td><input type="text" data-cell="A2"></td>
+                <td><input type="text" data-cell="B2"></td>
+                <td><input type="text" data-cell="C2"></td>
+                <td><input type="text" data-cell="D2"></td>
+                <td><input type="text" data-cell="E2"></td>
+                <td><input type="text" data-cell="F2"></td>
+            </tr>
+            <tr>
+                <td class="num">3</td>
+                <td><input type="text" data-cell="A3"></td>
+                <td><input type="text" data-cell="B3"></td>
+                <td><input type="text" data-cell="C3"></td>
+                <td><input type="text" data-cell="D3"></td>
+                <td><input type="text" data-cell="E3"></td>
+                <td><input type="text" data-cell="F3"></td>
+            </tr>
+            <tr>
+                <td class="num">4</td>
+                <td><input type="text" data-cell="A4"></td>
+                <td><input type="text" data-cell="B4"></td>
+                <td><input type="text" data-cell="C4"></td>
+                <td><input type="text" data-cell="D4"></td>
+                <td><input type="text" data-cell="E4"></td>
+                <td><input type="text" data-cell="F4"></td>
+            </tr>
+            <tr>
+                <td class="num">5</td>
+                <td><input type="text" data-cell="A5"></td>
+                <td><input type="text" data-cell="B5"></td>
+                <td><input type="text" data-cell="C5"></td>
+                <td><input type="text" data-cell="D5"></td>
+                <td><input type="text" data-cell="E5"></td>
+                <td><input type="text" data-cell="F5"></td>
+            </tr>
+            <tr>
+                <td class="num">6</td>
+                <td><input type="text" data-cell="A6"></td>
+                <td><input type="text" data-cell="B6"></td>
+                <td><input type="text" data-cell="C6"></td>
+                <td><input type="text" data-cell="D6"></td>
+                <td><input type="text" data-cell="E6"></td>
+                <td><input type="text" data-cell="F6"></td>
+            </tr>
+        </tbody>
+    </table>
     <script type="text/javascript">
-        $('#form, #form2').calx({
+        $('#sheet1, #sheet2').calx({
             'default' : 0,
             'autoCalculate' : true
         });
+
+        $('#formula_button').click(function(){
+            $('#sheet1').calx('getCell', 'G1').setFormula($('#formula_test').val());
+        })
     </script>
 
 </body>
