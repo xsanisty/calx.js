@@ -65,5 +65,15 @@ var data = {
       [4],
       [5],
       [6]
+    ],
+
+    DAY_NAME : [
+        'Sunday',
+        'Monday',
+        'Thuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday'
     ]
 }
