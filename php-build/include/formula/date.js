@@ -33,6 +33,10 @@ date: {
         return moment(new Date(date)).date();
     },
 
+    DAYNAME : function(date){
+        return data.DAY_NAME[formula.date.WEEKDAY(date)-1];
+    },
+
     DAYS : function(end_date, start_date) {
         if(typeof (moment) == 'undefined'){
             return '#NAME?';
@@ -137,7 +141,7 @@ date: {
         }
 
         var weekend_type = (typeof weekend === 'undefined') ? 1 : weekend;
-        var weekend_days = WEEKEND_TYPES[weekend_type];
+        var weekend_days = data.WEEKEND_TYPES[weekend_type];
         var sd = moment(start_date);
         var ed = moment(end_date);
         var net_days = ed.diff(sd, 'days') + 1;
