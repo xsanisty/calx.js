@@ -1,3 +1,9 @@
+/**
+ * date formula group.
+ * adapted from stoic's formula.js (http://www.stoic.com/pages/formula)
+ * with modification to adapt Calx environment
+ * @type {Object}
+ */
 date: {
     DATE : function(year, month, day) {
         return new Date(year, month - 1, day);
