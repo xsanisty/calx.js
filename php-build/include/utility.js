@@ -110,7 +110,17 @@ var utility = {
         }, []);
     },
 
-    arrayMerge : function(){
-
+    arrayMerge : function(args){
+      var a, i, result = [];
+      for (i = 0; i < args.length; i++) {
+        if(typeof (args[i]) == 'object'){
+            for(a in args[i]){
+                result = result.concat(args[i][a]);
+            }
+        }else{
+            result = result.concat(args[i]);
+        }
+      }
+      return result;
     }
 };
