@@ -21,9 +21,6 @@ var defaultConfig = {
     /** callback triggered right after calculation result is applied */
     'onAfterApply'          : function(data){return data},
 
-    /** default value when formula resulting zero */
-    'zeroFormat'            : null,
-
     /** default precision of decimal point to be displayed */
     'precision'             : 2,
 
