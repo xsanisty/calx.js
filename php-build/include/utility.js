@@ -101,5 +101,16 @@ var utility = {
         // this one is about 300x slower in Google Chrome
         for (var repeat = []; qty > 0; repeat[--qty] = str) {}
         return repeat.join(separator);
+    },
+
+    unique : function(array){
+        return array.reduce(function(p, c) {
+            if (p.indexOf(c) < 0) p.push(c);
+            return p;
+        }, []);
+    },
+
+    arrayMerge : function(){
+
     }
 };
