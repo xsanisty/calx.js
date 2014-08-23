@@ -59,9 +59,6 @@ var defaultConfig = {
     /** callback triggered right after calculation result is applied */
     'onAfterApply'          : function(data){return data},
 
-    /** default value when formula resulting zero */
-    'zeroFormat'            : null,
-
     /** default precision of decimal point to be displayed */
     'precision'             : 2,
 
@@ -2266,6 +2263,10 @@ date: {
         return moment(new Date(date)).date();
     },
 
+    DAYNAME : function(date){
+        return data.DAY_NAME[formula.date.WEEKDAY(date)-1];
+    },
+
     DAYS : function(end_date, start_date) {
         if(typeof (moment) == 'undefined'){
             return '#NAME?';
@@ -2370,7 +2371,7 @@ date: {
         }
 
         var weekend_type = (typeof weekend === 'undefined') ? 1 : weekend;
-        var weekend_days = WEEKEND_TYPES[weekend_type];
+        var weekend_days = data.WEEKEND_TYPES[weekend_type];
         var sd = moment(start_date);
         var ed = moment(end_date);
         var net_days = ed.diff(sd, 'days') + 1;
@@ -2648,7 +2649,9 @@ financial: {
     }
 },
     statistic: {
-    
+    COUNTUNIQUE : function () {
+      return utility.unique(utility.arrayMerge(arguments)).length;
+    }
 },
     /**
  * logical formula group.
@@ -3489,8 +3492,18 @@ logical : {
         }, []);
     },
 
-    arrayMerge : function(){
-
+    arrayMerge : function(args){
+      var a, i, result = [];
+      for (i = 0; i < args.length; i++) {
+        if(typeof (args[i]) == 'object'){
+            for(a in args[i]){
+                result = result.concat(args[i][a]);
+            }
+        }else{
+            result = result.concat(args[i]);
+        }
+      }
+      return result;
     }
 };var data = {
     MEMOIZED_FACT : [],
@@ -3559,6 +3572,16 @@ logical : {
       [4],
       [5],
       [6]
+    ],
+
+    DAY_NAME : [
+        'Sunday',
+        'Monday',
+        'Thuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday'
     ]
 }    /**
      * cell hold single element with formula and value information
