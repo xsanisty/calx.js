@@ -12,7 +12,7 @@ cell.prototype.processDependant = function(selfRender, parentRender){
     this.evaluateFormula();
 
     if(selfRender){
-        //console.log('render computed val');
+        console.log('render computed val of '+this.address);
         this.renderComputedValue();
     }
 

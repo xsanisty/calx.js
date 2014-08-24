@@ -8,15 +8,15 @@ cell.prototype.renderComputedValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             formattedVal;
 
-        if(this.formula && typeof(numeral) != 'undefined'){
-            formattedVal = (this.format) ? numeral(this.computedValue).format(this.format) : this.computedValue;
+        if(this.formula){
+            formattedVal = (this.format && typeof(numeral) != 'undefined') ? numeral(this.computedValue).format(this.format) : this.computedValue;
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
                 this.el.html(formattedVal);
             }
         }else{
-            formattedVal = (this.format) ? numeral(this.value).format(this.format) : this.value
+            formattedVal = (this.format && typeof(numeral) != 'undefined') ? numeral(this.value).format(this.format) : this.value
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
