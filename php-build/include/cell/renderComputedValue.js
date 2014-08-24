@@ -9,14 +9,14 @@ cell.prototype.renderComputedValue = function(){
             formattedVal;
 
         if(this.formula){
-            formattedVal = (this.format && typeof(numeral) != 'undefined') ? numeral(this.computedValue).format(this.format) : this.computedValue;
+            formattedVal = (this.format && typeof(numeral) != 'undefined' && this.computedValue !== '') ? numeral(this.computedValue).format(this.format) : this.computedValue;
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
                 this.el.html(formattedVal);
             }
         }else{
-            formattedVal = (this.format && typeof(numeral) != 'undefined') ? numeral(this.value).format(this.format) : this.value
+            formattedVal = (this.format && typeof(numeral) != 'undefined' && this.computedValue !== '') ? numeral(this.value).format(this.format) : this.value
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
