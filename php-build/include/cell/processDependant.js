@@ -3,14 +3,20 @@
  *
  * @return {[type]} [description]
  */
-cell.prototype.processDependant = function(){
+cell.prototype.processDependant = function(selfRender, parentRender){
+
+    selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
+    parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
+
+    console.log(selfRender);
     this.evaluateFormula();
 
-    if(this.sheet.config.autoCalculate){
+    if(selfRender){
+        console.log('render computed val');
         this.renderComputedValue();
     }
 
     for(var a in this.dependant){
-        this.dependant[a].processDependant();
+        this.dependant[a].processDependant(parentRender, parentRender);
     }
 };

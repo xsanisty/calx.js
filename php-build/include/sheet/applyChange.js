@@ -5,10 +5,10 @@
 sheet.prototype.applyChange = function(){
     var a;
     for(a in this.cells){
-        this.cells[a].processDependency();
+        this.cells[a].processDependency(false, false);
     }
 
-    for(var a in this.cells){
+    for(a in this.cells){
         this.cells[a].renderComputedValue();
     }
 };

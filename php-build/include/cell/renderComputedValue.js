@@ -5,19 +5,22 @@
 cell.prototype.renderComputedValue = function(){
     if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
-            isFormTag   = this.formTags.indexOf(tagName) > -1;
+            isFormTag   = this.formTags.indexOf(tagName) > -1,
+            formattedVal;
 
-        if(this.formula){
+        if(this.formula && typeof(numeral) != 'undefined'){
+            formattedVal = (this.format) ? numeral(this.computedValue).format(this.format) : this.computedValue;
             if(isFormTag){
-                this.el.val(this.computedValue);
+                this.el.val(formattedVal);
             }else{
-                this.el.html(this.computedValue);
+                this.el.html(formattedVal);
             }
         }else{
+            formattedVal = (this.format) ? numeral(this.value).format(this.format) : this.value
             if(isFormTag){
-                this.el.val(this.value);
+                this.el.val(formattedVal);
             }else{
-                this.el.html(this.value);
+                this.el.html(formattedVal);
             }
         }
     }

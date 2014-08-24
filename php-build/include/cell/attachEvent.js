@@ -13,13 +13,25 @@ cell.prototype.attachEvent = function(){
          */
         if(isFormTag){
             if(tagName == 'input'){
-                this.el.on('claxFocus', function(){
-                    this.el.val(currentCell.getValue());
+                this.el.on('calxFocus', function(){
+                    currentCell.el.val(currentCell.getValue());
                 });
 
                 this.el.on('calxBlur', function(){
+                    if(currentCell.getFormat() && typeof(numeral) != 'undefined'){
+                        var unformattedVal = numeral().unformat(currentCell.el.val());
+                        currentCell.setValue(unformattedVal);
+
+                    }else{
+                        currentCell.setValue(currentCell.el.val());
+                    }
+                    currentCell.renderComputedValue();
+                    currentCell.processDependant(false, true);
+                });
+
+                this.el.on('calxKeyup', function(){
                     currentCell.setValue(currentCell.el.val());
-                    currentCell.processDependant();
+                    currentCell.processDependant(false, true);
                 });
 
                 /** bind to internal event, so no need to unbind the real event on destroy */
@@ -32,7 +44,7 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.keyup(function(){
-                    $(this).trigger('calxBlur');
+                    $(this).trigger('calxKeyup');
                 });
             }else if(tagName == 'select'){
 

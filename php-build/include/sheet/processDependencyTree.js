@@ -12,6 +12,6 @@ sheet.prototype.processDependencyTree = function(){
 
     /** start processing the dependency tree */
     for(a in this.cells){
-        this.cells[a].processDependency();
+        this.cells[a].processDependency(true, true);
     }
 };

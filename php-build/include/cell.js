@@ -22,5 +22,6 @@
         this.dependencies       = {};
         this.dependant          = {};
         this.conditionalStyle   = false;
+        this.address            = '';
         this.init();
     };
