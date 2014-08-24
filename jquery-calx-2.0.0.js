@@ -3655,7 +3655,7 @@ cell.prototype.init = function(){
         $format = this.sheet.config.defaultFormat;
     }
 
-    if($format && typeof(numeral) != 'undefined'){
+    if($format && typeof(numeral) != 'undefined' && $value != ''){
         $value = numeral().unformat($value);
     }
 
@@ -3836,7 +3836,7 @@ cell.prototype.processDependant = function(selfRender, parentRender){
     this.evaluateFormula();
 
     if(selfRender){
-        //console.log('render computed val');
+        //console.log('render computed val of '+this.address);
         this.renderComputedValue();
     }
 
@@ -3906,7 +3906,7 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxBlur', function(){
-                    if(currentCell.getFormat() && typeof(numeral) != 'undefined'){
+                    if(currentCell.getFormat() && typeof(numeral) != 'undefined' && currentCell.el.val() != ''){
                         var unformattedVal = numeral().unformat(currentCell.el.val());
                         currentCell.setValue(unformattedVal);
 
@@ -4075,15 +4075,15 @@ cell.prototype.renderComputedValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             formattedVal;
 
-        if(this.formula && typeof(numeral) != 'undefined'){
-            formattedVal = (this.format) ? numeral(this.computedValue).format(this.format) : this.computedValue;
+        if(this.formula){
+            formattedVal = (this.format && typeof(numeral) != 'undefined' && this.computedValue !== '') ? numeral(this.computedValue).format(this.format) : this.computedValue;
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
                 this.el.html(formattedVal);
             }
         }else{
-            formattedVal = (this.format) ? numeral(this.value).format(this.format) : this.value
+            formattedVal = (this.format && typeof(numeral) != 'undefined' && this.computedValue !== '') ? numeral(this.value).format(this.format) : this.value
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
