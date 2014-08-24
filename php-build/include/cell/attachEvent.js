@@ -35,8 +35,7 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxKeyup', function(){
-                    currentCell.setValue(currentCell.el.val());
-                    currentCell.processDependant(false, true);
+                    currentCell.setValue(currentCell.el.val(), false);
                 });
 
                 /** bind to internal event, so no need to unbind the real event on destroy */
