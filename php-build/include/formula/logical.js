@@ -28,7 +28,7 @@ logical : {
     },
 
     IFERROR : function(value, value_if_error) {
-        return (['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!'].indexOf(value) >= 0) ? value_if_error : value;
+        return (data.ERROR.indexOf(value) >= 0) ? value_if_error : value;
     },
 
     IFNA : function(value, value_if_na) {
