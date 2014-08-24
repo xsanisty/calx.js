@@ -17,6 +17,14 @@ date: {
         return moment(end_date).diff(moment.utc(start_date), period);
     },
 
+    DATEFORMAT : function(date, format){
+        if(typeof (moment) == 'undefined'){
+            return '#NAME?';
+        }
+
+        return moment(date).format(format);
+    },
+
     DATEVALUE : function(date_text) {
         if(typeof (moment) == 'undefined'){
             return '#NAME?';
