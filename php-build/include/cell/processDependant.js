@@ -8,11 +8,11 @@ cell.prototype.processDependant = function(selfRender, parentRender){
     selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
     parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
-    console.log(selfRender);
+    //console.log(selfRender);
     this.evaluateFormula();
 
     if(selfRender){
-        console.log('render computed val');
+        //console.log('render computed val');
         this.renderComputedValue();
     }
 
