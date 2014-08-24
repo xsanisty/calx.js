@@ -2691,7 +2691,7 @@ logical : {
     },
 
     IFERROR : function(value, value_if_error) {
-        return (['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!'].indexOf(value) >= 0) ? value_if_error : value;
+        return (data.ERROR.indexOf(value) >= 0) ? value_if_error : value;
     },
 
     IFNA : function(value, value_if_na) {
@@ -3596,7 +3596,9 @@ logical : {
         'Thursday',
         'Friday',
         'Saturday'
-    ]
+    ],
+
+    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!']
 }    /**
      * cell hold single element with formula and value information
      * @param  {sheet}      sheet       the sheet object where the cell is belong to
@@ -3906,7 +3908,12 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxBlur', function(){
-                    if(currentCell.getFormat() && typeof(numeral) != 'undefined' && currentCell.el.val() != ''){
+                    if(
+                        currentCell.getFormat()
+                        && typeof(numeral) != 'undefined'
+                        && currentCell.el.val() != ''
+                        && data.ERROR.indexOf(currentCell.el.val()) == -1
+                    ){
                         var unformattedVal = numeral().unformat(currentCell.el.val());
                         currentCell.setValue(unformattedVal);
 
@@ -4075,15 +4082,32 @@ cell.prototype.renderComputedValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             formattedVal;
 
+            console.log(data.ERROR.indexOf(this.computedValue));
         if(this.formula){
-            formattedVal = (this.format && typeof(numeral) != 'undefined' && this.computedValue !== '') ? numeral(this.computedValue).format(this.format) : this.computedValue;
+            formattedVal = (
+                this.format
+                && typeof(numeral) != 'undefined'
+                && this.computedValue !== ''
+                && data.ERROR.indexOf(this.computedValue) == -1
+            )
+            ? numeral(this.computedValue).format(this.format)
+            : this.computedValue;
+
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
                 this.el.html(formattedVal);
             }
         }else{
-            formattedVal = (this.format && typeof(numeral) != 'undefined' && this.computedValue !== '') ? numeral(this.value).format(this.format) : this.value
+            formattedVal = (
+                this.format
+                && typeof(numeral) != 'undefined'
+                && this.computedValue !== ''
+                && data.ERROR.indexOf(this.computedValue) == -1
+            )
+            ? numeral(this.value).format(this.format)
+            : this.value;
+
             if(isFormTag){
                 this.el.val(formattedVal);
             }else{
