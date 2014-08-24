@@ -18,7 +18,7 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxBlur', function(){
-                    if(currentCell.getFormat() && typeof(numeral) != 'undefined'){
+                    if(currentCell.getFormat() && typeof(numeral) != 'undefined' && currentCell.el.val() != ''){
                         var unformattedVal = numeral().unformat(currentCell.el.val());
                         currentCell.setValue(unformattedVal);
 

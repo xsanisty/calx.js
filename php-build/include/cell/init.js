@@ -30,7 +30,7 @@ cell.prototype.init = function(){
         $format = this.sheet.config.defaultFormat;
     }
 
-    if($format && typeof(numeral) != 'undefined'){
+    if($format && typeof(numeral) != 'undefined' && $value != ''){
         $value = numeral().unformat($value);
     }
 
