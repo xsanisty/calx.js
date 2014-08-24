@@ -8,7 +8,7 @@ cell.prototype.renderComputedValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             formattedVal;
 
-            console.log(data.ERROR.indexOf(this.computedValue));
+            //console.log(data.ERROR.indexOf(this.computedValue));
         if(this.formula){
             formattedVal = (
                 this.format
