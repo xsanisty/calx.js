@@ -10,4 +10,6 @@ sheet.prototype.init = function(){
         $cell = new cell(sheet, this);
         sheet.registerCell($cell);
     });
+
+    sheet.attachEvent();
 };
