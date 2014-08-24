@@ -19,8 +19,6 @@ cell.prototype.processDependency = function(selfRender, childRender){
         if(this.dependencies[a].isAffected()){
             this.dependencies[a].processDependency(childRender, childRender);
         }
-        this.dependencies[a].setAffected(false);
-
     }
     this.evaluateFormula();
     this.setAffected(false);
