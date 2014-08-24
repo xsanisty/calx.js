@@ -4020,26 +4020,13 @@ cell.prototype.setValue = function(value){
     this.floatValue     = ($.isNumeric(value)) ? parseFloat(value) : 0;
     this.formattedValue = '';
 
-    this.sheet.engine.formatter(
-                            this.floatValue,
-                            (this.format) ? this.format : this.sheet.config.defaultFormat
-                        );
-
-    if(false !== this.el){
-        var tagName     = this.el.prop('tagName').toLowerCase(),
-            isFormTag   = this.formTags.indexOf(tagName) > -1;
-
-        if(isFormTag){
-            this.el.val(this.value);
-        }else{
-            this.el.html(this.value);
-        }
-    }
-
     this.setAffected(true);
+
     for(a in this.dependant){
         this.dependant[a].setAffected(true);
     }
+
+    this.processDependant(true, true);
 };cell.prototype.getValue = function(){
     if(this.formula){
         return this.computedValue;
@@ -4082,7 +4069,7 @@ cell.prototype.renderComputedValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             formattedVal;
 
-            console.log(data.ERROR.indexOf(this.computedValue));
+            //console.log(data.ERROR.indexOf(this.computedValue));
         if(this.formula){
             formattedVal = (
                 this.format
@@ -4146,6 +4133,8 @@ cell.prototype.renderComputedValue = function(){
         $cell = new cell(sheet, this);
         sheet.registerCell($cell);
     });
+
+    sheet.attachEvent();
 };/**
  * check circular reference on each cell registered to this sheet
  * @return {bool} true if exist, false if clear
@@ -4369,28 +4358,9 @@ sheet.prototype.applyChange = function(){
 
 };sheet.prototype.refresh = function(){
 
+};sheet.prototype.attachEvent = function(){
+
 };    /**
-     * Sheet prototype engine, contain formatting engine, formula
-     * @type {Object}
-     */
-    sheet.prototype.engine = {
-        /**
- * formatting cell value based on given format
- * @param  {[type]} value  [description]
- * @param  {[type]} format [description]
- * @return {[type]}        [description]
- */
-formatter: function (value, format) {
-    return value;
-    if(numeral){
-        return numeral(value).format(format);
-    }else{
-        return value;
-    }
-},
-        bignumber : function (argument) {
-    // body...
-}    };    /**
      * [calx : the calx core object to work with jquery as plugin]
      * @type {Object}
      */
