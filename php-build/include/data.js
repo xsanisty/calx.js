@@ -75,5 +75,7 @@ var data = {
         'Thursday',
         'Friday',
         'Saturday'
-    ]
+    ],
+
+    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!']
 }
