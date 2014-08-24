@@ -11,7 +11,7 @@ cell.prototype.buildDependency = function(){
         },
         formula     = this.formula,
         sheetKey    = '#'+this.sheet.el.attr('id'),
-        cellAddress = this.getAddress(),
+        cellAddress = this.address,
         dependencies,
         a, i, j, key,
         formulaPart,
