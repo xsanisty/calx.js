@@ -3681,7 +3681,7 @@ cell.prototype.buildDependency = function(){
         },
         formula     = this.formula,
         sheetKey    = '#'+this.sheet.el.attr('id'),
-        cellAddress = this.getAddress(),
+        cellAddress = this.address,
         dependencies,
         a, i, j, key,
         formulaPart,
@@ -3782,7 +3782,12 @@ cell.prototype.buildDependency = function(){
             }
         }
     }
-};cell.prototype.removeDependency = function(key){
+};/**
+ * remove key from the dependency list
+ * @param  {string} key [the dependency key, can be cellAddress, or #sheet>cellAddress]
+ * @return {void}
+ */
+cell.prototype.removeDependency = function(key){
     if(typeof(this.dependencies[key]) != 'undefined'){
         delete this.dependencies[key];
     }
@@ -3807,8 +3812,6 @@ cell.prototype.processDependency = function(selfRender, childRender){
         if(this.dependencies[a].isAffected()){
             this.dependencies[a].processDependency(childRender, childRender);
         }
-        this.dependencies[a].setAffected(false);
-
     }
     this.evaluateFormula();
     this.setAffected(false);
@@ -3925,8 +3928,7 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxKeyup', function(){
-                    currentCell.setValue(currentCell.el.val());
-                    currentCell.processDependant(false, true);
+                    currentCell.setValue(currentCell.el.val(), false);
                 });
 
                 /** bind to internal event, so no need to unbind the real event on destroy */
@@ -4012,13 +4014,16 @@ cell.prototype.getAddress = function(){
     return this.address;
 };/**
  * set cell value and sync it with the bound element, and trigger recalculation on all cell depend to it
- * @param {mixed} value [description]
+ * @param {mixed}   value       value to be inserted into the cell
+ * @param {bool}    render      render computed value of it's dependant or not
  */
-cell.prototype.setValue = function(value){
+cell.prototype.setValue = function(value, render){
     var a;
     this.value          = value;
     this.floatValue     = ($.isNumeric(value)) ? parseFloat(value) : 0;
     this.formattedValue = '';
+
+    render = (typeof(render) == 'undefined') ? true : render;
 
     this.setAffected(true);
 
@@ -4026,7 +4031,7 @@ cell.prototype.setValue = function(value){
         this.dependant[a].setAffected(true);
     }
 
-    this.processDependant(true, true);
+    this.processDependant(render, true);
 };cell.prototype.getValue = function(){
     if(this.formula){
         return this.computedValue;
