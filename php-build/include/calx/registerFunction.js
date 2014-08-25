@@ -4,5 +4,5 @@
  * @return {[type]}          [description]
  */
 registerFunction : function (funcName, funcDefinition) {
-    // body...
+    formula.user_defined[funcName] = funcDefinition;
 }

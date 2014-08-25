@@ -1,12 +1,13 @@
 var formula = {
-    <?php require 'include/formula/date.js' ?>,
-    <?php require 'include/formula/math.js' ?>,
-    <?php require 'include/formula/financial.js' ?>,
-    <?php require 'include/formula/statistic.js' ?>,
-    <?php require 'include/formula/logical.js' ?>,
-    <?php require 'include/formula/geometry.js' ?>,
-    <?php require 'include/formula/text.js' ?>,
-    <?php require 'include/formula/trigonometry.js' ?>,
-    <?php require 'include/formula/general.js' ?>,
-    <?php require 'include/formula/engineering.js' ?>
+    <?php require 'formula/date.js' ?>,
+    <?php require 'formula/math.js' ?>,
+    <?php require 'formula/financial.js' ?>,
+    <?php require 'formula/statistic.js' ?>,
+    <?php require 'formula/logical.js' ?>,
+    <?php require 'formula/geometry.js' ?>,
+    <?php require 'formula/text.js' ?>,
+    <?php require 'formula/trigonometry.js' ?>,
+    <?php require 'formula/general.js' ?>,
+    <?php require 'formula/engineering.js' ?>,
+    <?php require 'formula/user_defined.js' ?>
 };
