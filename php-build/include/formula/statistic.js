@@ -12,9 +12,11 @@ statistic: {
         var n = range.length;
         var count = 0;
         var sigma = 0;
+        var floatVal = 0;
         for (var i = 0; i < n; i++) {
             if (range[i] !== true && range[i] !== false) {
-                sigma += range[i];
+                floatVal = parseFloat(range[i]);
+                sigma += isNaN(floatVal) ? 0 : floatVal;
                 count++;
             }
         }
