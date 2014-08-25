@@ -4614,6 +4614,9 @@ logical : {
         // Return converted number
         return number * from[6] * from_multiplier / (to[6] * to_multiplier);
     }
+},
+    user_defined : {
+
 }};var utility = {
     /**
      * translate numeric to alphabet
@@ -5645,7 +5648,7 @@ init : function (option) {
  * @return {[type]}          [description]
  */
 registerFunction : function (funcName, funcDefinition) {
-    // body...
+    formula.user_defined[funcName] = funcDefinition;
 },
         scan : function (argument) {
     // body...
