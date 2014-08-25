@@ -24,61 +24,61 @@ math : {
         for (var i = 2; i < arguments.length; i++) {
             switch (function_code) {
                 case 1:
-                    result[i - 2] = formula.math.AVERAGE(arguments[i]);
+                    result[i - 2] = formula.statistic.AVERAGE(arguments[i]);
                     break;
                 case 2:
-                    result[i - 2] = formula.math.COUNT(arguments[i]);
+                    result[i - 2] = formula.statistic.COUNT(arguments[i]);
                     break;
                 case 3:
-                    result[i - 2] = formula.math.COUNTA(arguments[i]);
+                    result[i - 2] = formula.statistic.COUNTA(arguments[i]);
                     break;
                 case 4:
-                    result[i - 2] = formula.math.MAX(arguments[i]);
+                    result[i - 2] = formula.statistic.MAX(arguments[i]);
                     break;
                 case 5:
-                    result[i - 2] = formula.math.MIN(arguments[i]);
+                    result[i - 2] = formula.statistic.MIN(arguments[i]);
                     break;
                 case 6:
-                    result[i - 2] = formula.math.PRODUCT(arguments[i]);
+                    result[i - 2] = formula.statistic.PRODUCT(arguments[i]);
                     break;
                 case 7:
-                    result[i - 2] = formula.math.STDEVS(arguments[i]);
+                    result[i - 2] = formula.statistic.STDEVS(arguments[i]);
                     break;
                 case 8:
-                    result[i - 2] = formula.math.STDEVP(arguments[i]);
+                    result[i - 2] = formula.statistic.STDEVP(arguments[i]);
                     break;
                 case 9:
                     result[i - 2] = formula.math.SUM(arguments[i]);
                     break;
                 case 10:
-                    result[i - 2] = formula.math.VARS(arguments[i]);
+                    result[i - 2] = formula.statistic.VARS(arguments[i]);
                     break;
                 case 11:
-                    result[i - 2] = formula.math.VARP(arguments[i]);
+                    result[i - 2] = formula.statistic.VARP(arguments[i]);
                     break;
                 case 12:
-                    result[i - 2] = formula.math.MEDIAN(arguments[i]);
+                    result[i - 2] = formula.statistic.MEDIAN(arguments[i]);
                     break;
                 case 13:
-                    result[i - 2] = formula.math.MODESNGL(arguments[i]);
+                    result[i - 2] = formula.statistic.MODESNGL(arguments[i]);
                     break;
                 case 14:
-                    result[i - 2] = formula.math.LARGE(arguments[i]);
+                    result[i - 2] = formula.statistic.LARGE(arguments[i]);
                     break;
                 case 15:
-                    result[i - 2] = formula.math.SMALL(arguments[i]);
+                    result[i - 2] = formula.statistic.SMALL(arguments[i]);
                     break;
                 case 16:
-                    result[i - 2] = formula.math.PERCENTILEINC(arguments[i]);
+                    result[i - 2] = formula.statistic.PERCENTILEINC(arguments[i]);
                     break;
                 case 17:
-                    result[i - 2] = formula.math.QUARTILEINC(arguments[i]);
+                    result[i - 2] = formula.statistic.QUARTILEINC(arguments[i]);
                     break;
                 case 18:
-                    result[i - 2] = formula.math.PERCENTILEEXC(arguments[i]);
+                    result[i - 2] = formula.statistic.PERCENTILEEXC(arguments[i]);
                     break;
                 case 19:
-                    result[i - 2] = formula.math.QUARTILEEXC(arguments[i]);
+                    result[i - 2] = formula.statistic.QUARTILEEXC(arguments[i]);
                     break;
             }
         }
@@ -454,37 +454,37 @@ math : {
         for (var i = 1; i < arguments.length; i++) {
             switch (function_code) {
                 case 1:
-                    result[i - 1] = formula.math.AVERAGE(arguments[i]);
+                    result[i - 1] = formula.statistic.AVERAGE(arguments[i]);
                     break;
                 case 2:
-                    result[i - 1] = formula.math.COUNT(arguments[i]);
+                    result[i - 1] = formula.statistic.COUNT(arguments[i]);
                     break;
                 case 3:
-                    result[i - 1] = formula.math.COUNTA(arguments[i]);
+                    result[i - 1] = formula.statistic.COUNTA(arguments[i]);
                     break;
                 case 4:
-                    result[i - 1] = formula.math.MAX(arguments[i]);
+                    result[i - 1] = formula.statistic.MAX(arguments[i]);
                     break;
                 case 5:
-                    result[i - 1] = formula.math.MIN(arguments[i]);
+                    result[i - 1] = formula.statistic.MIN(arguments[i]);
                     break;
                 case 6:
-                    result[i - 1] = formula.math.PRODUCT(arguments[i]);
+                    result[i - 1] = formula.statistic.PRODUCT(arguments[i]);
                     break;
                 case 7:
-                    result[i - 1] = formula.math.STDEV(arguments[i]);
+                    result[i - 1] = formula.statistic.STDEV(arguments[i]);
                     break;
                 case 8:
-                    result[i - 1] = formula.math.STDEVP(arguments[i]);
+                    result[i - 1] = formula.statistic.STDEVP(arguments[i]);
                     break;
                 case 9:
                     result[i - 1] = formula.math.SUM(arguments[i]);
                     break;
                 case 10:
-                    result[i - 1] = formula.math.VAR(arguments[i]);
+                    result[i - 1] = formula.statistic.VAR(arguments[i]);
                     break;
                 case 11:
-                    result[i - 1] = formula.math.VARP(arguments[i]);
+                    result[i - 1] = formula.statistic.VARP(arguments[i]);
                     break;
             }
         }

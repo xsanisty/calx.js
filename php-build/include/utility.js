@@ -126,5 +126,20 @@ var utility = {
 
     toArray: function(args) {
         return Array.prototype.slice.call(args, 0);
+    },
+
+    cleanFloat : function (number) {
+        var power = Math.pow(10, 14);
+        return Math.round(number * power) / power;
+    },
+
+    countIn : function (range, value) {
+      var result = 0;
+      for (var i = 0; i < range.length; i++) {
+        if (range[i] === value) {
+          result++;
+        }
+      }
+      return result;
     }
 };
