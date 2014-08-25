@@ -3692,8 +3692,13 @@ financial: {
         return interest * rate;
     },
 
-    IRR : function(values, guess) {
+    IRR : function(valuesObject, guess) {
         // Credits: algorithm inspired by Apache OpenOffice
+
+        var values = [];
+        for(var a in valuesObject){
+            values.push(valuesObject[a]);
+        }
 
         // Calculates the resulting amount
         var irrResult = function(values, dates, rate) {
@@ -6900,16 +6905,14 @@ cell.prototype.getAddress = function(){
  * @param {bool}    render      render computed value of it's dependant or not
  */
 cell.prototype.setValue = function(value, render){
-    var a;
-    this.value          = value;
-    this.floatValue     = ($.isNumeric(value)) ? parseFloat(value) : 0;
+    this.value          = ($.isNumeric(value)) ? parseFloat(value) : value;
     this.formattedValue = '';
 
     render = (typeof(render) == 'undefined') ? true : render;
 
     this.setAffected(true);
 
-    for(a in this.dependant){
+    for(var a in this.dependant){
         this.dependant[a].setAffected(true);
     }
 
