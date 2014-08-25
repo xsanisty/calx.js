@@ -103,24 +103,28 @@ var utility = {
         return repeat.join(separator);
     },
 
-    unique : function(array){
+    unique: function(array) {
         return array.reduce(function(p, c) {
             if (p.indexOf(c) < 0) p.push(c);
             return p;
         }, []);
     },
 
-    arrayMerge : function(args){
-      var a, i, result = [];
-      for (i = 0; i < args.length; i++) {
-        if(typeof (args[i]) == 'object'){
-            for(a in args[i]){
-                result = result.concat(args[i][a]);
+    arrayMerge: function(args) {
+        var a, i, result = [];
+        for (i = 0; i < args.length; i++) {
+            if (typeof(args[i]) == 'object') {
+                for (a in args[i]) {
+                    result = result.concat(args[i][a]);
+                }
+            } else {
+                result = result.concat(args[i]);
             }
-        }else{
-            result = result.concat(args[i]);
         }
-      }
-      return result;
+        return result;
+    },
+
+    toArray: function(args) {
+        return Array.prototype.slice.call(args, 0);
     }
 };
