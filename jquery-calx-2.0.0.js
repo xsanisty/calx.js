@@ -3771,6 +3771,10 @@ logical : {
     },
 
     DOLLAR : function(number, decimals) {
+
+        if(typeof(numeral) == 'undefined'){
+            return '#NAME?';
+        }
         decimals = (typeof decimals === 'undefined') ? 2 : decimals;
         var format = '';
         if (decimals <= 0) {
@@ -3792,6 +3796,9 @@ logical : {
     },
 
     FIXED : function(number, decimals, no_commas) {
+        if(typeof(numeral) == 'undefined'){
+            return '#NAME?';
+        }
         decimals = (typeof decimals === 'undefined') ? 2 : decimals;
         no_commas = (typeof no_commas === 'undefined') ? false : no_commas;
         var format = no_commas ? '0' : '0,0';
@@ -3941,6 +3948,9 @@ logical : {
     },
 
     TEXT : function(value, format) {
+        if(typeof(numeral) == 'undefined'){
+            return '#NAME?';
+        }
         var text = '';
 
         if (value) {
@@ -3981,6 +3991,9 @@ logical : {
     },
 
     VALUE : function(text) {
+        if(typeof(numeral) == 'undefined'){
+            return '#NAME?';
+        }
         return numeral().unformat(text);
     }
 },
