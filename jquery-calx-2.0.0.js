@@ -3111,19 +3111,28 @@ date: {
         return result;
     },
 
-    SUM : function() {
-        var numbers = utility.toArray(arguments);
-        var result = 0;
-        for (var i = 0; i < numbers.length; i++) {
-            if (numbers[i] instanceof Array) {
-                for (var j = 0; j < numbers[i].length; j++) {
-                    result += ($.isNumeric(numbers[i][j])) ? numbers[i][j] : 0;
+    SUM : function(){
+        var cell, a, floatVal, stringVal = '', result = 0;
+
+        for(a = 0; a < arguments.length; a++){
+            if(typeof(arguments[a]) == 'object'){
+                for(cell in arguments[a]){
+                    stringVal   += arguments[a][cell];
+                    floatVal    = !isNaN(parseFloat(arguments[a][cell], 10)) ? parseFloat(arguments[a][cell], 10) : 0;
+                    result      += floatVal;
                 }
-            } else {
-                result += ($.isNumeric(numbers[i])) ? numbers[i] : 0;
+            }else{
+                stringVal   += arguments[a][cell];
+                floatVal    = !isNaN(parseFloat(arguments[a], 10)) ? parseFloat(arguments[a], 10) : 0;
+                result      += floatVal;
             }
         }
-        return result;
+
+        if(result === 0 && $.trim(stringVal) === ''){
+            return '';
+        }else{
+            return result;
+        }
     },
 
     SUMIF : function(range, criteria) {
@@ -5655,29 +5664,6 @@ logical : {
     
 },
     general: {
-    SUM : function(){
-    	var cell, a, floatVal, stringVal = '', result = 0;
-
-    	for(a = 0; a < arguments.length; a++){
-    		if(typeof(arguments[a]) == 'object'){
-                for(cell in arguments[a]){
-                    stringVal   += arguments[a][cell];
-                    floatVal    = !isNaN(parseFloat(arguments[a][cell], 10)) ? parseFloat(arguments[a][cell], 10) : 0;
-                    result      += floatVal;
-                }
-    		}else{
-                stringVal   += arguments[a][cell];
-                floatVal    = !isNaN(parseFloat(arguments[a], 10)) ? parseFloat(arguments[a], 10) : 0;
-                result      += floatVal;
-            }
-    	}
-
-        if(result === 0 && $.trim(stringVal) === ''){
-            return '';
-        }else{
-            return result;
-        }
-    },
 
     VLOOKUP : function($value, $table, $colIndex){
 
@@ -7320,7 +7306,16 @@ init : function (option) {
  * @param  {[type]} argument [description]
  * @return {[type]}          [description]
  */
-registerFunction : function (funcName, funcDefinition) {
+registerFunction : function (funcName, funcDefinition, override) {
+    override = (typeof(override) == 'undefined') ? false : override;
+
+    if(override){
+        for(var a in formula){
+            if(typeof(formula[a][funcName]) != 'undefined'){
+                delete(formula[a][funcName]);
+            }
+        }
+    }
     formula.user_defined[funcName] = funcDefinition;
 },
         scan : function (argument) {
