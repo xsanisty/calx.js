@@ -470,13 +470,11 @@ financial: {
 
     IRR : function(valuesObject, guess) {
         // Credits: algorithm inspired by Apache OpenOffice
-        console.log(valuesObject, guess);
 
         var values = [];
         for(var a in valuesObject){
             values.push(valuesObject[a]);
         }
-        console.log(values);
 
         // Calculates the resulting amount
         var irrResult = function(values, dates, rate) {
