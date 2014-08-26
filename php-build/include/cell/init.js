@@ -40,5 +40,5 @@ cell.prototype.init = function(){
     this.address    = $address;
 
     this.setValue($value);
-    this.attachEvent();
+    //this.attachEvent();
 };
