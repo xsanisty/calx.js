@@ -53,7 +53,6 @@ var utility = {
             for (row = numAxisStart; row <= numAxisStop; row++) {
                 cellAddress = this.toChr(col) + row;
                 cellRange.push(cellAddress);
-
             }
         }
 

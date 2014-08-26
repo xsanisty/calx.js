@@ -6,6 +6,13 @@
  */
 date: {
     DATE : function(year, month, day) {
+        if(typeof (moment) == 'undefined'){
+            return '#NAME?';
+        }
+        if(typeof(month) == 'undefined'){
+            return moment(year);
+        }
+
         return new Date(year, month - 1, day);
     },
 

@@ -679,6 +679,7 @@ financial: {
 
         // Initialize type
         type = (typeof type === 'undefined') ? 0 : type;
+        future = (typeof future === 'undefined') ? 0 : future;
 
         // Evaluate rate and periods (TODO: replace with secure expression evaluator)
         //rate = eval(rate);
