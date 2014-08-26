@@ -1,4 +1,5 @@
 var formula = {
+    <?php require 'formula/custom.js' ?>,
     <?php require 'formula/date.js' ?>,
     <?php require 'formula/math.js' ?>,
     <?php require 'formula/financial.js' ?>,
