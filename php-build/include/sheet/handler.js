@@ -92,10 +92,10 @@ sheet.prototype.time = function(time){
 sheet.prototype.getVariable = function(varName){
     var varIndex = varName[0];
 
-    if(typeof(this.variables[varIndex]) == 'undefined'){
+    if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
         return '#NAME?';
     }else{
-        return this.variables[varIndex];
+        return data.VARIABLE[varIndex];
     }
 };
 

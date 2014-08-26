@@ -7,6 +7,7 @@
         sheetRegistry : {},
         <?php require 'include/calx/init.js' ?>,
         <?php require 'include/calx/registerFunction.js' ?>,
+        <?php require 'include/calx/registerVariable.js' ?>,
         <?php require 'include/calx/scan.js' ?>,
         <?php require 'include/calx/update.js' ?>,
         <?php require 'include/calx/getSheet.js' ?>,
