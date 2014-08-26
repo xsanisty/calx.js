@@ -133,7 +133,7 @@
                 <td colspan="2" style="text-align:center"><button id="formula_button2">Apply!</button></td>
             </tr>
             <tr>
-                <td colspan="2"><input data-cell="ZZ256" type="text" style="width:100%"></td>
+                <td colspan="2"><input data-cell="ZZ256" data-formula="SUM(A1:BF200)" type="text" style="width:100%"></td>
             </tr>
         </table>
         <table id="tbl2">
@@ -198,7 +198,7 @@
                   if(row == 1){
                     thead.append('<td>'+this.toChr(col)+'</td>');
                   }
-                    cellAddress = this.toChr(row) + col;
+                    cellAddress = this.toChr(col) + row;
                     tr += '<td><input type="text" data-cell="'+cellAddress+'" value="'+getRandomArbitrary(0, 100)+'"></td>';
                 }
                 tr+= '</tr>';
@@ -209,7 +209,7 @@
 
         console.time('cell-rendering');
 
-        cellrange('A1', 'BF190');
+        cellrange('A1', 'F10');
 
         console.timeEnd('cell-rendering');
 

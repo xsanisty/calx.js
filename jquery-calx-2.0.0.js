@@ -2239,6 +2239,13 @@ var defaultConfig = {
  */
 date: {
     DATE : function(year, month, day) {
+        if(typeof (moment) == 'undefined'){
+            return '#NAME?';
+        }
+        if(typeof(month) == 'undefined'){
+            return moment(year);
+        }
+
         return new Date(year, month - 1, day);
     },
 
@@ -3906,6 +3913,7 @@ financial: {
 
         // Initialize type
         type = (typeof type === 'undefined') ? 0 : type;
+        future = (typeof future === 'undefined') ? 0 : future;
 
         // Evaluate rate and periods (TODO: replace with secure expression evaluator)
         //rate = eval(rate);
@@ -6320,7 +6328,6 @@ logical : {
             for (row = numAxisStart; row <= numAxisStop; row++) {
                 cellAddress = this.toChr(col) + row;
                 cellRange.push(cellAddress);
-
             }
         }
 
