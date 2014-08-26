@@ -6559,7 +6559,7 @@ cell.prototype.init = function(){
     this.address    = $address;
 
     this.setValue($value);
-    this.attachEvent();
+    //this.attachEvent();
 };/**
  * build inter-cell dependency and dependant list, used for triggerring calculation that related to other cell
  * @return {void}
@@ -6782,81 +6782,6 @@ cell.prototype.checkCircularReference = function(address){
 cell.prototype.evaluateFormula = function(){
     if(this.formula){
         this.computedValue = this.sheet.evaluate(this.formula);
-    }
-};/**
- * attach event listener on the dom element bound to the cell object
- * @return {void}
- */
-cell.prototype.attachEvent = function(){
-    if(false !== this.el){
-        var tagName     = this.el.prop('tagName').toLowerCase(),
-            isFormTag   = this.formTags.indexOf(tagName) > -1,
-            currentCell = this;
-
-        /**
-         * attach event only if it is form element
-         */
-        if(isFormTag){
-            if(tagName == 'input'){
-                this.el.on('calxFocus', function(){
-                    currentCell.el.val(currentCell.getValue());
-                });
-
-                this.el.on('calxBlur', function(){
-                    if(
-                        currentCell.getFormat()
-                        && typeof(numeral) != 'undefined'
-                        && currentCell.el.val() != ''
-                        && data.ERROR.indexOf(currentCell.el.val()) == -1
-                    ){
-                        var unformattedVal = numeral().unformat(currentCell.el.val());
-                        currentCell.setValue(unformattedVal);
-
-                    }else{
-                        currentCell.setValue(currentCell.el.val());
-                    }
-                    currentCell.renderComputedValue();
-                    currentCell.processDependant(false, true);
-                });
-
-                this.el.on('calxKeyup', function(){
-                    if(
-                        currentCell.getFormat()
-                        && typeof(numeral) != 'undefined'
-                        && currentCell.el.val() != ''
-                        && data.ERROR.indexOf(currentCell.el.val()) == -1
-                    ){
-                        var unformattedVal = numeral().unformat(currentCell.el.val());
-                        currentCell.setValue(unformattedVal, false);
-
-                    }else{
-                        currentCell.setValue(currentCell.el.val(), false);
-                    }
-                });
-
-                /** bind to internal event, so no need to unbind the real event on destroy */
-                this.el.blur(function(){
-                    $(this).trigger('calxBlur');
-                });
-
-                this.el.focus(function(){
-                    $(this).trigger('calxFocus');
-                });
-
-                this.el.keyup(function(){
-                    $(this).trigger('calxKeyup');
-                });
-            }else if(tagName == 'select'){
-
-                this.el.on('calxChange', function(){
-                    currentCell.setValue(currentCell.el.val());
-                    currentCell.processDependant();
-                });
-                this.el.change(function(){
-                    $(this).trigger('calxChange');
-                });
-            }
-        }
     }
 };/**
  * detach event listener on the dom element bound to the cell object
@@ -7266,6 +7191,64 @@ sheet.prototype.applyChange = function(){
 
 };sheet.prototype.attachEvent = function(){
 
+    var currentSheet = this;
+    this.el.on('calxFocus', 'input[data-cell]', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        currentCell.el.val(currentCell.getValue());
+    });
+
+    this.el.on('calxBlur', 'input[data-cell]', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        if(
+            currentCell.getFormat()
+            && typeof(numeral) != 'undefined'
+            && currentCell.el.val() != ''
+            && data.ERROR.indexOf(currentCell.el.val()) == -1
+        ){
+            var unformattedVal = numeral().unformat(currentCell.el.val());
+            currentCell.setValue(unformattedVal);
+
+        }else{
+            currentCell.setValue(currentCell.el.val());
+        }
+        currentCell.renderComputedValue();
+        currentCell.processDependant(false, true);
+    });
+
+    this.el.on('calxKeyup', 'input[data-cell]', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        if(
+            currentCell.getFormat()
+            && typeof(numeral) != 'undefined'
+            && currentCell.el.val() != ''
+            && data.ERROR.indexOf(currentCell.el.val()) == -1
+        ){
+            var unformattedVal = numeral().unformat(currentCell.el.val());
+            currentCell.setValue(unformattedVal, false);
+
+        }else{
+            currentCell.setValue(currentCell.el.val(), false);
+        }
+    });
+
+    /** bind to internal event, so no need to unbind the real event on destroy */
+    this.el.on('blur', 'input[data-cell]',function(){
+        $(this).trigger('calxBlur');
+    });
+
+    this.el.on('focus', 'input[data-cell]',function(){
+        $(this).trigger('calxFocus');
+    });
+
+    this.el.on('keyup', 'input[data-cell]',function(){
+        $(this).trigger('calxKeyup');
+    });
 };    /**
      * [calx : the calx core object to work with jquery as plugin]
      * @type {Object}
