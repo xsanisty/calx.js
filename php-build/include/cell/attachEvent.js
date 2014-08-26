@@ -35,7 +35,18 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxKeyup', function(){
-                    currentCell.setValue(currentCell.el.val(), false);
+                    if(
+                        currentCell.getFormat()
+                        && typeof(numeral) != 'undefined'
+                        && currentCell.el.val() != ''
+                        && data.ERROR.indexOf(currentCell.el.val()) == -1
+                    ){
+                        var unformattedVal = numeral().unformat(currentCell.el.val());
+                        currentCell.setValue(unformattedVal, false);
+
+                    }else{
+                        currentCell.setValue(currentCell.el.val(), false);
+                    }
                 });
 
                 /** bind to internal event, so no need to unbind the real event on destroy */
