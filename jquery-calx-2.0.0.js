@@ -2228,6 +2228,9 @@ var defaultConfig = {
     parser.Parser = Parser;
     return new Parser;
 }var formula = {
+    custom : {
+
+},
     /**
  * date formula group.
  * adapted from stoic's formula.js (http://www.stoic.com/pages/formula)
@@ -6485,7 +6488,9 @@ logical : {
         'Saturday'
     ],
 
-    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!']
+    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!'],
+
+    VARIABLE : {}
 }    /**
      * cell hold single element with formula and value information
      * @param  {sheet}      sheet       the sheet object where the cell is belong to
@@ -6815,7 +6820,18 @@ cell.prototype.attachEvent = function(){
                 });
 
                 this.el.on('calxKeyup', function(){
-                    currentCell.setValue(currentCell.el.val(), false);
+                    if(
+                        currentCell.getFormat()
+                        && typeof(numeral) != 'undefined'
+                        && currentCell.el.val() != ''
+                        && data.ERROR.indexOf(currentCell.el.val()) == -1
+                    ){
+                        var unformattedVal = numeral().unformat(currentCell.el.val());
+                        currentCell.setValue(unformattedVal, false);
+
+                    }else{
+                        currentCell.setValue(currentCell.el.val(), false);
+                    }
                 });
 
                 /** bind to internal event, so no need to unbind the real event on destroy */
@@ -7166,10 +7182,10 @@ sheet.prototype.time = function(time){
 sheet.prototype.getVariable = function(varName){
     var varIndex = varName[0];
 
-    if(typeof(this.variables[varIndex]) == 'undefined'){
+    if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
         return '#NAME?';
     }else{
-        return this.variables[varIndex];
+        return data.VARIABLE[varIndex];
     }
 };
 
@@ -7320,6 +7336,20 @@ registerFunction : function (funcName, funcDefinition, override) {
         }
     }
     formula.user_defined[funcName] = funcDefinition;
+},
+        /**
+ * register custom variable to the calx object
+ * @param  {string} varName     variable name
+ * @return {mixed}  varValue    variable value
+ */
+registerVariable : function (varName, varValue) {
+    if(typeof(varName) == 'object'){
+        for(var a in varName){
+            data.VARIABLE[a] = varName[a];
+        }
+    }else{
+        data.VARIABLE[varName] = varValue;
+    }
 },
         scan : function (argument) {
     // body...
