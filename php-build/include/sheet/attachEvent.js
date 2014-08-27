@@ -74,3 +74,9 @@ sheet.prototype.attachEvent = function(){
         $(this).trigger('updateCalculate');
     });
 };
+
+sheet.prototype.detachEvent = function(){
+    this.el.off('getOriginalValue');
+    this.el.off('updateRenderCalculate');
+    this.el.off('updateCalculate');
+}

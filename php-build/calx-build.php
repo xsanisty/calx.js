@@ -22,7 +22,7 @@
         require 'include/cell/checkCircularReference.js';
         require 'include/cell/evaluateFormula.js';
         //require 'include/cell/attachEvent.js';
-        require 'include/cell/detachEvent.js';
+        //require 'include/cell/detachEvent.js';
         require 'include/cell/formTags.js';
         require 'include/cell/setFormat.js';
         require 'include/cell/getFormat.js';

@@ -6799,27 +6799,6 @@ cell.prototype.evaluateFormula = function(){
     if(this.formula){
         this.computedValue = this.sheet.evaluate(this.formula);
     }
-};/**
- * detach event listener on the dom element bound to the cell object
- * @return {void}
- */
-cell.prototype.detachEvent = function(){
-    if(false !== this.el){
-        var tagName     = this.el.prop('tagName').toLowerCase(),
-            isFormTag   = this.formTags.indexOf(tagName) > -1;
-
-        /**
-         * attach event only if it is form element
-         */
-        if(isFormTag){
-            if(tagName == 'input'){
-                this.el.off('claxFocus');
-                this.el.off('calxBlur');
-            }else if(tagName == 'select'){
-                this.el.off('calxChange');
-            }
-        }
-    }
 };cell.prototype.formTags = ['input', 'select', 'textarea', 'button'];/**
  * set formatting rule to the cell
  * @param {string} format       format rule to define formatting on rendered value
@@ -7280,7 +7259,13 @@ sheet.prototype.applyChange = function(){
     this.el.on('keyup', 'input[data-cell]',function(){
         $(this).trigger('updateCalculate');
     });
-};    /**
+};
+
+sheet.prototype.detachEvent = function(){
+    this.el.off('getOriginalValue');
+    this.el.off('updateRenderCalculate');
+    this.el.off('updateCalculate');
+}    /**
      * [calx : the calx core object to work with jquery as plugin]
      * @type {Object}
      */
@@ -7417,9 +7402,7 @@ destroy : function(){
 
         $sheet.removeAttr('data-calx-identifier');
 
-        for(a in calx.sheetRegistry[sheetIdentifier].cells){
-            calx.sheetRegistry[sheetIdentifier].cells[a].detachEvent();
-        }
+        calx.sheetRegistry[sheetIdentifier].detachEvent();
 
         delete calx.sheetRegistry[sheetIdentifier];
     });
