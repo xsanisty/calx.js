@@ -4,8 +4,8 @@
     <script src="jquery-1.9.1.min.js"></script>
     <script src="js/numeral.min.js"></script>
     <script src="js/moment.min.js"></script>
-    <!--<script src="php-build/calx-build.php"></script>-->
-    <script src="jquery-calx-2.0.0.min.js"></script>
+    <script src="php-build/calx-build.php"></script>
+    <!--<script src="jquery-calx-2.0.0.min.js"></script>-->
     <style>
         thead > tr > td{
             text-align:center;
@@ -73,7 +73,15 @@
                 </tr>
                 <tr>
                     <td class="num">2</td>
-                    <td><input type="text" data-cell="A2" data-format="$ 0,0[.]00"></td>
+                    <td>
+                        <select data-cell="A2">
+                            <option value="1">$ 1</option>
+                            <option value="2">$ 2</option>
+                            <option value="3">$ 3</option>
+                            <option value="4">$ 4</option>
+                            <option value="5">$ 5</option>
+                        </select>
+                    </td>
                     <td><input type="text" data-cell="B2"></td>
                     <td><input type="text" data-cell="C2"></td>
                     <td><input type="text" data-cell="D2"></td>

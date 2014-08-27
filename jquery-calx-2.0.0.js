@@ -59,9 +59,6 @@ var defaultConfig = {
     /** callback triggered right after calculation result is applied */
     'onAfterApply'          : function(data){return data},
 
-    /** default precision of decimal point to be displayed */
-    'precision'             : 2,
-
     /** default fomatting rule when data-format is not present */
     'defaultFormat'         : false,
 
@@ -2742,6 +2739,7 @@ date: {
     },
 
     ASIN : function(number) {
+        console.log(Math.asin(number));
         return Math.asin(number);
     },
 
@@ -6893,39 +6891,20 @@ cell.prototype.renderComputedValue = function(){
     if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
-            formattedVal;
+            originalVal = (this.formula) ? this.computedValue : this.value,
+            formattedVal= (
+                            this.format
+                            && typeof(numeral) != 'undefined'
+                            && this.computedValue !== ''
+                            && data.ERROR.indexOf(originalVal) == -1
+                        )
+                        ? numeral(originalVal).format(this.format)
+                        : originalVal;
 
-            //console.log(data.ERROR.indexOf(this.computedValue));
-        if(this.formula){
-            formattedVal = (
-                this.format
-                && typeof(numeral) != 'undefined'
-                && this.computedValue !== ''
-                && data.ERROR.indexOf(this.computedValue) == -1
-            )
-            ? numeral(this.computedValue).format(this.format)
-            : this.computedValue;
-
-            if(isFormTag){
-                this.el.val(formattedVal);
-            }else{
-                this.el.html(formattedVal);
-            }
+        if(isFormTag){
+            this.el.val(formattedVal);
         }else{
-            formattedVal = (
-                this.format
-                && typeof(numeral) != 'undefined'
-                && this.computedValue !== ''
-                && data.ERROR.indexOf(this.computedValue) == -1
-            )
-            ? numeral(this.value).format(this.format)
-            : this.value;
-
-            if(isFormTag){
-                this.el.val(formattedVal);
-            }else{
-                this.el.html(formattedVal);
-            }
+            this.el.html(formattedVal);
         }
     }
 }
@@ -7205,27 +7184,30 @@ sheet.prototype.applyChange = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        if(
-            currentCell.getFormat()
-            && typeof(numeral) != 'undefined'
-            && currentCell.el.val() != ''
-            && data.ERROR.indexOf(currentCell.el.val()) == -1
-        ){
-            var unformattedVal = numeral().unformat(currentCell.el.val());
-            currentCell.setValue(unformattedVal);
-
-        }else{
-            currentCell.setValue(currentCell.el.val());
-        }
         currentCell.renderComputedValue();
-        currentCell.processDependant(false, true);
+
+        if(currentSheet.config.autoCalculateTrigger != 'keyup'){
+            if(
+                currentCell.getFormat()
+                && typeof(numeral) != 'undefined'
+                && currentCell.el.val() != ''
+                && data.ERROR.indexOf(currentCell.el.val()) == -1
+            ){
+                var unformattedVal = numeral().unformat(currentCell.el.val());
+                currentCell.setValue(unformattedVal);
+
+            }else{
+                currentCell.setValue(currentCell.el.val());
+            }
+
+            currentCell.processDependant(false, true);
+        }
     });
 
     /**
      * update value of current cell without render it's own value, and process it's dependant
-     * @return {[type]} [description]
      */
-    this.el.on('updateCalculate', 'input[data-cell]', function(){
+    this.el.on('updateCalculate', 'input[data-cell], select', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -7248,8 +7230,8 @@ sheet.prototype.applyChange = function(){
         $(this).trigger('updateRenderCalculate');
     });
 
-    this.el.on('change', 'input[data-cell], select',function(){
-        $(this).trigger('updateRenderCalculate');
+    this.el.on('change', 'select', function(){
+        $(this).trigger('updateCalculate');
     });
 
     this.el.on('focus', 'input[data-cell]',function(){

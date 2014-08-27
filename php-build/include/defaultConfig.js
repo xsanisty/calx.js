@@ -21,9 +21,6 @@ var defaultConfig = {
     /** callback triggered right after calculation result is applied */
     'onAfterApply'          : function(data){return data},
 
-    /** default precision of decimal point to be displayed */
-    'precision'             : 2,
-
     /** default fomatting rule when data-format is not present */
     'defaultFormat'         : false,
 

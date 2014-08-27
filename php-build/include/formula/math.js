@@ -112,6 +112,7 @@ math : {
     },
 
     ASIN : function(number) {
+        console.log(Math.asin(number));
         return Math.asin(number);
     },
 

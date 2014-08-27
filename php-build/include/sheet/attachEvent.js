@@ -19,27 +19,30 @@ sheet.prototype.attachEvent = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        if(
-            currentCell.getFormat()
-            && typeof(numeral) != 'undefined'
-            && currentCell.el.val() != ''
-            && data.ERROR.indexOf(currentCell.el.val()) == -1
-        ){
-            var unformattedVal = numeral().unformat(currentCell.el.val());
-            currentCell.setValue(unformattedVal);
-
-        }else{
-            currentCell.setValue(currentCell.el.val());
-        }
         currentCell.renderComputedValue();
-        currentCell.processDependant(false, true);
+
+        if(currentSheet.config.autoCalculateTrigger != 'keyup'){
+            if(
+                currentCell.getFormat()
+                && typeof(numeral) != 'undefined'
+                && currentCell.el.val() != ''
+                && data.ERROR.indexOf(currentCell.el.val()) == -1
+            ){
+                var unformattedVal = numeral().unformat(currentCell.el.val());
+                currentCell.setValue(unformattedVal);
+
+            }else{
+                currentCell.setValue(currentCell.el.val());
+            }
+
+            currentCell.processDependant(false, true);
+        }
     });
 
     /**
      * update value of current cell without render it's own value, and process it's dependant
-     * @return {[type]} [description]
      */
-    this.el.on('updateCalculate', 'input[data-cell]', function(){
+    this.el.on('updateCalculate', 'input[data-cell], select', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -62,8 +65,8 @@ sheet.prototype.attachEvent = function(){
         $(this).trigger('updateRenderCalculate');
     });
 
-    this.el.on('change', 'input[data-cell], select',function(){
-        $(this).trigger('updateRenderCalculate');
+    this.el.on('change', 'select', function(){
+        $(this).trigger('updateCalculate');
     });
 
     this.el.on('focus', 'input[data-cell]',function(){
