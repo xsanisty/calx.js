@@ -559,7 +559,12 @@ financial: {
         return;
     },
 
-    MIRR : function(values, finance_rate, reinvest_rate) {
+    MIRR : function(valuesObject, finance_rate, reinvest_rate) {
+
+        var values = [];
+        for(var a in valuesObject){
+            values.push(valuesObject[a]);
+        }
         // Initialize number of values
         var n = values.length;
 
@@ -921,8 +926,12 @@ financial: {
         return;
     },
 
-    XIRR : function(values, dates, guess) {
+    XIRR : function(valuesObject, dates, guess) {
         // Credits: algorithm inspired by Apache OpenOffice
+        var values = [];
+        for(var a in valuesObject){
+            values.push(valuesObject[a]);
+        }
 
         // Calculates the resulting amount
         var irrResult = function(values, dates, rate) {

@@ -1,14 +1,21 @@
 sheet.prototype.attachEvent = function(){
 
     var currentSheet = this;
-    this.el.on('calxFocus', 'input[data-cell]', function(){
+
+    /**
+     * get the unformatted value of the cell, and display it to the element
+     */
+    this.el.on('getOriginalValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
         currentCell.el.val(currentCell.getValue());
     });
 
-    this.el.on('calxBlur', 'input[data-cell]', function(){
+    /**
+     * update value of the current cell, render the formatted value, and process it's dependant
+     */
+    this.el.on('updateRenderCalculate', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -28,7 +35,11 @@ sheet.prototype.attachEvent = function(){
         currentCell.processDependant(false, true);
     });
 
-    this.el.on('calxKeyup', 'input[data-cell]', function(){
+    /**
+     * update value of current cell without render it's own value, and process it's dependant
+     * @return {[type]} [description]
+     */
+    this.el.on('updateCalculate', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -48,14 +59,18 @@ sheet.prototype.attachEvent = function(){
 
     /** bind to internal event, so no need to unbind the real event on destroy */
     this.el.on('blur', 'input[data-cell]',function(){
-        $(this).trigger('calxBlur');
+        $(this).trigger('updateRenderCalculate');
+    });
+
+    this.el.on('change', 'input[data-cell], select',function(){
+        $(this).trigger('updateRenderCalculate');
     });
 
     this.el.on('focus', 'input[data-cell]',function(){
-        $(this).trigger('calxFocus');
+        $(this).trigger('getOriginalValue');
     });
 
     this.el.on('keyup', 'input[data-cell]',function(){
-        $(this).trigger('calxKeyup');
+        $(this).trigger('updateCalculate');
     });
 };
