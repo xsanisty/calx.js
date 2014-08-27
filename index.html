@@ -4,8 +4,8 @@
     <script src="jquery-1.9.1.min.js"></script>
     <script src="js/numeral.min.js"></script>
     <script src="js/moment.min.js"></script>
-    <script src="php-build/calx-build.php"></script>
-    <!--<script src="jquery-calx-2.0.0.min.js"></script>-->
+    <!--<script src="php-build/calx-build.php"></script>-->
+    <script src="jquery-calx-2.0.0.min.js"></script>
     <style>
         thead > tr > td{
             text-align:center;
@@ -29,6 +29,7 @@
 </head>
 <body>
     <form id="sheet1">
+        <h1>Sheet 1</h1>
         <table>
             <thead>
                 <tr>
@@ -119,21 +120,32 @@
         </table>
     </form>
     <form id="sheet2">
-
+        <h1>Sheet 2</h1>
         <table>
             <tr>
+                <td class="num" colspan="2">Create Table</td>
+                <td style="width:50px">&nbsp;</td>
                 <td><label for="formula_test2">Formula :</label></td>
                 <td><input type="text" style="width:100%" id="formula_test2"></td>
             </tr>
             <tr>
+                <td>Row</td>
+                <td><input style="width:100%" type="text" id="row"></td>
+                <td style="width:50px">&nbsp;</td>
                 <td><label for="formula_test2">Format :</label></td>
                 <td><input type="text" style="width:100%" id="format_test2"></td>
             </tr>
             <tr>
+                <td>Col</td>
+                <td><input style="width:100%" type="text" id="col"></td>
+                <td style="width:50px">&nbsp;</td>
                 <td colspan="2" style="text-align:center"><button id="formula_button2">Apply!</button></td>
             </tr>
             <tr>
-                <td colspan="2"><input data-cell="ZZ256" data-formula="SUM(A1:BF200)" type="text" style="width:100%"></td>
+                <td colspan="2" style="text-align:center"><button id="draw_table">Draw!</button></td>
+                <td style="width:50px">&nbsp;</td>
+                <td><label>Result :</label></td>
+                <td><input data-cell="ZZ256" data-formula="" type="text" style="width:100%"></td>
             </tr>
         </table>
         <table id="tbl2">
@@ -199,7 +211,7 @@
                     thead.append('<td>'+this.toChr(col)+'</td>');
                   }
                     cellAddress = this.toChr(col) + row;
-                    tr += '<td><input type="text" data-cell="'+cellAddress+'" value="'+getRandomArbitrary(0, 100)+'"></td>';
+                    tr += '<td><input type="text" data-cell="'+cellAddress+'" value=""></td>';
                 }
                 tr+= '</tr>';
             }
@@ -207,18 +219,10 @@
             table.html(tr);
         }
 
-        console.time('cell-rendering');
-
-        cellrange('A1', 'F10');
-
-        console.timeEnd('cell-rendering');
-
-        console.time('calx-rendering');
         $('#sheet1, #sheet2').calx({
             'default' : 0,
             'autoCalculate' : true
         });
-        console.timeEnd('calx-rendering');
 
         $('#formula_button').click(function(e){
             e.preventDefault();
@@ -232,6 +236,17 @@
             var cell = $('#sheet2').calx('getCell', 'ZZ256');
             cell.setFormat($('#format_test2').val());
             cell.setFormula($('#formula_test2').val());
+        });
+
+        $('#draw_table').click(function(e){
+            e.preventDefault();
+            var row = $('#row').val();
+            var col = $('#col').val();
+
+            cellrange('A1', toChr(col)+row);
+
+            $('#sheet2').calx('destroy');
+            $('#sheet2').calx();
         });
 
     </script>
