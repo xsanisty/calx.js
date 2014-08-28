@@ -7,46 +7,97 @@
         <meta name="author" content="">
         <title>
             jQuery Calx 2.0.0 documentation
-        </title><!-- Bootstrap core CSS -->
-        <link href="css/bootstrap.css" rel="stylesheet" type="text/css"><!-- Add custom CSS here -->
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
     </head>
     <body>
         <div id="wrapper">
-            <!-- Sidebar -->
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                         <span class="sr-only">Toggle navigation</span>
                     </button>
-                    <a class="navbar-brand" href="index.html">jQuery Calx 2.0.0</a>
-                </div><!-- Collect the nav links, forms, and other content for toggling -->
+                    <a class="navbar-brand" href="#">jQuery Calx 2.0.0</a>
+                </div>
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
-                        <li class="active"><a href="index.html">Overview</a></li>
+                        <li class="active"><a href="#overview">Overview</a></li>
+                        <li class="active"><a href="#initialize">Initializing</a></li>
                     </ul>
-                </div><!-- /.navbar-collapse -->
+                </div>
             </nav>
             <div id="page-wrapper">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1>
-                            Blank Page <small>A Blank Slate</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li>
-                                <a href="index.html">Dashboard</a>
-                            </li>
-                            <li class="active">Blank Page
-                            </li>
-                        </ol>
+                <a name="overview"></a><br><br>
+                <div class="row page-header" style="margin-top: 0">
+                    <div class="col-md-12">
+                        <h3>
+                            jQuery Calx Overview
+                        </h3>
                     </div>
-                </div><!-- /.row -->
-            </div><!-- /#page-wrapper -->
-        </div><!-- /#wrapper -->
-        <!-- JavaScript -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <p>
+                            jQuery Calx is an excel calculation engine that wrapped as jQuery plugin,
+                            It is useful for building calculation in html page using excel-like formula.
+                            You can simply define the cell address in <code>data-cell</code> attribute,
+                            calculation formula in <code>data-formula</code> attribute, result formatting
+                            rule in <code>data-format</code> attribute, and let jQuery Calx do the magic.
+                        </p>
+                        <p>
+                            Once jQuery Calx is initialized, it will respond to any change that occur in cell's element,
+                            and do the calculation based on the cell value and formula, let's see below example:
+                        </p>
+                        <div class="highlight">
+                        <pre>
+    &lt;div id="sheet"&gt;
+        &lt;input type="text" data-cell="A1"&gt; &lt;br&gt;
+        &lt;input type="text" data-cell="A2"&gt; &lt;br&gt;
+        &lt;input type="text" data-cell="A3"&gt; &lt;br&gt;
+        &lt;input type="text" data-cell="A4" data-formula="SUM(A1:A3)"&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        $('#sheet').calx();
+    &lt;/script&gt;
+                        </pre>
+                        </div>
+
+                        <p>
+                            In the above sample code snippet, <code>A4</code> wil display whatever result of SUM(A1:A3), any change occured
+                            in <code>A1</code>, <code>A2</code>, or <code>A3</code> will be represented in <code>A4</code> since <code>A4</code>
+                            depend on cell ranged from <code>A1</code> to <code>A3</code>.
+                        </p>
+                        <p>
+                            If you are familiar with any spreadsheet application like Microsoft Excel or LibreOffice,
+                            you will also get familiar with jQuery Calx. We use term <code>sheet</code> for wrapper element like
+                            <code>div#sheet</code> where the jQuery Calx is initialized, and <code>cell</code> for all element inside the <code>div#sheet</code> that
+                            involved in calculation process, this mean all element that has <code>data-cell</code> and <code>data-formula</code> attribute.
+                        </p>
+                    </div>
+                </div>
+
+
+                <a name="initialize"></a><br><br>
+                <div class="row page-header" style="margin-top:0">
+                    <div class="col-md-12">
+                        <h3>
+                            Initializing
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
         <script src="js/bootstrap.js" type="text/javascript"></script>
     </body>
