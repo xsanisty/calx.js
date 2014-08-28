@@ -288,6 +288,33 @@ engineering: {
         return number1 ^ number2;
     },
 
+    COMPLEX: function(real, imaginary, suffix) {
+        // Return error if either number is a non-numeric value
+        if (isNaN(real) || isNaN(imaginary)) {
+            return '#VALUE!';
+        }
+
+        // Set suffix
+        suffix = (typeof suffix === 'undefined') ? 'i' : suffix;
+
+        // Return error if suffix is neither "i" nor "j"
+        if (suffix !== 'i' && suffix !== 'j') {
+            return '#VALUE!';
+        }
+
+        // Return complex number
+        if (real === 0 && imaginary === 0) {
+            return 0;
+        } else if (real === 0) {
+            return (imaginary === 1) ? suffix : imaginary.toString() + suffix;
+        } else if (imaginary === 0) {
+            return real.toString();
+        } else {
+            var sign = (imaginary > 0) ? '+' : '';
+            return real.toString() + sign + ((imaginary === 1) ? suffix : imaginary.toString() + suffix);
+        }
+    },
+
     /**
      * Implement CONVERT function, part of the stoic's formula.js (http://www.stoic.com/pages/formula)
      * Converting value from one measurement unit to another measurement unit
@@ -578,5 +605,1010 @@ engineering: {
 
         // Return converted number
         return number * from[6] * from_multiplier / (to[6] * to_multiplier);
+    },
+
+    DEC2BIN : function(number, places) {
+        // Return error if number is not a number
+        if (isNaN(number)) {
+            return '#VALUE!';
+        }
+
+        // Return error if number is not decimal, is lower than -512, or is greater than 511
+        if (!/^-?[0-9]{1,3}$/.test(number) || number < -512 || number > 511) {
+            return '#NUM!';
+        }
+
+        // Ignore places and return a 10-character binary number if number is negative
+        if (number < 0) {
+            return '1' + _s.repeat('0', 9 - (512 + number).toString(2).length) + (512 + number).toString(2);
+        }
+
+        // Convert decimal number to binary
+        var result = parseInt(number, 10).toString(2);
+
+        // Return binary number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
+    },
+
+    DEC2HEX : function(number, places) {
+        // Return error if number is not a number
+        if (isNaN(number)) {
+            return '#VALUE!';
+        }
+
+        // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
+        if (!/^-?[0-9]{1,12}$/.test(number) || number < -549755813888 || number > 549755813887) {
+            return '#NUM!';
+        }
+
+        // Ignore places and return a 10-character hexadecimal number if number is negative
+        if (number < 0) {
+            return (1099511627776 + number).toString(16);
+        }
+
+        // Convert decimal number to hexadecimal
+        var result = parseInt(number, 10).toString(16);
+
+        // Return hexadecimal number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
+    },
+
+    DEC2OCT : function(number, places) {
+        // Return error if number is not a number
+        if (isNaN(number)) {
+            return '#VALUE!';
+        }
+
+        // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
+        if (!/^-?[0-9]{1,9}$/.test(number) || number < -536870912 || number > 536870911) {
+            return '#NUM!';
+        }
+
+        // Ignore places and return a 10-character octal number if number is negative
+        if (number < 0) {
+            return (1073741824 + number).toString(8);
+        }
+
+        // Convert decimal number to octal
+        var result = parseInt(number, 10).toString(8);
+
+        // Return octal number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
+    },
+
+    DELTA : function(number1, number2) {
+        // Set number2 to zero if undefined
+        number2 = (typeof number2 === 'undefined') ? 0 : number2;
+
+        // Return error if either number is not a number
+        if (isNaN(number1) || isNaN(number2)) {
+            return '#VALUE!';
+        }
+
+        // Return delta
+        return (number1 === number2) ? 1 : 0;
+    },
+
+    ERF : function(lower_bound, upper_bound) {
+        // Set number2 to zero if undefined
+        upper_bound = (typeof upper_bound === 'undefined') ? 0 : upper_bound;
+
+        // Return error if either number is not a number
+        if (isNaN(lower_bound) || isNaN(upper_bound)) {
+            return '#VALUE!';
+        }
+
+        // Return ERFC using jStat [http://www.jstat.org/]
+        return jStat.erf(lower_bound);
+    },
+
+    ERFC : function(x) {
+        // Return error if x is not a number
+        if (isNaN(x)) {
+            return '#VALUE!';
+        }
+
+        // Return ERFC using jStat [http://www.jstat.org/]
+        return jStat.erfc(x);
+    },
+
+    ERFCPRECISE : function() {
+        return;
+    },
+
+    ERFPRECISE : function() {
+        return;
+    },
+
+    GESTEP : function(number, step) {
+        // Set step to zero if undefined
+        step = (typeof step === 'undefined') ? 0 : step;
+
+        // Return error if either number is not a number
+        if (isNaN(number) || isNaN(step)) {
+            return '#VALUE!';
+        }
+
+        // Return delta
+        return (number >= step) ? 1 : 0;
+    },
+
+    HEX2BIN : function(number, places) {
+
+        // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
+        if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
+            return '#NUM!';
+        }
+
+        // Check if number is negative
+        var negative = (number.length === 10 && number.substring(0, 1).toLowerCase() === 'f') ? true : false;
+
+        // Convert hexadecimal number to decimal
+        var decimal = (negative) ? parseInt(number, 16) - 1099511627776 : parseInt(number, 16);
+
+        // Return error if number is lower than -512 or greater than 511
+        if (decimal < -512 || decimal > 511) {
+            return '#NUM!';
+        }
+
+        // Ignore places and return a 10-character binary number if number is negative
+        if (negative) {
+            return '1' + _s.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
+        }
+
+        // Convert decimal number to binary
+        var result = decimal.toString(2);
+
+        // Return binary number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
+    },
+
+    HEX2DEC : function(number) {
+        // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
+        if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
+            return '#NUM!';
+        }
+
+        // Convert hexadecimal number to decimal
+        var decimal = parseInt(number, 16);
+
+        // Return decimal number
+        return (decimal >= 549755813888) ? decimal - 1099511627776 : decimal;
+    },
+
+    HEX2OCT : function(number, places) {
+        // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
+        if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
+            return '#NUM!';
+        }
+
+        // Convert hexadecimal number to decimal
+        var decimal = parseInt(number, 16);
+
+        // Return error if number is positive and greater than 0x1fffffff (536870911)
+        if (decimal > 536870911 && decimal < 1098974756864) {
+            return '#NUM!';
+        }
+
+        // Ignore places and return a 10-character octal number if number is negative
+        if (decimal >= 1098974756864) {
+            return (decimal - 1098437885952).toString(8);
+        }
+
+        // Convert decimal number to octal
+        var result = decimal.toString(8);
+
+        // Return octal number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
+    },
+
+    IMABS : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return absolute value of complex number
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    },
+
+    IMAGINARY : function(inumber) {
+        // Return 0 if inumber is equal to 0
+        if (inumber === 0 || inumber === '0') {
+            return 0;
+        }
+
+        // Handle special cases
+        if (['i', 'j'].indexOf(inumber) >= 0) {
+            return 1;
+        }
+
+        // Normalize imaginary coefficient
+        inumber = inumber.replace('+i', '+1i').replace('-i', '-1i').replace('+j', '+1j').replace('-j', '-1j');
+
+        // Lookup sign
+        var plus = inumber.indexOf('+');
+        var minus = inumber.indexOf('-');
+        if (plus === 0) {
+            plus = inumber.indexOf('+', 1);
+        }
+
+        if (minus === 0) {
+            minus = inumber.indexOf('-', 1);
+        }
+
+        // Lookup imaginary unit
+        var last = inumber.substring(inumber.length - 1, inumber.length);
+        var unit = (last === 'i' || last === 'j');
+
+        if (plus >= 0 || minus >= 0) {
+            // Return error if imaginary unit is neither i nor j
+            if (!unit) {
+                return '#NUM!';
+            }
+
+            // Return imaginary coefficient of complex number
+            if (plus >= 0) {
+                return (isNaN(inumber.substring(0, plus)) || isNaN(inumber.substring(plus + 1, inumber.length - 1))) ?
+                    '#NUM!' :
+                    Number(inumber.substring(plus + 1, inumber.length - 1));
+            } else {
+                return (isNaN(inumber.substring(0, minus)) || isNaN(inumber.substring(minus + 1, inumber.length - 1))) ?
+                    '#NUM!' :
+                    -Number(inumber.substring(minus + 1, inumber.length - 1));
+            }
+        } else {
+            if (unit) {
+                return (isNaN(inumber.substring(0, inumber.length - 1))) ? '#NUM!' : inumber.substring(0, inumber.length - 1);
+            } else {
+                return (isNaN(inumber)) ? '#NUM!' : 0;
+            }
+        }
+    },
+
+    IMARGUMENT : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return error if inumber is equal to zero
+        if (x === 0 && y === 0) {
+            return '#DIV/0!';
+        }
+
+        // Return PI/2 if x is equal to zero and y is positive
+        if (x === 0 && y > 0) {
+            return Math.PI / 2;
+        }
+
+        // Return -PI/2 if x is equal to zero and y is negative
+        if (x === 0 && y < 0) {
+            return -Math.PI / 2;
+        }
+
+        // Return zero if x is negative and y is equal to zero
+        if (y === 0 && x > 0) {
+            return 0;
+        }
+
+        // Return zero if x is negative and y is equal to zero
+        if (y === 0 && x < 0) {
+            return -Math.PI;
+        }
+
+        // Return argument of complex number
+        if (x > 0) {
+            return Math.atan(y / x);
+        } else if (x < 0 && y >= 0) {
+            return Math.atan(y / x) + Math.PI;
+        } else {
+            return Math.atan(y / x) - Math.PI;
+        }
+    },
+
+    IMCONJUGATE : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return conjugate of complex number
+        return (y !== 0) ? formula.engineering.COMPLEX(x, -y, unit) : inumber;
+    },
+
+    IMCOS : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return cosine of complex number
+        return formula.engineering.COMPLEX(Math.cos(x) * (Math.exp(y) + Math.exp(-y)) / 2, -Math.sin(x) * (Math.exp(y) - Math.exp(-y)) / 2, unit);
+    },
+
+    IMCOSH : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return hyperbolic cosine of complex number
+        return formula.engineering.COMPLEX(Math.cos(y) * (Math.exp(x) + Math.exp(-x)) / 2, Math.sin(y) * (Math.exp(x) - Math.exp(-x)) / 2, unit);
+    },
+
+    IMCOT : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return cotangent of complex number
+        return formula.engineering.IMDIV(formula.engineering.IMCOS(inumber), formula.engineering.IMSIN(inumber));
+    },
+
+    IMCSC : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return cosecant of complex number
+        return formula.engineering.IMDIV('1', formula.engineering.IMSIN(inumber));
+    },
+
+    IMCSCH : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return hyperbolic cosecant of complex number
+        return formula.engineering.IMDIV('1', formula.engineering.IMSINH(inumber));
+    },
+
+    IMDIV : function(inumber1, inumber2) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var a = formula.engineering.IMREAL(inumber1);
+        var b = formula.engineering.IMAGINARY(inumber1);
+        var c = formula.engineering.IMREAL(inumber2);
+        var d = formula.engineering.IMAGINARY(inumber2);
+
+        // Lookup imaginary unit
+        var unit1 = inumber1.substring(inumber1.length - 1);
+        var unit2 = inumber1.substring(inumber1.length - 1);
+        var unit = 'i';
+        if (unit1 === 'j') {
+            unit = 'j';
+        } else if (unit2 === 'j') {
+            unit = 'j';
+        }
+
+        // Return error if either coefficient is not a number
+        if (a === '#NUM!' || b === '#NUM!' || c === '#NUM!' || d === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return error if inumber2 is null
+        if (c === 0 && d === 0) {
+            return '#NUM!';
+        }
+
+        // Return exponential of complex number
+        var den = c * c + d * d;
+        return formula.engineering.COMPLEX((a * c + b * d) / den, (b * c - a * d) / den, unit);
+    },
+
+    IMEXP : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return exponential of complex number
+        var e = Math.exp(x);
+        return formula.engineering.COMPLEX(e * Math.cos(y), e * Math.sin(y), unit);
+    },
+
+    IMLN : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return exponential of complex number
+        return formula.engineering.COMPLEX(Math.log(Math.sqrt(x * x + y * y)), Math.atan(y / x), unit);
+    },
+
+    IMLOG10 : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return exponential of complex number
+        return formula.engineering.COMPLEX(Math.log(Math.sqrt(x * x + y * y)) / Math.log(10), Math.atan(y / x) / Math.log(10), unit);
+    },
+
+    IMLOG2 : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return exponential of complex number
+        return formula.engineering.COMPLEX(Math.log(Math.sqrt(x * x + y * y)) / Math.log(2), Math.atan(y / x) / Math.log(2), unit);
+    },
+
+    IMPOWER : function(inumber, number) {
+        // Return error if number is nonnumeric
+        if (isNaN(number)) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Calculate power of modulus
+        var p = Math.pow(formula.engineering.IMABS(inumber), number);
+
+        // Calculate argument
+        var t = formula.engineering.IMARGUMENT(inumber);
+
+        // Return exponential of complex number
+        return formula.engineering.COMPLEX(p * Math.cos(number * t), p * Math.sin(number * t), unit);
+    },
+
+    IMPRODUCT : function() {
+        // Initialize result
+        var result = arguments[0];
+
+        // Loop on all numbers
+        for (var i = 1; i < arguments.length; i++) {
+            // Lookup coefficients of two complex numbers
+            var a = formula.engineering.IMREAL(result);
+            var b = formula.engineering.IMAGINARY(result);
+            var c = formula.engineering.IMREAL(arguments[i]);
+            var d = formula.engineering.IMAGINARY(arguments[i]);
+
+            // Return error if either coefficient is not a number
+            if (a === '#NUM!' || b === '#NUM!' || c === '#NUM!' || d === '#NUM!') {
+                return '#NUM!';
+            }
+
+            // Complute product of two complex numbers
+            result = formula.engineering.COMPLEX(a * c - b * d, a * d + b * c);
+        }
+
+        // Return product of complex numbers
+        return result;
+    },
+
+    IMREAL : function(inumber) {
+        // Return 0 if inumber is equal to 0
+        if (inumber === 0 || inumber === '0') {
+            return 0;
+        }
+
+        // Handle special cases
+        if (['i', '+i', '1i', '+1i', '-i', '-1i', 'j', '+j', '1j', '+1j', '-j', '-1j'].indexOf(inumber) >= 0) {
+            return 0;
+        }
+
+        // Lookup sign
+        var plus = inumber.indexOf('+');
+        var minus = inumber.indexOf('-');
+        if (plus === 0) {
+            plus = inumber.indexOf('+', 1);
+        }
+        if (minus === 0) {
+            minus = inumber.indexOf('-', 1);
+        }
+
+        // Lookup imaginary unit
+        var last = inumber.substring(inumber.length - 1, inumber.length);
+        var unit = (last === 'i' || last === 'j');
+
+        if (plus >= 0 || minus >= 0) {
+            // Return error if imaginary unit is neither i nor j
+            if (!unit) {
+                return '#NUM!';
+            }
+
+            // Return real coefficient of complex number
+            if (plus >= 0) {
+                return (isNaN(inumber.substring(0, plus)) || isNaN(inumber.substring(plus + 1, inumber.length - 1))) ?
+                    '#NUM!' :
+                    Number(inumber.substring(0, plus));
+            } else {
+                return (isNaN(inumber.substring(0, minus)) || isNaN(inumber.substring(minus + 1, inumber.length - 1))) ?
+                    '#NUM!' :
+                    Number(inumber.substring(0, minus));
+            }
+        } else {
+            if (unit) {
+                return (isNaN(inumber.substring(0, inumber.length - 1))) ? '#NUM!' : 0;
+            } else {
+                return (isNaN(inumber)) ? '#NUM!' : inumber;
+            }
+        }
+    },
+
+    IMSEC : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return secant of complex number
+        return formula.engineering.IMDIV('1', formula.engineering.IMCOS(inumber));
+    },
+
+    IMSECH : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return hyperbolic secant of complex number
+        return formula.engineering.IMDIV('1', formula.engineering.IMCOSH(inumber));
+    },
+
+    IMSIN : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return sine of complex number
+        return formula.engineering.COMPLEX(Math.sin(x) * (Math.exp(y) + Math.exp(-y)) / 2, Math.cos(x) * (Math.exp(y) - Math.exp(-y)) / 2, unit);
+    },
+
+    IMSINH : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return hyperbolic sine of complex number
+        return formula.engineering.COMPLEX(Math.cos(y) * (Math.exp(x) - Math.exp(-x)) / 2, Math.sin(y) * (Math.exp(x) + Math.exp(-x)) / 2, unit);
+    },
+
+    IMSQRT : function(inumber) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Lookup imaginary unit
+        var unit = inumber.substring(inumber.length - 1);
+        unit = (unit === 'i' || unit === 'j') ? unit : 'i';
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Calculate power of modulus
+        var s = Math.sqrt(formula.engineering.IMABS(inumber));
+
+        // Calculate argument
+        var t = formula.engineering.IMARGUMENT(inumber);
+
+        // Return exponential of complex number
+        return formula.engineering.COMPLEX(s * Math.cos(t / 2), s * Math.sin(t / 2), unit);
+    },
+
+    IMSUB : function(inumber1, inumber2) {
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var a = formula.engineering.IMREAL(inumber1);
+        var b = formula.engineering.IMAGINARY(inumber1);
+        var c = formula.engineering.IMREAL(inumber2);
+        var d = formula.engineering.IMAGINARY(inumber2);
+
+        // Lookup imaginary unit
+        var unit1 = inumber1.substring(inumber1.length - 1);
+        var unit2 = inumber1.substring(inumber1.length - 1);
+        var unit = 'i';
+        if (unit1 === 'j') {
+            unit = 'j';
+        } else if (unit2 === 'j') {
+            unit = 'j';
+        }
+
+        // Return error if either coefficient is not a number
+        if (a === '#NUM!' || b === '#NUM!' || c === '#NUM!' || d === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return _ of two complex numbers
+        return formula.engineering.COMPLEX(a - c, b - d, unit);
+    },
+
+    IMSUM : function() {
+        // Initialize result
+        var result = arguments[0];
+
+        // Loop on all numbers
+        for (var i = 1; i < arguments.length; i++) {
+            // Lookup coefficients of two complex numbers
+            var a = formula.engineering.IMREAL(result);
+            var b = formula.engineering.IMAGINARY(result);
+            var c = formula.engineering.IMREAL(arguments[i]);
+            var d = formula.engineering.IMAGINARY(arguments[i]);
+
+            // Return error if either coefficient is not a number
+            if (a === '#NUM!' || b === '#NUM!' || c === '#NUM!' || d === '#NUM!') {
+                return '#NUM!';
+            }
+
+            // Complute product of two complex numbers
+            result = formula.engineering.COMPLEX(a + c, b + d);
+        }
+
+        // Return sum of complex numbers
+        return result;
+    },
+
+    IMTAN : function(inumber) {
+        // Return error if inumber is a logical value
+        if (inumber === true || inumber === false) {
+            return '#VALUE!';
+        }
+
+        // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
+        var x = formula.engineering.IMREAL(inumber);
+        var y = formula.engineering.IMAGINARY(inumber);
+
+        // Return error if either coefficient is not a number
+        if (x === '#NUM!' || y === '#NUM!') {
+            return '#NUM!';
+        }
+
+        // Return tangent of complex number
+        return formula.engineering.IMDIV(formula.engineering.IMSIN(inumber), formula.engineering.IMCOS(inumber));
+    },
+
+    OCT2BIN : function(number, places) {
+        // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
+        if (!/^[0-7]{1,10}$/.test(number)) {
+            return '#NUM!';
+        }
+
+        // Check if number is negative
+        var negative = (number.length === 10 && number.substring(0, 1) === '7') ? true : false;
+
+        // Convert octal number to decimal
+        var decimal = (negative) ? parseInt(number, 8) - 1073741824 : parseInt(number, 8);
+
+        // Return error if number is lower than -512 or greater than 511
+        if (decimal < -512 || decimal > 511) {
+            return '#NUM!';
+        }
+
+        // Ignore places and return a 10-character binary number if number is negative
+        if (negative) {
+            return '1' + _s.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
+        }
+
+        // Convert decimal number to binary
+        var result = decimal.toString(2);
+
+        // Return binary number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
+    },
+
+    OCT2DEC : function(number) {
+        // Return error if number is not octal or contains more than ten characters (10 digits)
+        if (!/^[0-7]{1,10}$/.test(number)) {
+            return '#NUM!';
+        }
+
+        // Convert octal number to decimal
+        var decimal = parseInt(number, 8);
+
+        // Return decimal number
+        return (decimal >= 536870912) ? decimal - 1073741824 : decimal;
+    },
+
+    OCT2HEX : function(number, places) {
+        // Return error if number is not octal or contains more than ten characters (10 digits)
+        if (!/^[0-7]{1,10}$/.test(number)) {
+            return '#NUM!';
+        }
+
+        // Convert octal number to decimal
+        var decimal = parseInt(number, 8);
+
+        // Ignore places and return a 10-character octal number if number is negative
+        if (decimal >= 536870912) {
+            return 'ff' + (decimal + 3221225472).toString(16);
+        }
+
+        // Convert decimal number to hexadecimal
+        var result = decimal.toString(16);
+
+        // Return hexadecimal number using the minimum number of characters necessary if places is undefined
+        if (typeof places === 'undefined') {
+            return result;
+        } else {
+            // Return error if places is nonnumeric
+            if (isNaN(places)) {
+                return '#VALUE!';
+            }
+
+            // Return error if places is negative
+            if (places < 0) {
+                return '#NUM!';
+            }
+
+            // Truncate places in case it is not an integer
+            places = Math.floor(places);
+
+            // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
+            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+        }
     }
 }
