@@ -37,6 +37,7 @@
         require 'include/cell/setAffected.js';
         require 'include/cell/isAffected.js';
         require 'include/cell/renderComputedValue.js';
+        require 'include/cell/resyncValue.js';
 
 
         /** sheet reference */
@@ -55,6 +56,7 @@
         require 'include/sheet/applyChange.js';
         require 'include/sheet/scan.js';
         require 'include/sheet/refresh.js';
+        require 'include/sheet/reset.js';
         require 'include/sheet/attachEvent.js';
 
         /** calx reference */
