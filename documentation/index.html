@@ -53,13 +53,13 @@
 
                         <p>
                             jQuery Calx is an excel calculation engine that wrapped as jQuery plugin,
-                            It is useful for building calculation in html page using excel-like formula.
+                            It is useful for building calculation in html page using excel formula.
                             You can simply define the cell address in <code>data-cell</code> attribute,
                             calculation formula in <code>data-formula</code> attribute, result formatting
                             rule in <code>data-format</code> attribute, and let jQuery Calx do the magic.
                         </p>
                         <p>
-                            Once jQuery Calx is initialized, it will respond to any change that occur in cell's element,
+                            Once jQuery Calx is initialized, it will respond to any changes occured in cell's element,
                             and do the calculation based on the cell value and formula, let's see below example:
                         </p>
                         <div class="highlight">
@@ -78,7 +78,7 @@
                         </div>
 
                         <p>
-                            In the above sample code snippet, <code>A4</code> will display whatever result of SUM(A1:A3), any change occured
+                            In the above sample code snippet, <code>A4</code> will display whatever result of <code>SUM(A1:A3)</code>, any change occured
                             in <code>A1</code>, <code>A2</code>, or <code>A3</code> will be represented in <code>A4</code> since <code>A4</code>
                             depend on cell ranged from <code>A1</code> to <code>A3</code>.
                         </p>
@@ -86,7 +86,12 @@
                             If you are familiar with any spreadsheet application like Microsoft Excel or LibreOffice,
                             you will also get familiar with jQuery Calx. We use term <code>sheet</code> for wrapper element like
                             <code>div#sheet</code> where the jQuery Calx is initialized, and <code>cell</code> for all element inside the <code>div#sheet</code> that
-                            involved in calculation process, this mean all element that has <code>data-cell</code> and <code>data-formula</code> attribute.
+                            involved in calculation process, this mean all element that has <code>data-cell</code> and/or <code>data-formula</code> attribute.
+                        </p>
+                        <p>
+                            In case <code>data-formula</code> attribute present without <code>data-cell</code> attribute, jQuery Calx will assign reserved cell address
+                            prefixed with <code>CALX</code> and counted incrementally, the cell address will look like <code>CALX1</code>,
+                            <code>CALX2</code>,<code>CALX3</code>,<code>CALX4</code>
                         </p>
                     </div>
                 </div>
@@ -338,10 +343,35 @@
 
                         <h4>Value Formatting</h4>
                         <p>
-                            In regards to format value using the data-format attribute, you need to include <code>numeral.min.js</code> located
+                            In regards to format value using the <code>data-format</code> attribute, you need to include <code>numeral.min.js</code> located
                             in <code>js</code> directory, or you can download the latest version from
                             <a href="https://github.com/adamwdraper/Numeral-js">https://github.com/adamwdraper/Numeral-js</a>.
+
+                            If <code>numeral.js</code> is not included, jQuery Calx will render the raw value instead of formatted one.
                         </p>
+                        <br>
+
+                        <h4>Date Processing</h4>
+                        <p>
+                            Most of the date processing formula like <code>DATE</code>, <code>DATEDIF()</code> require <code>moment.js</code> to be executed correctly,
+                            you need to include <code>moment.min.js</code> located in <code>js</code> directory.
+                            If <code>moment.js</code> is not loaded, jQuery Calx will return <code>#NAME?</code> error.
+                        </p>
+                        <br>
+                        <h4>Statistical Calculation</h4>
+                        <p>
+                            Most of the statistical processing formula like <code>CORREL()</code>, <code>EXPONDIF()</code> require <code>jstat.js</code> to be executed.
+                            you need to include <code>jstat.min.js</code> located in <code>js</code> directory.
+                            If <code>jstat.js</code> is not loaded, jQuery Calx will return <code>#NAME?</code> error.
+                        </p>
+
+
+                        <pre>
+&lt;script src="js/numeral.min.js"&gt;&lt/script&gt;
+&lt;script src="js/moment.min.js"&gt;&lt/script&gt;
+&lt;script src="js/jstat.min.js"&gt;&lt/script&gt;
+&lt;script src="jquery-1.9.1.min.js"&gt;&lt/script&gt;
+&lt;script src="jquery-calx-2.0.0.min.js"&gt;&lt/script&gt; </pre><br>
                     </div>
                 </div>
             </div>
