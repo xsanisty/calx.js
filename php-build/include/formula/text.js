@@ -119,7 +119,7 @@ text:{
     },
 
     LEN : function(text) {
-        return text ? text.length : 0;
+        return (text+'').length;
     },
 
     LOWER : function(text) {
