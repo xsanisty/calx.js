@@ -27,6 +27,9 @@ var defaultConfig = {
     /** used for server side formula */
     'ajaxUrl'               : null,
 
+    /** ajax method used for requesting formula result */
+    'ajaxMethod'            : 'get',
+
     /** Available option is morris, highchart, d3 */
     'graphHandler'          : 'flot'
 

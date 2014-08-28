@@ -5,7 +5,7 @@
     <?php
         require 'include/ieHack.js';
         require 'include/defaultConfig.js';
-        require 'include/parserFactory-rev-2.js';
+        require 'include/parserFactory.js';
         require 'include/formula.js';
         require 'include/utility.js';
         require 'include/data.js';

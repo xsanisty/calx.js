@@ -1,6 +1,7 @@
 <html>
 <head>
 	<title>console test</title>
+    <meta charset="utf-8">
     <script src="jquery-1.9.1.min.js"></script>
     <script src="js/numeral.min.js"></script>
     <script src="js/moment.min.js"></script>
@@ -164,7 +165,7 @@
             <tbody></tbody>
         </table>
     </form>
-    <script type="text/javascript">
+    <script charset="UTF-8" type="text/javascript">
 
         function toNum(chr) {
             chr = chr.split('');
@@ -226,6 +227,29 @@
 
             table.html(tr);
         }
+
+                // load a language
+        numeral.language('fr', {
+            delimiters: {
+                thousands: ' ',
+                decimal: ','
+            },
+            abbreviations: {
+                thousand: 'k',
+                million: 'm',
+                billion: 'b',
+                trillion: 't'
+            },
+            ordinal : function (number) {
+                return number === 1 ? 'er' : 'ème';
+            },
+            currency: {
+                symbol: '€'
+            }
+        });
+
+        // switch between languages
+        numeral.language('fr');
 
         $('#sheet1, #sheet2').calx({
             'default' : 0,
