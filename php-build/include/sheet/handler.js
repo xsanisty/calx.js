@@ -104,6 +104,19 @@ sheet.prototype.comparator = {
         return a > b;
     },
 
+    greaterEqual: function(a, b){
+        return a >= b;
+    },
+
+    less: function(a, b){
+        return a < b;
+    },
+
+    lessEqual : function(a, b){
+        console.log('lessEqual executed', a, b);
+        return a <= b;
+    },
+
     equal: function(a,b){
         return a == b;
     }

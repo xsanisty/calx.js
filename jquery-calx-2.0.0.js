@@ -238,11 +238,11 @@ var defaultConfig = {
 
                     break;
                 case 11:
-                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0 - 1]);
+                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0]);
 
                     break;
                 case 12:
-                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0 - 1]);
+                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0]);
 
                     break;
                 case 13:
@@ -8123,6 +8123,19 @@ sheet.prototype.getVariable = function(varName){
 sheet.prototype.comparator = {
     greater: function(a, b){
         return a > b;
+    },
+
+    greaterEqual: function(a, b){
+        return a >= b;
+    },
+
+    less: function(a, b){
+        return a < b;
+    },
+
+    lessEqual : function(a, b){
+        console.log('lessEqual executed', a, b);
+        return a <= b;
     },
 
     equal: function(a,b){
