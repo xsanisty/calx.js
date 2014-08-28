@@ -10,5 +10,5 @@ cell.prototype.setFormula = function(formula){
 
     this.buildDependency();
     this.processDependency(true, true);
-    this.evaluateFormula();
+    //this.evaluateFormula();
 };
