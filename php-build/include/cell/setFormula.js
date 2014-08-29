@@ -9,6 +9,7 @@ cell.prototype.setFormula = function(formula){
     }
 
     this.buildDependency();
-    this.processDependency(true, true);
+    this.processDependant(true, true);
+
     //this.evaluateFormula();
 };
