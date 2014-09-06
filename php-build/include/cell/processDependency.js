@@ -1,7 +1,4 @@
 /**
- * @return {void}
- */
-/**
  * process cell's dependency list and mark it as processed
  * @param  {bool} selfRender  [set render itself or not]
  * @param  {bool} childRender [set render child as well or not]
