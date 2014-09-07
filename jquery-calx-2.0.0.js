@@ -7699,7 +7699,7 @@ cell.prototype.buildDependency = function(){
         if(a.indexOf('#') === -1){
             this.dependencies[a].removeDependant(cellAddress);
         }else{
-            this.dependencies[a].removeDependant(sheetKey+'>'+cellAddress);
+            this.dependencies[a].removeDependant(sheetKey+'!'+cellAddress);
         }
 
         delete this.dependencies[a];
@@ -7717,7 +7717,7 @@ cell.prototype.buildDependency = function(){
                 switch(a){
                     case "remoteCellRange":
                         for(i = 0; i < cellMatch.length; i++){
-                            formulaPart = cellMatch[i].split('>');
+                            formulaPart = cellMatch[i].split('!');
                             sheetId     = $.trim(formulaPart[0]);
                             cellPart    = formulaPart[1].split(':');
                             cellStart   = $.trim(cellPart[0]);
@@ -7725,10 +7725,10 @@ cell.prototype.buildDependency = function(){
 
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
                             for(j in dependencies){
-                                key = sheetId+'>'+j;
+                                key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
                                     this.dependencies[key] = dependencies[j];
-                                    dependencies[j].registerDependant(sheetKey+'>'+this.getAddress(), this);
+                                    dependencies[j].registerDependant(sheetKey+'!'+this.getAddress(), this);
                                 }
                             }
                         }
@@ -7736,15 +7736,15 @@ cell.prototype.buildDependency = function(){
 
                     case "remoteCell":
                         for(i = 0; i < cellMatch.length; i++){
-                            formulaPart = cellMatch[i].split('>');
+                            formulaPart = cellMatch[i].split('!');
                             sheetId     = $.trim(formulaPart[0]);
                             cellPart    = $.trim(formulaPart[1]);
 
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
-                            key = sheetId+'>'+cellPart;
+                            key = sheetId+'!'+cellPart;
                             if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies){
                                 this.dependencies[key] = dependencies;
-                                dependencies.registerDependant(sheetKey+'>'+this.getAddress(), this);
+                                dependencies.registerDependant(sheetKey+'!'+this.getAddress(), this);
 
                             }
                         }
