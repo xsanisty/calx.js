@@ -4,8 +4,8 @@
  */
 cell.prototype.buildDependency = function(){
     var pattern = {
-            remoteCellRange : /\#[A-Za-z0-9_]+\s*>\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
-            remoteCell      : /\#[A-Za-z0-9_]+\s*>\s*[A-Za-z]+[0-9]+/g,
+            remoteCellRange : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
+            remoteCell      : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+/g,
             cellRange       : /[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
             cell            : /[A-Z]+[0-9]+/g
         },
