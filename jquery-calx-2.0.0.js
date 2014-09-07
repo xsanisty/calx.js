@@ -8012,7 +8012,15 @@ cell.prototype.renderComputedValue = function(){
  */
 cell.prototype.resyncValue = function(){
     if(this.el){
-        this.setValue(this.el.val());
+        var tagName     = this.el.prop('tagName').toLowerCase(),
+            isFormTag   = this.formTags.indexOf(tagName) > -1,
+            elValue     = (isFormTag) ? this.el.val() : this.el.text();
+
+        if(this.el.attr('data-format')){
+            this.setValue(numeral().unformat( elValue ));
+        }else{
+            this.setValue(elValue);
+        }
     }
 };
 
