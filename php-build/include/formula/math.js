@@ -205,6 +205,19 @@ math : {
         return number * 180 / Math.PI;
     },
 
+    DIVIDE : function(num1, num2){
+        console.log(num1, num2);
+        if(num1 === '' || num2 === ''){
+            return '';
+        }
+
+        if(num2 == 0){
+            return '#DIV/0';
+        }
+
+        return parseFloat(num1)/parseFloat(num2);
+    },
+
     EVEN : function(number) {
         return formula.math.CEILING(number, -2, -1);
     },
