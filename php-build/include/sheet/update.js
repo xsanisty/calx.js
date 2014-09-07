@@ -20,6 +20,8 @@ sheet.prototype.update = function(){
         if(cellAddr && typeof(sheet.cells[cellAddr]) != 'undefined'){
             $cell = new cell(sheet, this);
             sheet.registerCell($cell);
+        }else{
+            sheet.cells[cellAddr].resyncValue();
         }
     });
 
