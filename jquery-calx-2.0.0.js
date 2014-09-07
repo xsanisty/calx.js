@@ -8225,8 +8225,33 @@ sheet.prototype.obj = {
  */
 sheet.prototype.evaluate = function(formula){
     return this.parser.parse(formula);
-};sheet.prototype.update = function(){
+};/**
+ * update cell reference inside the sheet, detect removed and added cells
+ */
+sheet.prototype.update = function(){
+    var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
+        sheet = this,
+        $cell;
 
+    /** detect and remove detached cells and its reference */
+    for(var a in this.cells){
+        if(this.cells[a].el && !$.contains(document, this.cells[a].el[0])){
+            delete(this.cells[a]);
+        }
+    }
+
+    /** add new cell reference */
+    cells.each(function(){
+        var cellAddr = $(this).attr('data-cell');
+
+        if(cellAddr && typeof(sheet.cells[cellAddr]) != 'undefined'){
+            $cell = new cell(sheet, this);
+            sheet.registerCell($cell);
+        }
+    });
+
+    /** rebuild the dependency tree */
+    this.buildCellDependency();
 };sheet.prototype.calculate = function(){
 
 };/**
@@ -8279,9 +8304,28 @@ sheet.prototype.applyChange = function(){
     }
 };sheet.prototype.scan = function(){
 
-};sheet.prototype.refresh = function(){
+};/**
+ * refresh is similar to update, but instead of scanning for added/removed cells,
+ * it's remove whole cell registry and rebuild it
+ */
+sheet.prototype.refresh = function(){
+    var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
+        sheet = this,
+        $cell;
 
-};sheet.prototype.reset = function(){
+    this.cells = {};
+
+    cells.each(function(){
+        $cell = new cell(sheet, this);
+        sheet.registerCell($cell);
+    });
+
+    /** rebuild the dependency tree */
+    this.buildCellDependency();
+};/**
+ * reset the form to  it's original value, and resync the value with the cell registry
+ */
+sheet.prototype.reset = function(){
     var forms;
 
     if(this.el.prop('tagName').toLowerCase() == 'form'){
@@ -8394,7 +8438,7 @@ sheet.prototype.detachEvent = function(){
  * @return {object}             jQuery object for chaining
  */
 init : function (option) {
-    var a, sheetIdentifier;
+    var sheetIdentifier;
     this.each(function(){
         sheetIdentifier = $(this).attr('data-calx-identifier');
         //console.log(sheetIdentifier);
@@ -8403,35 +8447,31 @@ init : function (option) {
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
 
             calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
+
+            /** build dependency tree */
+            calx.sheetRegistry[sheetIdentifier].buildCellDependency();
+
+            /** check circular reference after tree has been built */
+            var reference = calx.sheetRegistry[sheetIdentifier].checkCircularReference();
+
+            if(reference.isCircular){
+                var errorMessage = 'Circular reference detected, this may cause calx to stop working.\ncell : '
+                                    +reference.cell.getAddress()
+                                    +'\nformula : '
+                                    +reference.cell.getFormula()
+                                    +'\n\nPlease check each cells involved in the formula that has direct or indirect reference to '
+                                    +reference.cell.getAddress();
+
+                alert(errorMessage);
+                $.error(errorMessage);
+            }
+
+            calx.sheetRegistry[sheetIdentifier].processDependencyTree();
         }else{
             //console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
-
-    /** build dependency tree */
-    for(a in calx.sheetRegistry){
-        calx.sheetRegistry[a].buildCellDependency();
-    }
-
-    /** check circular reference after tree has been built */
-    for(a in calx.sheetRegistry){
-        var reference = calx.sheetRegistry[a].checkCircularReference();
-
-        if(reference.isCircular){
-            var errorMessage = 'Circular reference detected, this may cause calx to stop working.\ncell : '
-                                +reference.cell.getAddress()
-                                +'\nformula : '
-                                +reference.cell.getFormula()
-                                +'\n\nPlease check each cells involved in the formula that has direct or indirect reference to '
-                                +reference.cell.getAddress();
-
-            alert(errorMessage);
-            $.error(errorMessage);
-        }
-
-        calx.sheetRegistry[a].processDependencyTree();
-    }
 
     return this;
 },
@@ -8466,11 +8506,32 @@ registerVariable : function (varName, varValue) {
         data.VARIABLE[varName] = varValue;
     }
 },
-        scan : function (argument) {
-    // body...
+        /**
+ * refresh sheet reference to the current dom state and rebuild
+ * the cell registry and dependency tree from the scratch
+ */
+refresh : function () {
+    return this.each(function(){
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        //console.log(sheetIdentifier);
+
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].refresh();
+        }
+    });
 },
-        update : function (argument) {
-    // body...
+        /**
+ * update sheet reference to the current dom state
+ */
+update : function () {
+    return this.each(function(){
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        //console.log(sheetIdentifier);
+
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].update();
+        }
+    });
 },
         /**
  * get sheet object bound to the element

@@ -4,7 +4,7 @@
  * @return {object}             jQuery object for chaining
  */
 init : function (option) {
-    var a, sheetIdentifier;
+    var sheetIdentifier;
     this.each(function(){
         sheetIdentifier = $(this).attr('data-calx-identifier');
         //console.log(sheetIdentifier);
@@ -13,35 +13,31 @@ init : function (option) {
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
 
             calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
+
+            /** build dependency tree */
+            calx.sheetRegistry[sheetIdentifier].buildCellDependency();
+
+            /** check circular reference after tree has been built */
+            var reference = calx.sheetRegistry[sheetIdentifier].checkCircularReference();
+
+            if(reference.isCircular){
+                var errorMessage = 'Circular reference detected, this may cause calx to stop working.\ncell : '
+                                    +reference.cell.getAddress()
+                                    +'\nformula : '
+                                    +reference.cell.getFormula()
+                                    +'\n\nPlease check each cells involved in the formula that has direct or indirect reference to '
+                                    +reference.cell.getAddress();
+
+                alert(errorMessage);
+                $.error(errorMessage);
+            }
+
+            calx.sheetRegistry[sheetIdentifier].processDependencyTree();
         }else{
             //console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
-
-    /** build dependency tree */
-    for(a in calx.sheetRegistry){
-        calx.sheetRegistry[a].buildCellDependency();
-    }
-
-    /** check circular reference after tree has been built */
-    for(a in calx.sheetRegistry){
-        var reference = calx.sheetRegistry[a].checkCircularReference();
-
-        if(reference.isCircular){
-            var errorMessage = 'Circular reference detected, this may cause calx to stop working.\ncell : '
-                                +reference.cell.getAddress()
-                                +'\nformula : '
-                                +reference.cell.getFormula()
-                                +'\n\nPlease check each cells involved in the formula that has direct or indirect reference to '
-                                +reference.cell.getAddress();
-
-            alert(errorMessage);
-            $.error(errorMessage);
-        }
-
-        calx.sheetRegistry[a].processDependencyTree();
-    }
 
     return this;
 }

@@ -1,3 +1,0 @@
-scan : function (argument) {
-    // body...
-}
