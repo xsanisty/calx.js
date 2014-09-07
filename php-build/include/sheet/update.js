@@ -17,7 +17,7 @@ sheet.prototype.update = function(){
     cells.each(function(){
         var cellAddr = $(this).attr('data-cell');
 
-        if(cellAddr && typeof(sheet.cells[cellAddr]) != 'undefined'){
+        if(cellAddr && typeof(sheet.cells[cellAddr]) == 'undefined'){
             $cell = new cell(sheet, this);
             sheet.registerCell($cell);
         }else{

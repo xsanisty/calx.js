@@ -5400,6 +5400,12 @@ logical : {
         return result;
     },
 
+    CHOOSE : function(){
+        var key = arguments[0];
+
+        return (typeof(arguments[key]) == 'undefined') ? '#NUM!' : arguments[key];
+    },
+
     FALSE : function(){
         return false;
     },
@@ -8244,7 +8250,7 @@ sheet.prototype.update = function(){
     cells.each(function(){
         var cellAddr = $(this).attr('data-cell');
 
-        if(cellAddr && typeof(sheet.cells[cellAddr]) != 'undefined'){
+        if(cellAddr && typeof(sheet.cells[cellAddr]) == 'undefined'){
             $cell = new cell(sheet, this);
             sheet.registerCell($cell);
         }else{

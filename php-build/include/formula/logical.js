@@ -15,6 +15,12 @@ logical : {
         return result;
     },
 
+    CHOOSE : function(){
+        var key = arguments[0];
+
+        return (typeof(arguments[key]) == 'undefined') ? '#NUM!' : arguments[key];
+    },
+
     FALSE : function(){
         return false;
     },
