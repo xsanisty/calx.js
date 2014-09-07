@@ -265,7 +265,7 @@ var defaultConfig = {
 
                     break;
                 case 17:
-                    this.$ = formula.math.MINUS($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.SUBTRACT($$[$0 - 2], $$[$0]);
 
                     break;
                 case 18:
@@ -2766,7 +2766,6 @@ date: {
     },
 
     ASIN : function(number) {
-        console.log(Math.asin(number));
         return Math.asin(number);
     },
 
@@ -2857,6 +2856,18 @@ date: {
 
     DEGREES : function(number) {
         return number * 180 / Math.PI;
+    },
+
+    DIVIDE : function(num1, num2){
+        if(num1 === '' || num2 === ''){
+            return '';
+        }
+
+        if(num2 == 0){
+            return '#DIV/0';
+        }
+
+        return parseFloat(num1)/parseFloat(num2);
     },
 
     EVEN : function(number) {
@@ -2983,6 +2994,7 @@ date: {
 
     //MM,LT : numeric.dot;
 
+
     MOD : function(dividend, divisor) {
         var modulus = Math.abs(dividend % divisor);
         return (divisor > 0) ? modulus : -modulus;
@@ -3004,6 +3016,17 @@ date: {
             divisor *= formula.math.FACT(arguments[i]);
         }
         return formula.math.FACT(sum) / divisor;
+    },
+
+    MULTIPLY : function(num1, num2){
+        if(num1 === '' || num2 === ''){
+            return '';
+        }
+
+        num1 = isNaN(parseFloat(num1)) ? 0 : parseFloat(num1);
+        num2 = isNaN(parseFloat(num2)) ? 0 : parseFloat(num2);
+
+        return num1*num2;
     },
 
     //MU,IT : numeric.identity;
@@ -3146,18 +3169,31 @@ date: {
         return result;
     },
 
+    SUBTRACT : function(num1, num2){
+        if(num1 === '' && num2 === ''){
+            return '';
+        }
+
+
+        num1 = isNaN(parseFloat(num1)) ? 0 : parseFloat(num1);
+        num2 = isNaN(parseFloat(num2)) ? 0 : parseFloat(num2);
+
+        return num1 - num2;
+    },
+
+
     SUM : function(){
         var cell, a, floatVal, stringVal = '', result = 0;
 
         for(a = 0; a < arguments.length; a++){
             if(typeof(arguments[a]) == 'object'){
                 for(cell in arguments[a]){
-                    stringVal   += arguments[a][cell];
+                    stringVal   += (typeof(arguments[a][cell]) != 'undefined') ? arguments[a][cell] : '';
                     floatVal    = !isNaN(parseFloat(arguments[a][cell], 10)) ? parseFloat(arguments[a][cell], 10) : 0;
                     result      += floatVal;
                 }
             }else{
-                stringVal   += arguments[a][cell];
+                stringVal   += (typeof(arguments[a]) != 'undefined') ? arguments[a] : '';
                 floatVal    = !isNaN(parseFloat(arguments[a], 10)) ? parseFloat(arguments[a], 10) : 0;
                 result      += floatVal;
             }
@@ -8173,6 +8209,10 @@ sheet.prototype.comparator = {
 
     equal: function(a,b){
         return a == b;
+    },
+
+    notEqual: function(a,b){
+        return a!= b;
     }
 }
 

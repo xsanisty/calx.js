@@ -192,7 +192,7 @@ function parserFactory(sheet){
 
                     break;
                 case 17:
-                    this.$ = formula.math.MINUS($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.SUBTRACT($$[$0 - 2], $$[$0]);
 
                     break;
                 case 18:

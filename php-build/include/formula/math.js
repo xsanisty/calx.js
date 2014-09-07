@@ -112,7 +112,6 @@ math : {
     },
 
     ASIN : function(number) {
-        console.log(Math.asin(number));
         return Math.asin(number);
     },
 
@@ -206,7 +205,6 @@ math : {
     },
 
     DIVIDE : function(num1, num2){
-        console.log(num1, num2);
         if(num1 === '' || num2 === ''){
             return '';
         }
@@ -342,6 +340,7 @@ math : {
 
     //MM,LT : numeric.dot;
 
+
     MOD : function(dividend, divisor) {
         var modulus = Math.abs(dividend % divisor);
         return (divisor > 0) ? modulus : -modulus;
@@ -363,6 +362,17 @@ math : {
             divisor *= formula.math.FACT(arguments[i]);
         }
         return formula.math.FACT(sum) / divisor;
+    },
+
+    MULTIPLY : function(num1, num2){
+        if(num1 === '' || num2 === ''){
+            return '';
+        }
+
+        num1 = isNaN(parseFloat(num1)) ? 0 : parseFloat(num1);
+        num2 = isNaN(parseFloat(num2)) ? 0 : parseFloat(num2);
+
+        return num1*num2;
     },
 
     //MU,IT : numeric.identity;
@@ -505,18 +515,31 @@ math : {
         return result;
     },
 
+    SUBTRACT : function(num1, num2){
+        if(num1 === '' && num2 === ''){
+            return '';
+        }
+
+
+        num1 = isNaN(parseFloat(num1)) ? 0 : parseFloat(num1);
+        num2 = isNaN(parseFloat(num2)) ? 0 : parseFloat(num2);
+
+        return num1 - num2;
+    },
+
+
     SUM : function(){
         var cell, a, floatVal, stringVal = '', result = 0;
 
         for(a = 0; a < arguments.length; a++){
             if(typeof(arguments[a]) == 'object'){
                 for(cell in arguments[a]){
-                    stringVal   += arguments[a][cell];
+                    stringVal   += (typeof(arguments[a][cell]) != 'undefined') ? arguments[a][cell] : '';
                     floatVal    = !isNaN(parseFloat(arguments[a][cell], 10)) ? parseFloat(arguments[a][cell], 10) : 0;
                     result      += floatVal;
                 }
             }else{
-                stringVal   += arguments[a][cell];
+                stringVal   += (typeof(arguments[a]) != 'undefined') ? arguments[a] : '';
                 floatVal    = !isNaN(parseFloat(arguments[a], 10)) ? parseFloat(arguments[a], 10) : 0;
                 result      += floatVal;
             }

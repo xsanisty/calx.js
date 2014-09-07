@@ -119,6 +119,10 @@ sheet.prototype.comparator = {
 
     equal: function(a,b){
         return a == b;
+    },
+
+    notEqual: function(a,b){
+        return a!= b;
     }
 }
 

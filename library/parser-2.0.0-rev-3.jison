@@ -146,7 +146,7 @@ e :
         }
     | e '-' e
         {
-            $$ = formula.math.MINUS($1, $3);
+            $$ = formula.math.SUBTRACT($1, $3);
         }
     | e '*' e
         {
