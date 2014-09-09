@@ -168,11 +168,11 @@ function parserFactory(sheet){
 
                     break;
                 case 11:
-                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0 - 1]);
+                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0]);
 
                     break;
                 case 12:
-                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0 - 1]);
+                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0]);
 
                     break;
                 case 13:
