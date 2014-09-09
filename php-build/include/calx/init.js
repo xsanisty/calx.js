@@ -29,6 +29,9 @@ init : function (option) {
                                     +reference.cell.getAddress();
 
                 alert(errorMessage);
+                if(typeof(console) != 'undefined'){
+                    console.log(reference.cell.el);
+                }
                 $.error(errorMessage);
             }
 
