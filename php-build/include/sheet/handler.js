@@ -113,7 +113,6 @@ sheet.prototype.comparator = {
     },
 
     lessEqual : function(a, b){
-        console.log('lessEqual executed', a, b);
         return a <= b;
     },
 
