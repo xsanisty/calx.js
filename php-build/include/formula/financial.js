@@ -628,13 +628,13 @@ financial: {
                 for(var a in arguments[i]){
                     floatVal = parseFloat(arguments[i][a], 10);
                     floatVal = isNaN(floatVal) ? 0 : floatVal;
-                    args = args.concat(floatVal);
+                    args = args.concat([floatVal]);
                 }
             }else{
 
-                floatVal = parseFloat(arguments[i][a], 10);
+                floatVal = parseFloat(arguments[i], 10);
                 floatVal = isNaN(floatVal) ? 0 : floatVal;
-                args = args.concat(floatVal);
+                args = args.concat([floatVal]);
             }
         }
 
