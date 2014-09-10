@@ -622,14 +622,19 @@ financial: {
 
     NPV : function() {
         // Cast arguments to array
-        var args = [];
+        var floatVal, args = [];
         for (var i = 0; i < arguments.length; i++) {
             if(typeof(arguments[i]) == 'object'){
                 for(var a in arguments[i]){
-                    args = args.concat(parseFloat(arguments[i][a], 10));
+                    floatVal = parseFloat(arguments[i][a], 10);
+                    floatVal = isNaN(floatVal) ? 0 : floatVal;
+                    args = args.concat(floatVal);
                 }
             }else{
-                args = args.concat(parseFloat(arguments[i], 10));
+
+                floatVal = parseFloat(arguments[i][a], 10);
+                floatVal = isNaN(floatVal) ? 0 : floatVal;
+                args = args.concat(floatVal);
             }
         }
 
