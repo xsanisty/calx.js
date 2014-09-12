@@ -122,11 +122,11 @@ e :
         }
     | e '<' '=' e
         {
-            $$ = sheet.comparator.lessEqual($1, $3);
+            $$ = sheet.comparator.lessEqual($1, $4);
         }
     | e '>' '=' e
         {
-            $$ = sheet.comparator.greaterEqual($1, $3);
+            $$ = sheet.comparator.greaterEqual($1, $4);
         }
     | e '<' '>' e
         {
