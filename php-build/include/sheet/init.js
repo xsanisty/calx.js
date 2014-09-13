@@ -14,10 +14,4 @@ sheet.prototype.init = function(){
 
     //sheet.buildCellDependency();
     sheet.attachEvent();
-
-    if(this.config.autoCalculate){
-        //console.log('sheet[#'+this.elementId+'] : autocalculating the sheet');
-        this.calculate();
-        this.renderComputedValue();
-    }
 };

@@ -7772,7 +7772,7 @@ cell.prototype.buildDependency = function(){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }else{
-                                $('#'+sheetId)
+                                console.log('#'+sheetId+' does not exist');
                             }
 
                             for(j in dependencies){
@@ -7797,6 +7797,9 @@ cell.prototype.buildDependency = function(){
                             if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+                            }else{
+                                console.log('#'+sheetId+' does not exist');
+
                             }
 
                             key = sheetId+'!'+cellPart;
@@ -8188,12 +8191,6 @@ cell.prototype.resyncFormula = function(){
 
     //sheet.buildCellDependency();
     sheet.attachEvent();
-
-    if(this.config.autoCalculate){
-        //console.log('sheet[#'+this.elementId+'] : autocalculating the sheet');
-        this.calculate();
-        this.renderComputedValue();
-    }
 };/**
  * check circular reference on each cell registered to this sheet
  * @return {bool} true if exist, false if clear
@@ -8664,6 +8661,7 @@ sheet.prototype.detachEvent = function(){
 init : function (option) {
     var sheetIdentifier;
     this.each(function(){
+        console.log('initialize sheet');
         sheetIdentifier = $(this).attr('data-calx-identifier');
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
@@ -8695,9 +8693,21 @@ init : function (option) {
     });
 
     this.each(function(){
+        console.log('build cell dependency');
         sheetIdentifier = $(this).attr('data-calx-identifier');
         var sheet = calx.sheetRegistry[sheetIdentifier];
         sheet.buildCellDependency();
+    });
+
+    this.each(function(){
+        console.log('calculate sheet');
+        sheetIdentifier = $(this).attr('data-calx-identifier');
+        var sheet = calx.sheetRegistry[sheetIdentifier];
+
+        if(sheet.config.autoCalculate){
+            sheet.calculate();
+            sheet.renderComputedValue();
+        }
     });
 
     return this;

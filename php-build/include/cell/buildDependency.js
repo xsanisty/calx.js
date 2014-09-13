@@ -60,7 +60,7 @@ cell.prototype.buildDependency = function(){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }else{
-                                $('#'+sheetId)
+                                console.log('#'+sheetId+' does not exist');
                             }
 
                             for(j in dependencies){
@@ -85,6 +85,9 @@ cell.prototype.buildDependency = function(){
                             if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+                            }else{
+                                console.log('#'+sheetId+' does not exist');
+
                             }
 
                             key = sheetId+'!'+cellPart;

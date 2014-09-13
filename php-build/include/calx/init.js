@@ -6,6 +6,7 @@
 init : function (option) {
     var sheetIdentifier;
     this.each(function(){
+        console.log('initialize sheet');
         sheetIdentifier = $(this).attr('data-calx-identifier');
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
@@ -37,9 +38,21 @@ init : function (option) {
     });
 
     this.each(function(){
+        console.log('build cell dependency');
         sheetIdentifier = $(this).attr('data-calx-identifier');
         var sheet = calx.sheetRegistry[sheetIdentifier];
         sheet.buildCellDependency();
+    });
+
+    this.each(function(){
+        console.log('calculate sheet');
+        sheetIdentifier = $(this).attr('data-calx-identifier');
+        var sheet = calx.sheetRegistry[sheetIdentifier];
+
+        if(sheet.config.autoCalculate){
+            sheet.calculate();
+            sheet.renderComputedValue();
+        }
     });
 
     return this;
