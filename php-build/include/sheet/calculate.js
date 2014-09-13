@@ -12,4 +12,8 @@ sheet.prototype.calculate = function(){
     for(a in this.cells){
         this.cells[a].processDependency();
     }
+
+    for(a in this.dependant){
+        this.dependant[a].calculate();
+    }
 };

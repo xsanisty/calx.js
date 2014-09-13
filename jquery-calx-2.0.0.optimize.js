@@ -7768,9 +7768,11 @@ cell.prototype.buildDependency = function(){
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
-                            if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                            if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+                            }else{
+                                $('#'+sheetId)
                             }
 
                             for(j in dependencies){
@@ -7792,7 +7794,7 @@ cell.prototype.buildDependency = function(){
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
-                            if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                            if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }
@@ -8184,7 +8186,7 @@ cell.prototype.resyncFormula = function(){
         sheet.registerCell($cell);
     });
 
-    sheet.buildCellDependency();
+    //sheet.buildCellDependency();
     sheet.attachEvent();
 
     if(this.config.autoCalculate){
@@ -8242,7 +8244,7 @@ sheet.prototype.buildCellDependency = function(){
 };sheet.prototype.renderComputedValue = function(){
     //console.log('sheet[#'+this.elementId+'] : rendering all computed value to the element');
 
-    for(a in this.cells){
+    for(var a in this.cells){
         this.cells[a].renderComputedValue();
     }
 };sheet.prototype.getCellValue = function(address){
@@ -8442,6 +8444,10 @@ sheet.prototype.calculate = function(){
 
     for(a in this.cells){
         this.cells[a].processDependency();
+    }
+
+    for(a in this.dependant){
+        this.dependant[a].calculate();
     }
 };/**
  * register singgle cell to sheet's cell registry
@@ -8684,8 +8690,14 @@ init : function (option) {
 
         }else{
             //console.log('second call should be refresh');
-            calx.sheetRegistry[sheetIdentifier].refresh();
+            //calx.sheetRegistry[sheetIdentifier].refresh();
         }
+    });
+
+    this.each(function(){
+        sheetIdentifier = $(this).attr('data-calx-identifier');
+        var sheet = calx.sheetRegistry[sheetIdentifier];
+        sheet.buildCellDependency();
     });
 
     return this;
@@ -8801,6 +8813,17 @@ destroy : function(){
     });
 
     return this;
+},
+        calculate : function(){
+    return this.each(function(){
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        //console.log(sheetIdentifier);
+
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].calculate();
+            calx.sheetRegistry[sheetIdentifier].renderComputedValue();
+        }
+    });
 }
     };    /**
      * the surrogate of the calx world to the jQuery world

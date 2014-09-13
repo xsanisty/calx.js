@@ -13,6 +13,7 @@
         <?php require 'include/calx/getSheet.js' ?>,
         <?php require 'include/calx/getCell.js' ?>,
         <?php require 'include/calx/evaluate.js' ?>,
-        <?php require 'include/calx/destroy.js' ?>
+        <?php require 'include/calx/destroy.js' ?>,
+        <?php require 'include/calx/calculate.js' ?>
 
     };

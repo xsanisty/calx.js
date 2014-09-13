@@ -32,8 +32,14 @@ init : function (option) {
 
         }else{
             //console.log('second call should be refresh');
-            calx.sheetRegistry[sheetIdentifier].refresh();
+            //calx.sheetRegistry[sheetIdentifier].refresh();
         }
+    });
+
+    this.each(function(){
+        sheetIdentifier = $(this).attr('data-calx-identifier');
+        var sheet = calx.sheetRegistry[sheetIdentifier];
+        sheet.buildCellDependency();
     });
 
     return this;

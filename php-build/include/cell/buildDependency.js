@@ -56,9 +56,11 @@ cell.prototype.buildDependency = function(){
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
-                            if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                            if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+                            }else{
+                                $('#'+sheetId)
                             }
 
                             for(j in dependencies){
@@ -80,7 +82,7 @@ cell.prototype.buildDependency = function(){
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
-                            if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                            if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }
