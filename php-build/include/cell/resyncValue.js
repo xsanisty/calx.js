@@ -10,8 +10,8 @@ cell.prototype.resyncValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             elValue     = (isFormTag) ? this.el.val() : this.el.text();
 
-        if(this.el.attr('data-format')){
-            this.setValue(numeral().unformat( elValue ));
+        if(this.el.attr('data-format') && $.trim(elValue) != ''){
+            this.setValue(numeral().unformat( elValue+'' ));
         }else{
             this.setValue(elValue);
         }
