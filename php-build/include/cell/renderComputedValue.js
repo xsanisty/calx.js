@@ -21,9 +21,6 @@ cell.prototype.renderComputedValue = function(){
                         ? numeral(originalVal).format(this.format)
                         : originalVal;
 
-            console.log(formattedVal);
-            console.log(this.format != '');
-
         //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
             if(tagName == 'select'){
