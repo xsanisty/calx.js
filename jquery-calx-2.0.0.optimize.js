@@ -8652,8 +8652,8 @@ init : function (option) {
         }
     });
 
-    for(var sheet in calx.sheetRegistry){
-        calx.sheetRegistry[sheet].buildCellDependency();
+    for(var a in calx.sheetRegistry){
+        calx.sheetRegistry[a].buildCellDependency();
     }
 
     return this;
