@@ -1,11 +1,12 @@
 sheet.prototype.attachEvent = function(){
+    console.log('sheet['+this.identifier+'] : attaching events to the element');
 
     var currentSheet = this;
 
     /**
      * get the unformatted value of the cell, and display it to the element
      */
-    this.el.on('getOriginalValue', 'input[data-cell]', function(){
+    this.el.on('calx.getValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -13,73 +14,82 @@ sheet.prototype.attachEvent = function(){
     });
 
     /**
-     * update value of the current cell, render the formatted value, and process it's dependant
+     * update value of the current cell internally
      */
-    this.el.on('updateRenderCalculate', 'input[data-cell]', function(){
+    this.el.on('calx.setValue', 'input[data-cell], select', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        currentCell.renderComputedValue();
+        currentSheet.cells[cellAddr].setValue($(this).val());
 
-        if(currentSheet.config.autoCalculateTrigger != 'keyup'){
-            if(
-                currentCell.getFormat()
-                && typeof(numeral) != 'undefined'
-                && currentCell.el.val() != ''
-                && data.ERROR.indexOf(currentCell.el.val()) == -1
-            ){
-                var unformattedVal = numeral().unformat(currentCell.el.val());
-                currentCell.setValue(unformattedVal);
+    });
 
-            }else{
-                currentCell.setValue(currentCell.el.val());
+    /**
+     * calculate the whole sheet
+     */
+    this.el.on('calx.calculateSheet', 'input[data-cell]', function(){
+        currentSheet.calculate();
+    });
+
+    /**
+     * update current cell value, and recalculate it's dependant
+     */
+    this.el.on('calx.calculateCellDependant', 'input[data-cell], select', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        currentSheet.clearProcessedFlag();
+        //currentCell.setValue($(this).val());
+        currentCell.calculate();
+        currentSheet.renderComputedValue();
+
+    });
+
+    /** bind to internal event, so no need to unbind the real event on destroy */
+    this.el.on(currentSheet.config.autoCalculateTrigger, 'input[data-cell]',function(){
+        console.log('blurred');
+        if(!$(this).attr('data-formula')){
+            if(currentSheet.config.autoCalculate){
+                console.log('calculating dependant');
+                $(this).trigger('calx.calculateCellDependant');
             }
-
-            currentCell.processDependant(false, true);
         }
     });
 
     /**
-     * update value of current cell without render it's own value, and process it's dependant
+     * change behaviour, based on configuration
+     * autoCalculate : on   => calx.calculateCellDependant
+     * autoCalculate : off  => calx.setValue
      */
-    this.el.on('updateCalculate', 'input[data-cell], select', function(){
-        var cellAddr    = $(this).attr('data-cell'),
-            currentCell = currentSheet.cells[cellAddr];
-
-        if(
-            currentCell.getFormat()
-            && typeof(numeral) != 'undefined'
-            && currentCell.el.val() != ''
-            && data.ERROR.indexOf(currentCell.el.val()) == -1
-        ){
-            var unformattedVal = numeral().unformat(currentCell.el.val());
-            currentCell.setValue(unformattedVal, false);
-
+    this.el.on('change', 'select', function(){
+        if(currentSheet.config.autoCalculate){
+            $(this).trigger('calx.calculateCellDependant');
         }else{
-            currentCell.setValue(currentCell.el.val(), false);
+            $(this).trigger('calx.setValue');
         }
     });
 
-    /** bind to internal event, so no need to unbind the real event on destroy */
-    this.el.on('blur', 'input[data-cell]',function(){
-        $(this).trigger('updateRenderCalculate');
-    });
-
-    this.el.on('change', 'select', function(){
-        $(this).trigger('updateCalculate');
-    });
-
+    /** focus does not depend on configuration, always get the value on focus */
     this.el.on('focus', 'input[data-cell]',function(){
-        $(this).trigger('getOriginalValue');
+        $(this).trigger('calx.getValue');
     });
 
-    this.el.on('keyup', 'input[data-cell]',function(){
-        $(this).trigger('updateCalculate');
+    /** keyup does not depend on configuration, always set value on keyup */
+    this.el.on('keyup', 'input[data-cell]',function(e){
+        if($(this).attr('data-formula')){
+            e.preventDefault();
+            return false;
+        }else{
+            $(this).trigger('calx.setValue');
+        }
     });
 };
 
 sheet.prototype.detachEvent = function(){
-    this.el.off('getOriginalValue');
-    this.el.off('updateRenderCalculate');
-    this.el.off('updateCalculate');
+    console.log('sheet['+this.identifier+'] : detaching events from the element');
+
+    this.el.off('calx.getValue');
+    this.el.off('calx.setValue');
+    this.el.off('calx.calculateSheet');
+    this.el.off('calx.calculateCellDependant');
 }

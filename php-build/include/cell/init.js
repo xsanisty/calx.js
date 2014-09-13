@@ -8,6 +8,7 @@ cell.prototype.init = function(){
         $format  = (this.el) ? this.el.attr('data-format') : '',
         $value   = (this.el) ? this.el.val() : null;
 
+    /** assign address if data-cell is not present */
     if(!$address || $.trim($address) == ''){
         $address = 'CALX'+this.sheet.counter;
         if(this.el) {
@@ -18,6 +19,7 @@ cell.prototype.init = function(){
         $address = $address.toUpperCase()
     }
 
+    /** set the formula as false if data-formula exists, but empty */
     if(!$formula || $.trim($formula) == ''){
         $formula = false;
     }else{
@@ -26,19 +28,22 @@ cell.prototype.init = function(){
                            .replace('&#34;', '"')
     }
 
+    /** fallback to default format where data-format is not present or empty */
     if(!$format || $.trim($format) == ''){
         $format = this.sheet.config.defaultFormat;
     }
 
+    /** convert value to unformatted form when data-format is present */
     if($format && typeof(numeral) != 'undefined' && $value != ''){
         $value = numeral().unformat($value);
     }
 
-    this.value      = $value;
     this.formula    = $formula;
     this.format     = $format;
     this.address    = $address;
 
+
+    console.log('cell['+$address+'] : Initializing the cell');
     this.setValue($value);
     //this.attachEvent();
 };

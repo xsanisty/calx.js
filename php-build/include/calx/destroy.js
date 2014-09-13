@@ -10,9 +10,10 @@ destroy : function(){
 
         $sheet.removeAttr('data-calx-identifier');
 
-        calx.sheetRegistry[sheetIdentifier].detachEvent();
-
-        delete calx.sheetRegistry[sheetIdentifier];
+        if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].detachEvent();
+            delete calx.sheetRegistry[sheetIdentifier];
+        }
     });
 
     return this;

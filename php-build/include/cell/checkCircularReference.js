@@ -4,6 +4,7 @@
  * @return {bool}               true if circular reference found, false if not found
  */
 cell.prototype.checkCircularReference = function(address){
+    console.log('cell['+this.address+'] : checking circular reference');
     var a, isCircular = false;
 
     if(typeof(address) == 'undefined'){

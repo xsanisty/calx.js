@@ -2,6 +2,8 @@
  * reset the form to  it's original value, and resync the value with the cell registry
  */
 sheet.prototype.reset = function(){
+    console.log('sheet['+this.identifier+'] : resetting form elements');
+
     var forms;
 
     if(this.el.prop('tagName').toLowerCase() == 'form'){

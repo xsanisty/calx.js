@@ -3,20 +3,35 @@
  *
  * @return {[type]} [description]
  */
-cell.prototype.processDependant = function(selfRender, parentRender){
+cell.prototype.processDependant = function(){
+    console.log('cell['+this.address+'] : processing dependants');
 
-    selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
-    parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
+
+    //prefix       = (typeof(prefix) == 'undefined') ? '--' : prefix;
+    //selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
+    //parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
     //console.log(selfRender);
-    this.evaluateFormula();
+    if(false == this.isProcessed()){
+        console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], processing...')
 
-    if(selfRender){
-        //console.log('render computed val of '+this.address);
-        this.renderComputedValue();
+        this.processDependency();
+        this.evaluateFormula();
+
+        for(var a in this.dependant){
+            //prefix = prefix+'--';
+            console.log('cell['+this.address+'] : processing dependant ['+a+']');
+            if(!this.dependant[a].isProcessed()){
+                this.dependant[a].processDependant();
+            }else{
+                console.log(a+' is already processed, leaving...');
+            }
+        }
+
+        this.setAffected(false);
+        this.setProcessed(true);
+    }else{
+        console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], leaving...')
     }
 
-    for(var a in this.dependant){
-        this.dependant[a].processDependant(parentRender, parentRender);
-    }
 };

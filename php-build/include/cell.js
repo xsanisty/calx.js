@@ -19,6 +19,7 @@
         this.computedValue      = null;
         this.floatValue         = null;
         this.affected           = false;
+        this.processed          = false;
         this.dependencies       = {};
         this.dependant          = {};
         this.conditionalStyle   = false;

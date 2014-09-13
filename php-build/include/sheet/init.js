@@ -1,4 +1,5 @@
 sheet.prototype.init = function(){
+    console.log('sheet['+this.identifier+'] : Initializing the sheet');
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
         $cell;
@@ -11,5 +12,12 @@ sheet.prototype.init = function(){
         sheet.registerCell($cell);
     });
 
+    sheet.buildCellDependency();
     sheet.attachEvent();
+
+    if(this.config.autoCalculate){
+        console.log('sheet['+this.identifier+'] : autocalculating the sheet');
+        this.calculate();
+        this.renderComputedValue();
+    }
 };

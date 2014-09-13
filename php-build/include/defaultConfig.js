@@ -31,6 +31,9 @@ var defaultConfig = {
     'ajaxMethod'            : 'get',
 
     /** Available option is morris, highchart, d3 */
-    'graphHandler'          : 'flot'
+    'graphHandler'          : 'flot',
+
+    /** check for circular reference on init, default false */
+    'checkCircularReference': false
 
 };

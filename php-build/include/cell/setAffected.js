@@ -3,6 +3,6 @@
  * process the cell or not when processing dependency tree
  */
 cell.prototype.setAffected = function(affected){
-    affected = typeof(affected) == 'undefined' ? true : false;
+    affected = typeof(affected) == 'undefined' ? true : affected;
     this.affected = affected;
 };

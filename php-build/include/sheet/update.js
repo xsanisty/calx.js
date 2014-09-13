@@ -2,6 +2,8 @@
  * update cell reference inside the sheet, detect removed and added cells
  */
 sheet.prototype.update = function(){
+    console.log('sheet['+this.identifier+'] : updating cells registry with current state of the element');
+
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
         $cell;
@@ -24,6 +26,7 @@ sheet.prototype.update = function(){
         }else{
             //console.log('resync cell '+cellAddr);
             sheet.cells[cellAddr].resyncValue();
+            sheet.cells[cellAddr].resyncFormula();
         }
     });
 

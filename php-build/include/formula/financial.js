@@ -471,9 +471,11 @@ financial: {
     IRR : function(valuesObject, guess) {
         // Credits: algorithm inspired by Apache OpenOffice
 
-        var values = [];
+        var floatVal, values = [];
         for(var a in valuesObject){
-            values.push(valuesObject[a]);
+            floatVal = parseFloat(valuesObject[a], 10);
+            floatVal = isNaN(floatVal) ? 0 : floatVal;
+            values.push(floatVal);
         }
 
         // Calculates the resulting amount

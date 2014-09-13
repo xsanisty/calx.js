@@ -3,6 +3,8 @@
  * @return {void}
  */
 cell.prototype.renderComputedValue = function(){
+    console.log('cell['+this.address+'] : rendering computed value');
+
     if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
@@ -11,11 +13,17 @@ cell.prototype.renderComputedValue = function(){
                             this.format
                             && typeof(numeral) != 'undefined'
                             && this.computedValue !== ''
+                            && this.computedValue !== false
+                            && this.computedValue !== null
                             && data.ERROR.indexOf(originalVal) == -1
+                            && $.isNumeric(originalVal)
                         )
                         ? numeral(originalVal).format(this.format)
                         : originalVal;
 
+            console.log(formattedVal);
+
+        //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
             this.el.val(formattedVal);
         }else{

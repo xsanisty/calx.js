@@ -3,7 +3,9 @@
  * @return {[type]} [description]
  */
 cell.prototype.resyncValue = function(){
-    if(this.el){
+    console.log('cell['+this.address+'] : resyncing value with element value');
+
+    if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             elValue     = (isFormTag) ? this.el.val() : this.el.text();

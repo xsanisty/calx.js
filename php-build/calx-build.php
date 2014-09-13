@@ -13,6 +13,7 @@
         /** cell reference */
         require 'include/cell.js';
         require 'include/cell/init.js';
+        require 'include/cell/calculate.js';
         require 'include/cell/buildDependency.js';
         require 'include/cell/removeDependency.js';
         require 'include/cell/processDependency.js';
@@ -55,7 +56,7 @@
         require 'include/sheet/checkCircularReference.js';
         require 'include/sheet/clearProcessedFlag.js';
         require 'include/sheet/buildCellDependency.js';
-        require 'include/sheet/processDependencyTree.js';
+        //require 'include/sheet/processDependencyTree.js';
         require 'include/sheet/renderComputedValue.js';
         require 'include/sheet/handler.js';
         require 'include/sheet/evaluate.js';
