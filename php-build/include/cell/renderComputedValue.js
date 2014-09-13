@@ -25,7 +25,11 @@ cell.prototype.renderComputedValue = function(){
 
         //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
-            this.el.val(formattedVal);
+            if(tagName == 'select'){
+                this.el.val(originalVal);
+            }else if(tagName == 'input' || tagName == 'textarea'){
+                this.el.val(formattedVal);
+            }
         }else{
             this.el.html(formattedVal);
         }
