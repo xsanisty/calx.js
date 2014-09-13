@@ -7613,7 +7613,7 @@ logical : {
         'Saturday'
     ],
 
-    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!'],
+    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!', '#ERROR!'],
 
     VARIABLE : {}
 }    /**
@@ -8091,7 +8091,11 @@ cell.prototype.renderComputedValue = function(){
 
         //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
-            this.el.val(formattedVal);
+            if(tagName == 'select'){
+                this.el.val(originalVal);
+            }else if(tagName == 'input' || tagName == 'textarea'){
+                this.el.val(formattedVal);
+            }
         }else{
             this.el.html(formattedVal);
         }
@@ -8108,8 +8112,8 @@ cell.prototype.resyncValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             elValue     = (isFormTag) ? this.el.val() : this.el.text();
 
-        if(this.el.attr('data-format')){
-            this.setValue(numeral().unformat( elValue ));
+        if(this.el.attr('data-format') && $.trim(elValue) != ''){
+            this.setValue(numeral().unformat( elValue+'' ));
         }else{
             this.setValue(elValue);
         }
