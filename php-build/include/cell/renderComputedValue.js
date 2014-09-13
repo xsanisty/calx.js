@@ -10,18 +10,19 @@ cell.prototype.renderComputedValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             originalVal = (this.formula) ? this.computedValue : this.value,
             formattedVal= (
-                            this.format
+                            this.format != ''
                             && typeof(numeral) != 'undefined'
-                            && this.computedValue !== ''
-                            && this.computedValue !== false
-                            && this.computedValue !== null
+                            && originalVal !== ''
+                            && originalVal !== false
+                            && originalVal !== null
                             && data.ERROR.indexOf(originalVal) == -1
                             && $.isNumeric(originalVal)
                         )
                         ? numeral(originalVal).format(this.format)
                         : originalVal;
 
-            //console.log(formattedVal);
+            console.log(formattedVal);
+            console.log(this.format != '');
 
         //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
