@@ -23,7 +23,7 @@ cell.prototype.renderComputedValue = function(){
 
             //console.log(formattedVal);
 
-        ////console.log('render computed value of '+this.address+ ' with formula '+this.formula);
+        //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
             this.el.val(formattedVal);
         }else{

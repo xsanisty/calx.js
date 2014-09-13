@@ -67,7 +67,12 @@
                                 <td colspan="2" style="text-align:center"><button id="formula_button">Apply!</button></td>
                             </tr>
                             <tr>
-                                <td colspan="2"><input data-cell="G1" type="text" style="width:100%"></td>
+                                <td>Result :</td>
+                                <td><input data-cell="G1" type="text" style="width:100%"></td>
+                            </tr>
+                            <tr>
+                                <td>Formatted Result :</td>
+                                <td><input data-cell="G2" data-formula="G1" type="text" style="width:100%"></td>
                             </tr>
                         </table>
                     </td>
@@ -228,7 +233,7 @@
             table.html(tr);
         }
 
-                // load a language
+        // load a language
         numeral.language('fr', {
             delimiters: {
                 thousands: ' ',
@@ -253,13 +258,16 @@
 
         $('#sheet1, #sheet2').calx({
             'default' : 0,
-            'autoCalculate' : true
+            'autoCalculate' : true,
+            'ajaxUrl' : 'formula.php',
+            'ajaxMethod' : 'post'
         });
 
         $('#formula_button').click(function(e){
             e.preventDefault();
             var cell = $('#sheet1').calx('getCell', 'G1');
-            cell.setFormat($('#format_test').val());
+            var cell2 = $('#sheet1').calx('getCell', 'G2');
+            cell2.setFormat($('#format_test').val());
             cell.setFormula($('#formula_test').val());
         });
 

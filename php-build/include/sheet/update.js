@@ -20,11 +20,11 @@ sheet.prototype.update = function(){
         var cellAddr = $(this).attr('data-cell');
 
         if(cellAddr && typeof(sheet.cells[cellAddr]) == 'undefined'){
-            ////console.log('new cell found '+cellAddr);
+            //console.log('new cell found '+cellAddr);
             $cell = new cell(sheet, this);
             sheet.registerCell($cell);
         }else{
-            ////console.log('resync cell '+cellAddr);
+            //console.log('resync cell '+cellAddr);
             sheet.cells[cellAddr].resyncValue();
             sheet.cells[cellAddr].resyncFormula();
         }

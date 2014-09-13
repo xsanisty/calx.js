@@ -11,7 +11,6 @@ cell.prototype.processDependant = function(){
     //selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
     //parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
-    ////console.log(selfRender);
     if(false == this.isProcessed()){
         //console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], processing...')
 

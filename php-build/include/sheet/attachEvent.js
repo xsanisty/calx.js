@@ -14,6 +14,16 @@ sheet.prototype.attachEvent = function(){
     });
 
     /**
+     * get the formatted value of the cell, and display it to the element
+     */
+    this.el.on('calx.getComputedValue', 'input[data-cell]', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        currentCell.renderComputedValue();
+    });
+
+    /**
      * update value of the current cell internally
      */
     this.el.on('calx.setValue', 'input[data-cell], select', function(){
@@ -39,7 +49,6 @@ sheet.prototype.attachEvent = function(){
             currentCell = currentSheet.cells[cellAddr];
 
         currentSheet.clearProcessedFlag();
-        //currentCell.setValue($(this).val());
         currentCell.calculate();
         currentSheet.renderComputedValue();
 
@@ -56,16 +65,21 @@ sheet.prototype.attachEvent = function(){
         }
     });
 
+    this.el.on('blur', 'input[data-cell]', function(){
+        //console.log('blurred');
+        $(this).trigger('calx.getComputedValue');
+    });
+
     /**
      * change behaviour, based on configuration
      * autoCalculate : on   => calx.calculateCellDependant
      * autoCalculate : off  => calx.setValue
      */
     this.el.on('change', 'select', function(){
+        $(this).trigger('calx.setValue');
+
         if(currentSheet.config.autoCalculate){
             $(this).trigger('calx.calculateCellDependant');
-        }else{
-            $(this).trigger('calx.setValue');
         }
     });
 
@@ -90,6 +104,7 @@ sheet.prototype.detachEvent = function(){
 
     this.el.off('calx.getValue');
     this.el.off('calx.setValue');
+    this.el.off('calx.getComputedValue');
     this.el.off('calx.calculateSheet');
     this.el.off('calx.calculateCellDependant');
 }
