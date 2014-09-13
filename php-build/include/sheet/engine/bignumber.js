@@ -1,3 +1,0 @@
-bignumber : function (argument) {
-    // body...
-}
