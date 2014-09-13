@@ -43,7 +43,7 @@ cell.prototype.init = function(){
     this.address    = $address;
 
 
-    console.log('cell['+$address+'] : Initializing the cell');
+    //console.log('cell['+$address+'] : Initializing the cell');
     this.setValue($value);
     //this.attachEvent();
 };

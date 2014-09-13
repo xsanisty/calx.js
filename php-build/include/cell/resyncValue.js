@@ -3,7 +3,7 @@
  * @return {[type]} [description]
  */
 cell.prototype.resyncValue = function(){
-    console.log('cell['+this.address+'] : resyncing value with element value');
+    //console.log('cell['+this.address+'] : resyncing value with element value');
 
     if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),

@@ -7,7 +7,7 @@ init : function (option) {
     var sheetIdentifier;
     this.each(function(){
         sheetIdentifier = $(this).attr('data-calx-identifier');
-        //console.log(sheetIdentifier);
+        ////console.log(sheetIdentifier);
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
@@ -28,14 +28,14 @@ init : function (option) {
 
                     alert(errorMessage);
                     if(typeof(console) != 'undefined'){
-                        console.log(reference.cell.el);
+                        //console.log(reference.cell.el);
                     }
                     $.error(errorMessage);
                 }
             }
 
         }else{
-            //console.log('second call should be refresh');
+            ////console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });

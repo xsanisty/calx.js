@@ -1,5 +1,5 @@
 sheet.prototype.attachEvent = function(){
-    console.log('sheet['+this.identifier+'] : attaching events to the element');
+    //console.log('sheet['+this.identifier+'] : attaching events to the element');
 
     var currentSheet = this;
 
@@ -47,10 +47,10 @@ sheet.prototype.attachEvent = function(){
 
     /** bind to internal event, so no need to unbind the real event on destroy */
     this.el.on(currentSheet.config.autoCalculateTrigger, 'input[data-cell]',function(){
-        console.log('blurred');
+        //console.log('blurred');
         if(!$(this).attr('data-formula')){
             if(currentSheet.config.autoCalculate){
-                console.log('calculating dependant');
+                //console.log('calculating dependant');
                 $(this).trigger('calx.calculateCellDependant');
             }
         }
@@ -86,7 +86,7 @@ sheet.prototype.attachEvent = function(){
 };
 
 sheet.prototype.detachEvent = function(){
-    console.log('sheet['+this.identifier+'] : detaching events from the element');
+    //console.log('sheet['+this.identifier+'] : detaching events from the element');
 
     this.el.off('calx.getValue');
     this.el.off('calx.setValue');

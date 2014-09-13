@@ -4,7 +4,7 @@
  * @return {bool}               true if circular reference found, false if not found
  */
 cell.prototype.checkCircularReference = function(address){
-    console.log('cell['+this.address+'] : checking circular reference');
+    //console.log('cell['+this.address+'] : checking circular reference');
     var a, isCircular = false;
 
     if(typeof(address) == 'undefined'){
@@ -16,7 +16,7 @@ cell.prototype.checkCircularReference = function(address){
         for(a in this.dependencies){
             isCircular = isCircular || (a == address);
 
-            //console.log(prefix+'cell: '+this.getAddress()+', dependencies: '+a+', is circular: '+isCircular);
+            ////console.log(prefix+'cell: '+this.getAddress()+', dependencies: '+a+', is circular: '+isCircular);
             if(isCircular){
                 return true;
             }
@@ -24,7 +24,7 @@ cell.prototype.checkCircularReference = function(address){
 
         /** second, check if the dependencies of the dependency is redudant */
         for(a in this.dependencies){
-            //console.log(prefix+'cell: '+this.getAddress()+', dependencies of dependency: '+a+', is circular: '+isCircular);
+            ////console.log(prefix+'cell: '+this.getAddress()+', dependencies of dependency: '+a+', is circular: '+isCircular);
 
             isCircular = isCircular || this.dependencies[a].checkCircularReference(address);
             if(isCircular){
