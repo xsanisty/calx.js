@@ -12,6 +12,7 @@ sheet.prototype.init = function(){
         sheet.registerCell($cell);
     });
 
+    sheet.buildCellDependency();
     sheet.attachEvent();
 
     if(this.config.autoCalculate){

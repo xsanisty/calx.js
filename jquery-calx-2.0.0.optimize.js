@@ -8162,6 +8162,7 @@ cell.prototype.resyncFormula = function(){
         sheet.registerCell($cell);
     });
 
+    sheet.buildCellDependency();
     sheet.attachEvent();
 
     if(this.config.autoCalculate){
@@ -8647,14 +8648,10 @@ init : function (option) {
             }
 
         }else{
-            //console.log('second call should be refresh');
+            console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
-
-    for(var a in calx.sheetRegistry){
-        calx.sheetRegistry[a].buildCellDependency();
-    }
 
     return this;
 },

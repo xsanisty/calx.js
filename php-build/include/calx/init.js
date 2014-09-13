@@ -31,14 +31,10 @@ init : function (option) {
             }
 
         }else{
-            //console.log('second call should be refresh');
+            console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
-
-    for(var a in calx.sheetRegistry){
-        calx.sheetRegistry[a].buildCellDependency();
-    }
 
     return this;
 }
