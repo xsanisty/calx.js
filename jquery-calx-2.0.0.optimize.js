@@ -4029,6 +4029,7 @@ financial: {
     PV : function(rate, periods, payment, future, type) {
         // Initialize type
         type = (typeof type === 'undefined') ? 0 : type;
+        future = (typeof future === 'undefined') ? 0 : future;
 
         // Evaluate rate and periods (TODO: replace with secure expression evaluator)
         //rate = eval(rate);
@@ -8136,13 +8137,14 @@ cell.prototype.resyncFormula = function(){
      * @return {void}
      */
     function sheet(identifier, element, config){
-        this.identifier = identifier;
-        this.el         = $(element);
-        this.lang       = 'en';
-        this.cells      = {};
-        this.variables  = {};
-        this.config     = $.extend({}, defaultConfig, config);
-        this.counter    = 1;
+        this.identifier   = identifier;
+        this.el           = $(element);
+        this.lang         = 'en';
+        this.cells        = {};
+        this.variables    = {};
+        this.config       = $.extend({}, defaultConfig, config);
+        this.counter      = 1;
+        this.relatedSheet = {};
 
         this.init();
     };sheet.prototype.init = function(){

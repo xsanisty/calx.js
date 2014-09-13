@@ -8,13 +8,14 @@
      * @return {void}
      */
     function sheet(identifier, element, config){
-        this.identifier = identifier;
-        this.el         = $(element);
-        this.lang       = 'en';
-        this.cells      = {};
-        this.variables  = {};
-        this.config     = $.extend({}, defaultConfig, config);
-        this.counter    = 1;
+        this.identifier   = identifier;
+        this.el           = $(element);
+        this.lang         = 'en';
+        this.cells        = {};
+        this.variables    = {};
+        this.config       = $.extend({}, defaultConfig, config);
+        this.counter      = 1;
+        this.relatedSheet = {};
 
         this.init();
     };
