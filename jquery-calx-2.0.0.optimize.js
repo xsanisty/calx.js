@@ -7887,7 +7887,6 @@ cell.prototype.processDependant = function(){
     //selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
     //parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
-    ////console.log(selfRender);
     if(false == this.isProcessed()){
         //console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], processing...')
 
@@ -7928,7 +7927,7 @@ cell.prototype.checkCircularReference = function(address){
         for(a in this.dependencies){
             isCircular = isCircular || (a == address);
 
-            ////console.log(prefix+'cell: '+this.getAddress()+', dependencies: '+a+', is circular: '+isCircular);
+            //console.log(prefix+'cell: '+this.getAddress()+', dependencies: '+a+', is circular: '+isCircular);
             if(isCircular){
                 return true;
             }
@@ -7936,7 +7935,7 @@ cell.prototype.checkCircularReference = function(address){
 
         /** second, check if the dependencies of the dependency is redudant */
         for(a in this.dependencies){
-            ////console.log(prefix+'cell: '+this.getAddress()+', dependencies of dependency: '+a+', is circular: '+isCircular);
+            //console.log(prefix+'cell: '+this.getAddress()+', dependencies of dependency: '+a+', is circular: '+isCircular);
 
             isCircular = isCircular || this.dependencies[a].checkCircularReference(address);
             if(isCircular){
@@ -7983,16 +7982,16 @@ cell.prototype.getFormat = function(){
  * @param {string} formula       formula definition
  */
 cell.prototype.setFormula = function(formula){
-    ////console.log('set formula of '+this.address+' to be '+formula);
+    //console.log('set formula of '+this.address+' to be '+formula);
     this.formula = formula;
     if(false !== this.el){
         this.el.attr('data-formula', formula);
     }
 
-    ////console.log('building dependency');
+    //console.log('building dependency');
     this.buildDependency();
 
-    ////console.log('processing dependant');
+    //console.log('processing dependant');
     //this.processDependant(true, true);
 
     //this.evaluateFormula();
@@ -8090,7 +8089,7 @@ cell.prototype.renderComputedValue = function(){
 
             //console.log(formattedVal);
 
-        ////console.log('render computed value of '+this.address+ ' with formula '+this.formula);
+        //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
             this.el.val(formattedVal);
         }else{
@@ -8379,11 +8378,11 @@ sheet.prototype.update = function(){
         var cellAddr = $(this).attr('data-cell');
 
         if(cellAddr && typeof(sheet.cells[cellAddr]) == 'undefined'){
-            ////console.log('new cell found '+cellAddr);
+            //console.log('new cell found '+cellAddr);
             $cell = new cell(sheet, this);
             sheet.registerCell($cell);
         }else{
-            ////console.log('resync cell '+cellAddr);
+            //console.log('resync cell '+cellAddr);
             sheet.cells[cellAddr].resyncValue();
             sheet.cells[cellAddr].resyncFormula();
         }
@@ -8510,6 +8509,16 @@ sheet.prototype.reset = function(){
     });
 
     /**
+     * get the formatted value of the cell, and display it to the element
+     */
+    this.el.on('calx.getComputedValue', 'input[data-cell]', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        currentCell.renderComputedValue();
+    });
+
+    /**
      * update value of the current cell internally
      */
     this.el.on('calx.setValue', 'input[data-cell], select', function(){
@@ -8535,7 +8544,6 @@ sheet.prototype.reset = function(){
             currentCell = currentSheet.cells[cellAddr];
 
         currentSheet.clearProcessedFlag();
-        //currentCell.setValue($(this).val());
         currentCell.calculate();
         currentSheet.renderComputedValue();
 
@@ -8552,16 +8560,21 @@ sheet.prototype.reset = function(){
         }
     });
 
+    this.el.on('blur', 'input[data-cell]', function(){
+        //console.log('blurred');
+        $(this).trigger('calx.getComputedValue');
+    });
+
     /**
      * change behaviour, based on configuration
      * autoCalculate : on   => calx.calculateCellDependant
      * autoCalculate : off  => calx.setValue
      */
     this.el.on('change', 'select', function(){
+        $(this).trigger('calx.setValue');
+
         if(currentSheet.config.autoCalculate){
             $(this).trigger('calx.calculateCellDependant');
-        }else{
-            $(this).trigger('calx.setValue');
         }
     });
 
@@ -8586,6 +8599,7 @@ sheet.prototype.detachEvent = function(){
 
     this.el.off('calx.getValue');
     this.el.off('calx.setValue');
+    this.el.off('calx.getComputedValue');
     this.el.off('calx.calculateSheet');
     this.el.off('calx.calculateCellDependant');
 }    /**
@@ -8604,7 +8618,7 @@ init : function (option) {
     var sheetIdentifier;
     this.each(function(){
         sheetIdentifier = $(this).attr('data-calx-identifier');
-        ////console.log(sheetIdentifier);
+        //console.log(sheetIdentifier);
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
@@ -8624,15 +8638,12 @@ init : function (option) {
                                         +reference.cell.getAddress();
 
                     alert(errorMessage);
-                    if(typeof(console) != 'undefined'){
-                        //console.log(reference.cell.el);
-                    }
                     $.error(errorMessage);
                 }
             }
 
         }else{
-            ////console.log('second call should be refresh');
+            //console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
@@ -8677,7 +8688,7 @@ registerVariable : function (varName, varValue) {
 refresh : function () {
     return this.each(function(){
         var sheetIdentifier = $(this).attr('data-calx-identifier');
-        ////console.log(sheetIdentifier);
+        //console.log(sheetIdentifier);
 
         if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
             calx.sheetRegistry[sheetIdentifier].refresh();
@@ -8690,7 +8701,7 @@ refresh : function () {
 update : function () {
     return this.each(function(){
         var sheetIdentifier = $(this).attr('data-calx-identifier');
-        ////console.log(sheetIdentifier);
+        //console.log(sheetIdentifier);
 
         if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
             calx.sheetRegistry[sheetIdentifier].update();
