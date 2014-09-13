@@ -5,7 +5,7 @@
  */
 cell.prototype.setValue = function(value, render){
 
-    //console.log('cell['+this.address+']: seting value to be : '+value);
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : setting value to be : '+value);
     if(this.format && typeof(numeral) != 'undefined' && $.trim(value) !== ''){
         this.value = numeral().unformat(value+'');
     }else{

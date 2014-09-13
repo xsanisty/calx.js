@@ -5,7 +5,7 @@
  * @return {void}
  */
 cell.prototype.processDependency = function(){
-    //console.log('cell['+this.address+'] : processing dependency');
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependency');
 
     //selfRender  = (typeof(selfRender) == 'undefined') ? false : selfRender;
     //childRender = (typeof(childRender) == 'undefined') ? false : childRender;
@@ -15,7 +15,7 @@ cell.prototype.processDependency = function(){
      * mark each cell as processed by setting the processed flag as true
      */
     if(false == this.isProcessed()){
-        //console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], processing...')
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
         for (var a in this.dependencies){
             if(false == this.dependencies[a].isProcessed()){
                 this.dependencies[a].processDependency();
@@ -25,7 +25,7 @@ cell.prototype.processDependency = function(){
         this.evaluateFormula();
         this.setProcessed(true);
     }else{
-        //console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], leaving...')
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
     }
 
     //if(selfRender){

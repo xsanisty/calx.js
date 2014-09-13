@@ -7,7 +7,6 @@ init : function (option) {
     var sheetIdentifier;
     this.each(function(){
         sheetIdentifier = $(this).attr('data-calx-identifier');
-        //console.log(sheetIdentifier);
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
@@ -36,6 +35,10 @@ init : function (option) {
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
+
+    for(var sheet in calx.sheetRegistry){
+        calx.sheetRegistry[sheet].buildCellDependency();
+    }
 
     return this;
 }

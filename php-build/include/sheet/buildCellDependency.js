@@ -5,7 +5,7 @@
  * @return {[type]} [description]
  */
 sheet.prototype.buildCellDependency = function(){
-    //console.log('sheet['+this.identifier+'] : building cells dependency');
+    //console.log('sheet[#'+this.elementId+'] : building cells dependency');
     var cell;
 
     for(cell in this.cells){

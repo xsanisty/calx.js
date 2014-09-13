@@ -3,7 +3,7 @@
  * @return {bool} true if exist, false if clear
  */
 sheet.prototype.checkCircularReference = function(){
-    //console.log('sheet['+this.identifier+'] : checking circular reference');
+    //console.log('sheet[#'+this.elementId+'] : checking circular reference');
     var a, response = {
             isCircular : false,
             cell : null

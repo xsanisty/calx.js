@@ -16,6 +16,7 @@
         this.config       = $.extend({}, defaultConfig, config);
         this.counter      = 1;
         this.relatedSheet = {};
+        this.elementId    = this.el.attr('id');
 
         this.init();
     };

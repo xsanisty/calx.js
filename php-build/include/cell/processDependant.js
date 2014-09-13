@@ -4,7 +4,7 @@
  * @return {[type]} [description]
  */
 cell.prototype.processDependant = function(){
-    //console.log('cell['+this.address+'] : processing dependants');
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependants');
 
 
     //prefix       = (typeof(prefix) == 'undefined') ? '--' : prefix;
@@ -12,14 +12,14 @@ cell.prototype.processDependant = function(){
     //parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
     if(false == this.isProcessed()){
-        //console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], processing...')
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
 
         this.processDependency();
         this.evaluateFormula();
 
         for(var a in this.dependant){
             //prefix = prefix+'--';
-            //console.log('cell['+this.address+'] : processing dependant ['+a+']');
+            //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependant ['+a+']');
             if(!this.dependant[a].isProcessed()){
                 this.dependant[a].processDependant();
             }else{
@@ -30,7 +30,7 @@ cell.prototype.processDependant = function(){
         this.setAffected(false);
         this.setProcessed(true);
     }else{
-        //console.log('cell['+this.address+'] : processing flag is ['+this.processed+'], leaving...')
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
     }
 
 };

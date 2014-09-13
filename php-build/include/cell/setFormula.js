@@ -3,7 +3,7 @@
  * @param {string} formula       formula definition
  */
 cell.prototype.setFormula = function(formula){
-    //console.log('set formula of '+this.address+' to be '+formula);
+    //console.log('set formula of #'+this.sheet.elementId+'!'+this.address+' to be '+formula);
     this.formula = formula;
     if(false !== this.el){
         this.el.attr('data-formula', formula);

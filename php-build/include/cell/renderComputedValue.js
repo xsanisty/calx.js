@@ -3,7 +3,7 @@
  * @return {void}
  */
 cell.prototype.renderComputedValue = function(){
-    //console.log('cell['+this.address+'] : rendering computed value');
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : rendering computed value');
 
     if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),

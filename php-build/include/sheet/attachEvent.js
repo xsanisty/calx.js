@@ -1,5 +1,5 @@
 sheet.prototype.attachEvent = function(){
-    //console.log('sheet['+this.identifier+'] : attaching events to the element');
+    //console.log('sheet[#'+this.elementId+'] : attaching events to the element');
 
     var currentSheet = this;
 
@@ -100,7 +100,7 @@ sheet.prototype.attachEvent = function(){
 };
 
 sheet.prototype.detachEvent = function(){
-    //console.log('sheet['+this.identifier+'] : detaching events from the element');
+    //console.log('sheet[#'+this.elementId+'] : detaching events from the element');
 
     this.el.off('calx.getValue');
     this.el.off('calx.setValue');

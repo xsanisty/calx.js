@@ -2,7 +2,7 @@
  * calculate all the sheet!
  */
 sheet.prototype.calculate = function(){
-    //console.log('sheet['+this.identifier+'] : calculating the sheet');
+    //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
     var a;
     /** set all cell with formula as affected */

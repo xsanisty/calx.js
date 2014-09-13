@@ -3,7 +3,7 @@
  * @return {null}
  */
 cell.prototype.evaluateFormula = function(){
-    //console.log('cell['+this.address+'] : evaluating formula ['+this.formula+']');
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : evaluating formula ['+this.formula+']');
 
     if(this.formula){
         try{
