@@ -128,3 +128,15 @@ sheet.prototype.comparator = {
 sheet.prototype.obj = {
     type : 'cell'
 };
+
+sheet.prototype.registerDependency = function(dep){
+    if(typeof(this.dependencies[dep.identifier]) == 'undefined'){
+        this.dependencies[dep.identifier] = dep;
+    }
+};
+
+sheet.prototype.registerDependant = function(dep){
+    if(typeof(this.dependant[dep.identifier]) == 'undefined'){
+        this.dependant[dep.identifier] = dep;
+    }
+};

@@ -17,6 +17,8 @@
         this.counter      = 1;
         this.relatedSheet = {};
         this.elementId    = this.el.attr('id');
+        this.dependant    = {};
+        this.dependencies = {};
 
         this.init();
     };

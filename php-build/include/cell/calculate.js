@@ -11,4 +11,9 @@ cell.prototype.calculate  = function(){
     for(var a in this.dependant){
         this.dependant[a].processDependant();
     }
+
+    for(var a in this.sheet.dependant){
+        this.sheet.dependant[a].calculate();
+        this.sheet.dependant[a].renderComputedValue();
+    }
 };

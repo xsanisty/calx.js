@@ -7705,6 +7705,11 @@ cell.prototype.calculate  = function(){
     for(var a in this.dependant){
         this.dependant[a].processDependant();
     }
+
+    for(var a in this.sheet.dependant){
+        this.sheet.dependant[a].calculate();
+        this.sheet.dependant[a].renderComputedValue();
+    }
 };/**
  * build inter-cell dependency and dependant list, used for triggerring calculation that related to other cell
  * @return {void}
@@ -7727,7 +7732,8 @@ cell.prototype.buildDependency = function(){
         cellPart,
         cellObject,
         cellMatch,
-        sheetId;
+        sheetId,
+        sheetIdentifier;
 
     /** clear up the dependant and dependency reference */
     for(a in this.dependencies){
@@ -7760,6 +7766,11 @@ cell.prototype.buildDependency = function(){
                             cellStop    = $.trim(cellPart[1]);
 
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
+                            sheetIdentifier = $(sheetId).attr('data-calx-identifier');
+
+                            calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
+                            this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+
                             for(j in dependencies){
                                 key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
@@ -7777,6 +7788,11 @@ cell.prototype.buildDependency = function(){
                             cellPart    = $.trim(formulaPart[1]);
 
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
+                            sheetIdentifier = $(sheetId).attr('data-calx-identifier');
+
+                            calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
+                            this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+
                             key = sheetId+'!'+cellPart;
                             if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies){
                                 this.dependencies[key] = dependencies;
@@ -8146,6 +8162,8 @@ cell.prototype.resyncFormula = function(){
         this.counter      = 1;
         this.relatedSheet = {};
         this.elementId    = this.el.attr('id');
+        this.dependant    = {};
+        this.dependencies = {};
 
         this.init();
     };sheet.prototype.init = function(){
@@ -8352,6 +8370,18 @@ sheet.prototype.comparator = {
 
 sheet.prototype.obj = {
     type : 'cell'
+};
+
+sheet.prototype.registerDependency = function(dep){
+    if(typeof(this.dependencies[dep.identifier]) == 'undefined'){
+        this.dependencies[dep.identifier] = dep;
+    }
+};
+
+sheet.prototype.registerDependant = function(dep){
+    if(typeof(this.dependant[dep.identifier]) == 'undefined'){
+        this.dependant[dep.identifier] = dep;
+    }
 };/**
  * evaluate given formula
  * @param  {string} formula     the formula need to be evaluated
@@ -8402,6 +8432,7 @@ sheet.prototype.calculate = function(){
     //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
     var a;
+
     /** set all cell with formula as affected */
     this.clearProcessedFlag();
 
@@ -8648,7 +8679,7 @@ init : function (option) {
             }
 
         }else{
-            console.log('second call should be refresh');
+            //console.log('second call should be refresh');
             calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
