@@ -14,17 +14,24 @@
         require 'include/cell.js';
         require 'include/cell/init.js';
         require 'include/cell/calculate.js';
+
         require 'include/cell/buildDependency.js';
         require 'include/cell/removeDependency.js';
         require 'include/cell/processDependency.js';
+
         require 'include/cell/registerDependant.js';
         require 'include/cell/removeDependant.js';
         require 'include/cell/processDependant.js';
+
+        require 'include/cell/renderComputedValue.js';
+        require 'include/cell/resyncValue.js';
+        require 'include/cell/resyncFormula.js';
         require 'include/cell/checkCircularReference.js';
         require 'include/cell/evaluateFormula.js';
-        //require 'include/cell/attachEvent.js';
-        //require 'include/cell/detachEvent.js';
+        #require 'include/cell/attachEvent.js';
+        #require 'include/cell/detachEvent.js';
         require 'include/cell/formTags.js';
+
         require 'include/cell/setFormat.js';
         require 'include/cell/getFormat.js';
 
@@ -32,9 +39,9 @@
         require 'include/cell/getFormula.js';
 
         require 'include/cell/getAddress.js';
-        require 'include/cell/getStringValue.js';
+        #require 'include/cell/getStringValue.js';
         require 'include/cell/getFormattedValue.js';
-        require 'include/cell/getFloatValue.js';
+        #require 'include/cell/getFloatValue.js';
 
         require 'include/cell/setValue.js';
         require 'include/cell/getValue.js';
@@ -45,10 +52,6 @@
         require 'include/cell/setProcessed.js';
         require 'include/cell/isProcessed.js';
 
-        require 'include/cell/renderComputedValue.js';
-        require 'include/cell/resyncValue.js';
-        require 'include/cell/resyncFormula.js';
-
 
         /** sheet reference */
         require 'include/sheet.js';
@@ -56,7 +59,7 @@
         require 'include/sheet/checkCircularReference.js';
         require 'include/sheet/clearProcessedFlag.js';
         require 'include/sheet/buildCellDependency.js';
-        //require 'include/sheet/processDependencyTree.js';
+        #require 'include/sheet/processDependencyTree.js';
         require 'include/sheet/renderComputedValue.js';
         require 'include/sheet/handler.js';
         require 'include/sheet/evaluate.js';

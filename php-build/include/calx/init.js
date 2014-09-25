@@ -4,7 +4,7 @@
  * @return {object}             jQuery object for chaining
  */
 init : function (option) {
-    var sheetIdentifier;
+    var a, sheetIdentifier;
     this.each(function(){
         //console.log('initialize sheet');
         sheetIdentifier = $(this).attr('data-calx-identifier');
@@ -37,23 +37,18 @@ init : function (option) {
         }
     });
 
-    this.each(function(){
+    for(sheetIdentifier in calx.sheetRegistry){
         //console.log('build cell dependency');
-        sheetIdentifier = $(this).attr('data-calx-identifier');
-        var sheet = calx.sheetRegistry[sheetIdentifier];
-        sheet.buildCellDependency();
-    });
+        calx.sheetRegistry[sheetIdentifier].buildCellDependency();
+    }
 
-    this.each(function(){
-        //console.log('calculate sheet');
-        sheetIdentifier = $(this).attr('data-calx-identifier');
-        var sheet = calx.sheetRegistry[sheetIdentifier];
+    for(sheetIdentifier in calx.sheetRegistry){
 
-        if(sheet.config.autoCalculate){
-            sheet.calculate();
-            sheet.renderComputedValue();
+        if(calx.sheetRegistry[sheetIdentifier].config.autoCalculate){
+            calx.sheetRegistry[sheetIdentifier].calculate();
+            calx.sheetRegistry[sheetIdentifier].renderComputedValue();
         }
-    });
+    }
 
     return this;
 }

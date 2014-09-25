@@ -133,9 +133,9 @@ cell.prototype.buildDependency = function(){
         }
     }
 
-    var dlist = [];
-    for(a in this.dependencies){
-        dlist.push(a);
-    }
+    //var dlist = [];
+    //for(a in this.dependencies){
+    //    dlist.push(a);
+    //}
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] :  Building dependency list '+dlist);
 };

@@ -19,6 +19,7 @@
         this.elementId    = this.el.attr('id');
         this.dependant    = {};
         this.dependencies = {};
+        this.calculated   = false;
 
         this.init();
     };

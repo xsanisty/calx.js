@@ -13,7 +13,19 @@ sheet.prototype.calculate = function(){
         this.cells[a].processDependency();
     }
 
+    this.setCalculated();
+    console.log(this.isCalculated());
+
     for(a in this.dependant){
-        this.dependant[a].calculate();
+        if(!this.dependant[a].isCalculated()){
+            this.dependant[a].calculate();
+        }
     }
+
+    //for(a in this.cells){
+    //    this.cells[a].evaluateFormula();
+    //    this.cells[a].renderComputedValue();
+    //}
+
+    this.renderComputedValue();
 };

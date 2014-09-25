@@ -12,6 +12,7 @@ destroy : function(){
 
         if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
             calx.sheetRegistry[sheetIdentifier].detachEvent();
+            calx.sheetRegistry[sheetIdentifier].clearDependencies();
             delete calx.sheetRegistry[sheetIdentifier];
         }
     });

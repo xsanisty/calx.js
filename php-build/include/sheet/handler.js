@@ -140,3 +140,29 @@ sheet.prototype.registerDependant = function(dep){
         this.dependant[dep.identifier] = dep;
     }
 };
+
+sheet.prototype.clearDependencies = function(){
+
+}
+
+sheet.prototype.setCalculated = function(calculated){
+    var calculated = (typeof(calculated) == 'undefined') ? true : calculated;
+    this.calculated  = calculated;
+}
+
+sheet.prototype.isCalculated = function(){
+    return this.calculated;
+}
+
+sheet.prototype.clearCalculatedFlag = function(){
+    var a;
+
+    for(a in this.dependant){
+        this.dependant[a].setCalculated(false);
+    }
+
+
+    for(a in this.dependencies){
+        this.dependencies[a].setCalculated(false);
+    }
+}
