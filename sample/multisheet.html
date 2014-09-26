@@ -1,0 +1,152 @@
+<html>
+<head>
+    <style>
+        body, td{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        input, select{
+            width: 120px;
+            border: solid 1px #ddd;
+            text-align: right;
+        }
+        .chead{
+            background:#ccf;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .rhead{
+            background: #cfc;
+            padding: 0 5px;
+            text-align: right;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class="rhead">Cell Address</td>
+            <td><input type="text" id="cell_address" style="text-align:left"></td>
+        </tr>
+        <tr>
+            <td class="rhead">Formula</td>
+            <td><input type="text" id="cell_formula" style="width: 300px; text-align:left"></td>
+        </tr>
+        <tr>
+            <td class="rhead">Action</td>
+            <td>
+                <button type="button" id="apply">Apply</button>
+                <button type="button" id="reset">Reset</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="button" id="enable">Enable Calx</button>
+                <button type="button" id="disable">Disable Calx</button>
+                <button type="button" id="resetsheet">Reset Sheet</button>
+            </td>
+        </tr>
+    </table>
+    <form action="" id="sheet1">
+        <table>
+            <tr>
+                <td class="chead">&nbsp;</td>
+                <td class="chead">A</td>
+                <td class="chead">B</td>
+                <td class="chead">C</td>
+                <td class="chead">D</td>
+                <td class="chead">E</td>
+                <td class="chead">F</td>
+                <td class="chead">G</td>
+                <td class="chead">H</td>
+                <td class="chead">I</td>
+                <td class="chead">J</td>
+            </tr>
+            <tr>
+                <td class="rhead">1</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B1"></td>
+                <td><input data-formula="A1+B1" data-format="0,0[.]00" data-cell="C1"></td>
+                <td><input data-formula="C1*2" data-format="0,0[.]00" data-cell="D1"></td>
+                <td><input data-formula="C1*3" data-format="0,0[.]00" data-cell="E1"></td>
+                <td><input data-formula="C1*4" data-format="0,0[.]00" data-cell="F1"></td>
+                <td><input data-formula="D1+E1+F1" data-format="0,0[.]00" data-cell="G1"></td>
+                <td><input data-formula="CONCAT('G1 is: ', G1)" data-format="0,0[.]00" data-cell="H1"></td>
+                <td><input data-formula="G1+100" data-format="0,0[.]00" data-cell="I1"></td>
+                <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
+        </table>
+    </form>
+
+    <form action="" id="sheet2">
+        <table>
+            <tr>
+                <td class="chead">&nbsp;</td>
+                <td class="chead">A</td>
+                <td class="chead">B</td>
+                <td class="chead">C</td>
+                <td class="chead">D</td>
+                <td class="chead">E</td>
+                <td class="chead">F</td>
+                <td class="chead">G</td>
+                <td class="chead">H</td>
+                <td class="chead">I</td>
+                <td class="chead">J</td>
+            </tr>
+            <tr>
+                <td class="rhead">1</td>
+                <td><input data-formula="#sheet1!A1" data-format="0,0[.]00" data-cell="A1"></td>
+                <td><input data-formula="#sheet1!B1" data-format="0,0[.]00" data-cell="B1"></td>
+                <td><input data-formula="#sheet3!C1" data-format="0,0[.]00" data-cell="C1"></td>
+                <td><input data-formula="#sheet3!D1" data-format="0,0[.]00" data-cell="D1"></td>
+                <td><input data-formula="C1*3" data-format="0,0[.]00" data-cell="E1"></td>
+                <td><input data-formula="D1*4" data-format="0,0[.]00" data-cell="F1"></td>
+                <td><input data-formula="D1+E1+F1" data-format="0,0[.]00" data-cell="G1"></td>
+                <td><input data-formula="CONCAT('G1 is: ', G1)" data-format="0,0[.]00" data-cell="H1"></td>
+                <td><input data-formula="G1+100" data-format="0,0[.]00" data-cell="I1"></td>
+                <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
+        </table>
+    </form>
+
+    <form action="" id="sheet3">
+        <table>
+            <tr>
+                <td class="chead">&nbsp;</td>
+                <td class="chead">A</td>
+                <td class="chead">B</td>
+                <td class="chead">C</td>
+                <td class="chead">D</td>
+                <td class="chead">E</td>
+                <td class="chead">F</td>
+                <td class="chead">G</td>
+                <td class="chead">H</td>
+                <td class="chead">I</td>
+                <td class="chead">J</td>
+            </tr>
+            <tr>
+                <td class="rhead">1</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C1" value="200"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D1" value="400"></td>
+                <td><input data-formula="#sheet2!E1" data-format="0,0[.]00" data-cell="E1"></td>
+                <td><input data-formula="#sheet2!F1" data-format="0,0[.]00" data-cell="F1"></td>
+                <td><input data-formula="D1+E1+F1" data-format="0,0[.]00" data-cell="G1"></td>
+                <td><input data-formula="CONCAT('G1 is: ', G1)" data-format="0,0[.]00" data-cell="H1"></td>
+                <td><input data-formula="G1+100" data-format="0,0[.]00" data-cell="I1"></td>
+                <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
+        </table>
+    </form>
+    <script src="../jquery-1.9.1.min.js"></script>
+    <script src="../js/moment.min.js"></script>
+    <script src="../js/numeral.min.js"></script>
+    <script src="../js/jstat.min.js"></script>
+    <script src="../jquery-1.9.1.min.js"></script>
+    <script src="../php-build/calx-build.php"></script>
+
+    <script>
+        $('#sheet1, #sheet2, #sheet3').calx();
+    </script>
+</body>
+</html>
