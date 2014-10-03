@@ -24,5 +24,6 @@
         this.dependant          = {};
         this.conditionalStyle   = false;
         this.address            = '';
+        this.remoteDependency   = false;
         this.init();
     };

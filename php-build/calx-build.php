@@ -23,6 +23,8 @@
         require 'include/cell/removeDependant.js';
         require 'include/cell/processDependant.js';
 
+        require 'include/cell/hasRemoteDependency.js';
+
         require 'include/cell/renderComputedValue.js';
         require 'include/cell/resyncValue.js';
         require 'include/cell/resyncFormula.js';

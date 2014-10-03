@@ -14,7 +14,7 @@ sheet.prototype.calculate = function(){
     }
 
     this.setCalculated();
-    console.log(this.isCalculated());
+    //console.log(this.isCalculated());
 
     for(a in this.dependant){
         if(!this.dependant[a].isCalculated()){
@@ -22,10 +22,15 @@ sheet.prototype.calculate = function(){
         }
     }
 
-    //for(a in this.cells){
-    //    this.cells[a].evaluateFormula();
-    //    this.cells[a].renderComputedValue();
-    //}
+    for(a in this.cells){
+        //console.log('recalculating cell');
+        if(this.cells[a].hasRemoteDependency()){
+            this.cells[a].evaluateFormula();
+            this.cells[a].renderComputedValue();
+
+            //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
+        }
+    }
 
     this.renderComputedValue();
 };

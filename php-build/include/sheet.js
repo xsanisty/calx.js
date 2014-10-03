@@ -20,6 +20,7 @@
         this.dependant    = {};
         this.dependencies = {};
         this.calculated   = false;
+        this.calculating  = false,
 
         this.init();
     };

@@ -30,7 +30,7 @@ sheet.prototype.attachEvent = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        currentSheet.cells[cellAddr].setValue($(this).val());
+        currentCell.setValue($(this).val());
 
     });
 
@@ -48,19 +48,27 @@ sheet.prototype.attachEvent = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
+        if(true === calx.isCalculating){
+            calx.isCalculating = false;
+        }
         currentSheet.clearProcessedFlag();
         currentCell.calculate();
         currentSheet.renderComputedValue();
 
     });
 
-    /** bind to internal event, so no need to unbind the real event on destroy */
+    /**
+     * bind to internal event, so no need to unbind the real event on destroy
+     */
     this.el.on(currentSheet.config.autoCalculateTrigger, 'input[data-cell]',function(){
         //console.log('blurred');
-        if(!$(this).attr('data-formula')){
+        var $this = $(this);
+        if(!$this.attr('data-formula')){
             if(currentSheet.config.autoCalculate){
                 //console.log('calculating dependant');
-                $(this).trigger('calx.calculateCellDependant');
+                setTimeout(function(){
+                    $this.trigger('calx.calculateCellDependant');
+                }, 50);
             }
         }
     });

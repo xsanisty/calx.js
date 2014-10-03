@@ -14,13 +14,6 @@
         };
     }
 
-    //ie support for String.trim method
-    if (typeof String.prototype.trim !== 'function') {
-        String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g, '');
-        };
-    }
-
     //ie support for getPrototypeOf
     if (typeof Object.getPrototypeOf !== "function") {
         if (typeof "test".__proto__ === "object") {

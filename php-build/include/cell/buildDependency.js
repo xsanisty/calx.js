@@ -66,6 +66,7 @@ cell.prototype.buildDependency = function(){
                             for(j in dependencies){
                                 key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
+                                    this.hasRemoteDependency(true);
                                     this.dependencies[key] = dependencies[j];
                                     dependencies[j].registerDependant(sheetKey+'!'+this.getAddress(), this);
                                 }
@@ -92,6 +93,7 @@ cell.prototype.buildDependency = function(){
 
                             key = sheetId+'!'+cellPart;
                             if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies){
+                                this.hasRemoteDependency(true);
                                 this.dependencies[key] = dependencies;
                                 dependencies.registerDependant(sheetKey+'!'+this.getAddress(), this);
 

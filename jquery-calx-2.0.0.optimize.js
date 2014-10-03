@@ -1,4 +1,5 @@
 
+
 (function($){
 
 
@@ -75,7 +76,7 @@ var defaultConfig = {
     'checkCircularReference': false
 
 };function parserFactory(sheet){
-	var parser = {
+    var parser = {
         trace: function trace() {},
         yy: {},
         symbols_: {
@@ -4891,7 +4892,7 @@ financial: {
     },
 
     MODEMULT : function() {
-        // Credits: Roönaän
+        // Credits: RoÃ¶naÃ¤n
         var range = utility.arrayMerge(arguments),
             n = range.length,
             count = {},
@@ -6118,7 +6119,7 @@ logical : {
             ["admiralty knot", "admkn", null, "speed", false, true, 0.514773333],
             ["ampere", "A", null, "electric_current", true, false, 1],
             ["ampere per meter", "A/m", null, "magnetic_field_intensity", true, false, 1],
-            ["ångström", "Å", ["ang"], "length", false, true, 1e-10],
+            ["Ã¥ngstrÃ¶m", "Ã…", ["ang"], "length", false, true, 1e-10],
             ["are", "ar", null, "area", false, true, 100],
             ["astronomical unit", "ua", null, "length", false, false, 1.49597870691667e-11],
             ["bar", "bar", null, "pressure", false, false, 100000],
@@ -6130,7 +6131,7 @@ logical : {
             ["candela", "cd", null, "luminous_intensity", true, false, 1],
             ["candela per square metre", "cd/m?", null, "luminance", true, false, 1],
             ["coulomb", "C", null, "electric_charge", true, false, 1],
-            ["cubic ångström", "ang3", ["ang^3"], "volume", false, true, 1e-30],
+            ["cubic Ã¥ngstrÃ¶m", "ang3", ["ang^3"], "volume", false, true, 1e-30],
             ["cubic foot", "ft3", ["ft^3"], "volume", false, true, 0.028316846592],
             ["cubic inch", "in3", ["in^3"], "volume", false, true, 0.000016387064],
             ["cubic light-year", "ly3", ["ly^3"], "volume", false, true, 8.46786664623715e-47],
@@ -6142,7 +6143,7 @@ logical : {
             ["cup", "cup", null, "volume", false, true, 0.0002365882365],
             ["dalton", "Da", ["u"], "mass", false, false, 1.66053886282828e-27],
             ["day", "d", ["day"], "time", false, true, 86400],
-            ["degree", "°", null, "angle", false, false, 0.0174532925199433],
+            ["degree", "Â°", null, "angle", false, false, 0.0174532925199433],
             ["degrees Rankine", "Rank", null, "temperature", false, true, 0.555555555555556],
             ["dyne", "dyn", ["dy"], "force", false, true, 0.00001],
             ["electronvolt", "eV", ["ev"], "energy", false, true, 1.60217656514141],
@@ -6202,12 +6203,12 @@ logical : {
             ["n.u. of time", "?/(me?c??)", null, "time", false, false, 1.28808866778687e-21],
             ["nautical mile", "M", ["Nmi"], "length", false, true, 1852],
             ["newton", "N", null, "force", true, true, 1],
-            ["œrsted", "Oe ", null, "magnetic_field_intensity", false, false, 79.5774715459477],
-            ["ohm", "Ω", null, "electric_resistance", true, false, 1],
+            ["Å“rsted", "Oe ", null, "magnetic_field_intensity", false, false, 79.5774715459477],
+            ["ohm", "Î©", null, "electric_resistance", true, false, 1],
             ["ounce mass", "ozm", null, "mass", false, true, 0.028349523125],
             ["pascal", "Pa", null, "pressure", true, false, 1],
             ["pascal second", "Pa?s", null, "dynamic_viscosity", true, false, 1],
-            ["pferdestärke", "PS", null, "power", false, true, 735.49875],
+            ["pferdestÃ¤rke", "PS", null, "power", false, true, 735.49875],
             ["phot", "ph", null, "illuminance", false, false, 0.0001],
             ["pica (1/6 inch)", "pica", null, "length", false, true, 0.00035277777777778],
             ["pica (1/72 inch)", "Pica", ["Picapt"], "length", false, true, 0.00423333333333333],
@@ -6223,7 +6224,7 @@ logical : {
             ["siemens", "S", null, "electrical_conductance", true, false, 1],
             ["sievert", "Sv", null, "equivalent_dose", true, false, 1],
             ["slug", "sg", null, "mass", false, true, 14.59390294],
-            ["square ångström", "ang2", ["ang^2"], "area", false, true, 1e-20],
+            ["square Ã¥ngstrÃ¶m", "ang2", ["ang^2"], "area", false, true, 1e-20],
             ["square foot", "ft2", ["ft^2"], "area", false, true, 0.09290304],
             ["square inch", "in2", ["in^2"], "area", false, true, 0.00064516],
             ["square light-year", "ly2", ["ly^2"], "area", false, true, 8.95054210748189e+31],
@@ -7771,7 +7772,7 @@ cell.prototype.buildDependency = function(){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }else{
-                                //console.log('#'+sheetId+' does not exist');
+                                console.log('#'+sheetId+' does not exist');
                             }
 
                             for(j in dependencies){
@@ -7797,7 +7798,7 @@ cell.prototype.buildDependency = function(){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }else{
-                                //console.log('#'+sheetId+' does not exist');
+                                console.log('#'+sheetId+' does not exist');
 
                             }
 
@@ -8458,7 +8459,7 @@ sheet.prototype.calculate = function(){
     }
 
     this.setCalculated();
-    //console.log(this.isCalculated());
+    console.log(this.isCalculated());
 
     for(a in this.dependant){
         if(!this.dependant[a].isCalculated()){
