@@ -3,6 +3,10 @@
 (function($){
 
     <?php
+
+        /**
+         * Calx helper function, formula function and formula parser
+         */
         require 'include/ieHack.js';
         require 'include/defaultConfig.js';
         require 'include/parserFactory.js';
@@ -10,7 +14,10 @@
         require 'include/utility.js';
         require 'include/data.js';
 
-        /** cell reference */
+        /**
+         * cell reference
+         * List all available cell object API method
+         */
         require 'include/cell.js';
         require 'include/cell/init.js';
         require 'include/cell/calculate.js';
@@ -41,8 +48,8 @@
         require 'include/cell/getFormula.js';
 
         require 'include/cell/getAddress.js';
-        #require 'include/cell/getStringValue.js';
         require 'include/cell/getFormattedValue.js';
+        #require 'include/cell/getStringValue.js';
         #require 'include/cell/getFloatValue.js';
 
         require 'include/cell/setValue.js';
@@ -55,7 +62,10 @@
         require 'include/cell/isProcessed.js';
 
 
-        /** sheet reference */
+        /**
+         * sheet reference
+         * list all available sheet object API method
+         */
         require 'include/sheet.js';
         require 'include/sheet/init.js';
         require 'include/sheet/checkCircularReference.js';

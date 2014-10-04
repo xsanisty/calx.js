@@ -4,6 +4,10 @@
  */
 cell.prototype.setFormula = function(formula){
     //console.log('set formula of #'+this.sheet.elementId+'!'+this.address+' to be '+formula);
+    if(typeof(formula) !== 'string'){
+        return false;
+    }
+
     this.formula = formula;
     if(false !== this.el){
         this.el.attr('data-formula', formula);
