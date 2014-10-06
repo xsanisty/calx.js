@@ -19,4 +19,6 @@ sheet.prototype.reset = function(){
     for(var a in this.cells){
         this.cells[a].resyncValue();
     }
+
+    this.calculate();
 };

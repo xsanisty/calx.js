@@ -8612,6 +8612,8 @@ sheet.prototype.reset = function(){
     for(var a in this.cells){
         this.cells[a].resyncValue();
     }
+
+    this.calculate();
 };sheet.prototype.attachEvent = function(){
     //console.log('sheet[#'+this.elementId+'] : attaching events to the element');
 
