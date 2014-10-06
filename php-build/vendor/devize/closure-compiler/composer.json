@@ -1,0 +1,21 @@
+{
+    "name": "devize/closure-compiler",
+    "description": "Google's Closure Compiler for use in PHP-based projects",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Breuls",
+            "email": "breuls@devize.nl"
+        }
+    ],
+    "require": {
+        
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "mikey179/vfsStream": "*"
+    },
+    "autoload": {
+        "classmap": ["src"]
+    }
+}
