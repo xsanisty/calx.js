@@ -1,8 +1,7 @@
 
-
 (function($){
 
-
+    
     /************************************************
      *                Begin of IE Hack              *
      ************************************************/
@@ -15,13 +14,6 @@
                 }
             }
             return -1;
-        };
-    }
-
-    //ie support for String.trim method
-    if (typeof String.prototype.trim !== 'function') {
-        String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g, '');
         };
     }
 
@@ -76,7 +68,7 @@ var defaultConfig = {
     'checkCircularReference': false
 
 };function parserFactory(sheet){
-    var parser = {
+	var parser = {
         trace: function trace() {},
         yy: {},
         symbols_: {
@@ -4892,7 +4884,7 @@ financial: {
     },
 
     MODEMULT : function() {
-        // Credits: RoÃ¶naÃ¤n
+        // Credits: Roönaän
         var range = utility.arrayMerge(arguments),
             n = range.length,
             count = {},
@@ -5496,7 +5488,7 @@ logical : {
 
 },
     geometry : {
-
+    
 },
     text:{
     CONCAT : function(){
@@ -5765,7 +5757,7 @@ logical : {
     }
 },
     trigonometry:{
-
+    
 },
     general: {
 
@@ -6119,7 +6111,7 @@ logical : {
             ["admiralty knot", "admkn", null, "speed", false, true, 0.514773333],
             ["ampere", "A", null, "electric_current", true, false, 1],
             ["ampere per meter", "A/m", null, "magnetic_field_intensity", true, false, 1],
-            ["Ã¥ngstrÃ¶m", "Ã…", ["ang"], "length", false, true, 1e-10],
+            ["ångström", "Å", ["ang"], "length", false, true, 1e-10],
             ["are", "ar", null, "area", false, true, 100],
             ["astronomical unit", "ua", null, "length", false, false, 1.49597870691667e-11],
             ["bar", "bar", null, "pressure", false, false, 100000],
@@ -6131,7 +6123,7 @@ logical : {
             ["candela", "cd", null, "luminous_intensity", true, false, 1],
             ["candela per square metre", "cd/m?", null, "luminance", true, false, 1],
             ["coulomb", "C", null, "electric_charge", true, false, 1],
-            ["cubic Ã¥ngstrÃ¶m", "ang3", ["ang^3"], "volume", false, true, 1e-30],
+            ["cubic ångström", "ang3", ["ang^3"], "volume", false, true, 1e-30],
             ["cubic foot", "ft3", ["ft^3"], "volume", false, true, 0.028316846592],
             ["cubic inch", "in3", ["in^3"], "volume", false, true, 0.000016387064],
             ["cubic light-year", "ly3", ["ly^3"], "volume", false, true, 8.46786664623715e-47],
@@ -6143,7 +6135,7 @@ logical : {
             ["cup", "cup", null, "volume", false, true, 0.0002365882365],
             ["dalton", "Da", ["u"], "mass", false, false, 1.66053886282828e-27],
             ["day", "d", ["day"], "time", false, true, 86400],
-            ["degree", "Â°", null, "angle", false, false, 0.0174532925199433],
+            ["degree", "°", null, "angle", false, false, 0.0174532925199433],
             ["degrees Rankine", "Rank", null, "temperature", false, true, 0.555555555555556],
             ["dyne", "dyn", ["dy"], "force", false, true, 0.00001],
             ["electronvolt", "eV", ["ev"], "energy", false, true, 1.60217656514141],
@@ -6203,12 +6195,12 @@ logical : {
             ["n.u. of time", "?/(me?c??)", null, "time", false, false, 1.28808866778687e-21],
             ["nautical mile", "M", ["Nmi"], "length", false, true, 1852],
             ["newton", "N", null, "force", true, true, 1],
-            ["Å“rsted", "Oe ", null, "magnetic_field_intensity", false, false, 79.5774715459477],
-            ["ohm", "Î©", null, "electric_resistance", true, false, 1],
+            ["œrsted", "Oe ", null, "magnetic_field_intensity", false, false, 79.5774715459477],
+            ["ohm", "Ω", null, "electric_resistance", true, false, 1],
             ["ounce mass", "ozm", null, "mass", false, true, 0.028349523125],
             ["pascal", "Pa", null, "pressure", true, false, 1],
             ["pascal second", "Pa?s", null, "dynamic_viscosity", true, false, 1],
-            ["pferdestÃ¤rke", "PS", null, "power", false, true, 735.49875],
+            ["pferdestärke", "PS", null, "power", false, true, 735.49875],
             ["phot", "ph", null, "illuminance", false, false, 0.0001],
             ["pica (1/6 inch)", "pica", null, "length", false, true, 0.00035277777777778],
             ["pica (1/72 inch)", "Pica", ["Picapt"], "length", false, true, 0.00423333333333333],
@@ -6224,7 +6216,7 @@ logical : {
             ["siemens", "S", null, "electrical_conductance", true, false, 1],
             ["sievert", "Sv", null, "equivalent_dose", true, false, 1],
             ["slug", "sg", null, "mass", false, true, 14.59390294],
-            ["square Ã¥ngstrÃ¶m", "ang2", ["ang^2"], "area", false, true, 1e-20],
+            ["square ångström", "ang2", ["ang^2"], "area", false, true, 1e-20],
             ["square foot", "ft2", ["ft^2"], "area", false, true, 0.09290304],
             ["square inch", "in2", ["in^2"], "area", false, true, 0.00064516],
             ["square light-year", "ly2", ["ly^2"], "area", false, true, 8.95054210748189e+31],
@@ -7644,6 +7636,7 @@ logical : {
         this.dependant          = {};
         this.conditionalStyle   = false;
         this.address            = '';
+        this.remoteDependency   = false;
         this.init();
     };/**
  * Initialize the cell object, preparing all necessary variables
@@ -7699,6 +7692,7 @@ cell.prototype.init = function(){
 cell.prototype.calculate  = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
 
+    calx.isCalculating = true;
     if(this.formula){
         this.evaluateFormula();
     }
@@ -7710,6 +7704,21 @@ cell.prototype.calculate  = function(){
     for(var a in this.sheet.dependant){
         this.sheet.dependant[a].calculate();
     }
+
+
+    for(a in this.sheet.cells){
+        //console.log('recalculating cell');
+        if(this.sheet.cells[a].hasRemoteDependency()){
+            this.sheet.cells[a].evaluateFormula();
+            this.sheet.cells[a].processDependant();
+            this.sheet.cells[a].renderComputedValue();
+
+            //console.log('recalculating cell #'+this.sheet.el.attr('id')+'!'+a+'='+this.sheet.cells[a].getValue());
+        }
+    }
+    calx.isCalculating = false;
+
+    return this;
 };/**
  * build inter-cell dependency and dependant list, used for triggerring calculation that related to other cell
  * @return {void}
@@ -7772,12 +7781,13 @@ cell.prototype.buildDependency = function(){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }else{
-                                console.log('#'+sheetId+' does not exist');
+                                //console.log('#'+sheetId+' does not exist');
                             }
 
                             for(j in dependencies){
                                 key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
+                                    this.hasRemoteDependency(true);
                                     this.dependencies[key] = dependencies[j];
                                     dependencies[j].registerDependant(sheetKey+'!'+this.getAddress(), this);
                                 }
@@ -7798,12 +7808,13 @@ cell.prototype.buildDependency = function(){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
                             }else{
-                                console.log('#'+sheetId+' does not exist');
+                                //console.log('#'+sheetId+' does not exist');
 
                             }
 
                             key = sheetId+'!'+cellPart;
                             if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies){
+                                this.hasRemoteDependency(true);
                                 this.dependencies[key] = dependencies;
                                 dependencies.registerDependant(sheetKey+'!'+this.getAddress(), this);
 
@@ -7844,6 +7855,8 @@ cell.prototype.buildDependency = function(){
             }
         }
     }
+
+    return this;
 
     //var dlist = [];
     //for(a in this.dependencies){
@@ -7906,6 +7919,7 @@ cell.prototype.processDependency = function(){
  * @return {[type]} [description]
  */
 cell.prototype.processDependant = function(){
+    var $continue;
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependants');
 
 
@@ -7913,7 +7927,7 @@ cell.prototype.processDependant = function(){
     //selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
     //parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
-    if(false == this.isProcessed()){
+    if(false === this.isProcessed() || true === calx.isCalculating){
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
 
         this.processDependency();
@@ -7923,7 +7937,10 @@ cell.prototype.processDependant = function(){
             //prefix = prefix+'--';
             //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependant ['+a+']');
             if(!this.dependant[a].isProcessed()){
-                this.dependant[a].processDependant();
+                $continue = this.dependant[a].processDependant();
+                if(false === $continue){
+                    return $continue;
+                }
             }else{
                 //console.log(a+' is already processed, leaving...');
             }
@@ -7933,8 +7950,15 @@ cell.prototype.processDependant = function(){
         this.setProcessed(true);
     }else{
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
+        return false;
     }
 
+};cell.prototype.hasRemoteDependency = function(status){
+    if(typeof(status) == 'undefined'){
+        return this.remoteDependency
+    }else{
+        this.remoteDependency = status;
+    }
 };/**
  * render calculated value or final value to the element bing to this cell
  * @return {void}
@@ -7969,6 +7993,8 @@ cell.prototype.renderComputedValue = function(){
             this.el.html(formattedVal);
         }
     }
+
+    return this;
 }/**
  * resync cell value with element value, in case the form is reseted
  * @return {[type]} [description]
@@ -8043,11 +8069,15 @@ cell.prototype.evaluateFormula = function(){
     if(this.formula){
         try{
             this.computedValue = this.sheet.evaluate(this.formula);
+            return this.computedValue;
         }catch(e){
             this.computedValue = '#ERROR!';
+            return false;
             //console.error('formula error on '+this.address+' : '+this.formula);
         }
     }
+
+    return false;
 };/** form tag reference */
 cell.prototype.formTags = ['input', 'select', 'textarea', 'button'];/**
  * set formatting rule to the cell
@@ -8059,6 +8089,8 @@ cell.prototype.setFormat = function(format){
         this.el.attr('data-format', format);
         this.renderComputedValue();
     }
+
+    return this;
 };/**
  * return format definition of the current cell object
  * @return {string}     format definition or false
@@ -8071,6 +8103,10 @@ cell.prototype.getFormat = function(){
  */
 cell.prototype.setFormula = function(formula){
     //console.log('set formula of #'+this.sheet.elementId+'!'+this.address+' to be '+formula);
+    if(typeof(formula) !== 'string'){
+        return false;
+    }
+
     this.formula = formula;
     if(false !== this.el){
         this.el.attr('data-formula', formula);
@@ -8083,6 +8119,8 @@ cell.prototype.setFormula = function(formula){
     //this.processDependant(true, true);
 
     //this.evaluateFormula();
+    //
+    return this;
 };cell.prototype.getFormula = function(){
     return this.formula;
 };/**
@@ -8112,6 +8150,7 @@ cell.prototype.setValue = function(value, render){
     }
 
     /* set value mean set value, no other thing should be done */
+    return this;
 };cell.prototype.getValue = function(){
     if(this.formula){
         return this.computedValue;
@@ -8124,6 +8163,8 @@ cell.prototype.setValue = function(value, render){
 cell.prototype.setAffected = function(affected){
     affected = typeof(affected) == 'undefined' ? true : affected;
     this.affected = affected;
+
+    return this;
 };cell.prototype.isAffected = function(){
     return this.affected;
 };/**
@@ -8162,6 +8203,7 @@ cell.prototype.isProcessed = function(){
         this.dependant    = {};
         this.dependencies = {};
         this.calculated   = false;
+        this.calculating  = false,
 
         this.init();
     };sheet.prototype.init = function(){
@@ -8459,7 +8501,7 @@ sheet.prototype.calculate = function(){
     }
 
     this.setCalculated();
-    console.log(this.isCalculated());
+    //console.log(this.isCalculated());
 
     for(a in this.dependant){
         if(!this.dependant[a].isCalculated()){
@@ -8467,10 +8509,15 @@ sheet.prototype.calculate = function(){
         }
     }
 
-    //for(a in this.cells){
-    //    this.cells[a].evaluateFormula();
-    //    this.cells[a].renderComputedValue();
-    //}
+    for(a in this.cells){
+        //console.log('recalculating cell');
+        if(this.cells[a].hasRemoteDependency()){
+            this.cells[a].evaluateFormula();
+            this.cells[a].renderComputedValue();
+
+            //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
+        }
+    }
 
     this.renderComputedValue();
 };/**
@@ -8596,7 +8643,7 @@ sheet.prototype.reset = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        currentSheet.cells[cellAddr].setValue($(this).val());
+        currentCell.setValue($(this).val());
 
     });
 
@@ -8614,19 +8661,27 @@ sheet.prototype.reset = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
+        if(true === calx.isCalculating){
+            calx.isCalculating = false;
+        }
         currentSheet.clearProcessedFlag();
         currentCell.calculate();
         currentSheet.renderComputedValue();
 
     });
 
-    /** bind to internal event, so no need to unbind the real event on destroy */
+    /**
+     * bind to internal event, so no need to unbind the real event on destroy
+     */
     this.el.on(currentSheet.config.autoCalculateTrigger, 'input[data-cell]',function(){
         //console.log('blurred');
-        if(!$(this).attr('data-formula')){
+        var $this = $(this);
+        if(!$this.attr('data-formula')){
             if(currentSheet.config.autoCalculate){
                 //console.log('calculating dependant');
-                $(this).trigger('calx.calculateCellDependant');
+                setTimeout(function(){
+                    $this.trigger('calx.calculateCellDependant');
+                }, 50);
             }
         }
     });
@@ -8678,8 +8733,12 @@ sheet.prototype.detachEvent = function(){
      * @type {Object}
      */
     var calx = {
+        /** flag to indicate that calx is calculating */
+        isCalculating : false,
+
         /** sheets collection */
         sheetRegistry : {},
+
         /**
  * initialize sheet object and register to internal calx.sheetRegistry
  * @param  {object} option      option to override the default option
@@ -8687,6 +8746,8 @@ sheet.prototype.detachEvent = function(){
  */
 init : function (option) {
     var a, sheetIdentifier;
+
+    /** initializing sheet object on each elements */
     this.each(function(){
         //console.log('initialize sheet');
         sheetIdentifier = $(this).attr('data-calx-identifier');
@@ -8696,36 +8757,39 @@ init : function (option) {
 
             calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
 
-            if(calx.sheetRegistry[sheetIdentifier].config.checkCircularReference){
-                /** check circular reference after tree has been built */
-                var reference = calx.sheetRegistry[sheetIdentifier].checkCircularReference();
-
-                if(reference.isCircular){
-                    var errorMessage = 'Circular reference detected, this may cause calx to stop working.\ncell : '
-                                        +reference.cell.getAddress()
-                                        +'\nformula : '
-                                        +reference.cell.getFormula()
-                                        +'\n\nPlease check each cells involved in the formula that has direct or indirect reference to '
-                                        +reference.cell.getAddress();
-
-                    alert(errorMessage);
-                    $.error(errorMessage);
-                }
-            }
-
         }else{
             //console.log('second call should be refresh');
-            //calx.sheetRegistry[sheetIdentifier].refresh();
+            calx.sheetRegistry[sheetIdentifier].refresh();
         }
     });
 
+    /** building dependency tree between cell and sheet */
     for(sheetIdentifier in calx.sheetRegistry){
         //console.log('build cell dependency');
         calx.sheetRegistry[sheetIdentifier].buildCellDependency();
     }
 
+    /** apply additional action based on configuration */
     for(sheetIdentifier in calx.sheetRegistry){
 
+        /** check circular reference after tree has been built */
+        if(calx.sheetRegistry[sheetIdentifier].config.checkCircularReference){
+            var reference = calx.sheetRegistry[sheetIdentifier].checkCircularReference();
+
+            if(reference.isCircular){
+                var errorMessage = 'Circular reference detected, this may cause calx to stop working.\ncell : '
+                                    +reference.cell.getAddress()
+                                    +'\nformula : '
+                                    +reference.cell.getFormula()
+                                    +'\n\nPlease check each cells involved in the formula that has direct or indirect reference to '
+                                    +reference.cell.getAddress();
+
+                alert(errorMessage);
+                $.error(errorMessage);
+            }
+        }
+
+        /** calculate and render the result */
         if(calx.sheetRegistry[sheetIdentifier].config.autoCalculate){
             calx.sheetRegistry[sheetIdentifier].calculate();
             calx.sheetRegistry[sheetIdentifier].renderComputedValue();
@@ -8814,6 +8878,9 @@ getCell : function(address){
 
     return $sheet.getCell(address);
 },
+        getUtility : function(){
+    return utility;
+},
         /**
  * Evaluate formula specific to sheet
  * @param  {string} formula     the formula to be evaluated
@@ -8849,6 +8916,14 @@ destroy : function(){
 },
         calculate : function(){
 
+    return this.each(function(){
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        //console.log(sheetIdentifier);
+
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].calculate();
+        }
+    });
 }
     };    /**
      * the surrogate of the calx world to the jQuery world
