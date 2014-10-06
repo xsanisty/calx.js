@@ -17,13 +17,6 @@
         };
     }
 
-    //ie support for String.trim method
-    if (typeof String.prototype.trim !== 'function') {
-        String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g, '');
-        };
-    }
-
     //ie support for getPrototypeOf
     if (typeof Object.getPrototypeOf !== "function") {
         if (typeof "test".__proto__ === "object") {
@@ -69,7 +62,10 @@ var defaultConfig = {
     'ajaxMethod'            : 'get',
 
     /** Available option is morris, highchart, d3 */
-    'graphHandler'          : 'flot'
+    'graphHandler'          : 'flot',
+
+    /** check for circular reference on init, default false */
+    'checkCircularReference': false
 
 };function parserFactory(sheet){
 	var parser = {
@@ -241,11 +237,11 @@ var defaultConfig = {
 
                     break;
                 case 11:
-                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0 - 1]);
+                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0]);
 
                     break;
                 case 12:
-                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0 - 1]);
+                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0]);
 
                     break;
                 case 13:
@@ -3766,9 +3762,11 @@ financial: {
     IRR : function(valuesObject, guess) {
         // Credits: algorithm inspired by Apache OpenOffice
 
-        var values = [];
+        var floatVal, values = [];
         for(var a in valuesObject){
-            values.push(valuesObject[a]);
+            floatVal = parseFloat(valuesObject[a], 10);
+            floatVal = isNaN(floatVal) ? 0 : floatVal;
+            values.push(floatVal);
         }
 
         // Calculates the resulting amount
@@ -3917,14 +3915,19 @@ financial: {
 
     NPV : function() {
         // Cast arguments to array
-        var args = [];
+        var floatVal, args = [];
         for (var i = 0; i < arguments.length; i++) {
             if(typeof(arguments[i]) == 'object'){
                 for(var a in arguments[i]){
-                    args = args.concat(parseFloat(arguments[i][a], 10));
+                    floatVal = parseFloat(arguments[i][a], 10);
+                    floatVal = isNaN(floatVal) ? 0 : floatVal;
+                    args = args.concat([floatVal]);
                 }
             }else{
-                args = args.concat(parseFloat(arguments[i], 10));
+
+                floatVal = parseFloat(arguments[i], 10);
+                floatVal = isNaN(floatVal) ? 0 : floatVal;
+                args = args.concat([floatVal]);
             }
         }
 
@@ -4019,6 +4022,7 @@ financial: {
     PV : function(rate, periods, payment, future, type) {
         // Initialize type
         type = (typeof type === 'undefined') ? 0 : type;
+        future = (typeof future === 'undefined') ? 0 : future;
 
         // Evaluate rate and periods (TODO: replace with secure expression evaluator)
         //rate = eval(rate);
@@ -7603,7 +7607,7 @@ logical : {
         'Saturday'
     ],
 
-    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!'],
+    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!', '#ERROR!'],
 
     VARIABLE : {}
 }    /**
@@ -7627,10 +7631,12 @@ logical : {
         this.computedValue      = null;
         this.floatValue         = null;
         this.affected           = false;
+        this.processed          = false;
         this.dependencies       = {};
         this.dependant          = {};
         this.conditionalStyle   = false;
         this.address            = '';
+        this.remoteDependency   = false;
         this.init();
     };/**
  * Initialize the cell object, preparing all necessary variables
@@ -7642,6 +7648,7 @@ cell.prototype.init = function(){
         $format  = (this.el) ? this.el.attr('data-format') : '',
         $value   = (this.el) ? this.el.val() : null;
 
+    /** assign address if data-cell is not present */
     if(!$address || $.trim($address) == ''){
         $address = 'CALX'+this.sheet.counter;
         if(this.el) {
@@ -7652,6 +7659,7 @@ cell.prototype.init = function(){
         $address = $address.toUpperCase()
     }
 
+    /** set the formula as false if data-formula exists, but empty */
     if(!$formula || $.trim($formula) == ''){
         $formula = false;
     }else{
@@ -7660,21 +7668,57 @@ cell.prototype.init = function(){
                            .replace('&#34;', '"')
     }
 
+    /** fallback to default format where data-format is not present or empty */
     if(!$format || $.trim($format) == ''){
         $format = this.sheet.config.defaultFormat;
     }
 
+    /** convert value to unformatted form when data-format is present */
     if($format && typeof(numeral) != 'undefined' && $value != ''){
         $value = numeral().unformat($value);
     }
 
-    this.value      = $value;
     this.formula    = $formula;
     this.format     = $format;
     this.address    = $address;
 
+
+    //console.log('cell[#'+this.sheet.elementId+'!'+$address+'] : Initializing the cell');
     this.setValue($value);
     //this.attachEvent();
+};/**
+ * calculate cells formula and process dependant
+ */
+cell.prototype.calculate  = function(){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
+
+    calx.isCalculating = true;
+    if(this.formula){
+        this.evaluateFormula();
+    }
+
+    for(var a in this.dependant){
+        this.dependant[a].processDependant();
+    }
+
+    for(var a in this.sheet.dependant){
+        this.sheet.dependant[a].calculate();
+    }
+
+
+    for(a in this.sheet.cells){
+        //console.log('recalculating cell');
+        if(this.sheet.cells[a].hasRemoteDependency()){
+            this.sheet.cells[a].evaluateFormula();
+            this.sheet.cells[a].processDependant();
+            this.sheet.cells[a].renderComputedValue();
+
+            //console.log('recalculating cell #'+this.sheet.el.attr('id')+'!'+a+'='+this.sheet.cells[a].getValue());
+        }
+    }
+    calx.isCalculating = false;
+
+    return this;
 };/**
  * build inter-cell dependency and dependant list, used for triggerring calculation that related to other cell
  * @return {void}
@@ -7697,7 +7741,8 @@ cell.prototype.buildDependency = function(){
         cellPart,
         cellObject,
         cellMatch,
-        sheetId;
+        sheetId,
+        sheetIdentifier;
 
     /** clear up the dependant and dependency reference */
     for(a in this.dependencies){
@@ -7730,9 +7775,19 @@ cell.prototype.buildDependency = function(){
                             cellStop    = $.trim(cellPart[1]);
 
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
+                            sheetIdentifier = $(sheetId).attr('data-calx-identifier');
+
+                            if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                                calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
+                                this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+                            }else{
+                                //console.log('#'+sheetId+' does not exist');
+                            }
+
                             for(j in dependencies){
                                 key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
+                                    this.hasRemoteDependency(true);
                                     this.dependencies[key] = dependencies[j];
                                     dependencies[j].registerDependant(sheetKey+'!'+this.getAddress(), this);
                                 }
@@ -7747,8 +7802,19 @@ cell.prototype.buildDependency = function(){
                             cellPart    = $.trim(formulaPart[1]);
 
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
+                            sheetIdentifier = $(sheetId).attr('data-calx-identifier');
+
+                            if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                                calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
+                                this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
+                            }else{
+                                //console.log('#'+sheetId+' does not exist');
+
+                            }
+
                             key = sheetId+'!'+cellPart;
                             if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies){
+                                this.hasRemoteDependency(true);
                                 this.dependencies[key] = dependencies;
                                 dependencies.registerDependant(sheetKey+'!'+this.getAddress(), this);
 
@@ -7789,6 +7855,14 @@ cell.prototype.buildDependency = function(){
             }
         }
     }
+
+    return this;
+
+    //var dlist = [];
+    //for(a in this.dependencies){
+    //    dlist.push(a);
+    //}
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] :  Building dependency list '+dlist);
 };/**
  * remove key from the dependency list
  * @param  {string} key [the dependency key, can be cellAddress, or #sheet>cellAddress]
@@ -7804,25 +7878,33 @@ cell.prototype.removeDependency = function(key){
  * @param  {bool} childRender [set render child as well or not]
  * @return {void}
  */
-cell.prototype.processDependency = function(selfRender, childRender){
-    selfRender  = (typeof(selfRender) == 'undefined') ? false : selfRender;
-    childRender = (typeof(childRender) == 'undefined') ? false : childRender;
+cell.prototype.processDependency = function(){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependency');
+
+    //selfRender  = (typeof(selfRender) == 'undefined') ? false : selfRender;
+    //childRender = (typeof(childRender) == 'undefined') ? false : childRender;
 
     /**
      * process all affected dependencies first, then evaluate the formula
-     * mark each cell as processed by setting the affected flag as false
+     * mark each cell as processed by setting the processed flag as true
      */
-    for (var a in this.dependencies){
-        if(this.dependencies[a].isAffected()){
-            this.dependencies[a].processDependency(childRender, childRender);
+    if(false == this.isProcessed()){
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
+        for (var a in this.dependencies){
+            if(false == this.dependencies[a].isProcessed()){
+                this.dependencies[a].processDependency();
+            }
         }
-    }
-    this.evaluateFormula();
-    this.setAffected(false);
 
-    if(selfRender){
-        this.renderComputedValue();
+        this.evaluateFormula();
+        this.setProcessed(true);
+    }else{
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
     }
+
+    //if(selfRender){
+    //    this.renderComputedValue();
+    //}
 };cell.prototype.registerDependant = function(key, cell){
     if(typeof(this.dependant[key]) == 'undefined' && cell){
         this.dependant[key] = cell;
@@ -7836,28 +7918,118 @@ cell.prototype.processDependency = function(selfRender, childRender){
  *
  * @return {[type]} [description]
  */
-cell.prototype.processDependant = function(selfRender, parentRender){
+cell.prototype.processDependant = function(){
+    var $continue;
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependants');
 
-    selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
-    parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
-    //console.log(selfRender);
-    this.evaluateFormula();
+    //prefix       = (typeof(prefix) == 'undefined') ? '--' : prefix;
+    //selfRender   = (typeof(selfRender) == 'undefined') ? false : selfRender;
+    //parentRender = (typeof(parentRender) == 'undefined') ? false : parentRender;
 
-    if(selfRender){
-        //console.log('render computed val of '+this.address);
-        this.renderComputedValue();
+    if(false === this.isProcessed() || true === calx.isCalculating){
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
+
+        this.processDependency();
+        this.evaluateFormula();
+
+        for(var a in this.dependant){
+            //prefix = prefix+'--';
+            //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependant ['+a+']');
+            if(!this.dependant[a].isProcessed()){
+                $continue = this.dependant[a].processDependant();
+                if(false === $continue){
+                    return $continue;
+                }
+            }else{
+                //console.log(a+' is already processed, leaving...');
+            }
+        }
+
+        this.setAffected(false);
+        this.setProcessed(true);
+    }else{
+        //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
+        return false;
     }
 
-    for(var a in this.dependant){
-        this.dependant[a].processDependant(parentRender, parentRender);
+};cell.prototype.hasRemoteDependency = function(status){
+    if(typeof(status) == 'undefined'){
+        return this.remoteDependency
+    }else{
+        this.remoteDependency = status;
     }
 };/**
+ * render calculated value or final value to the element bing to this cell
+ * @return {void}
+ */
+cell.prototype.renderComputedValue = function(){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : rendering computed value');
+
+    if(false !== this.el){
+        var tagName     = this.el.prop('tagName').toLowerCase(),
+            isFormTag   = this.formTags.indexOf(tagName) > -1,
+            originalVal = (this.formula) ? this.computedValue : this.value,
+            formattedVal= (
+                            this.format != ''
+                            && typeof(numeral) != 'undefined'
+                            && originalVal !== ''
+                            && originalVal !== false
+                            && originalVal !== null
+                            && data.ERROR.indexOf(originalVal) == -1
+                            && $.isNumeric(originalVal)
+                        )
+                        ? numeral(originalVal).format(this.format)
+                        : originalVal;
+
+        //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
+        if(isFormTag){
+            if(tagName == 'select'){
+                this.el.val(originalVal);
+            }else if(tagName == 'input' || tagName == 'textarea'){
+                this.el.val(formattedVal);
+            }
+        }else{
+            this.el.html(formattedVal);
+        }
+    }
+
+    return this;
+}/**
+ * resync cell value with element value, in case the form is reseted
+ * @return {[type]} [description]
+ */
+cell.prototype.resyncValue = function(){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : resyncing value with element value');
+
+    if(false !== this.el){
+        var tagName     = this.el.prop('tagName').toLowerCase(),
+            isFormTag   = this.formTags.indexOf(tagName) > -1,
+            elValue     = (isFormTag) ? this.el.val() : this.el.text();
+
+        if(this.el.attr('data-format') && $.trim(elValue) != ''){
+            this.setValue(numeral().unformat( elValue+'' ));
+        }else{
+            this.setValue(elValue);
+        }
+    }
+};/**
+ * sync formula from the el to the cells object
+ */
+cell.prototype.resyncFormula = function(){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : resyncing formula with the element formula');
+
+    if(this.el && this.el.attr('data-formula') != this.formula){
+        this.formula = this.el.attr('data-formula');
+        this.buildDependency();
+    }
+}/**
  * find the circular reference in cell dependency tree
  * @param  {string} address     the cell address that need to be checked
  * @return {bool}               true if circular reference found, false if not found
  */
 cell.prototype.checkCircularReference = function(address){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : checking circular reference');
     var a, isCircular = false;
 
     if(typeof(address) == 'undefined'){
@@ -7892,10 +8064,22 @@ cell.prototype.checkCircularReference = function(address){
  * @return {null}
  */
 cell.prototype.evaluateFormula = function(){
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : evaluating formula ['+this.formula+']');
+
     if(this.formula){
-        this.computedValue = this.sheet.evaluate(this.formula);
+        try{
+            this.computedValue = this.sheet.evaluate(this.formula);
+            return this.computedValue;
+        }catch(e){
+            this.computedValue = '#ERROR!';
+            return false;
+            //console.error('formula error on '+this.address+' : '+this.formula);
+        }
     }
-};cell.prototype.formTags = ['input', 'select', 'textarea', 'button'];/**
+
+    return false;
+};/** form tag reference */
+cell.prototype.formTags = ['input', 'select', 'textarea', 'button'];/**
  * set formatting rule to the cell
  * @param {string} format       format rule to define formatting on rendered value
  */
@@ -7903,7 +8087,10 @@ cell.prototype.setFormat = function(format){
     this.format = format;
     if(false !== this.el){
         this.el.attr('data-format', format);
+        this.renderComputedValue();
     }
+
+    return this;
 };/**
  * return format definition of the current cell object
  * @return {string}     format definition or false
@@ -7915,15 +8102,25 @@ cell.prototype.getFormat = function(){
  * @param {string} formula       formula definition
  */
 cell.prototype.setFormula = function(formula){
+    //console.log('set formula of #'+this.sheet.elementId+'!'+this.address+' to be '+formula);
+    if(typeof(formula) !== 'string'){
+        return false;
+    }
+
     this.formula = formula;
     if(false !== this.el){
         this.el.attr('data-formula', formula);
     }
 
+    //console.log('building dependency');
     this.buildDependency();
-    this.processDependant(true, true);
+
+    //console.log('processing dependant');
+    //this.processDependant(true, true);
 
     //this.evaluateFormula();
+    //
+    return this;
 };cell.prototype.getFormula = function(){
     return this.formula;
 };/**
@@ -7933,96 +8130,58 @@ cell.prototype.setFormula = function(formula){
 cell.prototype.getAddress = function(){
     return this.address;
 };/**
- * set cell value and sync it with the bound element, and trigger recalculation on all cell depend to it
- * @param {mixed}   value       value to be inserted into the cell
- * @param {bool}    render      render computed value of it's dependant or not
- */
-cell.prototype.setValue = function(value, render){
-    this.value          = ($.isNumeric(value)) ? parseFloat(value) : value;
-    this.formattedValue = '';
-
-    render = (typeof(render) == 'undefined') ? true : render;
-
-    this.setAffected(true);
-
-    for(var a in this.dependant){
-        this.dependant[a].setAffected(true);
-    }
-
-    this.processDependant(render, true);
-};cell.prototype.getValue = function(){
-    if(this.formula){
-        return this.computedValue;
-    }
-    return this.value;
-}/**
- * get string type representation of the cell's value
- * @return {string}
- */
-cell.prototype.getStringValue = function(){
-    return this.value+'';
-};/**
  * get formatted value of the cell based on the formula definition
  * @return {string}     the formatted value
  */
 cell.prototype.getFormattedValue = function(){
     return this.formattedValue;
 };/**
- * get float type representation of the cell's value
- * @return {float}
+ * set cell value and sync it with the bound element, and trigger recalculation on all cell depend to it
+ * @param {mixed}   value       value to be inserted into the cell
+ * @param {bool}    render      render computed value of it's dependant or not
  */
-cell.prototype.getFloatValue = function(){
-    return this.floatValue;
-};/**
+cell.prototype.setValue = function(value, render){
+
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : setting value to be : '+value);
+    if(this.format && typeof(numeral) != 'undefined' && $.trim(value) !== ''){
+        this.value = numeral().unformat(value+'');
+    }else{
+        this.value = ($.isNumeric(value)) ? parseFloat(value) : value;
+    }
+
+    /* set value mean set value, no other thing should be done */
+    return this;
+};cell.prototype.getValue = function(){
+    if(this.formula){
+        return this.computedValue;
+    }
+    return this.value;
+}/**
  * mark cell as affected by other cell, used to decide whether to
  * process the cell or not when processing dependency tree
  */
 cell.prototype.setAffected = function(affected){
-    affected = typeof(affected) == 'undefined' ? true : false;
+    affected = typeof(affected) == 'undefined' ? true : affected;
     this.affected = affected;
+
+    return this;
 };cell.prototype.isAffected = function(){
     return this.affected;
 };/**
- * render calculated value or final value to the element bing to this cell
- * @return {void}
+ * [setProcessed description]
+ * @param {[type]} processed [description]
  */
-cell.prototype.renderComputedValue = function(){
-    if(false !== this.el){
-        var tagName     = this.el.prop('tagName').toLowerCase(),
-            isFormTag   = this.formTags.indexOf(tagName) > -1,
-            originalVal = (this.formula) ? this.computedValue : this.value,
-            formattedVal= (
-                            this.format
-                            && typeof(numeral) != 'undefined'
-                            && this.computedValue !== ''
-                            && data.ERROR.indexOf(originalVal) == -1
-                        )
-                        ? numeral(originalVal).format(this.format)
-                        : originalVal;
+cell.prototype.setProcessed = function(processed){
+    this.processed = (typeof(processed) == 'undefined') ? true : processed;
 
-        if(isFormTag){
-            this.el.val(formattedVal);
-        }else{
-            this.el.html(formattedVal);
-        }
-    }
+    //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : mark as processed ['+processed+']');
 }/**
- * resync cell value with element value, in case the form is reseted
- * @return {[type]} [description]
+ * [isProcessed description]
+ * @return {Boolean} [description]
  */
-cell.prototype.resyncValue = function(){
-    if(this.el){
-        var tagName     = this.el.prop('tagName').toLowerCase(),
-            isFormTag   = this.formTags.indexOf(tagName) > -1,
-            elValue     = (isFormTag) ? this.el.val() : this.el.text();
-
-        if(this.el.attr('data-format')){
-            this.setValue(numeral().unformat( elValue ));
-        }else{
-            this.setValue(elValue);
-        }
-    }
-};
+cell.prototype.isProcessed = function(){
+    return this.processed;
+}
 
     /**
      * Sheet object, represent each cell as single sheet
@@ -8032,16 +8191,23 @@ cell.prototype.resyncValue = function(){
      * @return {void}
      */
     function sheet(identifier, element, config){
-        this.identifier = identifier;
-        this.el         = $(element);
-        this.lang       = 'en';
-        this.cells      = {};
-        this.variables  = {};
-        this.config     = $.extend({}, defaultConfig, config);
-        this.counter    = 1;
+        this.identifier   = identifier;
+        this.el           = $(element);
+        this.lang         = 'en';
+        this.cells        = {};
+        this.variables    = {};
+        this.config       = $.extend({}, defaultConfig, config);
+        this.counter      = 1;
+        this.relatedSheet = {};
+        this.elementId    = this.el.attr('id');
+        this.dependant    = {};
+        this.dependencies = {};
+        this.calculated   = false;
+        this.calculating  = false,
 
         this.init();
     };sheet.prototype.init = function(){
+    //console.log('sheet[#'+this.elementId+'] : Initializing the sheet');
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
         $cell;
@@ -8054,12 +8220,14 @@ cell.prototype.resyncValue = function(){
         sheet.registerCell($cell);
     });
 
+    //sheet.buildCellDependency();
     sheet.attachEvent();
 };/**
  * check circular reference on each cell registered to this sheet
  * @return {bool} true if exist, false if clear
  */
 sheet.prototype.checkCircularReference = function(){
+    //console.log('sheet[#'+this.elementId+'] : checking circular reference');
     var a, response = {
             isCircular : false,
             cell : null
@@ -8075,32 +8243,37 @@ sheet.prototype.checkCircularReference = function(){
 
     return response;
 }/**
+ * mark all cell as not processed
+ */
+sheet.prototype.clearProcessedFlag = function(){
+    //console.log('sheet[#'+this.elementId+'] : clearing the processed flag');
+    for(var a in this.cells){
+        if(false !== this.cells[a].formula){
+            this.cells[a].setProcessed(false);
+            this.cells[a].setAffected(true);
+        }else{
+            this.cells[a].setProcessed(true);
+            this.cells[a].setAffected(false);
+        }
+    }
+}/**
  * building inter-cell dependency
  * once the formula is evaluated,
  * make sure all cell involved is evaluated first
  * @return {[type]} [description]
  */
 sheet.prototype.buildCellDependency = function(){
+    //console.log('sheet[#'+this.elementId+'] : building cells dependency');
     var cell;
 
     for(cell in this.cells){
         this.cells[cell].buildDependency();
     }
-};/**
- * processing each cell's dependency list
- * @return {void}
- */
-sheet.prototype.processDependencyTree = function(){
-    var a;
+};sheet.prototype.renderComputedValue = function(){
+    //console.log('sheet[#'+this.elementId+'] : rendering all computed value to the element');
 
-    /** mark all cell as affected, so it will be processed */
-    for(a in this.cells){
-        this.cells[a].setAffected(true);
-    }
-
-    /** start processing the dependency tree */
-    for(a in this.cells){
-        this.cells[a].processDependency(true, true);
+    for(var a in this.cells){
+        this.cells[a].renderComputedValue();
     }
 };sheet.prototype.getCellValue = function(address){
     var cell = address.toUpperCase();
@@ -8217,7 +8390,6 @@ sheet.prototype.comparator = {
     },
 
     lessEqual : function(a, b){
-        console.log('lessEqual executed', a, b);
         return a <= b;
     },
 
@@ -8232,17 +8404,59 @@ sheet.prototype.comparator = {
 
 sheet.prototype.obj = {
     type : 'cell'
-};/**
+};
+
+sheet.prototype.registerDependency = function(dep){
+    if(typeof(this.dependencies[dep.identifier]) == 'undefined'){
+        this.dependencies[dep.identifier] = dep;
+    }
+};
+
+sheet.prototype.registerDependant = function(dep){
+    if(typeof(this.dependant[dep.identifier]) == 'undefined'){
+        this.dependant[dep.identifier] = dep;
+    }
+};
+
+sheet.prototype.clearDependencies = function(){
+
+}
+
+sheet.prototype.setCalculated = function(calculated){
+    var calculated = (typeof(calculated) == 'undefined') ? true : calculated;
+    this.calculated  = calculated;
+}
+
+sheet.prototype.isCalculated = function(){
+    return this.calculated;
+}
+
+sheet.prototype.clearCalculatedFlag = function(){
+    var a;
+
+    for(a in this.dependant){
+        this.dependant[a].setCalculated(false);
+    }
+
+
+    for(a in this.dependencies){
+        this.dependencies[a].setCalculated(false);
+    }
+}/**
  * evaluate given formula
  * @param  {string} formula     the formula need to be evaluated
  * @return {mixed}              result returned by the formula
  */
 sheet.prototype.evaluate = function(formula){
+    //console.log('sheet[#'+this.elementId+'] : evaluating formula => '+formula);
+
     return this.parser.parse(formula);
 };/**
  * update cell reference inside the sheet, detect removed and added cells
  */
 sheet.prototype.update = function(){
+    //console.log('sheet[#'+this.elementId+'] : updating cells registry with current state of the element');
+
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
         $cell;
@@ -8265,13 +8479,47 @@ sheet.prototype.update = function(){
         }else{
             //console.log('resync cell '+cellAddr);
             sheet.cells[cellAddr].resyncValue();
+            sheet.cells[cellAddr].resyncFormula();
         }
     });
 
     /** rebuild the dependency tree */
     this.buildCellDependency();
-};sheet.prototype.calculate = function(){
+};/**
+ * calculate all the sheet!
+ */
+sheet.prototype.calculate = function(){
+    //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
+    var a;
+
+    /** set all cell with formula as affected */
+    this.clearProcessedFlag();
+
+    for(a in this.cells){
+        this.cells[a].processDependency();
+    }
+
+    this.setCalculated();
+    //console.log(this.isCalculated());
+
+    for(a in this.dependant){
+        if(!this.dependant[a].isCalculated()){
+            this.dependant[a].calculate();
+        }
+    }
+
+    for(a in this.cells){
+        //console.log('recalculating cell');
+        if(this.cells[a].hasRemoteDependency()){
+            this.cells[a].evaluateFormula();
+            this.cells[a].renderComputedValue();
+
+            //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
+        }
+    }
+
+    this.renderComputedValue();
 };/**
  * register singgle cell to sheet's cell registry
  * @param  {object} cell    cell object
@@ -8312,6 +8560,7 @@ sheet.prototype.getCellRange = function(addressStart, addressStop){
  * @return void
  */
 sheet.prototype.applyChange = function(){
+    //console.log('sheet[#'+this.elementId+'] : applying all computed value to the element');
     var a;
     for(a in this.cells){
         this.cells[a].processDependency(false, false);
@@ -8327,6 +8576,7 @@ sheet.prototype.applyChange = function(){
  * it's remove whole cell registry and rebuild it
  */
 sheet.prototype.refresh = function(){
+    //console.log('sheet[#'+this.elementId+'] : refreshing the sheet cells registry');
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
         $cell;
@@ -8344,6 +8594,8 @@ sheet.prototype.refresh = function(){
  * reset the form to  it's original value, and resync the value with the cell registry
  */
 sheet.prototype.reset = function(){
+    //console.log('sheet[#'+this.elementId+'] : resetting form elements');
+
     var forms;
 
     if(this.el.prop('tagName').toLowerCase() == 'form'){
@@ -8360,13 +8612,14 @@ sheet.prototype.reset = function(){
         this.cells[a].resyncValue();
     }
 };sheet.prototype.attachEvent = function(){
+    //console.log('sheet[#'+this.elementId+'] : attaching events to the element');
 
     var currentSheet = this;
 
     /**
      * get the unformatted value of the cell, and display it to the element
      */
-    this.el.on('getOriginalValue', 'input[data-cell]', function(){
+    this.el.on('calx.getValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -8374,102 +8627,153 @@ sheet.prototype.reset = function(){
     });
 
     /**
-     * update value of the current cell, render the formatted value, and process it's dependant
+     * get the formatted value of the cell, and display it to the element
      */
-    this.el.on('updateRenderCalculate', 'input[data-cell]', function(){
+    this.el.on('calx.getComputedValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
         currentCell.renderComputedValue();
-
-        if(currentSheet.config.autoCalculateTrigger != 'keyup'){
-            if(
-                currentCell.getFormat()
-                && typeof(numeral) != 'undefined'
-                && currentCell.el.val() != ''
-                && data.ERROR.indexOf(currentCell.el.val()) == -1
-            ){
-                var unformattedVal = numeral().unformat(currentCell.el.val());
-                currentCell.setValue(unformattedVal);
-
-            }else{
-                currentCell.setValue(currentCell.el.val());
-            }
-
-            currentCell.processDependant(false, true);
-        }
     });
 
     /**
-     * update value of current cell without render it's own value, and process it's dependant
+     * update value of the current cell internally
      */
-    this.el.on('updateCalculate', 'input[data-cell], select', function(){
+    this.el.on('calx.setValue', 'input[data-cell], select', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        if(
-            currentCell.getFormat()
-            && typeof(numeral) != 'undefined'
-            && currentCell.el.val() != ''
-            && data.ERROR.indexOf(currentCell.el.val()) == -1
-        ){
-            var unformattedVal = numeral().unformat(currentCell.el.val());
-            currentCell.setValue(unformattedVal, false);
+        currentCell.setValue($(this).val());
 
-        }else{
-            currentCell.setValue(currentCell.el.val(), false);
+    });
+
+    /**
+     * calculate the whole sheet
+     */
+    this.el.on('calx.calculateSheet', 'input[data-cell]', function(){
+        currentSheet.calculate();
+    });
+
+    /**
+     * update current cell value, and recalculate it's dependant
+     */
+    this.el.on('calx.calculateCellDependant', 'input[data-cell], select', function(){
+        var cellAddr    = $(this).attr('data-cell'),
+            currentCell = currentSheet.cells[cellAddr];
+
+        if(true === calx.isCalculating){
+            calx.isCalculating = false;
+        }
+        currentSheet.clearProcessedFlag();
+        currentCell.calculate();
+        currentSheet.renderComputedValue();
+
+    });
+
+    /**
+     * bind to internal event, so no need to unbind the real event on destroy
+     */
+    this.el.on(currentSheet.config.autoCalculateTrigger, 'input[data-cell]',function(){
+        //console.log('blurred');
+        var $this = $(this);
+        if(!$this.attr('data-formula')){
+            if(currentSheet.config.autoCalculate){
+                //console.log('calculating dependant');
+                setTimeout(function(){
+                    $this.trigger('calx.calculateCellDependant');
+                }, 50);
+            }
         }
     });
 
-    /** bind to internal event, so no need to unbind the real event on destroy */
-    this.el.on('blur', 'input[data-cell]',function(){
-        $(this).trigger('updateRenderCalculate');
+    this.el.on('blur', 'input[data-cell]', function(){
+        //console.log('blurred');
+        $(this).trigger('calx.getComputedValue');
     });
 
+    /**
+     * change behaviour, based on configuration
+     * autoCalculate : on   => calx.calculateCellDependant
+     * autoCalculate : off  => calx.setValue
+     */
     this.el.on('change', 'select', function(){
-        $(this).trigger('updateCalculate');
+        $(this).trigger('calx.setValue');
+
+        if(currentSheet.config.autoCalculate){
+            $(this).trigger('calx.calculateCellDependant');
+        }
     });
 
+    /** focus does not depend on configuration, always get the value on focus */
     this.el.on('focus', 'input[data-cell]',function(){
-        $(this).trigger('getOriginalValue');
+        $(this).trigger('calx.getValue');
     });
 
-    this.el.on('keyup', 'input[data-cell]',function(){
-        $(this).trigger('updateCalculate');
+    /** keyup does not depend on configuration, always set value on keyup */
+    this.el.on('keyup', 'input[data-cell]',function(e){
+        if($(this).attr('data-formula')){
+            e.preventDefault();
+            return false;
+        }else{
+            $(this).trigger('calx.setValue');
+        }
     });
 };
 
 sheet.prototype.detachEvent = function(){
-    this.el.off('getOriginalValue');
-    this.el.off('updateRenderCalculate');
-    this.el.off('updateCalculate');
+    //console.log('sheet[#'+this.elementId+'] : detaching events from the element');
+
+    this.el.off('calx.getValue');
+    this.el.off('calx.setValue');
+    this.el.off('calx.getComputedValue');
+    this.el.off('calx.calculateSheet');
+    this.el.off('calx.calculateCellDependant');
 }    /**
      * [calx : the calx core object to work with jquery as plugin]
      * @type {Object}
      */
     var calx = {
+        /** flag to indicate that calx is calculating */
+        isCalculating : false,
+
         /** sheets collection */
         sheetRegistry : {},
+
         /**
  * initialize sheet object and register to internal calx.sheetRegistry
  * @param  {object} option      option to override the default option
  * @return {object}             jQuery object for chaining
  */
 init : function (option) {
-    var sheetIdentifier;
+    var a, sheetIdentifier;
+
+    /** initializing sheet object on each elements */
     this.each(function(){
+        //console.log('initialize sheet');
         sheetIdentifier = $(this).attr('data-calx-identifier');
-        //console.log(sheetIdentifier);
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
 
             calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
 
-            /** build dependency tree */
-            calx.sheetRegistry[sheetIdentifier].buildCellDependency();
+        }else{
+            //console.log('second call should be refresh');
+            calx.sheetRegistry[sheetIdentifier].refresh();
+        }
+    });
 
-            /** check circular reference after tree has been built */
+    /** building dependency tree between cell and sheet */
+    for(sheetIdentifier in calx.sheetRegistry){
+        //console.log('build cell dependency');
+        calx.sheetRegistry[sheetIdentifier].buildCellDependency();
+    }
+
+    /** apply additional action based on configuration */
+    for(sheetIdentifier in calx.sheetRegistry){
+
+        /** check circular reference after tree has been built */
+        if(calx.sheetRegistry[sheetIdentifier].config.checkCircularReference){
             var reference = calx.sheetRegistry[sheetIdentifier].checkCircularReference();
 
             if(reference.isCircular){
@@ -8483,13 +8787,14 @@ init : function (option) {
                 alert(errorMessage);
                 $.error(errorMessage);
             }
-
-            calx.sheetRegistry[sheetIdentifier].processDependencyTree();
-        }else{
-            //console.log('second call should be refresh');
-            calx.sheetRegistry[sheetIdentifier].refresh();
         }
-    });
+
+        /** calculate and render the result */
+        if(calx.sheetRegistry[sheetIdentifier].config.autoCalculate){
+            calx.sheetRegistry[sheetIdentifier].calculate();
+            calx.sheetRegistry[sheetIdentifier].renderComputedValue();
+        }
+    }
 
     return this;
 },
@@ -8573,6 +8878,9 @@ getCell : function(address){
 
     return $sheet.getCell(address);
 },
+        getUtility : function(){
+    return utility;
+},
         /**
  * Evaluate formula specific to sheet
  * @param  {string} formula     the formula to be evaluated
@@ -8597,12 +8905,25 @@ destroy : function(){
 
         $sheet.removeAttr('data-calx-identifier');
 
-        calx.sheetRegistry[sheetIdentifier].detachEvent();
-
-        delete calx.sheetRegistry[sheetIdentifier];
+        if(typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].detachEvent();
+            calx.sheetRegistry[sheetIdentifier].clearDependencies();
+            delete calx.sheetRegistry[sheetIdentifier];
+        }
     });
 
     return this;
+},
+        calculate : function(){
+
+    return this.each(function(){
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        //console.log(sheetIdentifier);
+
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].calculate();
+        }
+    });
 }
     };    /**
      * the surrogate of the calx world to the jQuery world
