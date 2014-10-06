@@ -1,0 +1,5 @@
+{
+    "require":{
+        "devize/closure-compiler": "dev-master"
+    }
+}
