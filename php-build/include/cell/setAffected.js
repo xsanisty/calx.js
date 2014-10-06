@@ -5,4 +5,6 @@
 cell.prototype.setAffected = function(affected){
     affected = typeof(affected) == 'undefined' ? true : affected;
     this.affected = affected;
+
+    return this;
 };

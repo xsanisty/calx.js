@@ -8,9 +8,13 @@ cell.prototype.evaluateFormula = function(){
     if(this.formula){
         try{
             this.computedValue = this.sheet.evaluate(this.formula);
+            return this.computedValue;
         }catch(e){
             this.computedValue = '#ERROR!';
+            return false;
             //console.error('formula error on '+this.address+' : '+this.formula);
         }
     }
+
+    return false;
 };

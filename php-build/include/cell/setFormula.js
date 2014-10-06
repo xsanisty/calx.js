@@ -20,4 +20,6 @@ cell.prototype.setFormula = function(formula){
     //this.processDependant(true, true);
 
     //this.evaluateFormula();
+    //
+    return this;
 };

@@ -32,4 +32,6 @@ cell.prototype.renderComputedValue = function(){
             this.el.html(formattedVal);
         }
     }
+
+    return this;
 }

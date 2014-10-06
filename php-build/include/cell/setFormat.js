@@ -8,4 +8,6 @@ cell.prototype.setFormat = function(format){
         this.el.attr('data-format', format);
         this.renderComputedValue();
     }
+
+    return this;
 };

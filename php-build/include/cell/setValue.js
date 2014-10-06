@@ -13,4 +13,5 @@ cell.prototype.setValue = function(value, render){
     }
 
     /* set value mean set value, no other thing should be done */
+    return this;
 };

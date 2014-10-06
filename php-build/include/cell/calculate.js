@@ -29,4 +29,6 @@ cell.prototype.calculate  = function(){
         }
     }
     calx.isCalculating = false;
+
+    return this;
 };
