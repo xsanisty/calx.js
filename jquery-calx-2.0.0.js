@@ -222,11 +222,11 @@ var defaultConfig = {
 
                     break;
                 case 7:
-                    this.$ = sheet.comparator.equal($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.comparator.equal.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 8:
-                    this.$ = formula.math.SUM($$[$0 - 2], $$[$0]);
+                    this.$ =  formula.math.SUM.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 9:
@@ -237,15 +237,15 @@ var defaultConfig = {
 
                     break;
                 case 11:
-                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0]);
+                    this.$ = sheet.comparator.lessEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
 
                     break;
                 case 12:
-                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0]);
+                    this.$ = sheet.comparator.greaterEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
 
                     break;
                 case 13:
-                    this.$ = sheet.comparator.notEqual($$[$0 - 3], $$[$0]);
+                    this.$ = sheet.comparator.notEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
 
                     break;
                 case 14:
@@ -253,27 +253,27 @@ var defaultConfig = {
 
                     break;
                 case 15:
-                    this.$ = sheet.comparator.greater($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.comparator.greater.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 16:
-                    this.$ = sheet.comparator.less($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.comparator.less.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 17:
-                    this.$ = formula.math.SUBTRACT($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.SUBTRACT.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 18:
-                    this.$ = formula.math.MULTIPLY($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.MULTIPLY.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 19:
-                    this.$ = formula.math.DIVIDE($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.DIVIDE.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 20:
-                    this.$ = formula.math.POWER($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.POWER.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 21:
@@ -8068,9 +8068,11 @@ cell.prototype.evaluateFormula = function(){
 
     if(this.formula){
         try{
+            this.sheet.setActiveCell(this);
             this.computedValue = this.sheet.evaluate(this.formula);
             return this.computedValue;
         }catch(e){
+            console.log(e);
             this.computedValue = '#ERROR!';
             return false;
             //console.error('formula error on '+this.address+' : '+this.formula);
@@ -8182,32 +8184,31 @@ cell.prototype.setProcessed = function(processed){
  */
 cell.prototype.isProcessed = function(){
     return this.processed;
-}
+}/**
+ * Sheet object, represent each cell as single sheet
+ * @param  {string}     identifier :unique key for accessing sheet object internally
+ * @param  {domElement} element    :dom element as scope for sheet to work with
+ * @param  {object}     config     : configuration object
+ * @return {void}
+ */
+function sheet(identifier, element, config){
+    this.identifier   = identifier;
+    this.el           = $(element);
+    this.lang         = 'en';
+    this.cells        = {};
+    this.variables    = {};
+    this.config       = $.extend({}, defaultConfig, config);
+    this.counter      = 1;
+    this.relatedSheet = {};
+    this.elementId    = this.el.attr('id');
+    this.dependant    = {};
+    this.dependencies = {};
+    this.calculated   = false;
+    this.calculating  = false;
+    this.activeCell   = null;
 
-    /**
-     * Sheet object, represent each cell as single sheet
-     * @param  {string}     identifier :unique key for accessing sheet object internally
-     * @param  {domElement} element    :dom element as scope for sheet to work with
-     * @param  {object}     config     : configuration object
-     * @return {void}
-     */
-    function sheet(identifier, element, config){
-        this.identifier   = identifier;
-        this.el           = $(element);
-        this.lang         = 'en';
-        this.cells        = {};
-        this.variables    = {};
-        this.config       = $.extend({}, defaultConfig, config);
-        this.counter      = 1;
-        this.relatedSheet = {};
-        this.elementId    = this.el.attr('id');
-        this.dependant    = {};
-        this.dependencies = {};
-        this.calculated   = false;
-        this.calculating  = false,
-
-        this.init();
-    };sheet.prototype.init = function(){
+    this.init();
+};sheet.prototype.init = function(){
     //console.log('sheet[#'+this.elementId+'] : Initializing the sheet');
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
@@ -8614,6 +8615,18 @@ sheet.prototype.reset = function(){
     }
 
     this.calculate();
+};/**
+ * tell the sheet which cell is currently evaluating formula
+ * @param {object} cell cell object
+ */
+sheet.prototype.setActiveCell = function(cell){
+    this.activeCell = cell;
+};/**
+ * get the current active cell
+ * @return {object} currently active cell object
+ */
+sheet.prototype.getActiveCell = function(){
+    return this.activeCell;
 };sheet.prototype.attachEvent = function(){
     //console.log('sheet[#'+this.elementId+'] : attaching events to the element');
 
