@@ -84,6 +84,8 @@
         require 'include/sheet/scan.js';
         require 'include/sheet/refresh.js';
         require 'include/sheet/reset.js';
+        require 'include/sheet/setActiveCell.js';
+        require 'include/sheet/getActiveCell.js';
         require 'include/sheet/attachEvent.js';
 
         /** calx reference */

@@ -153,11 +153,11 @@ function parserFactory(sheet){
 
                     break;
                 case 7:
-                    this.$ = sheet.comparator.equal($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.comparator.equal.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 8:
-                    this.$ = formula.math.SUM($$[$0 - 2], $$[$0]);
+                    this.$ =  formula.math.SUM.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 9:
@@ -168,15 +168,15 @@ function parserFactory(sheet){
 
                     break;
                 case 11:
-                    this.$ = sheet.comparator.lessEqual($$[$0 - 3], $$[$0]);
+                    this.$ = sheet.comparator.lessEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
 
                     break;
                 case 12:
-                    this.$ = sheet.comparator.greaterEqual($$[$0 - 3], $$[$0]);
+                    this.$ = sheet.comparator.greaterEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
 
                     break;
                 case 13:
-                    this.$ = sheet.comparator.notEqual($$[$0 - 3], $$[$0]);
+                    this.$ = sheet.comparator.notEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
 
                     break;
                 case 14:
@@ -184,27 +184,27 @@ function parserFactory(sheet){
 
                     break;
                 case 15:
-                    this.$ = sheet.comparator.greater($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.comparator.greater.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 16:
-                    this.$ = sheet.comparator.less($$[$0 - 2], $$[$0]);
+                    this.$ = sheet.comparator.less.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 17:
-                    this.$ = formula.math.SUBTRACT($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.SUBTRACT.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 18:
-                    this.$ = formula.math.MULTIPLY($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.MULTIPLY.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 19:
-                    this.$ = formula.math.DIVIDE($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.DIVIDE.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 20:
-                    this.$ = formula.math.POWER($$[$0 - 2], $$[$0]);
+                    this.$ = formula.math.POWER.apply(sheet, [$$[$0 - 2], $$[$0]]);
 
                     break;
                 case 21:
