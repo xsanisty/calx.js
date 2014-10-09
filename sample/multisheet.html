@@ -126,7 +126,7 @@
             </tr>
             <tr>
                 <td class="rhead">1</td>
-                <td><input data-formula="" data-format="0,0[.]00" data-cell="A1"></td>
+                <td><input data-formula="" data-format="0[.]00 %" data-cell="A1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="B1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="C1" value="200"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="D1" value="400"></td>
@@ -137,6 +137,8 @@
                 <td><input data-formula="G1+100" data-format="0,0[.]00" data-cell="I1"></td>
                 <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
         </table>
+
+        <div data-cell="Z1" data-formula="GRAPH(A1:J1)"></div>
     </form>
     <script src="../jquery-1.9.1.min.js"></script>
     <script src="../js/moment.min.js"></script>

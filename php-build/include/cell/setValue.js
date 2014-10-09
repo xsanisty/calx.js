@@ -6,8 +6,13 @@
 cell.prototype.setValue = function(value, render){
 
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : setting value to be : '+value);
+
     if(this.format && typeof(numeral) != 'undefined' && $.trim(value) !== ''){
         this.value = numeral().unformat(value+'');
+
+        if(this.format.indexOf('%') > -1 && (value+'').indexOf('%') == -1){
+            this.value = this.value/100;
+        }
     }else{
         this.value = ($.isNumeric(value)) ? parseFloat(value) : value;
     }

@@ -11,7 +11,7 @@ cell.prototype.evaluateFormula = function(){
             this.computedValue = this.sheet.evaluate(this.formula);
             return this.computedValue;
         }catch(e){
-            console.log(e);
+            //console.log(e);
             this.computedValue = '#ERROR!';
             return false;
             //console.error('formula error on '+this.address+' : '+this.formula);

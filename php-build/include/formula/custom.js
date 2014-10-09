@@ -27,5 +27,15 @@ custom : {
         });
 
         return result;
+    },
+
+    GRAPH : function(range, orientation, type){
+
+        var cellElement = this.getActiveCell().el;
+
+        $(cellElement).html('We are drawing graph here');
+
+        return false;
+
     }
 }

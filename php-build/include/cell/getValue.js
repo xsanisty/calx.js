@@ -1,6 +1,15 @@
 cell.prototype.getValue = function(){
+    var returnValue;
+
     if(this.formula){
-        return this.computedValue;
+        returnValue = this.computedValue;
+    }else{
+        returnValue = this.value;
     }
-    return this.value;
+
+    if(this.format && this.format.indexOf('%') > -1){
+        returnValue = (returnValue*100)+' %';
+    }
+
+    return returnValue;
 }

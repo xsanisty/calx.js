@@ -5,7 +5,9 @@
 cell.prototype.renderComputedValue = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : rendering computed value');
 
-    if(false !== this.el){
+    if(this.formula && this.formula.substring(0,5).toLowerCase() == 'graph'){
+        return this;
+    }else if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             originalVal = (this.formula) ? this.computedValue : this.value,

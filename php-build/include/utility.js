@@ -127,18 +127,36 @@ var utility = {
         return Array.prototype.slice.call(args, 0);
     },
 
-    cleanFloat : function (number) {
+    cleanFloat: function(number) {
         var power = Math.pow(10, 14);
         return Math.round(number * power) / power;
     },
 
-    countIn : function (range, value) {
-      var result = 0;
-      for (var i = 0; i < range.length; i++) {
-        if (range[i] === value) {
-          result++;
+    countIn: function(range, value) {
+        var result = 0;
+        for (var i = 0; i < range.length; i++) {
+            if (range[i] === value) {
+                result++;
+            }
         }
-      }
-      return result;
+        return result;
+    },
+
+    /**
+     * convert range {A1: val1, A2: val2, B1: val3, B2: val4} into 2 dimensional table array
+     * [
+     *     [val1, val2],
+     *     [val3, val4]
+     * ]
+     *
+     * @param  {object} cellRange [description]
+     * @return {array}            [description]
+     */
+    rangeToTable : function(cellRange){
+
+    },
+
+    rotateTable : function(tableRange){
+
     }
 };

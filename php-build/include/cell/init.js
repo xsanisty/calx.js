@@ -33,11 +33,6 @@ cell.prototype.init = function(){
         $format = this.sheet.config.defaultFormat;
     }
 
-    /** convert value to unformatted form when data-format is present */
-    if($format && typeof(numeral) != 'undefined' && $value != ''){
-        $value = numeral().unformat($value);
-    }
-
     this.formula    = $formula;
     this.format     = $format;
     this.address    = $address;

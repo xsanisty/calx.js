@@ -11,6 +11,7 @@ sheet.prototype.attachEvent = function(){
             currentCell = currentSheet.cells[cellAddr];
 
         currentCell.el.val(currentCell.getValue());
+        //console.log(currentCell.getValue());
     });
 
     /**
@@ -74,7 +75,7 @@ sheet.prototype.attachEvent = function(){
     });
 
     this.el.on('blur', 'input[data-cell]', function(){
-        //console.log('blurred');
+        //console.log($(this).attr('data-cell')+'blur');
         $(this).trigger('calx.getComputedValue');
     });
 
@@ -93,11 +94,13 @@ sheet.prototype.attachEvent = function(){
 
     /** focus does not depend on configuration, always get the value on focus */
     this.el.on('focus', 'input[data-cell]',function(){
+        //console.log($(this).attr('data-cell')+'focus');
         $(this).trigger('calx.getValue');
     });
 
     /** keyup does not depend on configuration, always set value on keyup */
     this.el.on('keyup', 'input[data-cell]',function(e){
+        //console.log($(this).attr('data-cell')+'key up');
         if($(this).attr('data-formula')){
             e.preventDefault();
             return false;

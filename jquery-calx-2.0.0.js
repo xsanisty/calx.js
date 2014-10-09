@@ -2249,6 +2249,16 @@ var defaultConfig = {
         });
 
         return result;
+    },
+
+    GRAPH : function(range, orientation, type){
+
+        var cellElement = this.getActiveCell().el;
+
+        $(cellElement).html('We are drawing graph here');
+
+        return false;
+
     }
 },
     /**
@@ -7514,19 +7524,37 @@ logical : {
         return Array.prototype.slice.call(args, 0);
     },
 
-    cleanFloat : function (number) {
+    cleanFloat: function(number) {
         var power = Math.pow(10, 14);
         return Math.round(number * power) / power;
     },
 
-    countIn : function (range, value) {
-      var result = 0;
-      for (var i = 0; i < range.length; i++) {
-        if (range[i] === value) {
-          result++;
+    countIn: function(range, value) {
+        var result = 0;
+        for (var i = 0; i < range.length; i++) {
+            if (range[i] === value) {
+                result++;
+            }
         }
-      }
-      return result;
+        return result;
+    },
+
+    /**
+     * convert range {A1: val1, A2: val2, B1: val3, B2: val4} into 2 dimensional table array
+     * [
+     *     [val1, val2],
+     *     [val3, val4]
+     * ]
+     *
+     * @param  {object} cellRange [description]
+     * @return {array}            [description]
+     */
+    rangeToTable : function(cellRange){
+
+    },
+
+    rotateTable : function(tableRange){
+
     }
 };var data = {
     MEMOIZED_FACT : [],
@@ -7671,11 +7699,6 @@ cell.prototype.init = function(){
     /** fallback to default format where data-format is not present or empty */
     if(!$format || $.trim($format) == ''){
         $format = this.sheet.config.defaultFormat;
-    }
-
-    /** convert value to unformatted form when data-format is present */
-    if($format && typeof(numeral) != 'undefined' && $value != ''){
-        $value = numeral().unformat($value);
     }
 
     this.formula    = $formula;
@@ -7966,7 +7989,9 @@ cell.prototype.processDependant = function(){
 cell.prototype.renderComputedValue = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : rendering computed value');
 
-    if(false !== this.el){
+    if(this.formula && this.formula.substring(0,5).toLowerCase() == 'graph'){
+        return this;
+    }else if(false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             originalVal = (this.formula) ? this.computedValue : this.value,
@@ -8072,7 +8097,7 @@ cell.prototype.evaluateFormula = function(){
             this.computedValue = this.sheet.evaluate(this.formula);
             return this.computedValue;
         }catch(e){
-            console.log(e);
+            //console.log(e);
             this.computedValue = '#ERROR!';
             return false;
             //console.error('formula error on '+this.address+' : '+this.formula);
@@ -8145,8 +8170,13 @@ cell.prototype.getFormattedValue = function(){
 cell.prototype.setValue = function(value, render){
 
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : setting value to be : '+value);
+
     if(this.format && typeof(numeral) != 'undefined' && $.trim(value) !== ''){
         this.value = numeral().unformat(value+'');
+
+        if(this.format.indexOf('%') > -1 && (value+'').indexOf('%') == -1){
+            this.value = this.value/100;
+        }
     }else{
         this.value = ($.isNumeric(value)) ? parseFloat(value) : value;
     }
@@ -8154,10 +8184,19 @@ cell.prototype.setValue = function(value, render){
     /* set value mean set value, no other thing should be done */
     return this;
 };cell.prototype.getValue = function(){
+    var returnValue;
+
     if(this.formula){
-        return this.computedValue;
+        returnValue = this.computedValue;
+    }else{
+        returnValue = this.value;
     }
-    return this.value;
+
+    if(this.format && this.format.indexOf('%') > -1){
+        returnValue = (returnValue*100)+' %';
+    }
+
+    return returnValue;
 }/**
  * mark cell as affected by other cell, used to decide whether to
  * process the cell or not when processing dependency tree
@@ -8640,6 +8679,7 @@ sheet.prototype.getActiveCell = function(){
             currentCell = currentSheet.cells[cellAddr];
 
         currentCell.el.val(currentCell.getValue());
+        //console.log(currentCell.getValue());
     });
 
     /**
@@ -8703,7 +8743,7 @@ sheet.prototype.getActiveCell = function(){
     });
 
     this.el.on('blur', 'input[data-cell]', function(){
-        //console.log('blurred');
+        //console.log($(this).attr('data-cell')+'blur');
         $(this).trigger('calx.getComputedValue');
     });
 
@@ -8722,11 +8762,13 @@ sheet.prototype.getActiveCell = function(){
 
     /** focus does not depend on configuration, always get the value on focus */
     this.el.on('focus', 'input[data-cell]',function(){
+        //console.log($(this).attr('data-cell')+'focus');
         $(this).trigger('calx.getValue');
     });
 
     /** keyup does not depend on configuration, always set value on keyup */
     this.el.on('keyup', 'input[data-cell]',function(e){
+        //console.log($(this).attr('data-cell')+'key up');
         if($(this).attr('data-formula')){
             e.preventDefault();
             return false;
