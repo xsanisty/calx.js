@@ -1,0 +1,135 @@
+<html>
+    <head>
+
+        <style>
+            body, td{
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            input, select{
+                width: 120px;
+                border: solid 1px #ddd;
+                text-align: right;
+            }
+            .chead{
+                background:#ccf;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .rhead{
+                background: #cfc;
+                padding: 0 5px;
+                text-align: right;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+
+    <form action="" id="sheet1">
+        <table>
+            <tr>
+                <td class="chead">&nbsp;</td>
+                <td class="chead">A</td>
+                <td class="chead">B</td>
+                <td class="chead">C</td>
+                <td class="chead">D</td>
+                <td class="chead">E</td>
+                <td class="chead">F</td>
+                <td class="chead">G</td>
+                <td class="chead">H</td>
+                <td class="chead">I</td>
+                <td class="chead">J</td>
+            </tr>
+            <tr>
+                <td class="rhead">1</td>
+                <td><input data-cell="A1"></td>
+                <td><input data-cell="B1"></td>
+                <td><input data-cell="C1"></td>
+                <td><input data-cell="D1"></td>
+                <td><input data-cell="E1"></td>
+                <td><input data-cell="F1"></td>
+                <td><input data-cell="G1"></td>
+                <td><input data-cell="H1"></td>
+                <td><input data-cell="I1"></td>
+                <td><input data-cell="J1"></td>
+            </tr>
+            <tr>
+                <td class="rhead">2</td>
+                <td><input data-cell="A2"></td>
+                <td><input data-cell="B2"></td>
+                <td><input data-cell="C2"></td>
+                <td><input data-cell="D2"></td>
+                <td><input data-cell="E2"></td>
+                <td><input data-cell="F2"></td>
+                <td><input data-cell="G2"></td>
+                <td><input data-cell="H2"></td>
+                <td><input data-cell="I2"></td>
+                <td><input data-cell="J2"></td>
+            </tr>
+            <tr>
+                <td class="rhead">3</td>
+                <td><input data-cell="A3"></td>
+                <td><input data-cell="B3"></td>
+                <td><input data-cell="C3"></td>
+                <td><input data-cell="D3"></td>
+                <td><input data-cell="E3"></td>
+                <td><input data-cell="F3"></td>
+                <td><input data-cell="G3"></td>
+                <td><input data-cell="H3"></td>
+                <td><input data-cell="I3"></td>
+                <td><input data-cell="J3"></td>
+            </tr>
+            <tr>
+                <td class="rhead">4</td>
+                <td><input data-cell="A4"></td>
+                <td><input data-cell="B4"></td>
+                <td><input data-cell="C4"></td>
+                <td><input data-cell="D4"></td>
+                <td><input data-cell="E4"></td>
+                <td><input data-cell="F4"></td>
+                <td><input data-cell="G4"></td>
+                <td><input data-cell="H4"></td>
+                <td><input data-cell="I4"></td>
+                <td><input data-cell="J4"></td>
+            </tr>
+            <tr>
+                <td class="rhead">5</td>
+                <td><input data-cell="A5"></td>
+                <td><input data-cell="B5"></td>
+                <td><input data-cell="C5"></td>
+                <td><input data-cell="D5"></td>
+                <td><input data-cell="E5"></td>
+                <td><input data-cell="F5"></td>
+                <td><input data-cell="G5"></td>
+                <td><input data-cell="H5"></td>
+                <td><input data-cell="I5"></td>
+                <td><input data-cell="J5"></td>
+            </tr>
+            <tr>
+                <td class="rhead">6</td>
+                <td><input data-cell="A6"></td>
+                <td><input data-cell="B6"></td>
+                <td><input data-cell="C6"></td>
+                <td><input data-cell="D6"></td>
+                <td><input data-cell="E6"></td>
+                <td><input data-cell="F6"></td>
+                <td><input data-cell="G6"></td>
+                <td><input data-cell="H6"></td>
+                <td><input data-cell="I6"></td>
+                <td><input data-cell="J6"></td>
+            </tr>
+        </table>
+    </form>
+    <script src="../jquery-1.9.1.min.js"></script>
+    <script src="../js/moment.min.js"></script>
+    <script src="../js/numeral.min.js"></script>
+    <script src="../js/jstat.min.js"></script>
+    <script src="../js/jquery.flot.min.js"></script>
+    <script src="../php-build/calx-build.php"></script>
+
+    <script>
+        $('#sheet1').calx();
+    </script>
+    </body>
+</html>
