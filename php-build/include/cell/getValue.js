@@ -7,9 +7,5 @@ cell.prototype.getValue = function(){
         returnValue = this.value;
     }
 
-    if(this.format && this.format.indexOf('%') > -1){
-        returnValue = (returnValue*100)+' %';
-    }
-
     return returnValue;
 }

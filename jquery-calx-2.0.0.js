@@ -8192,10 +8192,6 @@ cell.prototype.setValue = function(value, render){
         returnValue = this.value;
     }
 
-    if(this.format && this.format.indexOf('%') > -1){
-        returnValue = (returnValue*100)+' %';
-    }
-
     return returnValue;
 }/**
  * mark cell as affected by other cell, used to decide whether to
@@ -8676,9 +8672,15 @@ sheet.prototype.getActiveCell = function(){
      */
     this.el.on('calx.getValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
-            currentCell = currentSheet.cells[cellAddr];
+            currentCell = currentSheet.cells[cellAddr],
+            cellValue   = currentCell.getValue(),
+            cellFormat  = currentCell.getFormat();
 
-        currentCell.el.val(currentCell.getValue());
+        if(cellFormat && cellFormat.indexOf('%') > -1){
+            cellValue = cellValue*100+' %';
+        }
+
+        currentCell.el.val(cellValue);
         //console.log(currentCell.getValue());
     });
 

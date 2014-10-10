@@ -8,9 +8,15 @@ sheet.prototype.attachEvent = function(){
      */
     this.el.on('calx.getValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
-            currentCell = currentSheet.cells[cellAddr];
+            currentCell = currentSheet.cells[cellAddr],
+            cellValue   = currentCell.getValue(),
+            cellFormat  = currentCell.getFormat();
 
-        currentCell.el.val(currentCell.getValue());
+        if(cellFormat && cellFormat.indexOf('%') > -1){
+            cellValue = cellValue*100+' %';
+        }
+
+        currentCell.el.val(cellValue);
         //console.log(currentCell.getValue());
     });
 
