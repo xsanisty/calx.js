@@ -189,7 +189,7 @@ text:{
 
     SPLIT : function(text, separator) {
         text = $.trim(text);
-        return text.split(text, delimiter || /\s+/);
+        return text.split(text, separator || /\s+/);
     },
 
     SUBSTITUTE : function(text, old_text, new_text, occurrence) {

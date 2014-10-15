@@ -1,6 +1,8 @@
+(function($, numeral, moment, jStat){
 
-(function($){
-
+    if(typeof($) == 'undefined'){
+        return false;
+    }
     
     /************************************************
      *                Begin of IE Hack              *
@@ -2257,6 +2259,7 @@ var defaultConfig = {
 
         $(cellElement).html('We are drawing graph here');
 
+        console.log(arguments);
         return false;
 
     }
@@ -2270,7 +2273,7 @@ var defaultConfig = {
 date: {
     DATE : function(year, month, day) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
         if(typeof(month) == 'undefined'){
             return moment(year);
@@ -2281,7 +2284,7 @@ date: {
 
     DATEDIFF : function (start_date, end_date, period) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(end_date).diff(moment.utc(start_date), period);
@@ -2289,7 +2292,7 @@ date: {
 
     DATEFORMAT : function(date, format){
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(date).format(format);
@@ -2297,7 +2300,7 @@ date: {
 
     DATEVALUE : function(date_text) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return Math.ceil((moment(date_text) - moment('1900-1-1')) / 86400000) + 2;
@@ -2305,7 +2308,7 @@ date: {
 
     DAY : function(date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(date)).date();
@@ -2317,7 +2320,7 @@ date: {
 
     DAYS : function(end_date, start_date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(end_date)).diff(moment(new Date(start_date)), 'days');
@@ -2325,7 +2328,7 @@ date: {
 
     DAYS360 : function(start_date, end_date, method) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var start = moment(new Date(start_date));
@@ -2354,7 +2357,7 @@ date: {
 
     EDATE : function(start_date, months) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(start_date)).add('months', months).toDate();
@@ -2362,7 +2365,7 @@ date: {
 
     EOMONTH : function(start_date, months) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var edate = moment(new Date(start_date)).add('months', months);
@@ -2371,7 +2374,7 @@ date: {
 
     FROMNOW : function(timestamp, nosuffix) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(timestamp)).fromNow(nosuffix);
@@ -2379,7 +2382,7 @@ date: {
 
     HOUR : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return (timestamp <= 1) ? Math.floor(24 * timestamp) : moment(new Date(timestamp)).hours();
@@ -2387,7 +2390,7 @@ date: {
 
     MINUTE : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return (timestamp <= 1) ? Math.floor(24 * 60 * timestamp) - 60 * Math.floor(24 * timestamp) : moment(new Date(timestamp)).minutes();
@@ -2395,7 +2398,7 @@ date: {
 
     ISOWEEKNUM : function(date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(date)).format('w');
@@ -2403,7 +2406,7 @@ date: {
 
     MONTH : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(timestamp)).month() + 1;
@@ -2415,7 +2418,7 @@ date: {
 
     NETWORKDAYSINTL : function(start_date, end_date, weekend, holidays) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var weekend_type = (typeof weekend === 'undefined') ? 1 : weekend;
@@ -2452,7 +2455,7 @@ date: {
 
     SECOND : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(timestamp)).seconds();
@@ -2464,7 +2467,7 @@ date: {
 
     TIMEVALUE : function(time_text) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var timestamp = moment(new Date(time_text));
@@ -2477,7 +2480,7 @@ date: {
 
     WEEKDAY : function(date, type) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var week_day = moment(new Date(date)).format('d');
@@ -2487,7 +2490,7 @@ date: {
 
     WEEKNUM : function(date, type) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var current_date = moment(new Date(date));
@@ -2509,11 +2512,11 @@ date: {
 
     WORKDAYINTL : function(start_date, days, weekend, holidays) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var weekend_type = (typeof weekend === 'undefined') ? 1 : weekend;
-        var weekend_days = WEEKEND_TYPES[weekend_type];
+        var weekend_days = data.WEEKEND_TYPES[weekend_type];
         var sd = moment(new Date(start_date));
         var cd = sd;
         var day_of_week = '';
@@ -2536,7 +2539,7 @@ date: {
 
     YEAR : function(date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(date)).year();
@@ -2544,7 +2547,7 @@ date: {
 
     YEARFRAC : function(start_date, end_date, basis) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         // Credits: David A. Wheeler [http://www.dwheeler.com/]
@@ -4333,7 +4336,7 @@ financial: {
     statistic: {
     AVEDEV : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         return jStat.sum(jStat(range).subtract(jStat.mean(range)).abs()[0]) / range.length;
@@ -4357,7 +4360,7 @@ financial: {
 
     AVERAGEA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.mean(utility.arrayMerge(arguments));
     },
@@ -4397,7 +4400,7 @@ financial: {
 
     BETADIST : function(x, alpha, beta, cumulative, A, B) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         A = (typeof A === 'undefined') ? 0 : A;
         B = (typeof B === 'undefined') ? 1 : B;
@@ -4407,7 +4410,7 @@ financial: {
 
     BETAINV : function(probability, alpha, beta, A, B) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         A = (typeof A === 'undefined') ? 0 : A;
         B = (typeof B === 'undefined') ? 1 : B;
@@ -4416,7 +4419,7 @@ financial: {
 
     BINOMDIST : function(successes, trials, probability, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.binomial.cdf(successes, trials, probability) : jStat.binomial.pdf(successes, trials, probability);
     },
@@ -4432,7 +4435,7 @@ financial: {
 
     BINOMINV : function(trials, probability, alpha) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var x = 0;
         while (x <= trials) {
@@ -4445,7 +4448,7 @@ financial: {
 
     CHISQDIST : function(x, k, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.chisquare.cdf(x, k) : jStat.chisquare.pdf(x, k);
     },
@@ -4456,7 +4459,7 @@ financial: {
 
     CHISQINV : function(probability, k) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.chisquare.inv(probability, k);
     },
@@ -4471,21 +4474,21 @@ financial: {
 
     CONFIDENCENORM : function(alpha, sd, n) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normalci(1, alpha, sd, n)[1] - 1;
     },
 
     CONFIDENCET : function(alpha, sd, n) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.tci(1, alpha, sd, n)[1] - 1;
     },
 
     CORREL : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.corrcoeff.apply(this, arguments);
     },
@@ -4542,7 +4545,7 @@ financial: {
 
     COVARIANCEP : function(array1, array2) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var mean1 = jStat.mean(array1);
         var mean2 = jStat.mean(array2);
@@ -4556,14 +4559,14 @@ financial: {
 
     COVARIANCES : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.covariance.apply(this, arguments);
     },
 
     DEVSQ : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -4576,14 +4579,14 @@ financial: {
 
     EXPONDIST : function(x, lambda, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.exponential.cdf(x, lambda) : jStat.exponential.pdf(x, lambda);
     },
 
     FDIST : function(x, d1, d2, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.centralF.cdf(x, d1, d2) : jStat.centralF.pdf(x, d1, d2);
     },
@@ -4594,7 +4597,7 @@ financial: {
 
     FINV : function(probability, d1, d2) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.centralF.inv(probability, d1, d2);
     },
@@ -4618,7 +4621,7 @@ financial: {
 
     FORECAST : function(x, data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -4661,7 +4664,7 @@ financial: {
 
     GAMMA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.gammafn.apply(this, arguments);
     },
@@ -4686,7 +4689,7 @@ financial: {
 
     GAMMALN : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.gammaln.apply(this, arguments);
     },
@@ -4697,14 +4700,14 @@ financial: {
 
     GAUSS : function(z) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normal.cdf(z, 0, 1) - 0.5;
     },
 
     GEOMEAN : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.geomean(utility.arrayMerge(arguments));
     },
@@ -4800,7 +4803,7 @@ financial: {
 
     KURT : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -4821,7 +4824,7 @@ financial: {
 
     LINEST : function(data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -4843,7 +4846,7 @@ financial: {
 
     LOGNORMDIST : function(x, mean, sd, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
 
         return (cumulative) ? jStat.lognormal.cdf(x, mean, sd) : jStat.lognormal.pdf(x, mean, sd);
@@ -4851,7 +4854,7 @@ financial: {
 
     LOGNORMINV : function(probability, mean, sd) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.lognormal.inv(probability, mean, sd);
     },
@@ -4873,7 +4876,7 @@ financial: {
 
     MEDIAN : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.median(utility.arrayMerge(arguments));
     },
@@ -4923,14 +4926,14 @@ financial: {
 
     NEGBINOMDIST : function(k, r, p, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.negbin.cdf(k, r, p) : jStat.negbin.pdf(k, r, p);
     },
 
     NORMDIST : function(x, mean, sd, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         // Check parameters
         if (isNaN(x) || isNaN(mean) || isNaN(sd)) {
@@ -4946,28 +4949,28 @@ financial: {
 
     NORMINV : function(probability, mean, sd) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normal.inv(probability, mean, sd);
     },
 
     NORMSDIST : function(z, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.normal.cdf(z, 0, 1) : jStat.normal.pdf(z, 0, 1);
     },
 
     NORMSINV : function(probability) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normal.inv(probability, 0, 1);
     },
 
     PEARSON : function(data_x, data_y) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -5012,7 +5015,7 @@ financial: {
         array = array.sort(function(a, b) {
             return a - b;
         });
-        var uniques = _.uniq(array);
+        var uniques = utility.unique(array);
         var n = array.length;
         var m = uniques.length;
         significance = (typeof significance === 'undefined') ? 3 : significance;
@@ -5037,7 +5040,7 @@ financial: {
         array = array.sort(function(a, b) {
             return a - b;
         });
-        var uniques = _.uniq(array);
+        var uniques = utility.unique(array);
         var n = array.length;
         var m = uniques.length;
         significance = (typeof significance === 'undefined') ? 3 : significance;
@@ -5067,12 +5070,12 @@ financial: {
     },
 
     PHI : function(x) {
-        return Math.exp(-0.5 * x * x) / SQRT2PI;
+        return Math.exp(-0.5 * x * x) / data.SQRT2PI;
     },
 
     POISSONDIST : function(x, mean, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.poisson.cdf(x, mean) : jStat.poisson.pdf(x, mean);
     },
@@ -5155,7 +5158,7 @@ financial: {
 
     SKEW : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -5169,7 +5172,7 @@ financial: {
 
     SKEWP : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -5187,7 +5190,7 @@ financial: {
 
     SLOPE : function(data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -5239,7 +5242,7 @@ financial: {
 
     STDEVPA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var n = range.length;
@@ -5268,7 +5271,7 @@ financial: {
 
     STEYX : function(data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -5286,7 +5289,7 @@ financial: {
 
     TDIST : function(x, df, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.studentt.cdf(x, df) : jStat.studentt.pdf(x, df);
     },
@@ -5301,7 +5304,7 @@ financial: {
 
     TINV : function(probability, df) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.studentt.inv(probability, df);
     },
@@ -5320,18 +5323,18 @@ financial: {
 
     TRIMMEAN : function(range, percent) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var n = range.length;
         var trim = formula.math.FLOOR(range.length * percent, 2) / 2;
-        return jStat.mean(_.initial(_.rest(range.sort(function(a, b) {
+        return jStat.mean(utility.initial(utility.rest(range.sort(function(a, b) {
             return a - b;
         }), trim), trim));
     },
 
     VARA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var n = range.length;
@@ -5360,7 +5363,7 @@ financial: {
 
     VARPA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var n = range.length;
@@ -5691,7 +5694,7 @@ logical : {
 
     SPLIT : function(text, separator) {
         text = $.trim(text);
-        return text.split(text, delimiter || /\s+/);
+        return text.split(text, separator || /\s+/);
     },
 
     SUBSTITUTE : function(text, old_text, new_text, occurrence) {
@@ -6401,7 +6404,7 @@ logical : {
 
         // Ignore places and return a 10-character binary number if number is negative
         if (number < 0) {
-            return '1' + _s.repeat('0', 9 - (512 + number).toString(2).length) + (512 + number).toString(2);
+            return '1' + utility.repeat('0', 9 - (512 + number).toString(2).length) + (512 + number).toString(2);
         }
 
         // Convert decimal number to binary
@@ -6425,7 +6428,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -6466,7 +6469,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -6507,7 +6510,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -6588,7 +6591,7 @@ logical : {
 
         // Ignore places and return a 10-character binary number if number is negative
         if (negative) {
-            return '1' + _s.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
+            return '1' + utility.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
         }
 
         // Convert decimal number to binary
@@ -6612,7 +6615,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -6669,7 +6672,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -7313,7 +7316,7 @@ logical : {
 
         // Ignore places and return a 10-character binary number if number is negative
         if (negative) {
-            return '1' + _s.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
+            return '1' + utility.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
         }
 
         // Convert decimal number to binary
@@ -7337,7 +7340,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -7389,7 +7392,7 @@ logical : {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     }
 },
@@ -7506,15 +7509,29 @@ logical : {
         }, []);
     },
 
+    initial : function(array, n, guard) {
+        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+    },
+
+    rest : function(array, n, guard) {
+        return slice.call(array, n == null || guard ? 1 : n);
+    },
+
+    /** end of underscore func */
+
     arrayMerge: function(args) {
         var a, i, result = [];
         for (i = 0; i < args.length; i++) {
             if (typeof(args[i]) == 'object') {
                 for (a in args[i]) {
-                    result = result.concat(args[i][a]);
+                    if($.trim(args[i][a]) !== ''){
+                        result = result.concat(args[i][a]);
+                    }
                 }
             } else {
-                result = result.concat(args[i]);
+                if($.trim(result.concat(args[i])) !== ''){
+                    result = result.concat(args[i]);
+                }
             }
         }
         return result;
@@ -7522,6 +7539,23 @@ logical : {
 
     toArray: function(args) {
         return Array.prototype.slice.call(args, 0);
+    },
+
+    /**
+     * remove empty cell from cell range collection
+     * @param  {object} cellRange
+     * @return {object} trimmed cellRange
+     */
+    trimEmptyCell : function(cellRange){
+        var result = {};
+
+        for(var a in cellRange){
+            if($.trim(cellRange[a]) !== ''){
+                result[a] = cellRange[a];
+            }
+        }
+
+        return result;
     },
 
     cleanFloat: function(number) {
@@ -7635,9 +7669,29 @@ logical : {
         'Saturday'
     ],
 
-    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!', '#ERROR!'],
+    ERROR : [
+        '#DIV/0!',
+        '#N/A',
+        '#NAME?',
+        '#NUM!',
+        '#NULL!',
+        '#REF!',
+        '#VALUE!',
+        '#ERROR!',
+        '#ERROR_MOMENT_JS_REQUIRED!',
+        '#ERROR_JSTAT_JS_REQUIRED!'
+    ],
 
-    VARIABLE : {}
+    ERRKEY : {
+        jStatRequired : '#ERROR_JSTAT_JS_REQUIRED!',
+        momentRequired : '#ERROR_MOMENT_JS_REQUIRED!'
+    },
+
+    VARIABLE : {},
+
+    SELF_RENDER_FORMULA : [
+        'GRAPH'
+    ]
 }    /**
      * cell hold single element with formula and value information
      * @param  {sheet}      sheet       the sheet object where the cell is belong to
@@ -7983,7 +8037,7 @@ cell.prototype.processDependant = function(){
         this.remoteDependency = status;
     }
 };/**
- * render calculated value or final value to the element bing to this cell
+ * render calculated value or final value to the element bound to this cell
  * @return {void}
  */
 cell.prototype.renderComputedValue = function(){
@@ -8241,6 +8295,7 @@ function sheet(identifier, element, config){
     this.calculated   = false;
     this.calculating  = false;
     this.activeCell   = null;
+    this.totalCell    = 0;
 
     this.init();
 };sheet.prototype.init = function(){
@@ -8249,6 +8304,7 @@ function sheet(identifier, element, config){
         sheet = this,
         $cell;
 
+    this.totalCell = cells.length;
     this.parser = parserFactory(this);
     this.el.attr('data-calx-identifier', this.identifier);
 
@@ -8460,7 +8516,7 @@ sheet.prototype.clearDependencies = function(){
 }
 
 sheet.prototype.setCalculated = function(calculated){
-    var calculated = (typeof(calculated) == 'undefined') ? true : calculated;
+    calculated = (typeof(calculated) == 'undefined') ? true : calculated;
     this.calculated  = calculated;
 }
 
@@ -8497,6 +8553,8 @@ sheet.prototype.update = function(){
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,
         $cell;
+
+    this.totalCell = cells.length;
 
     /** detect and remove detached cells and its reference */
     for(var a in this.cells){
@@ -8550,7 +8608,6 @@ sheet.prototype.calculate = function(){
         //console.log('recalculating cell');
         if(this.cells[a].hasRemoteDependency()){
             this.cells[a].evaluateFormula();
-            this.cells[a].renderComputedValue();
 
             //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
         }
@@ -8618,6 +8675,7 @@ sheet.prototype.refresh = function(){
         sheet = this,
         $cell;
 
+    this.totalCell = cells.length;
     this.cells = {};
 
     cells.each(function(){
@@ -8933,7 +8991,7 @@ getSheet : function(){
  */
 getCell : function(address){
     var $this       = $(this),
-        $identifier = $this.attr('data-calx-identifier')
+        $identifier = $this.attr('data-calx-identifier'),
         $sheet      = calx.sheetRegistry[$identifier];
 
     return $sheet.getCell(address);
@@ -8948,7 +9006,7 @@ getCell : function(address){
  */
 evaluate : function(formula){
     var $this       = $(this),
-        $identifier = $this.attr('data-calx-identifier')
+        $identifier = $this.attr('data-calx-identifier'),
         $sheet      = calx.sheetRegistry[$identifier];
 
     return $sheet.evaluate(formula);
@@ -8998,7 +9056,7 @@ destroy : function(){
             var $calx = calx.init.apply(this, arguments);
             return $calx;
         } else {
-            $.error('Method ' + method + ' does not exist on jQuery.calx');
+            $.error('Method ' + $action + ' does not exist on jQuery.calx');
         }
     };
-})(jQuery);
+})(jQuery, numeral, moment, jStat);

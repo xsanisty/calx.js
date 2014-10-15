@@ -146,7 +146,7 @@ sheet.prototype.clearDependencies = function(){
 }
 
 sheet.prototype.setCalculated = function(calculated){
-    var calculated = (typeof(calculated) == 'undefined') ? true : calculated;
+    calculated = (typeof(calculated) == 'undefined') ? true : calculated;
     this.calculated  = calculated;
 }
 

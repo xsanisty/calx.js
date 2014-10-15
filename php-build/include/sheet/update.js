@@ -8,6 +8,8 @@ sheet.prototype.update = function(){
         sheet = this,
         $cell;
 
+    this.totalCell = cells.length;
+
     /** detect and remove detached cells and its reference */
     for(var a in this.cells){
         if(this.cells[a].el && !$.contains(document, this.cells[a].el[0])){

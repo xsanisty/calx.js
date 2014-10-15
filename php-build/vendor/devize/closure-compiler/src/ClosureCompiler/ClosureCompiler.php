@@ -219,6 +219,7 @@ class ClosureCompiler
             $command .= " --js={$file}";
         }
 
+        //$command .= " --compilation_level ADVANCED";
         $command .= " --js_output_file={$this->config['targetFileName']} 2>&1";
 
         $return = '';

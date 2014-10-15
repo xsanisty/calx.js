@@ -11,6 +11,6 @@
             var $calx = calx.init.apply(this, arguments);
             return $calx;
         } else {
-            $.error('Method ' + method + ' does not exist on jQuery.calx');
+            $.error('Method ' + $action + ' does not exist on jQuery.calx');
         }
     };

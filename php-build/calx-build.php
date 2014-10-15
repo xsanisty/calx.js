@@ -1,7 +1,9 @@
 <?php header('Content-Type', 'text/javascript') ?>
+(function($, numeral, moment, jStat){
 
-(function($){
-
+    if(typeof($) == 'undefined'){
+        return false;
+    }
     <?php
 
         /**
@@ -95,4 +97,4 @@
         require 'include/jQueryCalx.js';
     ?>
 
-})(jQuery);
+})(jQuery, numeral, moment, jStat);

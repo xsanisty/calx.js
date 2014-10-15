@@ -20,6 +20,7 @@ function sheet(identifier, element, config){
     this.calculated   = false;
     this.calculating  = false;
     this.activeCell   = null;
+    this.totalCell    = 0;
 
     this.init();
 };

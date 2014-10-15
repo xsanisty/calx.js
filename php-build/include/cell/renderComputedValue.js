@@ -1,5 +1,5 @@
 /**
- * render calculated value or final value to the element bing to this cell
+ * render calculated value or final value to the element bound to this cell
  * @return {void}
  */
 cell.prototype.renderComputedValue = function(){

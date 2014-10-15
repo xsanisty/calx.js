@@ -109,15 +109,29 @@ var utility = {
         }, []);
     },
 
+    initial : function(array, n, guard) {
+        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+    },
+
+    rest : function(array, n, guard) {
+        return slice.call(array, n == null || guard ? 1 : n);
+    },
+
+    /** end of underscore func */
+
     arrayMerge: function(args) {
         var a, i, result = [];
         for (i = 0; i < args.length; i++) {
             if (typeof(args[i]) == 'object') {
                 for (a in args[i]) {
-                    result = result.concat(args[i][a]);
+                    if($.trim(args[i][a]) !== ''){
+                        result = result.concat(args[i][a]);
+                    }
                 }
             } else {
-                result = result.concat(args[i]);
+                if($.trim(result.concat(args[i])) !== ''){
+                    result = result.concat(args[i]);
+                }
             }
         }
         return result;
@@ -125,6 +139,23 @@ var utility = {
 
     toArray: function(args) {
         return Array.prototype.slice.call(args, 0);
+    },
+
+    /**
+     * remove empty cell from cell range collection
+     * @param  {object} cellRange
+     * @return {object} trimmed cellRange
+     */
+    trimEmptyCell : function(cellRange){
+        var result = {};
+
+        for(var a in cellRange){
+            if($.trim(cellRange[a]) !== ''){
+                result[a] = cellRange[a];
+            }
+        }
+
+        return result;
     },
 
     cleanFloat: function(number) {

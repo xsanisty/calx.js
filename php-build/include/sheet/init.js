@@ -4,6 +4,7 @@ sheet.prototype.init = function(){
         sheet = this,
         $cell;
 
+    this.totalCell = cells.length;
     this.parser = parserFactory(this);
     this.el.attr('data-calx-identifier', this.identifier);
 

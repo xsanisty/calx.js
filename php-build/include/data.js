@@ -77,7 +77,27 @@ var data = {
         'Saturday'
     ],
 
-    ERROR : ['#DIV/0!', '#N/A', '#NAME?', '#NUM!', '#NULL!', '#REF!', '#VALUE!', '#ERROR!'],
+    ERROR : [
+        '#DIV/0!',
+        '#N/A',
+        '#NAME?',
+        '#NUM!',
+        '#NULL!',
+        '#REF!',
+        '#VALUE!',
+        '#ERROR!',
+        '#ERROR_MOMENT_JS_REQUIRED!',
+        '#ERROR_JSTAT_JS_REQUIRED!'
+    ],
 
-    VARIABLE : {}
+    ERRKEY : {
+        jStatRequired : '#ERROR_JSTAT_JS_REQUIRED!',
+        momentRequired : '#ERROR_MOMENT_JS_REQUIRED!'
+    },
+
+    VARIABLE : {},
+
+    SELF_RENDER_FORMULA : [
+        'GRAPH'
+    ]
 }

@@ -3,7 +3,7 @@ $unminifiedFile = '../jquery-calx-2.0.0.js';
 $minifiedFile   = '../jquery-calx-2.0.0.min.js';
 
 /**
- * gathering alll js source and build into one package
+ * gathering all js source and build into one package
  */
 
 ob_start();

@@ -8,6 +8,7 @@ sheet.prototype.refresh = function(){
         sheet = this,
         $cell;
 
+    this.totalCell = cells.length;
     this.cells = {};
 
     cells.each(function(){

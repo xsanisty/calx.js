@@ -620,7 +620,7 @@ engineering: {
 
         // Ignore places and return a 10-character binary number if number is negative
         if (number < 0) {
-            return '1' + _s.repeat('0', 9 - (512 + number).toString(2).length) + (512 + number).toString(2);
+            return '1' + utility.repeat('0', 9 - (512 + number).toString(2).length) + (512 + number).toString(2);
         }
 
         // Convert decimal number to binary
@@ -644,7 +644,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -685,7 +685,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -726,7 +726,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -807,7 +807,7 @@ engineering: {
 
         // Ignore places and return a 10-character binary number if number is negative
         if (negative) {
-            return '1' + _s.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
+            return '1' + utility.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
         }
 
         // Convert decimal number to binary
@@ -831,7 +831,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -888,7 +888,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -1532,7 +1532,7 @@ engineering: {
 
         // Ignore places and return a 10-character binary number if number is negative
         if (negative) {
-            return '1' + _s.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
+            return '1' + utility.repeat('0', 9 - (512 + decimal).toString(2).length) + (512 + decimal).toString(2);
         }
 
         // Convert decimal number to binary
@@ -1556,7 +1556,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     },
 
@@ -1608,7 +1608,7 @@ engineering: {
             places = Math.floor(places);
 
             // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-            return (places >= result.length) ? _s.repeat('0', places - result.length) + result : '#NUM!';
+            return (places >= result.length) ? utility.repeat('0', places - result.length) + result : '#NUM!';
         }
     }
 }

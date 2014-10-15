@@ -26,7 +26,6 @@ sheet.prototype.calculate = function(){
         //console.log('recalculating cell');
         if(this.cells[a].hasRemoteDependency()){
             this.cells[a].evaluateFormula();
-            this.cells[a].renderComputedValue();
 
             //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
         }

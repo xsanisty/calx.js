@@ -1,7 +1,7 @@
 statistic: {
     AVEDEV : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         return jStat.sum(jStat(range).subtract(jStat.mean(range)).abs()[0]) / range.length;
@@ -25,7 +25,7 @@ statistic: {
 
     AVERAGEA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.mean(utility.arrayMerge(arguments));
     },
@@ -65,7 +65,7 @@ statistic: {
 
     BETADIST : function(x, alpha, beta, cumulative, A, B) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         A = (typeof A === 'undefined') ? 0 : A;
         B = (typeof B === 'undefined') ? 1 : B;
@@ -75,7 +75,7 @@ statistic: {
 
     BETAINV : function(probability, alpha, beta, A, B) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         A = (typeof A === 'undefined') ? 0 : A;
         B = (typeof B === 'undefined') ? 1 : B;
@@ -84,7 +84,7 @@ statistic: {
 
     BINOMDIST : function(successes, trials, probability, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.binomial.cdf(successes, trials, probability) : jStat.binomial.pdf(successes, trials, probability);
     },
@@ -100,7 +100,7 @@ statistic: {
 
     BINOMINV : function(trials, probability, alpha) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var x = 0;
         while (x <= trials) {
@@ -113,7 +113,7 @@ statistic: {
 
     CHISQDIST : function(x, k, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.chisquare.cdf(x, k) : jStat.chisquare.pdf(x, k);
     },
@@ -124,7 +124,7 @@ statistic: {
 
     CHISQINV : function(probability, k) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.chisquare.inv(probability, k);
     },
@@ -139,21 +139,21 @@ statistic: {
 
     CONFIDENCENORM : function(alpha, sd, n) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normalci(1, alpha, sd, n)[1] - 1;
     },
 
     CONFIDENCET : function(alpha, sd, n) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.tci(1, alpha, sd, n)[1] - 1;
     },
 
     CORREL : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.corrcoeff.apply(this, arguments);
     },
@@ -210,7 +210,7 @@ statistic: {
 
     COVARIANCEP : function(array1, array2) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var mean1 = jStat.mean(array1);
         var mean2 = jStat.mean(array2);
@@ -224,14 +224,14 @@ statistic: {
 
     COVARIANCES : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.covariance.apply(this, arguments);
     },
 
     DEVSQ : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -244,14 +244,14 @@ statistic: {
 
     EXPONDIST : function(x, lambda, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.exponential.cdf(x, lambda) : jStat.exponential.pdf(x, lambda);
     },
 
     FDIST : function(x, d1, d2, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.centralF.cdf(x, d1, d2) : jStat.centralF.pdf(x, d1, d2);
     },
@@ -262,7 +262,7 @@ statistic: {
 
     FINV : function(probability, d1, d2) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.centralF.inv(probability, d1, d2);
     },
@@ -286,7 +286,7 @@ statistic: {
 
     FORECAST : function(x, data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -329,7 +329,7 @@ statistic: {
 
     GAMMA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.gammafn.apply(this, arguments);
     },
@@ -354,7 +354,7 @@ statistic: {
 
     GAMMALN : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.gammaln.apply(this, arguments);
     },
@@ -365,14 +365,14 @@ statistic: {
 
     GAUSS : function(z) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normal.cdf(z, 0, 1) - 0.5;
     },
 
     GEOMEAN : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.geomean(utility.arrayMerge(arguments));
     },
@@ -468,7 +468,7 @@ statistic: {
 
     KURT : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -489,7 +489,7 @@ statistic: {
 
     LINEST : function(data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -511,7 +511,7 @@ statistic: {
 
     LOGNORMDIST : function(x, mean, sd, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
 
         return (cumulative) ? jStat.lognormal.cdf(x, mean, sd) : jStat.lognormal.pdf(x, mean, sd);
@@ -519,7 +519,7 @@ statistic: {
 
     LOGNORMINV : function(probability, mean, sd) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.lognormal.inv(probability, mean, sd);
     },
@@ -541,7 +541,7 @@ statistic: {
 
     MEDIAN : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.median(utility.arrayMerge(arguments));
     },
@@ -591,14 +591,14 @@ statistic: {
 
     NEGBINOMDIST : function(k, r, p, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.negbin.cdf(k, r, p) : jStat.negbin.pdf(k, r, p);
     },
 
     NORMDIST : function(x, mean, sd, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         // Check parameters
         if (isNaN(x) || isNaN(mean) || isNaN(sd)) {
@@ -614,28 +614,28 @@ statistic: {
 
     NORMINV : function(probability, mean, sd) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normal.inv(probability, mean, sd);
     },
 
     NORMSDIST : function(z, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.normal.cdf(z, 0, 1) : jStat.normal.pdf(z, 0, 1);
     },
 
     NORMSINV : function(probability) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.normal.inv(probability, 0, 1);
     },
 
     PEARSON : function(data_x, data_y) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -680,7 +680,7 @@ statistic: {
         array = array.sort(function(a, b) {
             return a - b;
         });
-        var uniques = _.uniq(array);
+        var uniques = utility.unique(array);
         var n = array.length;
         var m = uniques.length;
         significance = (typeof significance === 'undefined') ? 3 : significance;
@@ -705,7 +705,7 @@ statistic: {
         array = array.sort(function(a, b) {
             return a - b;
         });
-        var uniques = _.uniq(array);
+        var uniques = utility.unique(array);
         var n = array.length;
         var m = uniques.length;
         significance = (typeof significance === 'undefined') ? 3 : significance;
@@ -735,12 +735,12 @@ statistic: {
     },
 
     PHI : function(x) {
-        return Math.exp(-0.5 * x * x) / SQRT2PI;
+        return Math.exp(-0.5 * x * x) / data.SQRT2PI;
     },
 
     POISSONDIST : function(x, mean, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.poisson.cdf(x, mean) : jStat.poisson.pdf(x, mean);
     },
@@ -823,7 +823,7 @@ statistic: {
 
     SKEW : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -837,7 +837,7 @@ statistic: {
 
     SKEWP : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var mean = jStat.mean(range);
@@ -855,7 +855,7 @@ statistic: {
 
     SLOPE : function(data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -907,7 +907,7 @@ statistic: {
 
     STDEVPA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var n = range.length;
@@ -936,7 +936,7 @@ statistic: {
 
     STEYX : function(data_y, data_x) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var xmean = jStat.mean(data_x);
         var ymean = jStat.mean(data_y);
@@ -954,7 +954,7 @@ statistic: {
 
     TDIST : function(x, df, cumulative) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return (cumulative) ? jStat.studentt.cdf(x, df) : jStat.studentt.pdf(x, df);
     },
@@ -969,7 +969,7 @@ statistic: {
 
     TINV : function(probability, df) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         return jStat.studentt.inv(probability, df);
     },
@@ -988,18 +988,18 @@ statistic: {
 
     TRIMMEAN : function(range, percent) {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var n = range.length;
         var trim = formula.math.FLOOR(range.length * percent, 2) / 2;
-        return jStat.mean(_.initial(_.rest(range.sort(function(a, b) {
+        return jStat.mean(utility.initial(utility.rest(range.sort(function(a, b) {
             return a - b;
         }), trim), trim));
     },
 
     VARA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var n = range.length;
@@ -1028,7 +1028,7 @@ statistic: {
 
     VARPA : function() {
         if(typeof(jStat) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.jStatRequired;
         }
         var range = utility.arrayMerge(arguments);
         var n = range.length;

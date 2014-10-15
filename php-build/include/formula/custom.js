@@ -35,6 +35,7 @@ custom : {
 
         $(cellElement).html('We are drawing graph here');
 
+        console.log(arguments);
         return false;
 
     }

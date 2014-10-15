@@ -9,6 +9,6 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-
+        Calx comes with several API that can be invoked using syntax <code>$('selector').calx('method')</code>
     </div>
 </div>

@@ -7,7 +7,7 @@
 date: {
     DATE : function(year, month, day) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
         if(typeof(month) == 'undefined'){
             return moment(year);
@@ -18,7 +18,7 @@ date: {
 
     DATEDIFF : function (start_date, end_date, period) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(end_date).diff(moment.utc(start_date), period);
@@ -26,7 +26,7 @@ date: {
 
     DATEFORMAT : function(date, format){
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(date).format(format);
@@ -34,7 +34,7 @@ date: {
 
     DATEVALUE : function(date_text) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return Math.ceil((moment(date_text) - moment('1900-1-1')) / 86400000) + 2;
@@ -42,7 +42,7 @@ date: {
 
     DAY : function(date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(date)).date();
@@ -54,7 +54,7 @@ date: {
 
     DAYS : function(end_date, start_date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(end_date)).diff(moment(new Date(start_date)), 'days');
@@ -62,7 +62,7 @@ date: {
 
     DAYS360 : function(start_date, end_date, method) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var start = moment(new Date(start_date));
@@ -91,7 +91,7 @@ date: {
 
     EDATE : function(start_date, months) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(start_date)).add('months', months).toDate();
@@ -99,7 +99,7 @@ date: {
 
     EOMONTH : function(start_date, months) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var edate = moment(new Date(start_date)).add('months', months);
@@ -108,7 +108,7 @@ date: {
 
     FROMNOW : function(timestamp, nosuffix) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(timestamp)).fromNow(nosuffix);
@@ -116,7 +116,7 @@ date: {
 
     HOUR : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return (timestamp <= 1) ? Math.floor(24 * timestamp) : moment(new Date(timestamp)).hours();
@@ -124,7 +124,7 @@ date: {
 
     MINUTE : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return (timestamp <= 1) ? Math.floor(24 * 60 * timestamp) - 60 * Math.floor(24 * timestamp) : moment(new Date(timestamp)).minutes();
@@ -132,7 +132,7 @@ date: {
 
     ISOWEEKNUM : function(date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(date)).format('w');
@@ -140,7 +140,7 @@ date: {
 
     MONTH : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(timestamp)).month() + 1;
@@ -152,7 +152,7 @@ date: {
 
     NETWORKDAYSINTL : function(start_date, end_date, weekend, holidays) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var weekend_type = (typeof weekend === 'undefined') ? 1 : weekend;
@@ -189,7 +189,7 @@ date: {
 
     SECOND : function(timestamp) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(timestamp)).seconds();
@@ -201,7 +201,7 @@ date: {
 
     TIMEVALUE : function(time_text) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var timestamp = moment(new Date(time_text));
@@ -214,7 +214,7 @@ date: {
 
     WEEKDAY : function(date, type) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var week_day = moment(new Date(date)).format('d');
@@ -224,7 +224,7 @@ date: {
 
     WEEKNUM : function(date, type) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var current_date = moment(new Date(date));
@@ -246,11 +246,11 @@ date: {
 
     WORKDAYINTL : function(start_date, days, weekend, holidays) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         var weekend_type = (typeof weekend === 'undefined') ? 1 : weekend;
-        var weekend_days = WEEKEND_TYPES[weekend_type];
+        var weekend_days = data.WEEKEND_TYPES[weekend_type];
         var sd = moment(new Date(start_date));
         var cd = sd;
         var day_of_week = '';
@@ -273,7 +273,7 @@ date: {
 
     YEAR : function(date) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         return moment(new Date(date)).year();
@@ -281,7 +281,7 @@ date: {
 
     YEARFRAC : function(start_date, end_date, basis) {
         if(typeof (moment) == 'undefined'){
-            return '#NAME?';
+            return data.ERRKEY.momentRequired;
         }
 
         // Credits: David A. Wheeler [http://www.dwheeler.com/]
