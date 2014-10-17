@@ -8402,6 +8402,9 @@ sheet.prototype.buildCellDependency = function(){
 };
 
 sheet.prototype.getCellRangeValue = function(addressStart, addressStop){
+    addressStart = addressStart.toUpperCase();
+    addressStop = addressStop.toUpperCase();
+
     var cellRangeAddress= utility.cellRange(addressStart, addressStop),
         cellRangeLength = cellRangeAddress.length,
         cellRangeValue  = {},
@@ -8668,6 +8671,8 @@ sheet.prototype.registerCell = function(cell){
  * @return {cell|false}         cell object represented by the address or false if not found
  */
 sheet.prototype.getCell = function(address){
+
+    address = address.toUpperCase();
     if(typeof(this.cells[address]) != 'undefined'){
         return this.cells[address];
     }else{
@@ -8680,6 +8685,10 @@ sheet.prototype.getCell = function(address){
  * @return {object}              object containing all cell object in given range
  */
 sheet.prototype.getCellRange = function(addressStart, addressStop){
+
+    addressStart = addressStart.toUpperCase();
+    addressStop = addressStop.toUpperCase();
+
     var cellList        = utility.cellRange(addressStart, addressStop),
         cellListLength  = cellList.length,
         cellRange       = {},

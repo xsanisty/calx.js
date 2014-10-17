@@ -5,6 +5,10 @@
  * @return {object}              object containing all cell object in given range
  */
 sheet.prototype.getCellRange = function(addressStart, addressStop){
+
+    addressStart = addressStart.toUpperCase();
+    addressStop = addressStop.toUpperCase();
+
     var cellList        = utility.cellRange(addressStart, addressStop),
         cellListLength  = cellList.length,
         cellRange       = {},

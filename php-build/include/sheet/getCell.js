@@ -4,6 +4,8 @@
  * @return {cell|false}         cell object represented by the address or false if not found
  */
 sheet.prototype.getCell = function(address){
+
+    address = address.toUpperCase();
     if(typeof(this.cells[address]) != 'undefined'){
         return this.cells[address];
     }else{

@@ -7,6 +7,9 @@ sheet.prototype.getCellValue = function(address){
 };
 
 sheet.prototype.getCellRangeValue = function(addressStart, addressStop){
+    addressStart = addressStart.toUpperCase();
+    addressStop = addressStop.toUpperCase();
+
     var cellRangeAddress= utility.cellRange(addressStart, addressStop),
         cellRangeLength = cellRangeAddress.length,
         cellRangeValue  = {},
