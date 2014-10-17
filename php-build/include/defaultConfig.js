@@ -16,10 +16,10 @@ var defaultConfig = {
     'onAfterCalculate'      : function(data){return data},
 
     /** callback triggered right before calculation result is applied */
-    'onBeforeApply'         : function(data){return data},
+    'onBeforeRender'         : function(data){return data},
 
     /** callback triggered right after calculation result is applied */
-    'onAfterApply'          : function(data){return data},
+    'onAfterRender'          : function(data){return data},
 
     /** default fomatting rule when data-format is not present */
     'defaultFormat'         : false,

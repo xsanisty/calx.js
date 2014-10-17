@@ -1,8 +1,13 @@
 /**
  * calculate cells formula and process dependant
  */
-cell.prototype.calculate  = function(){
+cell.prototype.calculate  = function(triggerEvent){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
+    triggerEvent = (typeof triggerEvent == 'undefined') ? true : triggerEvent;
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeCalculate) == 'function'){
+        this.sheet.config.onBeforeCalculate.apply(this.sheet);
+    }
 
     calx.isCalculating = true;
     if(this.formula){
@@ -14,7 +19,7 @@ cell.prototype.calculate  = function(){
     }
 
     for(var a in this.sheet.dependant){
-        this.sheet.dependant[a].calculate();
+        this.sheet.dependant[a].calculate(false);
     }
 
 
@@ -29,6 +34,20 @@ cell.prototype.calculate  = function(){
         }
     }
     calx.isCalculating = false;
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){
+        this.sheet.config.onAfterCalculate.apply(this.sheet);
+    }
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeRender) == 'function'){
+        this.sheet.config.onBeforeRender.apply(this.sheet);
+    }
+
+    this.renderComputedValue();
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterRender) == 'function'){
+        this.sheet.config.onAfterRender.apply(this.sheet);
+    }
 
     return this;
 };

@@ -1,3 +1,9 @@
+var Zepto   = Zepto     || undefined,
+    jQuery  = jQuery    || Zepto,
+    numeral = numeral   || undefined,
+    moment  = moment    || undefined,
+    jStat   = jStat     || undefined;
+
 (function($, numeral, moment, jStat){
 
     if(typeof($) == 'undefined'){
@@ -49,10 +55,10 @@ var defaultConfig = {
     'onAfterCalculate'      : function(data){return data},
 
     /** callback triggered right before calculation result is applied */
-    'onBeforeApply'         : function(data){return data},
+    'onBeforeRender'         : function(data){return data},
 
     /** callback triggered right after calculation result is applied */
-    'onAfterApply'          : function(data){return data},
+    'onAfterRender'          : function(data){return data},
 
     /** default fomatting rule when data-format is not present */
     'defaultFormat'         : false,
@@ -7766,8 +7772,13 @@ cell.prototype.init = function(){
 };/**
  * calculate cells formula and process dependant
  */
-cell.prototype.calculate  = function(){
+cell.prototype.calculate  = function(triggerEvent){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
+    triggerEvent = (typeof triggerEvent == 'undefined') ? true : triggerEvent;
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeCalculate) == 'function'){
+        this.sheet.config.onBeforeCalculate.apply(this.sheet);
+    }
 
     calx.isCalculating = true;
     if(this.formula){
@@ -7779,7 +7790,7 @@ cell.prototype.calculate  = function(){
     }
 
     for(var a in this.sheet.dependant){
-        this.sheet.dependant[a].calculate();
+        this.sheet.dependant[a].calculate(false);
     }
 
 
@@ -7794,6 +7805,20 @@ cell.prototype.calculate  = function(){
         }
     }
     calx.isCalculating = false;
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){
+        this.sheet.config.onAfterCalculate.apply(this.sheet);
+    }
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeRender) == 'function'){
+        this.sheet.config.onBeforeRender.apply(this.sheet);
+    }
+
+    this.renderComputedValue();
+
+    if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterRender) == 'function'){
+        this.sheet.config.onAfterRender.apply(this.sheet);
+    }
 
     return this;
 };/**
@@ -8586,6 +8611,10 @@ sheet.prototype.update = function(){
 sheet.prototype.calculate = function(){
     //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
+    if(typeof(this.config.onBeforeCalculate) == 'function'){
+        this.config.onBeforeCalculate.apply(this);
+    }
+
     var a;
 
     /** set all cell with formula as affected */
@@ -8613,7 +8642,19 @@ sheet.prototype.calculate = function(){
         }
     }
 
+    if(typeof(this.config.onAfterCalculate) == 'function'){
+        this.config.onAfterCalculate.apply(this);
+    }
+
+    if(typeof(this.config.onBeforeRender) == 'function'){
+        this.config.onBeforeRender.apply(this);
+    }
+
     this.renderComputedValue();
+
+    if(typeof(this.config.onAfterRender) == 'function'){
+        this.config.onAfterRender.apply(this);
+    }
 };/**
  * register singgle cell to sheet's cell registry
  * @param  {object} cell    cell object
@@ -9038,7 +9079,7 @@ destroy : function(){
         var sheetIdentifier = $(this).attr('data-calx-identifier');
         //console.log(sheetIdentifier);
 
-        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
             calx.sheetRegistry[sheetIdentifier].calculate();
         }
     });

@@ -128,7 +128,23 @@
     <script src="../php-build/calx-build.php"></script>
 
     <script>
-        $('#sheet1').calx();
+        $('#sheet1').calx({
+            onBeforeCalculate: function(){
+                console.log('before calculate triggerred');
+            },
+
+            onAfterCalculate: function(){
+                console.log('after calculate triggerred');
+            },
+
+            onBeforeRender: function(){
+                console.log('before render triggerred');
+            },
+
+            onAfterRender: function(){
+                console.log('after render triggerred');
+            }
+        });
     </script>
     </body>
 </html>

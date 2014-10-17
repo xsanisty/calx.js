@@ -4,6 +4,10 @@
 sheet.prototype.calculate = function(){
     //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
+    if(typeof(this.config.onBeforeCalculate) == 'function'){
+        this.config.onBeforeCalculate.apply(this);
+    }
+
     var a;
 
     /** set all cell with formula as affected */
@@ -31,5 +35,17 @@ sheet.prototype.calculate = function(){
         }
     }
 
+    if(typeof(this.config.onAfterCalculate) == 'function'){
+        this.config.onAfterCalculate.apply(this);
+    }
+
+    if(typeof(this.config.onBeforeRender) == 'function'){
+        this.config.onBeforeRender.apply(this);
+    }
+
     this.renderComputedValue();
+
+    if(typeof(this.config.onAfterRender) == 'function'){
+        this.config.onAfterRender.apply(this);
+    }
 };

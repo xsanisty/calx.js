@@ -1,4 +1,10 @@
 <?php header('Content-Type', 'text/javascript') ?>
+var Zepto   = Zepto     || undefined,
+    jQuery  = jQuery    || Zepto,
+    numeral = numeral   || undefined,
+    moment  = moment    || undefined,
+    jStat   = jStat     || undefined;
+
 (function($, numeral, moment, jStat){
 
     if(typeof($) == 'undefined'){
