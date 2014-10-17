@@ -1,4 +1,4 @@
-sheet.prototype.attachEvent = function(){
+sheet.fx.attachEvent = function(){
     //console.log('sheet[#'+this.elementId+'] : attaching events to the element');
 
     var currentSheet = this;
@@ -116,7 +116,7 @@ sheet.prototype.attachEvent = function(){
     });
 };
 
-sheet.prototype.detachEvent = function(){
+sheet.fx.detachEvent = function(){
     //console.log('sheet[#'+this.elementId+'] : detaching events from the element');
 
     this.el.off('calx.getValue');

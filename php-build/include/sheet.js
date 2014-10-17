@@ -24,3 +24,5 @@ function sheet(identifier, element, config){
 
     this.init();
 };
+
+sheet.fx = sheet.prototype;

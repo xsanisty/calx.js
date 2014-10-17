@@ -4,7 +4,7 @@
  * make sure all cell involved is evaluated first
  * @return {[type]} [description]
  */
-sheet.prototype.buildCellDependency = function(){
+sheet.fx.buildCellDependency = function(){
     //console.log('sheet[#'+this.elementId+'] : building cells dependency');
     var cell;
 

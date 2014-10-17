@@ -1,3 +1,3 @@
-sheet.prototype.scan = function(){
+sheet.fx.scan = function(){
 
 };

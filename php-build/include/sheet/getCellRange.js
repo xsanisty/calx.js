@@ -4,7 +4,7 @@
  * @param  {string} addressStop  range stop
  * @return {object}              object containing all cell object in given range
  */
-sheet.prototype.getCellRange = function(addressStart, addressStop){
+sheet.fx.getCellRange = function(addressStart, addressStop){
 
     addressStart = addressStart.toUpperCase();
     addressStop = addressStop.toUpperCase();

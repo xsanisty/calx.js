@@ -2,7 +2,7 @@
  * evaluate cell formula and put the result in computed value container
  * @return {null}
  */
-cell.prototype.evaluateFormula = function(){
+cell.fx.evaluateFormula = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : evaluating formula ['+this.formula+']');
 
     if(this.formula){

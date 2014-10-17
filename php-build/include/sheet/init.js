@@ -1,4 +1,4 @@
-sheet.prototype.init = function(){
+sheet.fx.init = function(){
     //console.log('sheet[#'+this.elementId+'] : Initializing the sheet');
     var cells = this.el.find('[data-cell],[data-formula],[data-format]'),
         sheet = this,

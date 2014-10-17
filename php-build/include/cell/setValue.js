@@ -3,7 +3,7 @@
  * @param {mixed}   value       value to be inserted into the cell
  * @param {bool}    render      render computed value of it's dependant or not
  */
-cell.prototype.setValue = function(value, render){
+cell.fx.setValue = function(value, render){
 
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : setting value to be : '+value);
 

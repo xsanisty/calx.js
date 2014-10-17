@@ -3,7 +3,7 @@
  * @param  {string} address     the cell address that need to be checked
  * @return {bool}               true if circular reference found, false if not found
  */
-cell.prototype.checkCircularReference = function(address){
+cell.fx.checkCircularReference = function(address){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : checking circular reference');
     var a, isCircular = false;
 

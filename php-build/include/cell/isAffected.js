@@ -1,3 +1,3 @@
-cell.prototype.isAffected = function(){
+cell.fx.isAffected = function(){
     return this.affected;
 };

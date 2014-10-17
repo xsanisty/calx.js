@@ -4,7 +4,7 @@
  * @param  {bool} childRender [set render child as well or not]
  * @return {void}
  */
-cell.prototype.processDependency = function(){
+cell.fx.processDependency = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependency');
 
     //selfRender  = (typeof(selfRender) == 'undefined') ? false : selfRender;

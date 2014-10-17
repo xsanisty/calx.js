@@ -2,7 +2,7 @@
  * set formula definition to the cell
  * @param {string} formula       formula definition
  */
-cell.prototype.setFormula = function(formula){
+cell.fx.setFormula = function(formula){
     //console.log('set formula of #'+this.sheet.elementId+'!'+this.address+' to be '+formula);
     if(typeof(formula) !== 'string'){
         return false;

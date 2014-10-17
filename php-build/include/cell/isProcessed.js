@@ -2,6 +2,6 @@
  * [isProcessed description]
  * @return {Boolean} [description]
  */
-cell.prototype.isProcessed = function(){
+cell.fx.isProcessed = function(){
     return this.processed;
 }

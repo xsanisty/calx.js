@@ -2,7 +2,7 @@
  * resync cell value with element value, in case the form is reseted
  * @return {[type]} [description]
  */
-cell.prototype.resyncValue = function(){
+cell.fx.resyncValue = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : resyncing value with element value');
 
     if(false !== this.el){

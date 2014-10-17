@@ -1,3 +1,3 @@
-cell.prototype.getFormula = function(){
+cell.fx.getFormula = function(){
     return this.formula;
 };

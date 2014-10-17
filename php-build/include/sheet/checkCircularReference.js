@@ -2,7 +2,7 @@
  * check circular reference on each cell registered to this sheet
  * @return {bool} true if exist, false if clear
  */
-sheet.prototype.checkCircularReference = function(){
+sheet.fx.checkCircularReference = function(){
     //console.log('sheet[#'+this.elementId+'] : checking circular reference');
     var a, response = {
             isCircular : false,

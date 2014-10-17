@@ -1,7 +1,7 @@
 /**
  * calculate all the sheet!
  */
-sheet.prototype.calculate = function(){
+sheet.fx.calculate = function(){
     //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
     if(typeof(this.config.onBeforeCalculate) == 'function'){

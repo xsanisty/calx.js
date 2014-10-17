@@ -3,7 +3,7 @@
  *
  * @return {[type]} [description]
  */
-cell.prototype.processDependant = function(){
+cell.fx.processDependant = function(){
     var $continue;
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing dependants');
 

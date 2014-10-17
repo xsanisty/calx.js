@@ -1,4 +1,4 @@
-cell.prototype.getValue = function(){
+cell.fx.getValue = function(){
     var returnValue;
 
     if(this.formula){

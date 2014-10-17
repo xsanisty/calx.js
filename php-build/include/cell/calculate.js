@@ -1,7 +1,7 @@
 /**
  * calculate cells formula and process dependant
  */
-cell.prototype.calculate  = function(triggerEvent){
+cell.fx.calculate  = function(triggerEvent){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
     triggerEvent = (typeof triggerEvent == 'undefined') ? true : triggerEvent;
 

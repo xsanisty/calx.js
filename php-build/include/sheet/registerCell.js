@@ -3,6 +3,6 @@
  * @param  {object} cell    cell object
  * @return {void}
  */
-sheet.prototype.registerCell = function(cell){
+sheet.fx.registerCell = function(cell){
     this.cells[cell.getAddress()] = cell;
 };

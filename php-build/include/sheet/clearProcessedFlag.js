@@ -1,7 +1,7 @@
 /**
  * mark all cell as not processed
  */
-sheet.prototype.clearProcessedFlag = function(){
+sheet.fx.clearProcessedFlag = function(){
     //console.log('sheet[#'+this.elementId+'] : clearing the processed flag');
     for(var a in this.cells){
         if(false !== this.cells[a].formula){

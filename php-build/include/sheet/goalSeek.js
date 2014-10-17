@@ -4,6 +4,6 @@
  * @param  {[type]} target   [description]
  * @return {[type]}          [description]
  */
-sheet.prototype.goalSeek = function(changing, target){
+sheet.fx.goalSeek = function(changing, target){
 
 }

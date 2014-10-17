@@ -2,7 +2,7 @@
  * Initialize the cell object, preparing all necessary variables
  * @return {void}
  */
-cell.prototype.init = function(){
+cell.fx.init = function(){
     var $address = (this.el) ? this.el.attr('data-cell') : '',
         $formula = (this.el) ? this.el.attr('data-formula') : '',
         $format  = (this.el) ? this.el.attr('data-format') : '',

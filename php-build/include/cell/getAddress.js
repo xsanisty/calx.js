@@ -2,6 +2,6 @@
  * get current cell address
  * @return {string}     cell address of the current cell object
  */
-cell.prototype.getAddress = function(){
+cell.fx.getAddress = function(){
     return this.address;
 };

@@ -2,7 +2,7 @@
  * build inter-cell dependency and dependant list, used for triggerring calculation that related to other cell
  * @return {void}
  */
-cell.prototype.buildDependency = function(){
+cell.fx.buildDependency = function(){
     var pattern = {
             remoteCellRange : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
             remoteCell      : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+/g,

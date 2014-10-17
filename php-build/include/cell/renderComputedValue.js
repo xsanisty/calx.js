@@ -2,7 +2,7 @@
  * render calculated value or final value to the element bound to this cell
  * @return {void}
  */
-cell.prototype.renderComputedValue = function(){
+cell.fx.renderComputedValue = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : rendering computed value');
 
     if(this.formula && this.formula.substring(0,5).toLowerCase() == 'graph'){

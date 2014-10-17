@@ -1,7 +1,7 @@
 /**
  * reset the form to  it's original value, and resync the value with the cell registry
  */
-sheet.prototype.reset = function(){
+sheet.fx.reset = function(){
     //console.log('sheet[#'+this.elementId+'] : resetting form elements');
 
     var forms;

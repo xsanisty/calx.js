@@ -3,6 +3,6 @@
  * @param  {atring} address     cell address
  * @return {void}
  */
-sheet.prototype.removeCell = function(address){
+sheet.fx.removeCell = function(address){
     delete this.cells[address];
 };
