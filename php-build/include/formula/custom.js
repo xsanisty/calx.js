@@ -33,9 +33,11 @@ custom : {
 
         var cellElement = this.getActiveCell().el;
 
-        $(cellElement).html('We are drawing graph here');
+        //$(cellElement).html('We are drawing graph here '+(new Date().valueOf()));
 
-        console.log(arguments);
+        var data = utility.rangeToTable(range);
+
+        $.plot(cellElement, data)
         return false;
 
     }

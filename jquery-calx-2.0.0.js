@@ -7516,11 +7516,11 @@ logical : {
     },
 
     initial : function(array, n, guard) {
-        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+        return Array.prototype.slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
     },
 
     rest : function(array, n, guard) {
-        return slice.call(array, n == null || guard ? 1 : n);
+        return Array.prototype.slice.call(array, n == null || guard ? 1 : n);
     },
 
     /** end of underscore func */

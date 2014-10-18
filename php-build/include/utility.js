@@ -197,7 +197,7 @@ var utility = {
                 arrayTable[row] = [];
             }
 
-            arrayTable[row][col] = cellRange[cell];
+            arrayTable[row][col] = [col, cellRange[cell]];
         }
 
         return arrayTable;

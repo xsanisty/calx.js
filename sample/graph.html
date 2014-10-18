@@ -121,7 +121,7 @@
             </tr>
         </table>
 
-        <div data-cell="A7" data-formula="GRAPH(A1:J6, 'h', 'line', TRUE())"></div>
+        <div data-cell="A7" data-formula="GRAPH(A1:J6, 'h', 'line', TRUE())" style="height:400px; width:600px"></div>
     </form>
     <script src="../jquery-1.9.1.min.js"></script>
     <script src="../js/jquery.flot.min.js"></script>
@@ -134,7 +134,11 @@
             },
 
             onAfterCalculate: function(){
-                console.log('after calculate triggerred');
+                if(this.getCellValue('A1') > 100){
+                    console.log('lebih dari 100');
+                }else{
+                    console.log('kurang dari 100');
+                }
             },
 
             onBeforeRender: function(){

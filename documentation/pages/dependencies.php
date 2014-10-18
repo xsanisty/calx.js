@@ -13,7 +13,7 @@
             By default, the only dependency of jQuery Calx is jQuery, the other dependencies located in <code>js</code> directory only required when you perform
             specific formula, including value formatting, date operation, and statistic operation. jQuery Calx using formula
             sets from <a href="https://github.com/sutoiku/formula.js">formula.js</a> in the core,
-            modified to work seamlessly with jQuery Calx to minimize dependencies.
+            but it already modified to work seamlessly with jQuery Calx to minimize dependencies.
         </p><br>
 
         <h4>Value Formatting</h4>
@@ -30,14 +30,14 @@
         <p>
             Most of the date processing formula like <code>DATE</code>, <code>DATEDIF()</code> require <code>moment.js</code> to be executed correctly,
             you need to include <code>moment.min.js</code> located in <code>js</code> directory.
-            If <code>moment.js</code> is not loaded, jQuery Calx will return <code>#NAME?</code> error.
+            If <code>moment.js</code> is not loaded, jQuery Calx will return <code>#ERROR_MOMENT_JS_REQUIRED</code> error.
         </p>
         <br>
         <h4>Statistical Calculation</h4>
         <p>
             Most of the statistical processing formula like <code>CORREL()</code>, <code>EXPONDIF()</code> require <code>jstat.js</code> to be executed.
             you need to include <code>jstat.min.js</code> located in <code>js</code> directory.
-            If <code>jstat.js</code> is not loaded, jQuery Calx will return <code>#NAME?</code> error.
+            If <code>jstat.js</code> is not loaded, jQuery Calx will return <code>#ERROR_JSTAT_JS_REQUIRED</code> error.
         </p>
 
 
