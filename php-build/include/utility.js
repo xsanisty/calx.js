@@ -110,11 +110,11 @@ var utility = {
     },
 
     initial : function(array, n, guard) {
-        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+        return Array.prototype.slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
     },
 
     rest : function(array, n, guard) {
-        return slice.call(array, n == null || guard ? 1 : n);
+        return Array.prototype.slice.call(array, n == null || guard ? 1 : n);
     },
 
     /** end of underscore func */
@@ -184,7 +184,23 @@ var utility = {
      * @return {array}            [description]
      */
     rangeToTable : function(cellRange){
+        var cell, row, col,
+            alphaPattern = /[A-Z]+/,
+            numPattern = /[0-9]+/,
+            arrayTable = [];
 
+        for(cell in cellRange){
+            col = this.toNum(cell.match(alphaPattern)[0])-1;
+            row = parseInt(cell.match(numPattern)[0], 10)-1;
+
+            if(typeof arrayTable[row] == 'undefined'){
+                arrayTable[row] = [];
+            }
+
+            arrayTable[row][col] = cellRange[cell];
+        }
+
+        return arrayTable;
     },
 
     rotateTable : function(tableRange){

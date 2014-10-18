@@ -1,6 +1,6 @@
 /**
- * Apply calculated and formatted value to elements that represent cell
- * @return void
+ * Apply calculated and formatted value to elements that represent the cell
+ * @return sheet object
  */
 sheet.fx.applyChange = function(){
     //console.log('sheet[#'+this.elementId+'] : applying all computed value to the element');
@@ -12,4 +12,6 @@ sheet.fx.applyChange = function(){
     for(a in this.cells){
         this.cells[a].renderComputedValue();
     }
+
+    return this;
 };

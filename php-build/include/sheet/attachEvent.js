@@ -23,7 +23,7 @@ sheet.fx.attachEvent = function(){
     /**
      * get the formatted value of the cell, and display it to the element
      */
-    this.el.on('calx.getComputedValue', 'input[data-cell]', function(){
+    this.el.on('calx.renderComputedValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -82,7 +82,7 @@ sheet.fx.attachEvent = function(){
 
     this.el.on('blur', 'input[data-cell]', function(){
         //console.log($(this).attr('data-cell')+'blur');
-        $(this).trigger('calx.getComputedValue');
+        $(this).trigger('calx.renderComputedValue');
     });
 
     /**
@@ -121,7 +121,7 @@ sheet.fx.detachEvent = function(){
 
     this.el.off('calx.getValue');
     this.el.off('calx.setValue');
-    this.el.off('calx.getComputedValue');
+    this.el.off('calx.renderComputedValue');
     this.el.off('calx.calculateSheet');
     this.el.off('calx.calculateCellDependant');
 }
