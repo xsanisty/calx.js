@@ -2263,9 +2263,11 @@ var defaultConfig = {
 
         var cellElement = this.getActiveCell().el;
 
-        $(cellElement).html('We are drawing graph here');
+        //$(cellElement).html('We are drawing graph here '+(new Date().valueOf()));
 
-        console.log(arguments);
+        var data = utility.rangeToTable(range);
+
+        $.plot(cellElement, data)
         return false;
 
     }
@@ -7590,7 +7592,23 @@ logical : {
      * @return {array}            [description]
      */
     rangeToTable : function(cellRange){
+        var cell, row, col,
+            alphaPattern = /[A-Z]+/,
+            numPattern = /[0-9]+/,
+            arrayTable = [];
 
+        for(cell in cellRange){
+            col = this.toNum(cell.match(alphaPattern)[0])-1;
+            row = parseInt(cell.match(numPattern)[0], 10)-1;
+
+            if(typeof arrayTable[row] == 'undefined'){
+                arrayTable[row] = [];
+            }
+
+            arrayTable[row][col] = [col, cellRange[cell]];
+        }
+
+        return arrayTable;
     },
 
     rotateTable : function(tableRange){
@@ -8242,7 +8260,20 @@ cell.fx.getAddress = function(){
  * @return {string}     the formatted value
  */
 cell.fx.getFormattedValue = function(){
-    return this.formattedValue;
+    var originalVal = (this.formula) ? this.computedValue : this.value,
+        formattedVal= (
+            this.format != ''
+            && typeof(numeral) != 'undefined'
+            && originalVal !== ''
+            && originalVal !== false
+            && originalVal !== null
+            && data.ERROR.indexOf(originalVal) == -1
+            && $.isNumeric(originalVal)
+        )
+        ? numeral(originalVal).format(this.format)
+        : originalVal;
+
+    return formattedVal;
 };/**
  * set cell value and sync it with the bound element, and trigger recalculation on all cell depend to it
  * @param {mixed}   value       value to be inserted into the cell
@@ -8704,8 +8735,8 @@ sheet.fx.getCellRange = function(addressStart, addressStop){
 
     return cellRange;
 };/**
- * Apply calculated and formatted value to elements that represent cell
- * @return void
+ * Apply calculated and formatted value to elements that represent the cell
+ * @return sheet object
  */
 sheet.fx.applyChange = function(){
     //console.log('sheet[#'+this.elementId+'] : applying all computed value to the element');
@@ -8717,6 +8748,8 @@ sheet.fx.applyChange = function(){
     for(a in this.cells){
         this.cells[a].renderComputedValue();
     }
+
+    return this;
 };sheet.fx.scan = function(){
 
 };/**
@@ -8799,7 +8832,7 @@ sheet.fx.getActiveCell = function(){
     /**
      * get the formatted value of the cell, and display it to the element
      */
-    this.el.on('calx.getComputedValue', 'input[data-cell]', function(){
+    this.el.on('calx.renderComputedValue', 'input[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -8858,7 +8891,7 @@ sheet.fx.getActiveCell = function(){
 
     this.el.on('blur', 'input[data-cell]', function(){
         //console.log($(this).attr('data-cell')+'blur');
-        $(this).trigger('calx.getComputedValue');
+        $(this).trigger('calx.renderComputedValue');
     });
 
     /**
@@ -8897,7 +8930,7 @@ sheet.fx.detachEvent = function(){
 
     this.el.off('calx.getValue');
     this.el.off('calx.setValue');
-    this.el.off('calx.getComputedValue');
+    this.el.off('calx.renderComputedValue');
     this.el.off('calx.calculateSheet');
     this.el.off('calx.calculateCellDependant');
 }    /**
