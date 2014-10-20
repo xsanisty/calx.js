@@ -87,12 +87,15 @@ var data = {
         '#VALUE!',
         '#ERROR!',
         '#ERROR_MOMENT_JS_REQUIRED!',
-        '#ERROR_JSTAT_JS_REQUIRED!'
+        '#ERROR_JSTAT_JS_REQUIRED!',
+        '#ERROR_AJAX_URL_REQUIRED!'
     ],
 
     ERRKEY : {
         jStatRequired : '#ERROR_JSTAT_JS_REQUIRED!',
-        momentRequired : '#ERROR_MOMENT_JS_REQUIRED!'
+        momentRequired : '#ERROR_MOMENT_JS_REQUIRED!',
+        ajaxUrlRequired : '#ERROR_AJAX_URL_REQUIRED!',
+        sendRequestError : '#ERROR_SEND_REQUEST!'
     },
 
     VARIABLE : {},

@@ -190,6 +190,7 @@ var utility = {
             arrayTable = [];
 
         for(cell in cellRange){
+
             col = this.toNum(cell.match(alphaPattern)[0])-1;
             row = parseInt(cell.match(numPattern)[0], 10)-1;
 
@@ -197,13 +198,43 @@ var utility = {
                 arrayTable[row] = [];
             }
 
-            arrayTable[row][col] = [col, cellRange[cell]];
+            arrayTable[row][col] = cellRange[cell];
         }
 
         return arrayTable;
     },
 
-    rotateTable : function(tableRange){
+    /**
+     * transpose horizontal table to be vertical table, or vice-versa
+     * e.g
+     *     [[1,2,3,4],
+     *      [1,2,3,4]]
+     *
+     * to be
+     *     [[1,1],
+     *      [2,2],
+     *      [3,3],
+     *      [4,4]]
+     */
+    transposeTable : function(table){
+        var row, col, rowLength, colLength, newTable;
+
+        rowLength = table.length;
+        newTable  = [];
+
+        for(row = 0; row < rowLength; row++){
+            colLength = table[row].length;
+
+            for(col = 0; col < colLength; col++){
+                if(typeof(newTable[col]) == 'undefined'){
+                    newTable[col] = [];
+                }
+
+                newTable[col].push(table[row][col]);
+            }
+        }
+
+        return newTable;
 
     }
 };

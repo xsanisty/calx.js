@@ -94,6 +94,10 @@ logical : {
             }
         }
         return (Math.floor(Math.abs(result)) & 1) ? true : false;
+    },
+
+    NULL : function(){
+        return null;
     }
 
 
