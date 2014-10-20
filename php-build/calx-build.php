@@ -48,6 +48,7 @@ var Zepto   = Zepto     || undefined,
         #require 'include/cell/attachEvent.js';
         #require 'include/cell/detachEvent.js';
         require 'include/cell/formTags.js';
+        require 'include/cell/setConditionalStyle.js';
 
         require 'include/cell/setFormat.js';
         require 'include/cell/getFormat.js';

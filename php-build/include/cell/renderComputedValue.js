@@ -35,5 +35,13 @@ cell.fx.renderComputedValue = function(){
         }
     }
 
+    //console.log(typeof(this.conditionalStyle));
+
+    if(typeof(this.conditionalStyle) == 'function'){
+        var css = this.conditionalStyle.apply(null, [this.getValue()]);
+
+        this.el.css(css);
+    }
+
     return this;
 }
