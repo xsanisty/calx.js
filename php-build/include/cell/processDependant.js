@@ -16,7 +16,8 @@ cell.fx.processDependant = function(){
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
 
         this.processDependency();
-        this.evaluateFormula();
+        //console.log((new Date()).valueOf());
+        //this.evaluateFormula();
 
         for(var a in this.dependant){
             //prefix = prefix+'--';

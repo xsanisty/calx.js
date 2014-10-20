@@ -10,9 +10,7 @@ cell.fx.calculate  = function(triggerEvent){
     }
 
     calx.isCalculating = true;
-    if(this.formula){
-        this.evaluateFormula();
-    }
+    this.evaluateFormula();
 
     for(var a in this.dependant){
         this.dependant[a].processDependant();
@@ -22,17 +20,19 @@ cell.fx.calculate  = function(triggerEvent){
         this.sheet.dependant[a].calculate(false);
     }
 
+    if(this.sheet.hasRelatedSheet()){
+        for(a in this.sheet.cells){
+            console.log('recalculating cell');
+            if(this.sheet.cells[a].hasRemoteDependency()){
+                this.sheet.cells[a].evaluateFormula();
+                this.sheet.cells[a].processDependant();
+                this.sheet.cells[a].renderComputedValue();
 
-    for(a in this.sheet.cells){
-        //console.log('recalculating cell');
-        if(this.sheet.cells[a].hasRemoteDependency()){
-            this.sheet.cells[a].evaluateFormula();
-            this.sheet.cells[a].processDependant();
-            this.sheet.cells[a].renderComputedValue();
-
-            //console.log('recalculating cell #'+this.sheet.el.attr('id')+'!'+a+'='+this.sheet.cells[a].getValue());
+                //console.log('recalculating cell #'+this.sheet.el.attr('id')+'!'+a+'='+this.sheet.cells[a].getValue());
+            }
         }
     }
+
     calx.isCalculating = false;
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){

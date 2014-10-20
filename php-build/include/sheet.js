@@ -13,7 +13,7 @@ function sheet(identifier, element, config){
     this.variables    = {};
     this.config       = $.extend({}, defaultConfig, config);
     this.counter      = 1;
-    this.relatedSheet = {};
+    this.relatedSheet = false;
     this.elementId    = this.el.attr('id');
     this.dependant    = {};
     this.dependencies = {};

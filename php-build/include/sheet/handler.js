@@ -126,19 +126,21 @@ sheet.fx.comparator = {
     notEqual: function(a,b){
         return a!= b;
     }
-}
+};
 
 sheet.fx.obj = {
     type : 'cell'
 };
 
 sheet.fx.registerDependency = function(dep){
+    this.relatedSheet = true;
     if(typeof(this.dependencies[dep.identifier]) == 'undefined'){
         this.dependencies[dep.identifier] = dep;
     }
 };
 
 sheet.fx.registerDependant = function(dep){
+    this.relatedSheet = true;
     if(typeof(this.dependant[dep.identifier]) == 'undefined'){
         this.dependant[dep.identifier] = dep;
     }
@@ -146,16 +148,16 @@ sheet.fx.registerDependant = function(dep){
 
 sheet.fx.clearDependencies = function(){
 
-}
+};
 
 sheet.fx.setCalculated = function(calculated){
     calculated = (typeof(calculated) == 'undefined') ? true : calculated;
     this.calculated  = calculated;
-}
+};
 
 sheet.fx.isCalculated = function(){
     return this.calculated;
-}
+};
 
 sheet.fx.clearCalculatedFlag = function(){
     var a;
@@ -168,4 +170,8 @@ sheet.fx.clearCalculatedFlag = function(){
     for(a in this.dependencies){
         this.dependencies[a].setCalculated(false);
     }
+};
+
+sheet.fx.hasRelatedSheet = function(){
+    return this.relatedSheet;
 }
