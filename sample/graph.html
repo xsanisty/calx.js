@@ -121,34 +121,20 @@
             </tr>
         </table>
 
-        <div data-cell="A7" data-formula="GRAPH(A1:J6, 'h', 'line', TRUE())" style="height:400px; width:600px"></div>
+        <div data-cell="A7" data-formula="SUM(A1:J6)" style="width:100%"></div>
+        <div data-cell="A8" data-formula="HLOOKUP(100, A1:C2, 2)" style="width:100%"></div>
     </form>
     <script src="../jquery-1.9.1.min.js"></script>
     <script src="../js/jquery.flot.min.js"></script>
+    <script src="../js/flot_plugin/jquery.flot.categories.js"></script>
+    <script src="../js/flot_plugin/jquery.flot.pie.js"></script>
     <script src="../php-build/calx-build.php"></script>
 
     <script>
-        $('#sheet1').calx({
-            onBeforeCalculate: function(){
-                console.log('before calculate triggerred');
-            },
+        console.time('init_calx');
+        $('#sheet1').calx();
+        console.timeEnd('init_calx');
 
-            onAfterCalculate: function(){
-                if(this.getCellValue('A1') > 100){
-                    console.log('lebih dari 100');
-                }else{
-                    console.log('kurang dari 100');
-                }
-            },
-
-            onBeforeRender: function(){
-                console.log('before render triggerred');
-            },
-
-            onAfterRender: function(){
-                console.log('after render triggerred');
-            }
-        });
     </script>
     </body>
 </html>

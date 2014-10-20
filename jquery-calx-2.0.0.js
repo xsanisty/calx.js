@@ -2229,48 +2229,7 @@ var defaultConfig = {
     return new Parser;
 }var formula = {
     custom : {
-    SERVER : function(){
-        if(this.config.ajaxUrl == null){
-            return '#NAME?';
-        }
 
-
-        var result,
-            funcName = arguments[0],
-            params = {};
-
-        for (var a = 1; a < arguments.length; a++){
-            params['params['+a+']'] = arguments[a];
-        }
-
-        $.ajax({
-            url: this.config.ajaxUrl,
-            method: this.config.ajaxMethod,
-            data: params,
-            async: false,
-            success: function(response){
-                result = response;
-            },
-            error: function(response){
-                result = '#NAME?';
-            }
-        });
-
-        return result;
-    },
-
-    GRAPH : function(range, orientation, type){
-
-        var cellElement = this.getActiveCell().el;
-
-        //$(cellElement).html('We are drawing graph here '+(new Date().valueOf()));
-
-        var data = utility.rangeToTable(range);
-
-        $.plot(cellElement, data)
-        return false;
-
-    }
 },
     /**
  * date formula group.
@@ -5504,6 +5463,10 @@ logical : {
             }
         }
         return (Math.floor(Math.abs(result)) & 1) ? true : false;
+    },
+
+    NULL : function(){
+        return null;
     }
 
 
@@ -5782,11 +5745,217 @@ logical : {
 },
     general: {
 
-    VLOOKUP : function($value, $table, $colIndex){
+    VLOOKUP : function(value, table, colIndex, approx){
+        var col, row, rowLength, colLength;
 
+        if(typeof(table == 'object') && table.constructor.name == 'Object'){
+            table = utility.rangeToTable(table);
+        }
+
+        rowLength = table.length;
+        colLength = table[0].length;
+        colIndex  = colIndex-1;
+        /** default approx to false */
+        approx = typeof(approx) == 'undefined' ? false : approx;
+
+        if(colIndex > colLength-1){
+            return '#REF!';
+        }
+
+        if(colIndex < 0){
+            return '#VALUE!';
+        }
+
+        if(false == approx){
+            for(row = 0; row < rowLength; row++){
+                if(value == table[row][0]){
+                    return table[row][colIndex];
+                }
+            }
+
+            return '#N/A!';
+        }else{
+            var delta = [], deltaMin, rowIndex, deltaLength;
+
+            for(row = 0; row < rowLength; row++){
+                if(value == table[row][0]){
+                    return table[row][colIndex];
+                }
+                delta[row] = Math.abs(table[row][0] - value);
+
+                if(isNaN(delta[row])){
+                    delta[row] = -1;
+                }
+
+            }
+
+            deltaLength = delta.length;
+            deltaMin    = null;
+
+            for(var a = 0; a < deltaLength; a++){
+                if(delta[a] >= 0){
+                    if(deltaMin === null){
+                        deltaMin = delta[a];
+                    }else{
+                        deltaMin = (deltaMin < delta[a]) ? deltaMin : delta[a];
+                    }
+                }
+            }
+
+            rowIndex = delta.indexOf(deltaMin);
+
+            if(rowIndex < 0){
+                return '#N/A!';
+            }
+
+            return table[rowIndex][colIndex];
+        }
     },
 
-    HLOOKUP : function($value, $table, $rowIndex){
+    HLOOKUP : function(value, table, rowIndex, approx){
+        if(typeof(table == 'object')){
+            table = utility.rangeToTable(table);
+        }
+
+        table = utility.transposeTable(table);
+
+        return formula.general.VLOOKUP(value, table, rowIndex, approx);
+    },
+
+    SERVER : function(){
+        if(this.config.ajaxUrl == null){
+            return data.ERRKEY.ajaxUrlRequired;
+        }
+
+        var result,
+            funcName = arguments[0],
+            params = {};
+
+        for (var a = 1; a < arguments.length; a++){
+            params['params['+a+']'] = arguments[a];
+        }
+
+        $.ajax({
+            url: this.config.ajaxUrl,
+            method: this.config.ajaxMethod,
+            data: params,
+            async: false,
+            success: function(response){
+                result = response;
+            },
+            error: function(response){
+                result = data.ERRKEY.sendRequestError;
+            }
+        });
+
+        return result;
+    },
+
+    GRAPH : function(data, legend, label, options){
+
+        var graphOptions = {},
+            cellElement = this.getActiveCell().el,
+            graphData = utility.rangeToTable(data),
+            plotOptions = {},
+            legend = (typeof(legend) == 'object') ? utility.arrayMerge([legend]) : false,
+            label = (typeof(label) == 'object') ? utility.arrayMerge([label]) : false,
+            keyval;
+
+        console.log(legend);
+        console.log(label);
+
+        /**
+         * parsing option come from formula into javascript object
+         */
+        for(var a = 0; a < options.length; a++){
+            keyval = options[a].split('=');
+            graphOptions[keyval[0]] = keyval[1];
+        }
+
+        /**
+         * parsing table header as x-axis label
+         */
+        if(graphOptions.column_header == 'true'){
+            var header = graphData.shift(),
+                rowLength = graphData.length,
+                colLength, row, col, data;
+
+            for(row = 0; row < rowLength; row++){
+
+                colLength = graphData[row].length;
+
+                for(col = 0; col < colLength; col++){
+                    data = graphData[row][col];
+                    graphData[row][col] = [header[col], data];
+                }
+            }
+
+            plotOptions.xaxis = {
+                mode: "categories",
+                tickLength: 0
+            };
+        }
+
+        /**
+         * using incremental number as x-axis
+         */
+        if(graphOptions.column_header == 'false'){
+
+            var rowLength = graphData.length,
+                colLength, row, col, data;
+
+            for(row = 0; row < rowLength; row++){
+
+                colLength = graphData[row].length;
+
+                for(col = 0; col < colLength; col++){
+                    data = graphData[row][col];
+                    graphData[row][col] = [col, data];
+                }
+            }
+        }
+
+        if(graphOptions.type == 'pie' || graphOptions.type == 'doughnut'){
+            var pieData = graphData.shift();
+
+
+        }
+
+        switch(graphOptions.type){
+            case 'bar':
+                plotOptions.series = {
+                    bars: {
+                        show: true,
+                        barWidth: 0.6,
+                        align: "center"
+                    }
+                };
+                break;
+
+            case 'pie':
+                plotOptions.series = {
+                    pie: {
+                        show: true
+                    }
+                };
+                break;
+
+            case 'doughnut':
+                plotOptions.series = {
+                    pie: {
+                        show: true,
+                        innerRadius: 0.65
+                    }
+                };
+                break;
+
+            default:
+                break;
+        }
+
+        $.plot(cellElement, graphData, plotOptions);
+
+        return false;
 
     }
 },
@@ -7598,6 +7767,7 @@ logical : {
             arrayTable = [];
 
         for(cell in cellRange){
+
             col = this.toNum(cell.match(alphaPattern)[0])-1;
             row = parseInt(cell.match(numPattern)[0], 10)-1;
 
@@ -7605,13 +7775,43 @@ logical : {
                 arrayTable[row] = [];
             }
 
-            arrayTable[row][col] = [col, cellRange[cell]];
+            arrayTable[row][col] = cellRange[cell];
         }
 
         return arrayTable;
     },
 
-    rotateTable : function(tableRange){
+    /**
+     * transpose horizontal table to be vertical table, or vice-versa
+     * e.g
+     *     [[1,2,3,4],
+     *      [1,2,3,4]]
+     *
+     * to be
+     *     [[1,1],
+     *      [2,2],
+     *      [3,3],
+     *      [4,4]]
+     */
+    transposeTable : function(table){
+        var row, col, rowLength, colLength, newTable;
+
+        rowLength = table.length;
+        newTable  = [];
+
+        for(row = 0; row < rowLength; row++){
+            colLength = table[row].length;
+
+            for(col = 0; col < colLength; col++){
+                if(typeof(newTable[col]) == 'undefined'){
+                    newTable[col] = [];
+                }
+
+                newTable[col].push(table[row][col]);
+            }
+        }
+
+        return newTable;
 
     }
 };var data = {
@@ -7703,12 +7903,16 @@ logical : {
         '#VALUE!',
         '#ERROR!',
         '#ERROR_MOMENT_JS_REQUIRED!',
-        '#ERROR_JSTAT_JS_REQUIRED!'
+        '#ERROR_JSTAT_JS_REQUIRED!',
+        '#ERROR_AJAX_URL_REQUIRED!',
+        '#ERROR_SEND_REQUEST!'
     ],
 
     ERRKEY : {
         jStatRequired : '#ERROR_JSTAT_JS_REQUIRED!',
-        momentRequired : '#ERROR_MOMENT_JS_REQUIRED!'
+        momentRequired : '#ERROR_MOMENT_JS_REQUIRED!',
+        ajaxUrlRequired : '#ERROR_AJAX_URL_REQUIRED!',
+        sendRequestError : '#ERROR_SEND_REQUEST!'
     },
 
     VARIABLE : {},
@@ -7801,9 +8005,7 @@ cell.fx.calculate  = function(triggerEvent){
     }
 
     calx.isCalculating = true;
-    if(this.formula){
-        this.evaluateFormula();
-    }
+    this.evaluateFormula();
 
     for(var a in this.dependant){
         this.dependant[a].processDependant();
@@ -7813,18 +8015,21 @@ cell.fx.calculate  = function(triggerEvent){
         this.sheet.dependant[a].calculate(false);
     }
 
+    calx.isCalculating = false;
 
-    for(a in this.sheet.cells){
-        //console.log('recalculating cell');
-        if(this.sheet.cells[a].hasRemoteDependency()){
-            this.sheet.cells[a].evaluateFormula();
-            this.sheet.cells[a].processDependant();
-            this.sheet.cells[a].renderComputedValue();
 
-            //console.log('recalculating cell #'+this.sheet.el.attr('id')+'!'+a+'='+this.sheet.cells[a].getValue());
+    if(this.sheet.hasRelatedSheet()){
+        for(a in this.sheet.cells){
+            //console.log('recalculating cell');
+            if(this.sheet.cells[a].hasRemoteDependency()){
+                this.sheet.cells[a].evaluateFormula();
+                this.sheet.cells[a].processDependant();
+                this.sheet.cells[a].renderComputedValue();
+
+                //console.log('recalculating cell #'+this.sheet.el.attr('id')+'!'+a+'='+this.sheet.cells[a].getValue());
+            }
         }
     }
-    calx.isCalculating = false;
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){
         this.sheet.config.onAfterCalculate.apply(this.sheet);
@@ -8053,7 +8258,8 @@ cell.fx.processDependant = function(){
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], processing...')
 
         this.processDependency();
-        this.evaluateFormula();
+        //console.log((new Date()).valueOf());
+        //this.evaluateFormula();
 
         for(var a in this.dependant){
             //prefix = prefix+'--';
@@ -8346,7 +8552,7 @@ function sheet(identifier, element, config){
     this.variables    = {};
     this.config       = $.extend({}, defaultConfig, config);
     this.counter      = 1;
-    this.relatedSheet = {};
+    this.relatedSheet = false;
     this.elementId    = this.el.attr('id');
     this.dependant    = {};
     this.dependencies = {};
@@ -8556,19 +8762,21 @@ sheet.fx.comparator = {
     notEqual: function(a,b){
         return a!= b;
     }
-}
+};
 
 sheet.fx.obj = {
     type : 'cell'
 };
 
 sheet.fx.registerDependency = function(dep){
+    this.relatedSheet = true;
     if(typeof(this.dependencies[dep.identifier]) == 'undefined'){
         this.dependencies[dep.identifier] = dep;
     }
 };
 
 sheet.fx.registerDependant = function(dep){
+    this.relatedSheet = true;
     if(typeof(this.dependant[dep.identifier]) == 'undefined'){
         this.dependant[dep.identifier] = dep;
     }
@@ -8576,16 +8784,16 @@ sheet.fx.registerDependant = function(dep){
 
 sheet.fx.clearDependencies = function(){
 
-}
+};
 
 sheet.fx.setCalculated = function(calculated){
     calculated = (typeof(calculated) == 'undefined') ? true : calculated;
     this.calculated  = calculated;
-}
+};
 
 sheet.fx.isCalculated = function(){
     return this.calculated;
-}
+};
 
 sheet.fx.clearCalculatedFlag = function(){
     var a;
@@ -8598,6 +8806,10 @@ sheet.fx.clearCalculatedFlag = function(){
     for(a in this.dependencies){
         this.dependencies[a].setCalculated(false);
     }
+};
+
+sheet.fx.hasRelatedSheet = function(){
+    return this.relatedSheet;
 }/**
  * evaluate given formula
  * @param  {string} formula     the formula need to be evaluated

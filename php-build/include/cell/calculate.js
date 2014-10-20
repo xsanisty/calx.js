@@ -20,9 +20,12 @@ cell.fx.calculate  = function(triggerEvent){
         this.sheet.dependant[a].calculate(false);
     }
 
+    calx.isCalculating = false;
+
+
     if(this.sheet.hasRelatedSheet()){
         for(a in this.sheet.cells){
-            console.log('recalculating cell');
+            //console.log('recalculating cell');
             if(this.sheet.cells[a].hasRemoteDependency()){
                 this.sheet.cells[a].evaluateFormula();
                 this.sheet.cells[a].processDependant();
@@ -32,8 +35,6 @@ cell.fx.calculate  = function(triggerEvent){
             }
         }
     }
-
-    calx.isCalculating = false;
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){
         this.sheet.config.onAfterCalculate.apply(this.sheet);
