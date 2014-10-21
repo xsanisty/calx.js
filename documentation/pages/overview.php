@@ -50,7 +50,7 @@ $('#sheet').calx();
         </p>
         <p>
             In case <code>data-formula</code> attribute present without <code>data-cell</code> attribute, jQuery Calx will assign reserved cell address
-            prefixed with <code>CALX</code> and counted incrementally, the cell address will look like <code>CALX1</code>,
+            prefixed with <code>CALX</code> and count the index incrementally, the resulting cell address will be like <code>CALX1</code>,
             <code>CALX2</code>,<code>CALX3</code>,<code>CALX4</code>
         </p>
     </div>

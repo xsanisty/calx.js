@@ -10,6 +10,7 @@
         </title>
         <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
     </head>
     <body>
@@ -23,15 +24,15 @@
                 </div>
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
-                        <li class="active"><a href="#overview">Overview</a></li>
-                        <li class="active"><a href="#initialize">Initializing</a></li>
-                        <li class="active"><a href="#configure">Configuration</a></li>
-                        <li class="active"><a href="#formula">Formula</a></li>
-                        <li class="active"><a href="#format">Formatting</a></li>
-                        <li class="active"><a href="#calx">Calx API</a></li>
-                        <li class="active"><a href="#sheet">Sheet API</a></li>
-                        <li class="active"><a href="#cell">Cell API</a></li>
-                        <li class="active"><a href="#dependency">Dependencies</a></li>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#initialize">Initializing</a></li>
+                        <li><a href="#configure">Configuration</a></li>
+                        <li><a href="#formula">Formula</a></li>
+                        <li><a href="#format">Formatting</a></li>
+                        <li><a href="#calx">Calx API</a></li>
+                        <li><a href="#sheet">Sheet API</a></li>
+                        <li><a href="#cell">Cell API</a></li>
+                        <li><a href="#dependency">Dependencies</a></li>
 
                     </ul>
                 </div>
