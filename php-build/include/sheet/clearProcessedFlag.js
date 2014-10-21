@@ -12,4 +12,4 @@ sheet.fx.clearProcessedFlag = function(){
             this.cells[a].setAffected(false);
         }
     }
-}
+};

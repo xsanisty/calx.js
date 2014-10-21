@@ -6,4 +6,4 @@
  */
 sheet.fx.goalSeek = function(changing, target){
 
-}
+};
