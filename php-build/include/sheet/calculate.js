@@ -4,6 +4,8 @@
 sheet.fx.calculate = function(){
     //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
+    this.clearAffectedCell();
+
     if(typeof(this.config.onBeforeCalculate) == 'function'){
         this.config.onBeforeCalculate.apply(this);
     }
@@ -30,7 +32,6 @@ sheet.fx.calculate = function(){
         //console.log('recalculating cell');
         if(this.cells[a].hasRemoteDependency()){
             this.cells[a].evaluateFormula();
-
             //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
         }
     }
@@ -48,4 +49,6 @@ sheet.fx.calculate = function(){
     if(typeof(this.config.onAfterRender) == 'function'){
         this.config.onAfterRender.apply(this);
     }
+
+    return this;
 };

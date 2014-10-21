@@ -7996,9 +7996,13 @@ cell.fx.init = function(){
 };/**
  * calculate cells formula and process dependant
  */
-cell.fx.calculate  = function(triggerEvent){
+cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
     triggerEvent = (typeof triggerEvent == 'undefined') ? true : triggerEvent;
+    renderComputedValue = (typeof renderComputedValue == 'undefined') ? true : renderComputedValue;
+
+    /* clear list of affected cell */
+    this.sheet.clearAffectedCell();
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeCalculate) == 'function'){
         this.sheet.config.onBeforeCalculate.apply(this.sheet);
@@ -8012,7 +8016,7 @@ cell.fx.calculate  = function(triggerEvent){
     }
 
     for(var a in this.sheet.dependant){
-        this.sheet.dependant[a].calculate(false);
+        this.sheet.dependant[a].calculate(false, false);
     }
 
     calx.isCalculating = false;
@@ -8039,7 +8043,9 @@ cell.fx.calculate  = function(triggerEvent){
         this.sheet.config.onBeforeRender.apply(this.sheet);
     }
 
-    this.renderComputedValue();
+    if(renderComputedValue){
+        this.renderComputedValue();
+    }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterRender) == 'function'){
         this.sheet.config.onAfterRender.apply(this.sheet);
@@ -8225,6 +8231,11 @@ cell.fx.processDependency = function(){
 
         this.evaluateFormula();
         this.setProcessed(true);
+
+        if(this.sheet.affectedCell.indexOf(this.address) == -1){
+            this.sheet.affectedCell.push(this.address);
+            //console.log(this.sheet.affectedCell);
+        }
     }else{
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
     }
@@ -8276,6 +8287,11 @@ cell.fx.processDependant = function(){
 
         this.setAffected(false);
         this.setProcessed(true);
+
+        if(this.sheet.affectedCell.indexOf(this.address) == -1){
+            this.sheet.affectedCell.push(this.address);
+            //console.log(this.sheet.affectedCell);
+        }
     }else{
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
         return false;
@@ -8321,6 +8337,16 @@ cell.fx.renderComputedValue = function(){
             }
         }else{
             this.el.html(formattedVal);
+        }
+    }
+
+    //console.log(typeof(this.conditionalStyle));
+
+    if(typeof(this.conditionalStyle) == 'function'){
+        var css = this.conditionalStyle.apply(null, [this.getValue(), this.el]);
+
+        if(typeof(css) == 'object'){
+            this.el.css(css);
         }
     }
 
@@ -8391,7 +8417,7 @@ cell.fx.checkCircularReference = function(address){
     return isCircular;
 };/**
  * evaluate cell formula and put the result in computed value container
- * @return {null}
+ * @return {mixed}
  */
 cell.fx.evaluateFormula = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : evaluating formula ['+this.formula+']');
@@ -8412,6 +8438,14 @@ cell.fx.evaluateFormula = function(){
     return false;
 };/** form tag reference */
 cell.fx.formTags = ['input', 'select', 'textarea', 'button'];/**
+ * set conditional style callback
+ * @param {Function} callback [description]
+ */
+cell.fx.setConditionalStyle = function(callback){
+    if(typeof(callback) == 'function'){
+        this.conditionalStyle = callback;
+    }
+}/**
  * set formatting rule to the cell
  * @param {string} format       format rule to define formatting on rendered value
  */
@@ -8560,6 +8594,7 @@ function sheet(identifier, element, config){
     this.calculating  = false;
     this.activeCell   = null;
     this.totalCell    = 0;
+    this.affectedCell = [];
 
     this.init();
 };
@@ -8631,9 +8666,12 @@ sheet.fx.buildCellDependency = function(){
 };sheet.fx.renderComputedValue = function(){
     //console.log('sheet[#'+this.elementId+'] : rendering all computed value to the element');
 
-    for(var a in this.cells){
-        this.cells[a].renderComputedValue();
+    //console.log(this.el.attr('id'));
+    //console.log(this.affectedCell);
+    for(var a = 0; a < this.affectedCell.length; a++){
+        this.cells[this.affectedCell[a]].renderComputedValue();
     }
+    this.clearAffectedCell();
 };sheet.fx.getCellValue = function(address){
     var cell = address.toUpperCase();
     if(typeof(this.cells[cell]) == 'undefined'){
@@ -8810,6 +8848,10 @@ sheet.fx.clearCalculatedFlag = function(){
 
 sheet.fx.hasRelatedSheet = function(){
     return this.relatedSheet;
+}
+
+sheet.fx.clearAffectedCell = function(){
+    this.affectedCell = [];
 }/**
  * evaluate given formula
  * @param  {string} formula     the formula need to be evaluated
@@ -8861,6 +8903,8 @@ sheet.fx.update = function(){
 sheet.fx.calculate = function(){
     //console.log('sheet[#'+this.elementId+'] : calculating the sheet');
 
+    this.clearAffectedCell();
+
     if(typeof(this.config.onBeforeCalculate) == 'function'){
         this.config.onBeforeCalculate.apply(this);
     }
@@ -8887,7 +8931,6 @@ sheet.fx.calculate = function(){
         //console.log('recalculating cell');
         if(this.cells[a].hasRemoteDependency()){
             this.cells[a].evaluateFormula();
-
             //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
         }
     }
@@ -8905,6 +8948,8 @@ sheet.fx.calculate = function(){
     if(typeof(this.config.onAfterRender) == 'function'){
         this.config.onAfterRender.apply(this);
     }
+
+    return this;
 };/**
  * register singgle cell to sheet's cell registry
  * @param  {object} cell    cell object
@@ -8912,6 +8957,10 @@ sheet.fx.calculate = function(){
  */
 sheet.fx.registerCell = function(cell){
     this.cells[cell.getAddress()] = cell;
+
+    if(this.affectedCell.indexOf(cell.getAddress()) == -1){
+        this.affectedCell.push(cell.getAddress());
+    }
 };/**
  * get cell object based on given address
  * @param  {string} address     cell address (A1, B1 etc)
@@ -9080,8 +9129,12 @@ sheet.fx.getActiveCell = function(){
             calx.isCalculating = false;
         }
         currentSheet.clearProcessedFlag();
-        currentCell.calculate();
-        currentSheet.renderComputedValue();
+        currentCell.calculate(true, false);
+        if(currentSheet.hasRelatedSheet()){
+            currentSheet.calculate();
+        }else{
+            currentSheet.renderComputedValue();
+        }
 
     });
 
@@ -9208,8 +9261,8 @@ init : function (option) {
 
         /** calculate and render the result */
         if(calx.sheetRegistry[sheetIdentifier].config.autoCalculate){
-            calx.sheetRegistry[sheetIdentifier].calculate();
             calx.sheetRegistry[sheetIdentifier].renderComputedValue();
+            calx.sheetRegistry[sheetIdentifier].calculate();
         }
     }
 

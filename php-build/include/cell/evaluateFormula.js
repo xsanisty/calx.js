@@ -1,6 +1,6 @@
 /**
  * evaluate cell formula and put the result in computed value container
- * @return {null}
+ * @return {mixed}
  */
 cell.fx.evaluateFormula = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : evaluating formula ['+this.formula+']');

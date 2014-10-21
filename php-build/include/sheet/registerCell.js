@@ -5,4 +5,8 @@
  */
 sheet.fx.registerCell = function(cell){
     this.cells[cell.getAddress()] = cell;
+
+    if(this.affectedCell.indexOf(cell.getAddress()) == -1){
+        this.affectedCell.push(cell.getAddress());
+    }
 };

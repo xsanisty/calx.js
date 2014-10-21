@@ -175,3 +175,7 @@ sheet.fx.clearCalculatedFlag = function(){
 sheet.fx.hasRelatedSheet = function(){
     return this.relatedSheet;
 }
+
+sheet.fx.clearAffectedCell = function(){
+    this.affectedCell = [];
+}

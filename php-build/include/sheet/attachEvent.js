@@ -59,8 +59,12 @@ sheet.fx.attachEvent = function(){
             calx.isCalculating = false;
         }
         currentSheet.clearProcessedFlag();
-        currentCell.calculate();
-        currentSheet.renderComputedValue();
+        currentCell.calculate(true, false);
+        if(currentSheet.hasRelatedSheet()){
+            currentSheet.calculate();
+        }else{
+            currentSheet.renderComputedValue();
+        }
 
     });
 

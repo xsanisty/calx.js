@@ -34,6 +34,11 @@ cell.fx.processDependant = function(){
 
         this.setAffected(false);
         this.setProcessed(true);
+
+        if(this.sheet.affectedCell.indexOf(this.address) == -1){
+            this.sheet.affectedCell.push(this.address);
+            //console.log(this.sheet.affectedCell);
+        }
     }else{
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
         return false;

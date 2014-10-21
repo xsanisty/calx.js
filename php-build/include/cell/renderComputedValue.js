@@ -38,9 +38,11 @@ cell.fx.renderComputedValue = function(){
     //console.log(typeof(this.conditionalStyle));
 
     if(typeof(this.conditionalStyle) == 'function'){
-        var css = this.conditionalStyle.apply(null, [this.getValue()]);
+        var css = this.conditionalStyle.apply(null, [this.getValue(), this.el]);
 
-        this.el.css(css);
+        if(typeof(css) == 'object'){
+            this.el.css(css);
+        }
     }
 
     return this;

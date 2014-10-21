@@ -123,11 +123,11 @@ e :
         }
     | e '=' e
         {
-            $$ = sheet.comparator.equal($1, $3);
+            $$ = sheet.comparator.equal.apply(sheet, [$1, $3]);
         }
     | e '+' e
         {
-            $$ = formula.math.SUM($1, $3);
+            $$ = formula.math.SUM.apply(sheet, [$1, $3]);
         }
     | '(' e ')'
         {$$ = $2 * 1;}
@@ -137,15 +137,15 @@ e :
         }
     | e '<' '=' e
         {
-            $$ = sheet.comparator.lessEqual($1, $4);
+            $$ = sheet.comparator.lessEqual.apply(sheet, [$1, $4]);
         }
     | e '>' '=' e
         {
-            $$ = sheet.comparator.greaterEqual($1, $4);
+            $$ = sheet.comparator.greaterEqual.apply(sheet, [$1, $4]);
         }
     | e '<' '>' e
         {
-            $$ = sheet.comparator.notEqual($1, $4);
+            $$ = sheet.comparator.notEqual.apply(sheet, [$1, $4]);
         }
     | e NOT e
         {
@@ -153,27 +153,27 @@ e :
         }
     | e '>' e
         {
-            $$ = sheet.comparator.greater($1, $3);
+            $$ = sheet.comparator.greater.apply(sheet, [$1, $3]);
         }
     | e '<' e
         {
-            $$ = sheet.comparator.less($1, $3);
+            $$ = sheet.comparator.less.apply(sheet, [$1, $3]);
         }
     | e '-' e
         {
-            $$ = formula.math.SUBTRACT($1, $3);
+            $$ = formula.math.SUBTRACT.apply(sheet, [$1, $3]);
         }
     | e '*' e
         {
-            $$ = formula.math.MULTIPLY($1, $3);
+            $$ = formula.math.MULTIPLY.apply(sheet, [$1, $3]);
         }
     | e '/' e
         {
-            $$ = formula.math.DIVIDE($1, $3);
+            $$ = formula.math.DIVIDE.apply(sheet, [$1, $3]);
         }
     | e '^' e
         {
-            $$ = formula.math.POWER($1, $3);
+            $$ = formula.math.POWER.apply(sheet, [$1, $3]);
         }
     | '-' e
         {

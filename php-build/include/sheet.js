@@ -21,6 +21,7 @@ function sheet(identifier, element, config){
     this.calculating  = false;
     this.activeCell   = null;
     this.totalCell    = 0;
+    this.affectedCell = [];
 
     this.init();
 };

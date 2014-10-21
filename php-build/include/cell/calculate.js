@@ -1,9 +1,13 @@
 /**
  * calculate cells formula and process dependant
  */
-cell.fx.calculate  = function(triggerEvent){
+cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : calculating result of ['+this.formula+']');
     triggerEvent = (typeof triggerEvent == 'undefined') ? true : triggerEvent;
+    renderComputedValue = (typeof renderComputedValue == 'undefined') ? true : renderComputedValue;
+
+    /* clear list of affected cell */
+    this.sheet.clearAffectedCell();
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeCalculate) == 'function'){
         this.sheet.config.onBeforeCalculate.apply(this.sheet);
@@ -17,7 +21,7 @@ cell.fx.calculate  = function(triggerEvent){
     }
 
     for(var a in this.sheet.dependant){
-        this.sheet.dependant[a].calculate(false);
+        this.sheet.dependant[a].calculate(false, false);
     }
 
     calx.isCalculating = false;
@@ -44,7 +48,9 @@ cell.fx.calculate  = function(triggerEvent){
         this.sheet.config.onBeforeRender.apply(this.sheet);
     }
 
-    this.renderComputedValue();
+    if(renderComputedValue){
+        this.renderComputedValue();
+    }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterRender) == 'function'){
         this.sheet.config.onAfterRender.apply(this.sheet);
