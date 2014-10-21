@@ -75,6 +75,7 @@
 %left '*' '/'
 %left '^'
 %left '%'
+%left 'PI' 'FALSE' 'NULL' 'TRUE'
 %left UMINUS
 
 %start expressions
@@ -90,6 +91,18 @@ e :
     variableSequence
         {
             $$ = sheet.getVariable($1)
+        }
+    | TRUE
+        {
+            $$ = true;
+        }
+    | FALSE
+        {
+            $$ = false;
+        }
+    | NULL
+        {
+            $$ = null;
         }
     | TIME_AMPM
         {
@@ -108,18 +121,6 @@ e :
     | STRING
         {
             $$ = $1.substring(1, $1.length - 1);
-        }
-    | TRUE
-        {
-            $$ = true;
-        }
-    | FALSE
-        {
-            $$ = false;
-        }
-    | NULL
-        {
-            $$ = null;
         }
     | e '=' e
         {
