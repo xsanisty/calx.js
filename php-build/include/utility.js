@@ -141,6 +141,16 @@ var utility = {
         return Array.prototype.slice.call(args, 0);
     },
 
+    objectToArray: function(obj){
+        var ar = [], a;
+
+        for(a in obj){
+            ar.push(obj[a]);
+        }
+
+        return ar;
+    },
+
     /**
      * remove empty cell from cell range collection
      * @param  {object} cellRange

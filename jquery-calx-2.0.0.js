@@ -49,16 +49,16 @@ var defaultConfig = {
     'autoCalculateTrigger'  : 'blur',
 
     /** callback triggered right before calculation is performed */
-    'onBeforeCalculate'     : function(data){return data},
+    'onBeforeCalculate'     : null ,
 
     /** callback triggered right after calculation is performed */
-    'onAfterCalculate'      : function(data){return data},
+    'onAfterCalculate'      : null ,
 
     /** callback triggered right before calculation result is applied */
-    'onBeforeRender'         : function(data){return data},
+    'onBeforeRender'         : null ,
 
     /** callback triggered right after calculation result is applied */
-    'onAfterRender'          : function(data){return data},
+    'onAfterRender'          : null ,
 
     /** default fomatting rule when data-format is not present */
     'defaultFormat'         : false,
@@ -5835,6 +5835,8 @@ logical : {
             params['params['+a+']'] = arguments[a];
         }
 
+        params.function = funcName;
+
         $.ajax({
             url: this.config.ajaxUrl,
             method: this.config.ajaxMethod,
@@ -5851,18 +5853,13 @@ logical : {
         return result;
     },
 
-    GRAPH : function(data, legend, label, options){
+    GRAPH : function(data, options){
 
-        var graphOptions = {},
+        var graphOptions= {},
             cellElement = this.getActiveCell().el,
-            graphData = utility.rangeToTable(data),
             plotOptions = {},
-            legend = (typeof(legend) == 'object') ? utility.arrayMerge([legend]) : false,
-            label = (typeof(label) == 'object') ? utility.arrayMerge([label]) : false,
-            keyval;
-
-        console.log(legend);
-        console.log(label);
+            options     = (typeof(options) == 'undefined') ? [] : options,
+            keyval, graphData;
 
         /**
          * parsing option come from formula into javascript object
@@ -5873,10 +5870,75 @@ logical : {
         }
 
         /**
-         * parsing table header as x-axis label
+         * setup default height and width
          */
-        if(graphOptions.column_header == 'true'){
-            var header = graphData.shift(),
+        if(!cellElement.height()){
+            cellElement.css('height', '300px');
+        }
+
+        if(!cellElement.width){
+            cellElement.css('width', '300px');
+        }
+
+        switch(graphOptions.type){
+            case 'bar':
+                graphData   = utility.rangeToTable(data);
+                plotOptions.series = {
+                    bars: {
+                        show: true,
+                        barWidth: 0.6,
+                        align: "center"
+                    }
+                };
+                break;
+
+            case 'pie':
+                graphData   = utility.objectToArray(data);
+                plotOptions.series = {
+                    pie: {
+                        show: true,
+                        radius: 0.8
+                    }
+                };
+                plotOptions.legend = {
+                    show:false
+                }
+                break;
+
+            case 'doughnut':
+            case 'donut':
+                graphData   = utility.objectToArray(data);
+                plotOptions.series = {
+                    pie: {
+                        show: true,
+                        innerRadius: 0.5,
+                        radius: 0.8
+                    }
+                };
+                plotOptions.legend = {
+                    show:false
+                }
+                break;
+
+            default:
+                graphData   = utility.rangeToTable(data);
+                break;
+        }
+
+        /**
+         * change the table orientation if configured
+         * @type {[type]}
+         */
+        if(typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical'){
+            graphData = utility.transposeTable(graphData);
+        }
+
+        /**
+         * parsing label as x-axis label
+         */
+        if(typeof(graphOptions.label) != 'undefined'){
+            var label = this.evaluate(graphOptions.label),
+                label = utility.objectToArray(label),
                 rowLength = graphData.length,
                 colLength, row, col, data;
 
@@ -5886,7 +5948,7 @@ logical : {
 
                 for(col = 0; col < colLength; col++){
                     data = graphData[row][col];
-                    graphData[row][col] = [header[col], data];
+                    graphData[row][col] = [label[col], data];
                 }
             }
 
@@ -5894,12 +5956,7 @@ logical : {
                 mode: "categories",
                 tickLength: 0
             };
-        }
-
-        /**
-         * using incremental number as x-axis
-         */
-        if(graphOptions.column_header == 'false'){
+        }else{
 
             var rowLength = graphData.length,
                 colLength, row, col, data;
@@ -5915,44 +5972,25 @@ logical : {
             }
         }
 
-        if(graphOptions.type == 'pie' || graphOptions.type == 'doughnut'){
-            var pieData = graphData.shift();
+        /**
+         * parsing legend and merge with the graph data
+         */
+        if(typeof(graphOptions.legend) != 'undefined'){
+            var legend = this.evaluate(graphOptions.legend),
+                legend = utility.objectToArray(legend),
+                newGraphData = [];
 
+            for(var graphLength = 0; graphLength < graphData.length; graphLength++){
+                newGraphData.push({
+                    label : legend[graphLength],
+                    data  : graphData[graphLength]
+                });
+            }
 
+            graphData = newGraphData;
         }
 
-        switch(graphOptions.type){
-            case 'bar':
-                plotOptions.series = {
-                    bars: {
-                        show: true,
-                        barWidth: 0.6,
-                        align: "center"
-                    }
-                };
-                break;
-
-            case 'pie':
-                plotOptions.series = {
-                    pie: {
-                        show: true
-                    }
-                };
-                break;
-
-            case 'doughnut':
-                plotOptions.series = {
-                    pie: {
-                        show: true,
-                        innerRadius: 0.65
-                    }
-                };
-                break;
-
-            default:
-                break;
-        }
-
+        console.log(graphData, plotOptions);
         $.plot(cellElement, graphData, plotOptions);
 
         return false;
@@ -7718,6 +7756,16 @@ logical : {
         return Array.prototype.slice.call(args, 0);
     },
 
+    objectToArray: function(obj){
+        var ar = [], a;
+
+        for(a in obj){
+            ar.push(obj[a]);
+        }
+
+        return ar;
+    },
+
     /**
      * remove empty cell from cell range collection
      * @param  {object} cellRange
@@ -7761,10 +7809,12 @@ logical : {
      * @return {array}            [description]
      */
     rangeToTable : function(cellRange){
-        var cell, row, col,
+        var cell, col,
+            row = 0,
             alphaPattern = /[A-Z]+/,
             numPattern = /[0-9]+/,
-            arrayTable = [];
+            arrayTable = [],
+            resultTable = [];
 
         for(cell in cellRange){
 
@@ -7778,7 +7828,26 @@ logical : {
             arrayTable[row][col] = cellRange[cell];
         }
 
-        return arrayTable;
+        var resultRow = 0, rowLength = arrayTable.length, colLength;
+        for (row = 0; row < rowLength; row++){
+            if(typeof(arrayTable[row]) != 'undefined'){
+                colLength = arrayTable[row].length;
+
+                if(typeof(resultTable[resultRow]) == 'undefined'){
+                    resultTable[resultRow] = [];
+                }
+
+                for(col = 0; col < colLength; col++ ){
+                    if(typeof(arrayTable[row][col]) != 'undefined'){
+                        resultTable[resultRow].push(arrayTable[row][col]);
+                    }
+                }
+
+                resultRow++;
+            }
+        }
+
+        return resultTable;
     },
 
     /**
@@ -7905,7 +7974,8 @@ logical : {
         '#ERROR_MOMENT_JS_REQUIRED!',
         '#ERROR_JSTAT_JS_REQUIRED!',
         '#ERROR_AJAX_URL_REQUIRED!',
-        '#ERROR_SEND_REQUEST!'
+        '#ERROR_SEND_REQUEST!',
+        '#UNDEFINED_VARIABLE!'
     ],
 
     ERRKEY : {
@@ -7947,6 +8017,7 @@ function cell(sheet, element){
     this.conditionalStyle   = false;
     this.address            = '';
     this.remoteDependency   = false;
+    this.isCheckbox         = false;
     this.init();
 };
 
@@ -7978,6 +8049,14 @@ cell.fx.init = function(){
         $formula = $formula.replace('&quot;', '"')
                            .replace('&#39;', "'")
                            .replace('&#34;', '"')
+    }
+
+    if(this.el.prop('tagName').toLowerCase() == 'input' && (this.el.attr('type') == 'checkbox' || this.el.attr('type') == 'radio')){
+        var uncheckedVal = this.el.attr('data-unchecked');
+            uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+
+        $value = (this.el.prop('checked')) ? this.el.val() : uncheckedVal;
+        this.isCheckbox = true;
     }
 
     /** fallback to default format where data-format is not present or empty */
@@ -8330,7 +8409,9 @@ cell.fx.renderComputedValue = function(){
 
         //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
-            if(tagName == 'select'){
+            if(this.isCheckbox){
+                this.el.prop('checked', (originalVal == this.el.val()));
+            }else if(tagName == 'select'){
                 this.el.val(originalVal);
             }else if(tagName == 'input' || tagName == 'textarea'){
                 this.el.val(formattedVal);
@@ -8571,7 +8652,19 @@ cell.fx.setProcessed = function(processed){
  */
 cell.fx.isProcessed = function(){
     return this.processed;
-}/**
+};cell.fx.highlightDependant = function(){
+    for(var a in this.dependant){
+        this.dependant[a].el.css('border', 'solid 1px blue');
+    }
+};
+
+cell.fx.highlightDependency = function(){
+    for(var a in this.dependencies){
+        this.dependencies[a].el.css('border', 'solid 1px red');
+    }
+};
+
+/**
  * Sheet object, represent each cell as single sheet
  * @param  {string}     identifier :unique key for accessing sheet object internally
  * @param  {domElement} element    :dom element as scope for sheet to work with
@@ -8731,10 +8824,23 @@ sheet.fx.buildCellDependency = function(){
         return a!= b;
     }
 };sheet.fx.getVariable = function(varName){
-    var varIndex = varName[0];
+    var varIndex = varName[0],
+        varUpperCase = varIndex.toUpperCase();
+
+    if(varUpperCase == 'TRUE'){
+        return true;
+    }
+
+    if(varUpperCase == 'FALSE'){
+        return false;
+    }
+
+    if(varUpperCase == 'NULL'){
+        return null;
+    }
 
     if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
-        return '#NAME?';
+        return '#UNDEFINED_VARIABLE!';
     }else{
         return data.VARIABLE[varIndex];
     }
@@ -9050,7 +9156,9 @@ sheet.fx.getActiveCell = function(){
             cellValue = cellValue*100+' %';
         }
 
-        currentCell.el.val(cellValue);
+        if(!currentCell.isCheckbox){
+            currentCell.el.val(cellValue);
+        }
         //console.log(currentCell.getValue());
     });
 
@@ -9067,11 +9175,37 @@ sheet.fx.getActiveCell = function(){
     /**
      * update value of the current cell internally
      */
-    this.el.on('calx.setValue', 'input[data-cell], select', function(){
+    this.el.on('calx.setValue', 'input[data-cell], select[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        currentCell.setValue($(this).val());
+        if(currentCell.isCheckbox && currentCell.el.attr('type') == 'checkbox'){
+            if(currentCell.el.prop('checked')){
+                currentCell.setValue(currentCell.el.val());
+            }else{
+                var uncheckedVal = currentCell.el.attr('data-unchecked');
+                    uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+
+                currentCell.setValue(uncheckedVal);
+            }
+        }else if(currentCell.isCheckbox && currentCell.el.attr('type') == 'radio'){
+            currentCell.setValue(currentCell.el.val());
+
+            currentSheet.el
+                        .find('[name='+currentCell.el.attr('name')+']')
+                        .not(currentCell.el)
+                        .each(function(){
+                            var radioBox     = $(this),
+                                uncheckedVal = radioBox.attr('data-unchecked'),
+                                cellAddr     = radioBox.attr('data-cell');
+
+                            uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+
+                            currentSheet.cells[cellAddr].setValue(uncheckedVal);
+                        });
+        }else{
+            currentCell.setValue(currentCell.el.val());
+        }
 
     });
 
@@ -9085,7 +9219,7 @@ sheet.fx.getActiveCell = function(){
     /**
      * update current cell value, and recalculate it's dependant
      */
-    this.el.on('calx.calculateCellDependant', 'input[data-cell], select', function(){
+    this.el.on('calx.calculateCellDependant', 'input[data-cell], select[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -9094,6 +9228,7 @@ sheet.fx.getActiveCell = function(){
         }
         currentSheet.clearProcessedFlag();
         currentCell.calculate(true, false);
+
         if(currentSheet.hasRelatedSheet()){
             currentSheet.calculate();
         }else{
@@ -9128,7 +9263,7 @@ sheet.fx.getActiveCell = function(){
      * autoCalculate : on   => calx.calculateCellDependant
      * autoCalculate : off  => calx.setValue
      */
-    this.el.on('change', 'select', function(){
+    this.el.on('change', 'select[data-cell], input[data-cell][type=checkbox], input[data-cell][type=radio]', function(){
         $(this).trigger('calx.setValue');
 
         if(currentSheet.config.autoCalculate){
@@ -9347,6 +9482,20 @@ destroy : function(){
     });
 
     return this;
+},
+        /**
+ * Reset the form to the initial value
+ */
+
+reset: function(){
+    return this.each(function(){
+        var sheetIdentifier = $(this).attr('data-calx-identifier');
+        //console.log(sheetIdentifier);
+
+        if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+            calx.sheetRegistry[sheetIdentifier].reset();
+        }
+    });
 },
         calculate : function(){
 

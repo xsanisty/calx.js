@@ -90,6 +90,8 @@ general: {
             params['params['+a+']'] = arguments[a];
         }
 
+        params.function = funcName;
+
         $.ajax({
             url: this.config.ajaxUrl,
             method: this.config.ajaxMethod,
@@ -106,18 +108,13 @@ general: {
         return result;
     },
 
-    GRAPH : function(data, legend, label, options){
+    GRAPH : function(data, options){
 
-        var graphOptions = {},
+        var graphOptions= {},
             cellElement = this.getActiveCell().el,
-            graphData = utility.rangeToTable(data),
             plotOptions = {},
-            legend = (typeof(legend) == 'object') ? utility.arrayMerge([legend]) : false,
-            label = (typeof(label) == 'object') ? utility.arrayMerge([label]) : false,
-            keyval;
-
-        console.log(legend);
-        console.log(label);
+            options     = (typeof(options) == 'undefined') ? [] : options,
+            keyval, graphData;
 
         /**
          * parsing option come from formula into javascript object
@@ -128,10 +125,75 @@ general: {
         }
 
         /**
-         * parsing table header as x-axis label
+         * setup default height and width
          */
-        if(graphOptions.column_header == 'true'){
-            var header = graphData.shift(),
+        if(!cellElement.height()){
+            cellElement.css('height', '300px');
+        }
+
+        if(!cellElement.width){
+            cellElement.css('width', '300px');
+        }
+
+        switch(graphOptions.type){
+            case 'bar':
+                graphData   = utility.rangeToTable(data);
+                plotOptions.series = {
+                    bars: {
+                        show: true,
+                        barWidth: 0.6,
+                        align: "center"
+                    }
+                };
+                break;
+
+            case 'pie':
+                graphData   = utility.objectToArray(data);
+                plotOptions.series = {
+                    pie: {
+                        show: true,
+                        radius: 0.8
+                    }
+                };
+                plotOptions.legend = {
+                    show:false
+                }
+                break;
+
+            case 'doughnut':
+            case 'donut':
+                graphData   = utility.objectToArray(data);
+                plotOptions.series = {
+                    pie: {
+                        show: true,
+                        innerRadius: 0.5,
+                        radius: 0.8
+                    }
+                };
+                plotOptions.legend = {
+                    show:false
+                }
+                break;
+
+            default:
+                graphData   = utility.rangeToTable(data);
+                break;
+        }
+
+        /**
+         * change the table orientation if configured
+         * @type {[type]}
+         */
+        if(typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical'){
+            graphData = utility.transposeTable(graphData);
+        }
+
+        /**
+         * parsing label as x-axis label
+         */
+        if(typeof(graphOptions.label) != 'undefined'){
+            var label = this.evaluate(graphOptions.label),
+                label = utility.objectToArray(label),
                 rowLength = graphData.length,
                 colLength, row, col, data;
 
@@ -141,7 +203,7 @@ general: {
 
                 for(col = 0; col < colLength; col++){
                     data = graphData[row][col];
-                    graphData[row][col] = [header[col], data];
+                    graphData[row][col] = [label[col], data];
                 }
             }
 
@@ -149,12 +211,7 @@ general: {
                 mode: "categories",
                 tickLength: 0
             };
-        }
-
-        /**
-         * using incremental number as x-axis
-         */
-        if(graphOptions.column_header == 'false'){
+        }else{
 
             var rowLength = graphData.length,
                 colLength, row, col, data;
@@ -170,44 +227,25 @@ general: {
             }
         }
 
-        if(graphOptions.type == 'pie' || graphOptions.type == 'doughnut'){
-            var pieData = graphData.shift();
+        /**
+         * parsing legend and merge with the graph data
+         */
+        if(typeof(graphOptions.legend) != 'undefined'){
+            var legend = this.evaluate(graphOptions.legend),
+                legend = utility.objectToArray(legend),
+                newGraphData = [];
 
+            for(var graphLength = 0; graphLength < graphData.length; graphLength++){
+                newGraphData.push({
+                    label : legend[graphLength],
+                    data  : graphData[graphLength]
+                });
+            }
 
+            graphData = newGraphData;
         }
 
-        switch(graphOptions.type){
-            case 'bar':
-                plotOptions.series = {
-                    bars: {
-                        show: true,
-                        barWidth: 0.6,
-                        align: "center"
-                    }
-                };
-                break;
-
-            case 'pie':
-                plotOptions.series = {
-                    pie: {
-                        show: true
-                    }
-                };
-                break;
-
-            case 'doughnut':
-                plotOptions.series = {
-                    pie: {
-                        show: true,
-                        innerRadius: 0.65
-                    }
-                };
-                break;
-
-            default:
-                break;
-        }
-
+        console.log(graphData, plotOptions);
         $.plot(cellElement, graphData, plotOptions);
 
         return false;
