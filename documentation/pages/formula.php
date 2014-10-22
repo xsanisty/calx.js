@@ -12,12 +12,12 @@
         <p>
             Formula is used to define calculation rule, you can define the formula inside the
             <code>data-formula</code> attribute like the formula you write in excel. There are a lot excel
-            compatible formula can be used from simple <code>SUM</code> to complex financial function like
-            <code>NPV</code>, <code>IRR</code>, etc.
+            compatible formula can be used from simple <code>SUM</code>, <code>HLOOKUP</code>, <code>VLOOKUP</code>
+            to complex financial function like <code>NPV</code>, <code>IRR</code>, etc.
         </p>
 
         <p>
-            Beside the excel compatible formula, there is also custom formula built is jQuery Calx, they are
+            Beside the excel compatible formula, there is also custom formula built in jQuery Calx, they are
             <code>SERVER()</code> and <code>GRAPH()</code>
         </p>
 
@@ -54,6 +54,10 @@
     )
 ]
 </code></pre>
+        </p>
+
+        <p>
+            <code>#ERROR_SEND_REQUEST!</code> will be returned when error occured.
         </p>
 
         <h4 class="method-title">GRAPH()</h4>
@@ -93,9 +97,10 @@
                 <li>
                     orientation: <br>
                     orientation is used to define the table orientation, it could be vertical or horizontal,
-                    default it horizontal
+                    default it horizontal<br>
 
-                    Horizontal table:
+                    Horizontal table:<br>
+                    jQuery Calx will parse single row as single series.<br>
 <pre>
 +-------+-------+-------+-------+-------+
 | val 1 | val 2 | val 3 | val 4 | val 5 |
@@ -104,7 +109,9 @@
 +-------+-------+-------+-------+-------+
 </pre>
 
-                    Vertical table:
+                    Vertical table: <br>
+                    jQuery Calx will parse single column as single series.<br>
+
 <pre>
 +-------+-------+
 | val 1 | val 1 |
