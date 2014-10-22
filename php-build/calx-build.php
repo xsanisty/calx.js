@@ -70,6 +70,8 @@ var Zepto   = Zepto     || undefined,
         require 'include/cell/setProcessed.js';
         require 'include/cell/isProcessed.js';
 
+        require 'include/cell/highlightDependant.js';
+
 
         /**
          * sheet reference
