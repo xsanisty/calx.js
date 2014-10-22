@@ -39,17 +39,32 @@ sheet.fx.attachEvent = function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        if(currentCell.isCheckbox){
-            if($(this).prop('checked')){
-                currentCell.setValue($(this).val());
+        if(currentCell.isCheckbox && currentCell.el.attr('type') == 'checkbox'){
+            if(currentCell.el.prop('checked')){
+                currentCell.setValue(currentCell.el.val());
             }else{
-                var uncheckedVal = $(this).attr('data-unchecked');
+                var uncheckedVal = currentCell.el.attr('data-unchecked');
                     uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
 
                 currentCell.setValue(uncheckedVal);
             }
+        }else if(currentCell.isCheckbox && currentCell.el.attr('type') == 'radio'){
+            currentCell.setValue(currentCell.el.val());
+
+            currentSheet.el
+                        .find('[name='+currentCell.el.attr('name')+']')
+                        .not(currentCell.el)
+                        .each(function(){
+                            var radioBox     = $(this),
+                                uncheckedVal = radioBox.attr('data-unchecked'),
+                                cellAddr     = radioBox.attr('data-cell');
+
+                            uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+
+                            currentSheet.cells[cellAddr].setValue(uncheckedVal);
+                        });
         }else{
-            currentCell.setValue($(this).val());
+            currentCell.setValue(currentCell.el.val());
         }
 
     });
