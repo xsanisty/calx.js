@@ -28,6 +28,14 @@ cell.fx.init = function(){
                            .replace('&#34;', '"')
     }
 
+    if(this.el.prop('tagName').toLowerCase() == 'input' && (this.el.attr('type') == 'checkbox' || this.el.attr('type') == 'radio')){
+        var uncheckedVal = this.el.attr('data-unchecked');
+            uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+
+        $value = (this.el.prop('checked')) ? this.el.val() : uncheckedVal;
+        this.isCheckbox = true;
+    }
+
     /** fallback to default format where data-format is not present or empty */
     if(!$format || $.trim($format) == ''){
         $format = this.sheet.config.defaultFormat;

@@ -25,6 +25,7 @@ function cell(sheet, element){
     this.conditionalStyle   = false;
     this.address            = '';
     this.remoteDependency   = false;
+    this.isCheckbox         = false;
     this.init();
 };
 
