@@ -11,7 +11,7 @@
     <div class="col-md-12">
         <p>
             Formula is used to define calculation rule, you can define the formula inside the
-            <code>data-formula</code> attribute like the formula you write in excel. There are a lot excel
+            <code>data-formula</code> attribute and write the formula like the you write it in excel. There are a lot excel
             compatible formula can be used from simple <code>SUM</code>, <code>HLOOKUP</code>, <code>VLOOKUP</code>
             to complex financial function like <code>NPV</code>, <code>IRR</code>, etc.
         </p>

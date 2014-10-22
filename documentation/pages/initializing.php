@@ -10,6 +10,12 @@
 <div class="row">
     <div class="col-md-12">
         <p>
+            The very first step to enable jQuery Calx, is to load jQuery and the jQuery Calx itself
+        </p>
+<pre><code>&lt;script type="text/javascript" src="path/to/jquery-1.10.2.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="path/to/jquery-calx-2.0.0.min.js"&gt;&lt;/script&gt;
+</code></pre>
+        <p>
             Like any other jQuery plugin, it is easy to initialize jQuery Calx, you just need to prepare the element
             with configured <code>data-cell</code>, <code>data-formula</code>, or <code>data-format</code> attribute
             and call <code>$('selector').calx()</code> to enable jQuery Calx.
@@ -25,12 +31,12 @@
         </p>
         <div class="highlight">
         <pre>
-&lt;div id="sheet"&gt;
-&lt;input type="text" data-cell="A1"&gt; &lt;br&gt;
-&lt;input type="text" data-cell="A2"&gt; &lt;br&gt;
-&lt;input type="text" data-cell="A3"&gt; &lt;br&gt;
-&lt;input type="text" data-cell="A4" data-formula="SUM(A1:A3)"&gt;
-&lt;/div&gt;
+&lt;form id="sheet"&gt;
+    &lt;input type="text" data-cell="A1"&gt; &lt;br&gt;
+    &lt;input type="text" data-cell="A2"&gt; &lt;br&gt;
+    &lt;input type="text" data-cell="A3"&gt; &lt;br&gt;
+    &lt;input type="text" data-cell="A4" data-formula="SUM(A1:A3)"&gt;
+&lt;/form&gt;
 
 &lt;script&gt;
 $('#sheet').calx();
@@ -46,7 +52,7 @@ $('#sheet').calx();
         <p>
             If you are familiar with any spreadsheet application like Microsoft Excel or LibreOffice,
             you will also get familiar with jQuery Calx. We use term <code>sheet</code> for wrapper element like
-            <code>div#sheet</code> where the jQuery Calx is initialized, and <code>cell</code> for all element inside the <code>div#sheet</code> that
+            <code>form#sheet</code> where the jQuery Calx is initialized, and <code>cell</code> for all element inside the <code>form#sheet</code> that
             involved in calculation process, this mean all element that has <code>data-cell</code> and/or <code>data-formula</code> attribute.
         </p>
         <p>

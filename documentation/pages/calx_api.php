@@ -59,8 +59,8 @@
                 <h4 class="method-title">getSheet</h4>
                 <p><code>$('selector').calx('getSheet')</code></p>
                 <p>
-                    This method is used to retreive sheet object related to the selected cell.
-                    Please refer to <a href="#sheet">Sheet API</a> for detailed documentation about cell object.
+                    This method is used to retreive sheet object related to the selected element.
+                    Please refer to <a href="#sheet">Sheet API</a> for detailed documentation about sheet object.
                 </p>
             </li>
             <li>
