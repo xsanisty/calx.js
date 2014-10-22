@@ -60,6 +60,7 @@ sheet.fx.attachEvent = function(){
         }
         currentSheet.clearProcessedFlag();
         currentCell.calculate(true, false);
+
         if(currentSheet.hasRelatedSheet()){
             currentSheet.calculate();
         }else{

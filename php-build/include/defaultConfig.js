@@ -10,16 +10,16 @@ var defaultConfig = {
     'autoCalculateTrigger'  : 'blur',
 
     /** callback triggered right before calculation is performed */
-    'onBeforeCalculate'     : function(data){return data},
+    'onBeforeCalculate'     : null ,
 
     /** callback triggered right after calculation is performed */
-    'onAfterCalculate'      : function(data){return data},
+    'onAfterCalculate'      : null ,
 
     /** callback triggered right before calculation result is applied */
-    'onBeforeRender'         : function(data){return data},
+    'onBeforeRender'         : null ,
 
     /** callback triggered right after calculation result is applied */
-    'onAfterRender'          : function(data){return data},
+    'onAfterRender'          : null ,
 
     /** default fomatting rule when data-format is not present */
     'defaultFormat'         : false,

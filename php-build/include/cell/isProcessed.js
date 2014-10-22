@@ -4,4 +4,4 @@
  */
 cell.fx.isProcessed = function(){
     return this.processed;
-}
+};
