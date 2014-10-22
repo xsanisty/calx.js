@@ -184,10 +184,12 @@ var utility = {
      * @return {array}            [description]
      */
     rangeToTable : function(cellRange){
-        var cell, row, col,
+        var cell, col,
+            row = 0,
             alphaPattern = /[A-Z]+/,
             numPattern = /[0-9]+/,
-            arrayTable = [];
+            arrayTable = [],
+            resultTable = [];
 
         for(cell in cellRange){
 
@@ -201,7 +203,26 @@ var utility = {
             arrayTable[row][col] = cellRange[cell];
         }
 
-        return arrayTable;
+        var resultRow = 0, rowLength = arrayTable.length, colLength;
+        for (row = 0; row < rowLength; row++){
+            if(typeof(arrayTable[row]) != 'undefined'){
+                colLength = arrayTable[row].length;
+
+                if(typeof(resultTable[resultRow]) == 'undefined'){
+                    resultTable[resultRow] = [];
+                }
+
+                for(col = 0; col < colLength; col++ ){
+                    if(typeof(arrayTable[row][col]) != 'undefined'){
+                        resultTable[resultRow].push(arrayTable[row][col]);
+                    }
+                }
+
+                resultRow++;
+            }
+        }
+
+        return resultTable;
     },
 
     /**
