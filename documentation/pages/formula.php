@@ -9,6 +9,120 @@
 </div>
 <div class="row">
     <div class="col-md-12">
+        <p>
+            Formula is used to define calculation rule, you can define the formula inside the
+            <code>data-formula</code> attribute like the formula you write in excel. There are a lot excel
+            compatible formula can be used from simple <code>SUM</code> to complex financial function like
+            <code>NPV</code>, <code>IRR</code>, etc.
+        </p>
+
+        <p>
+            Beside the excel compatible formula, there is also custom formula built is jQuery Calx, they are
+            <code>SERVER()</code> and <code>GRAPH()</code>
+        </p>
+
+        <h4 class="method-title">SERVER()</h4>
+        <p>
+            This is special function to perform calculation in server side, you must define <code>ajaxUrl</code>
+            parameter when configuring calx. The first parameter of this function is the formula name, and the rest is
+            formula parameters
+        </p>
+        <p>
+            When it invoked, jQuery Calx will send the request to the configured ajaxUrl and wait for the response
+            before continue to the next formula execution.
+        </p>
+        <p>
+            <pre><code>SERVER('SUM', A1:A3, B4)</code></pre>
+        </p>
+        <p>
+            Formula above will send request looks like below
+        </p>
+        <p>
+<pre><code>
+[
+    function    => 'SUM',
+    params      => array(
+        /* range from A1 to A3 */
+        1   => array(
+            A1  => 'value of A1',
+            A2  => 'value of A2',
+            A3  => 'value of A3'
+        ),
+
+        /* the value of B4 */
+        2   => 'value of B4'
+    )
+]
+</code></pre>
+        </p>
+
+        <h4 class="method-title">GRAPH()</h4>
+        <p>
+            This is special function used to draw graphic or chart to represent the data in graphical way.
+            You need to place the GRAPH formula in the div element with specified height and width.
+        </p>
+
+        <p>
+            <pre><code>&lt;div data-formula="GRAPH(B2:G8, ['type=bar', 'label=B1:G1', 'legend=A2:A8', 'color=#333, #0f0, #f00'])"&gt;&lt;/div&gt;</code></pre>
+        </p>
+
+        <p>
+            The first parameter is cell range contains data that need to be represented as graphic. <br>
+            The second parameter is array containing some 'key=value' to define how the chart should be rendered.
+
+            <ul type="square">
+                <li>
+                    type: <br>
+                    type could be one of the following bar, line, pie, or doughnut, default is line.
+                </li>
+                <li>
+                    label: <br>
+                    label is used in bar or line type chart to draw label in the x-axis of the chart.
+                    If none is given, the label will be incremental number starting from 0.
+                </li>
+                <li>
+                    legend: <br>
+                    legend is used to give explanation on the chart. If none is given, the legend will be blank
+                </li>
+                <li>
+                    color: <br>
+                    color is used to tell jQuery Calx in which color the graph should be drawn, you can use
+                    comma separated color to define color sequence.
+                    If none is given, it will use auto-generated color squence.
+                </li>
+                <li>
+                    orientation: <br>
+                    orientation is used to define the table orientation, it could be vertical or horizontal,
+                    default it horizontal
+
+                    Horizontal table:
+<pre>
++-------+-------+-------+-------+-------+
+| val 1 | val 2 | val 3 | val 4 | val 5 |
++-------+-------+-------+-------+-------+
+| val 1 | val 2 | val 3 | val 4 | val 5 |
++-------+-------+-------+-------+-------+
+</pre>
+
+                    Vertical table:
+<pre>
++-------+-------+
+| val 1 | val 1 |
++-------+-------+
+| val 2 | val 2 |
++-------+-------+
+| val 3 | val 3 |
++-------+-------+
+| val 4 | val 4 |
++-------+-------+
+| val 5 | val 5 |
++-------+-------+
+
+</pre>
+
+                </li>
+            </ul>
+        </p>
 
     </div>
 </div>

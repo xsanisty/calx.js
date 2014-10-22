@@ -13,45 +13,32 @@
 
         <p>
             jQuery Calx is an excel calculation engine that wrapped as jQuery plugin,
-            It is useful for building calculation in html page using excel formula.
-            You can simply define the cell address in <code>data-cell</code> attribute,
-            calculation formula in <code>data-formula</code> attribute, result formatting
-            rule in <code>data-format</code> attribute, and let jQuery Calx do the magic.
+            It is useful for building calculation in html page using excel formula, create calculation table,
+            build custom calculator, convert excel spreadsheet into web page, etc.
         </p>
-        <p>
-            Once jQuery Calx is initialized, it will respond to any changes occured in cell's element,
-            and do the calculation based on the cell value and formula, let's see below example:
-        </p>
-        <div class="highlight">
-        <pre>
-&lt;div id="sheet"&gt;
-&lt;input type="text" data-cell="A1"&gt; &lt;br&gt;
-&lt;input type="text" data-cell="A2"&gt; &lt;br&gt;
-&lt;input type="text" data-cell="A3"&gt; &lt;br&gt;
-&lt;input type="text" data-cell="A4" data-formula="SUM(A1:A3)"&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-$('#sheet').calx();
-&lt;/script&gt;
-        </pre>
-        </div>
 
         <p>
-            In the above sample code snippet, <code>A4</code> will display whatever result of <code>SUM(A1:A3)</code>, any change occured
-            in <code>A1</code>, <code>A2</code>, or <code>A3</code> will be represented in <code>A4</code> since <code>A4</code>
-            depend on cell ranged from <code>A1</code> to <code>A3</code>.
+            jQuery Calx also come with a lot formula function defined, and adopted from <a href="https://github.com/sutoiku/formula.js">formula.js</a>.
+            If the default formula set is not enough, you can always define your own formula function
+            and register it via <code>registerFunction</code> method.
         </p>
+
+        <h4 class="method-title">Server Side Calculation</h4>
         <p>
-            If you are familiar with any spreadsheet application like Microsoft Excel or LibreOffice,
-            you will also get familiar with jQuery Calx. We use term <code>sheet</code> for wrapper element like
-            <code>div#sheet</code> where the jQuery Calx is initialized, and <code>cell</code> for all element inside the <code>div#sheet</code> that
-            involved in calculation process, this mean all element that has <code>data-cell</code> and/or <code>data-formula</code> attribute.
+            In case you don't want the calculation formula to be exposed to the end user, you can always hide it
+            by processing the calculation logic in the server side by using the <code>SERVER()</code> formula.
         </p>
+
+        <h4 class="method-title">Chart Drawing</h4>
         <p>
-            In case <code>data-formula</code> attribute present without <code>data-cell</code> attribute, jQuery Calx will assign reserved cell address
-            prefixed with <code>CALX</code> and count the index incrementally, the resulting cell address will be like <code>CALX1</code>,
-            <code>CALX2</code>,<code>CALX3</code>,<code>CALX4</code>
+            When you need to represent your data in graphical way, there is <code>GRAPH()</code> formula to help you
+            draw the chart.
+        </p>
+
+        <h4 class="method-title">Resport Bug/Issue</h4>
+        <p>
+            If some bug or abnormal behaviour is found, you can always report the issue via jQuery Calx issue tracker
+            here <a href="https://bitbucket.org/xsanisty/jquery-calx-2/issues">https://bitbucket.org/xsanisty/jquery-calx-2/issues</a>
         </p>
     </div>
 </div>

@@ -87,8 +87,8 @@
                     <ul type="square">
                         <li>FUNCTION_NAME<br>the function name such as SUM, AVG, etc, must be uppercase letter</li>
                         <li>
-                            function_definition<br>the normal function definition in javascript <code>function(){ /** bla bla bla **/ }</code>,
-                            the given context of <code>this</code> keyword is the sheet object, so you can access all the sheet API via
+                            function_definition<br>the function definition define how the function should behave <code>function(){ /** bla bla bla **/ }</code>,
+                            jQuery Calx will pass the sheet object as the context, so you can access all the sheet API via
                             <code>this</code> keyword.
                         </li>
                         <li>
@@ -118,18 +118,28 @@ $('selector').calx('registerFunction', 'CUSTOM', function(args1, args2, ... , ar
             </li>
             <li>
                 <h4 class="method-title">registerVariable</h4>
-                <p><code>$('selector').calx('registerVariable', var_name, var_value)</code></p>
+                <p><code>$('selector').calx('registerVariable', var_name [, var_value])</code></p>
                 <p>
                     This method is used to register variables to the calx, and are available to all sheet. The variable name
                     should be all lowercase and underscore character ([a-z_]) and the value could be anything as far as the function
                     can handle it.
                 </p>
                 <p>
-                    <code>$().calx('registerVariable', 'the_year_i_was_born', 1988)</code>
+                    <pre><code>$().calx('registerVariable', 'the_year_i_was_born', 1988)</code></pre>
+                </p>
+                <p>
+                    Or you can define multiple variable at one time using javascript object
+                </p>
+                <p>
+                    <pre><code>$().calx('registerVariable', {varname: 'value', another_var: 'another value'})</code></pre>
                 </p>
                 <p>
                     After variable is registered, you can reference it in data-formula attribute like
                     <code>data-formula="CONCAT('I was born in ', the_year_i_was_born)"</code>
+                </p>
+                <p>
+                    Please note that there are predefined variables: true, false, and null disregard of the character is lower
+                    case or upper case, or mix of both, which mean true, TRUE, tRue are all the same.
                 </p>
             </li>
             <li>
@@ -139,6 +149,17 @@ $('selector').calx('registerFunction', 'CUSTOM', function(args1, args2, ... , ar
                     This method is used to update cell registry against any change in the element related to the sheet,
                     <code>update</code> is similar to <code>refresh</code>, but instead of rebuild the cell registry from
                     the scratch, it only add or delete cell that has been added or removed from the sheet's element.
+                </p>
+                <p>
+                    This is useful when you are working with dynamic form where form elements are added or removed on the fly.
+                </p>
+            </li>
+
+            <li>
+                <h4 class="method-title">reset</h4>
+                <p><code>$('selector').calx('reset')</code></p>
+                <p>
+                    This method is used to reset the form inside the sheet element to its original state.
                 </p>
             </li>
         </ul>
