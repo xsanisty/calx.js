@@ -89,7 +89,8 @@ var data = {
         '#ERROR_MOMENT_JS_REQUIRED!',
         '#ERROR_JSTAT_JS_REQUIRED!',
         '#ERROR_AJAX_URL_REQUIRED!',
-        '#ERROR_SEND_REQUEST!'
+        '#ERROR_SEND_REQUEST!',
+        '#UNDEFINED_VARIABLE!'
     ],
 
     ERRKEY : {

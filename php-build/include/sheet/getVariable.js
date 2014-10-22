@@ -15,7 +15,7 @@ sheet.fx.getVariable = function(varName){
     }
 
     if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
-        return '#NAME?';
+        return '#UNDEFINED_VARIABLE!';
     }else{
         return data.VARIABLE[varIndex];
     }
