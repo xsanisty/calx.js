@@ -16,7 +16,9 @@ sheet.fx.attachEvent = function(){
             cellValue = cellValue*100+' %';
         }
 
-        currentCell.el.val(cellValue);
+        if(!currentCell.isCheckbox){
+            currentCell.el.val(cellValue);
+        }
         //console.log(currentCell.getValue());
     });
 
@@ -33,11 +35,22 @@ sheet.fx.attachEvent = function(){
     /**
      * update value of the current cell internally
      */
-    this.el.on('calx.setValue', 'input[data-cell], select', function(){
+    this.el.on('calx.setValue', 'input[data-cell], select[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
-        currentCell.setValue($(this).val());
+        if(currentCell.isCheckbox){
+            if($(this).prop('checked')){
+                currentCell.setValue($(this).val());
+            }else{
+                var uncheckedVal = $(this).attr('data-unchecked');
+                    uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+
+                currentCell.setValue(uncheckedVal);
+            }
+        }else{
+            currentCell.setValue($(this).val());
+        }
 
     });
 
@@ -51,7 +64,7 @@ sheet.fx.attachEvent = function(){
     /**
      * update current cell value, and recalculate it's dependant
      */
-    this.el.on('calx.calculateCellDependant', 'input[data-cell], select', function(){
+    this.el.on('calx.calculateCellDependant', 'input[data-cell], select[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
 
@@ -95,7 +108,7 @@ sheet.fx.attachEvent = function(){
      * autoCalculate : on   => calx.calculateCellDependant
      * autoCalculate : off  => calx.setValue
      */
-    this.el.on('change', 'select', function(){
+    this.el.on('change', 'select[data-cell], input[data-cell][type=checkbox], input[data-cell][type=radio]', function(){
         $(this).trigger('calx.setValue');
 
         if(currentSheet.config.autoCalculate){
