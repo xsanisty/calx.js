@@ -39,6 +39,7 @@ class ClosureCompiler
 {
     protected $java;
     protected $compilerJar = 'compiler-latest/compiler.jar';
+    protected $compilationLevel = 'SIMPLE';
 
     protected $config = array(
         'sourceBaseDir' => '',
@@ -196,6 +197,10 @@ class ClosureCompiler
         $this->config['targetFileName'] = $path;
     }
 
+    public function setCompilationLevel($level){
+        $this->compilationLevel = $level;
+    }
+
     /**
      * Performs the compilation by calling the compiler.jar
      *
@@ -219,7 +224,7 @@ class ClosureCompiler
             $command .= " --js={$file}";
         }
 
-        //$command .= " --compilation_level ADVANCED";
+        $command .= " --compilation_level ".$this->compilationLevel;
         $command .= " --js_output_file={$this->config['targetFileName']} 2>&1";
 
         $return = '';
