@@ -63,7 +63,7 @@
                 <td class="chead">H</td>
                 <td class="chead">I</td>
                 <td class="chead">J</td>
-                <!--
+
                 <td class="chead">K</td>
                 <td class="chead">L</td>
                 <td class="chead">M</td>
@@ -74,7 +74,7 @@
                 <td class="chead">R</td>
                 <td class="chead">S</td>
                 <td class="chead">T</td>
-                -->
+
             </tr>
             <tr>
                 <td class="rhead">1</td>
@@ -96,7 +96,7 @@
                 <td><input data-formula="CONCAT('G1 is: ', G1)" data-format="0,0[.]00" data-cell="H1"></td>
                 <td><input data-formula="G1+100" data-format="0,0[.]00" data-cell="I1"></td>
                 <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
-                <!--
+
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="K1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="L1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="M1"></td>
@@ -107,9 +107,9 @@
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="R1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="S1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="T1"></td>
-                -->
+
             </tr>
-            <!--
+
             <tr>
                 <td class="rhead">2</td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="A2"></td>
@@ -566,16 +566,10 @@
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="S20"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="T20"></td>
             </tr>
-            -->
+
         </table>
     </form>
-
-    <script src="../jquery-1.9.1.min.js"></script>
-    <script src="../js/moment.min.js"></script>
-    <script src="../js/numeral.min.js"></script>
-    <script src="../js/jstat.min.js"></script>
-    <script src="../jquery-1.9.1.min.js"></script>
-    <script src="../php-build/calx-build.php"></script>
+    <script src="jquery-calx-sample-2.0.0.min.js"></script>
 
     <script>
         $('#reset').click(function(){
@@ -587,7 +581,10 @@
                 formula = $('#cell_formula').val();
 
             if($('#sheet1').calx('getSheet')){
-                $('#sheet1').calx('getCell', addr).setFormula(formula);
+                $('#sheet1').calx('getCell', addr)
+                            .setFormula(formula)
+                            .calculate()
+                            .renderComputedValue();
             }else{
                 $('input[data-cell='+addr+']').attr('data-formula', formula);
             }
@@ -602,8 +599,7 @@
         });
 
         $('#resetsheet').click(function(){
-            $('#sheet1').calx('destroy');
-            $('#sheet1 input').val('').attr('data-formula', '');
+            $('#sheet1').calx('reset');
         });
     </script>
 </body>
