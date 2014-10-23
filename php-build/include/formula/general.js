@@ -143,9 +143,9 @@ general: {
                         show: true,
                         barWidth: 0.6,
                         align: "center"
-                    }
+                    },
+                    stack: true
                 };
-                plotOptions.stack = true;
                 break;
 
             case 'pie':
@@ -178,7 +178,6 @@ general: {
 
             default:
                 graphData   = utility.rangeToTable(data);
-                plotOptions.stack = true;
                 break;
         }
 
