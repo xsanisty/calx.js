@@ -27,4 +27,6 @@ $compiler->setTargetFile($minifiedFile);
 $compiler->setCompilationLevel('SIMPLE');
 
 $compiler->compile();
+
+unlink($unminifiedFile);
 ?>
