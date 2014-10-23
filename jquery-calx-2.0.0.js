@@ -4784,6 +4784,7 @@ financial: {
     },
 
     LARGE : function(array, k) {
+        array = utility.objectToArray(array);
         return array.sort(function(a, b) {
             return b - a;
         })[k - 1];
