@@ -246,6 +246,16 @@ general: {
             graphData = newGraphData;
         }
 
+        plotOptions.grid = {
+            backgroundColor: { colors: [ "#fff", "#eee" ] },
+            borderWidth: {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            }
+        };
+
         $.plot(cellElement, graphData, plotOptions);
 
         return false;

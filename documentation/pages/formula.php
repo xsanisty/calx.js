@@ -67,7 +67,7 @@
         </p>
 
         <p>
-            <pre><code>&lt;div data-formula="GRAPH(B2:G8, ['type=bar', 'label=B1:G1', 'legend=A2:A8', 'color=#333, #0f0, #f00'])"&gt;&lt;/div&gt;</code></pre>
+            <pre><code>&lt;div data-formula="GRAPH(B2:G8, ['type=bar', 'label=B1:G1', 'legend=A2:A8'])"&gt;&lt;/div&gt;</code></pre>
         </p>
 
         <p>
@@ -88,12 +88,12 @@
                     legend: <br>
                     legend is used to give explanation on the chart. If none is given, the legend will be blank
                 </li>
-                <li>
+                <!--<li>
                     color: <br>
                     color is used to tell jQuery Calx in which color the graph should be drawn, you can use
                     comma separated color to define color sequence.
                     If none is given, it will use auto-generated color squence.
-                </li>
+                </li>-->
                 <li>
                     orientation: <br>
                     orientation is used to define the table orientation, it could be vertical or horizontal,
