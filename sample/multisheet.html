@@ -28,32 +28,8 @@
     </style>
 </head>
 <body>
-    <table>
-        <tr>
-            <td class="rhead">Cell Address</td>
-            <td><input type="text" id="cell_address" style="text-align:left"></td>
-        </tr>
-        <tr>
-            <td class="rhead">Formula</td>
-            <td><input type="text" id="cell_formula" style="width: 300px; text-align:left"></td>
-        </tr>
-        <tr>
-            <td class="rhead">Action</td>
-            <td>
-                <button type="button" id="apply">Apply</button>
-                <button type="button" id="reset">Reset</button>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <button type="button" id="enable">Enable Calx</button>
-                <button type="button" id="disable">Disable Calx</button>
-                <button type="button" id="resetsheet">Reset Sheet</button>
-            </td>
-        </tr>
-    </table>
     <form action="" id="sheet1">
+        <h4>Sheet 1</h4>
         <table>
             <tr>
                 <td class="chead">&nbsp;</td>
@@ -70,8 +46,8 @@
             </tr>
             <tr>
                 <td class="rhead">1</td>
-                <td><input data-formula="" data-format="0,0[.]00" data-cell="A1"></td>
-                <td><input data-formula="" data-format="0,0[.]00" data-cell="B1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A1" value="100"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B1" value="150"></td>
                 <td><input data-formula="A1+B1" data-format="0,0[.]00" data-cell="C1"></td>
                 <td><input data-formula="C1*2" data-format="0,0[.]00" data-cell="D1"></td>
                 <td><input data-formula="C1*3" data-format="0,0[.]00" data-cell="E1"></td>
@@ -84,6 +60,7 @@
     </form>
 
     <form action="" id="sheet2">
+        <h4>Sheet 2</h4>
         <table>
             <tr>
                 <td class="chead">&nbsp;</td>
@@ -114,6 +91,7 @@
     </form>
 
     <form action="" id="sheet3">
+        <h4>Sheet 3</h4>
         <table>
             <tr>
                 <td class="chead">&nbsp;</td>
@@ -130,7 +108,7 @@
             </tr>
             <tr>
                 <td class="rhead">1</td>
-                <td><input data-formula="" data-format="0[.]00 %" data-cell="A1"></td>
+                <td><input data-formula="" data-format="0[.]00 %" data-cell="A1" value="50%"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="B1"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="C1" value="200"></td>
                 <td><input data-formula="" data-format="0,0[.]00" data-cell="D1" value="400"></td>
@@ -140,9 +118,9 @@
                 <td><input data-formula="CONCAT('G1 is: ', G1)" data-format="0,0[.]00" data-cell="H1"></td>
                 <td><input data-formula="G1*A1" data-format="0,0[.]00" data-cell="I1"></td>
                 <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
+            </tr>
         </table>
 
-        <div data-cell="Z1" data-formula="GRAPH(A1:J1)" style="height:400px; width: 600px"></div>
     </form>
     <script src="../jquery-1.9.1.min.js"></script>
     <script src="../js/moment.min.js"></script>
@@ -153,7 +131,8 @@
 
     <script>
         $('#sheet1, #sheet2, #sheet3').calx({
-            autoCalculateTrigger : 'blur'
+            autoCalculateTrigger : 'blur',
+            ajaxUrl : 'function.php'
         });
 
         $('[data-cell]').each(function(){
