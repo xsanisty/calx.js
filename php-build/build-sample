@@ -1,0 +1,30 @@
+<?php
+$unminifiedFile = '../sample/jquery-calx-sample-2.0.0.js';
+$minifiedFile   = '../sample/jquery-calx-sample-2.0.0.min.js';
+
+/**
+ * gathering all js source and build into one package
+ */
+
+ob_start();
+require 'calx-build-sample.php';
+$jsBuild = ob_get_contents();
+ob_end_clean();
+
+file_put_contents($unminifiedFile, $jsBuild);
+
+/**
+ * start minifiying completed built
+ */
+
+require 'vendor/autoload.php';
+
+use Devize\ClosureCompiler\ClosureCompiler;
+
+$compiler = new ClosureCompiler;
+$compiler->addSourceFile($unminifiedFile);
+$compiler->setTargetFile($minifiedFile);
+$compiler->setCompilationLevel('SIMPLE');
+
+$compiler->compile();
+?>
