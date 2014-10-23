@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form action="" id="sheet1">
+        <label for="">
+            <input type="checkbox" data-cell="A1" value="100"> $ 100 <br>
+        </label>
+        <label for="">
+            <input type="checkbox" data-cell="A2" value="200"> $ 200 <br>
+        </label>
+        <label for="">
+            <input type="checkbox" data-cell="A3" value="350"> $ 350 <br>
+        </label>
+        <label for="">
+            <input type="checkbox" data-cell="A4" value="400"> $ 400 <br>
+        </label>
+        <label for="">
+            <input type="checkbox" data-cell="A5" value="500"> $ 500 <br>
+        </label>
+
+        <div style="display:block" data-formula="SUM(A1, A2, A3, A4, A5)" data-format="$ 0,0"></div>
+    </form>
+    <script src="jquery-calx-sample-2.0.0.min.js"></script>
+    <script>
+        $('#sheet1').calx();
+    </script>
+</body>
+</html>
