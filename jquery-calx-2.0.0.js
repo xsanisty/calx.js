@@ -5890,6 +5890,7 @@ logical : {
                         align: "center"
                     }
                 };
+                plotOptions.stack = true;
                 break;
 
             case 'pie':
@@ -5922,6 +5923,7 @@ logical : {
 
             default:
                 graphData   = utility.rangeToTable(data);
+                plotOptions.stack = true;
                 break;
         }
 
@@ -5990,7 +5992,6 @@ logical : {
             graphData = newGraphData;
         }
 
-        console.log(graphData, plotOptions);
         $.plot(cellElement, graphData, plotOptions);
 
         return false;
@@ -8537,6 +8538,10 @@ cell.fx.setFormat = function(format){
         this.renderComputedValue();
     }
 
+    if(this.sheet.affectedCell.indexOf(this.address) == -1){
+        this.sheet.affectedCell.push(this.address);
+    }
+
     return this;
 };/**
  * return format definition of the current cell object
@@ -8567,6 +8572,10 @@ cell.fx.setFormula = function(formula){
 
     //this.evaluateFormula();
     //
+    //
+    if(this.sheet.affectedCell.indexOf(this.address) == -1){
+        this.sheet.affectedCell.push(this.address);
+    }
     return this;
 };cell.fx.getFormula = function(){
     return this.formula;
@@ -8612,6 +8621,10 @@ cell.fx.setValue = function(value, render){
         }
     }else{
         this.value = ($.isNumeric(value)) ? parseFloat(value) : value;
+    }
+
+    if(this.sheet.affectedCell.indexOf(this.address) == -1){
+        this.sheet.affectedCell.push(this.address);
     }
 
     /* set value mean set value, no other thing should be done */

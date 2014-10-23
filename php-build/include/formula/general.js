@@ -145,6 +145,7 @@ general: {
                         align: "center"
                     }
                 };
+                plotOptions.stack = true;
                 break;
 
             case 'pie':
@@ -177,6 +178,7 @@ general: {
 
             default:
                 graphData   = utility.rangeToTable(data);
+                plotOptions.stack = true;
                 break;
         }
 
@@ -245,7 +247,6 @@ general: {
             graphData = newGraphData;
         }
 
-        console.log(graphData, plotOptions);
         $.plot(cellElement, graphData, plotOptions);
 
         return false;

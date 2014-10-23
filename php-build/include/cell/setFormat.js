@@ -9,5 +9,9 @@ cell.fx.setFormat = function(format){
         this.renderComputedValue();
     }
 
+    if(this.sheet.affectedCell.indexOf(this.address) == -1){
+        this.sheet.affectedCell.push(this.address);
+    }
+
     return this;
 };

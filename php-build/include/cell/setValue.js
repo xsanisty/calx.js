@@ -17,6 +17,10 @@ cell.fx.setValue = function(value, render){
         this.value = ($.isNumeric(value)) ? parseFloat(value) : value;
     }
 
+    if(this.sheet.affectedCell.indexOf(this.address) == -1){
+        this.sheet.affectedCell.push(this.address);
+    }
+
     /* set value mean set value, no other thing should be done */
     return this;
 };

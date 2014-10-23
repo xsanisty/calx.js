@@ -21,5 +21,9 @@ cell.fx.setFormula = function(formula){
 
     //this.evaluateFormula();
     //
+    //
+    if(this.sheet.affectedCell.indexOf(this.address) == -1){
+        this.sheet.affectedCell.push(this.address);
+    }
     return this;
 };
