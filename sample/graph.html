@@ -172,7 +172,21 @@
     <script src="jquery-calx-sample-2.0.0.min.js"></script>
 
     <script>
-        var calc  = $('#sheet1').calx();
+        console.time('initializing');
+        var calc  = $('#sheet1').calx({
+            onBeforeCalculate : function(){
+                console.time('calculating');
+            },
+            onAfterCalculate : function(){
+                console.timeEnd('calculating');
+            },
+            onBeforeRender : function(){
+                console.time('rendering');
+            },
+            onAfterRender : function(){
+                console.timeEnd('rendering');
+            }
+        });
         var sheet = calc.calx('getSheet');
         var range = sheet.getCellRange('B2', 'J6');
 
@@ -180,6 +194,8 @@
             range[a].setValue(Math.random(10, 1000)*100);
             range[a].renderComputedValue();
         }
+
+        console.timeEnd('initializing');
 
         sheet.calculate();
     </script>
