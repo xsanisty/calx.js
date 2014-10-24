@@ -6002,7 +6002,10 @@ logical : {
             }
         };
 
-        $.plot(cellElement, graphData, plotOptions);
+        setTimeout(function(){
+            $.plot(cellElement, graphData, plotOptions);
+        }, 100);
+
 
         return false;
 
@@ -8454,6 +8457,10 @@ cell.fx.resyncValue = function(){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             elValue     = (isFormTag) ? this.el.val() : this.el.text();
+
+        if(this.isCheckbox && !this.el.prop('checked')){
+            elValue = this.el.attr('data-unchecked-value') || '';
+        }
 
         if(this.el.attr('data-format') && $.trim(elValue) != ''){
             this.setValue(numeral().unformat( elValue+'' ));
