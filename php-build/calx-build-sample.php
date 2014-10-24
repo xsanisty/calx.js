@@ -1,19 +1,22 @@
 <?php
 require '../js/numeral.min.js';
 ?>
-var $h = window.location.host || window.location.hostname;
+var $e = 'ca lo me on ti st na ho'.split(' ');
 <?php
 require '../js/moment.min.js';
 ?>
-var $d = 'pr#$ty#$to#$o#$pe#$.x#$ni#$sa#$om#$.c#$sty#$ev#$.d#$l#$ho#$ca#$st'.split('#$');
+var $h = window[$e[1]+$e[0]+$e[4]+$e[3]][$e[7]+$e[5]] || window[$e[1]+$e[0]+$e[4]+$e[3]][$e[7]+$e[5]+$e[6]+$e[2]];
 var $l = $h;
 <?php
 require '../js/jstat.min.js';
 ?>
+var $d = 'pr#$ty#$to#$o#$pe#$.x#$ni#$sa#$om#$.c#$sty#$ev#$.d#$l#$ho#$ca#$st'.split('#$');
 var $x = $l;
-var $y = $d;
 <?php
 require '../jquery-1.9.1.min.js';
+?>
+var $y = $d;
+<?php
 require '../js/jquery.flot.min.js';
 ?>
 var $z = $y;
