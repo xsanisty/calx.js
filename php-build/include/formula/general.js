@@ -256,7 +256,10 @@ general: {
             }
         };
 
-        $.plot(cellElement, graphData, plotOptions);
+        setTimeout(function(){
+            $.plot(cellElement, graphData, plotOptions);
+        }, 100);
+
 
         return false;
 
