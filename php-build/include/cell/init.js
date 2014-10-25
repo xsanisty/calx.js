@@ -6,7 +6,8 @@ cell.fx.init = function(){
     var $address = (this.el) ? this.el.attr('data-cell') : '',
         $formula = (this.el) ? this.el.attr('data-formula') : '',
         $format  = (this.el) ? this.el.attr('data-format') : '',
-        $value   = (this.el) ? this.el.val() : null;
+        $value   = (this.el) ? this.el.val() : null,
+        tagName  = this.el.prop('tagName').toLowerCase();
 
     /** assign address if data-cell is not present */
     if(!$address || $.trim($address) == ''){
@@ -28,12 +29,16 @@ cell.fx.init = function(){
                            .replace('&#34;', '"')
     }
 
-    if(this.el.prop('tagName').toLowerCase() == 'input' && (this.el.attr('type') == 'checkbox' || this.el.attr('type') == 'radio')){
+    if(tagName == 'input' && (this.el.attr('type') == 'checkbox' || this.el.attr('type') == 'radio')){
         var uncheckedVal = this.el.attr('data-unchecked');
             uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
 
         $value = (this.el.prop('checked')) ? this.el.val() : uncheckedVal;
         this.isCheckbox = true;
+    }
+
+    if(this.formTags.indexOf( tagName) == -1){
+        $value = this.el.text();
     }
 
     /** fallback to default format where data-format is not present or empty */
