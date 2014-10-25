@@ -48,6 +48,16 @@ th.actual, th.budget, th.diff{
     text-align:center;
 }
 
+/*
+td.budget, td.budget > input{
+    background: #aaf
+}
+
+td.actual, td.actual > input{
+    background: #3b3
+}
+*/
+
 .w100{
     width:90px;
     padding:0px 2px;
@@ -58,4 +68,12 @@ th.actual, th.budget, th.diff{
 
 label.normal{
     font-weight: normal;
+}
+
+tr.bggrey td{
+    background: #ddd;
+}
+
+td{
+    padding:2px !important;
 }

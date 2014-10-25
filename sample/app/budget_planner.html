@@ -75,7 +75,64 @@
                                     <tr><th class="small">&nbsp;</th></tr>
                                 </thead>
                                 <tbody>
-                                    <td><label class="normal">NET (Income - Expenses)</label></td>
+                                    <tr class="bggrey">
+                                        <td><label class="normal" data-cell="A7">Total Income</label></td>
+                                    </tr>
+                                    <tr class="bggrey">
+                                        <td><label class="normal" data-cell="A8">Total Expense</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A10" data-formula="CONCAT(A40, ' (', IF(AY8=0,0,ROUND(AY10/AY8*100,1)) ,'%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A11" data-formula="CONCAT(A56, ' (', IF(AY8=0,0,ROUND(AY11/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A12" data-formula="CONCAT(A66, ' (', IF(AY8=0,0,ROUND(AY12/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A13" data-formula="CONCAT(A78, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A14" data-formula="CONCAT(A89, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A15" data-formula="CONCAT(A97, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A16" data-formula="CONCAT(A108, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A17" data-formula="CONCAT(A120, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A18" data-formula="CONCAT(A131, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A19" data-formula="CONCAT(A144, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A20" data-formula="CONCAT(A158, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A21" data-formula="CONCAT(A165, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A22" data-formula="CONCAT(A183, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A23" data-formula="CONCAT(A191, ' (', IF(AY8=0,0,ROUND(AY13/AY8*100,1)), '%)')"></label></td>
+                                    </tr>
+
+                                    <tr class="bggrey">
+                                        <td><label class="normal" data-cell="A25">NET (Income - Expenses)</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label data-cell="A26">Projected End Balance</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="normal" data-cell="A27">Actual End Balance</label></td>
+                                    </tr>
 
                                 </tbody>
                             </table>
@@ -142,110 +199,1999 @@
                                 </thead>
 
                                 <tbody>
-                                    <tr>
+                                    <!-- Total Income -->
+                                    <tr class="bggrey">
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C7" data-format="$ 0,0">
+                                        </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="C25" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E7" data-format="$ 0,0">
                                         </td>
                                         <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV7" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW7" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY7" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ7" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Total Expense -->
+                                    <tr class="bggrey">
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV8" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW8" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY8" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ8" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- To Savings -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV10" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW10" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY10" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ10" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Charity / Gifts -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV11" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW11" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY11" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ11" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Housing -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV12" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW12" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY12" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ12" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Utilities -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV13" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW13" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY13" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ13" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Food -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV14" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW14" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY14" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ14" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Transportation -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV15" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW15" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY15" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ15" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Health -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV16" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW16" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY16" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ16" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Day Living -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV17" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW17" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY17" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ17" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Children -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV18" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW18" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY18" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ18" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Obligations -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV19" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW19" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY19" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ19" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Bussines Expense -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV20" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW20" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY20" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ20" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Entertainment -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV21" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW21" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY21" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ21" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Subscribtions -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV22" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW22" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY22" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ22" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- Misc -->
+                                    <tr>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV23" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW23" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY23" data-format="$ 0,0">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ23" data-format="$ 0,0">
+                                        </td>
+                                    </tr>
+
+                                    <!-- NET (Income - Expenses) -->
+                                    <tr class="bggrey">
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C25" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="D25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="E25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="G25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="H25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="I25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="K25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="L25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="M25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="O25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="P25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="Q25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="S25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="T25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="U25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="W25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="X25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="Y25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="AA25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="AB25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="AC25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="AE25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="AF25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="AG25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="AI25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="AJ25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="AK25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="AM25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="AN25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="AO25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="AQ25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="AR25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
                                             <input type="text" class="form-control input-xs w100" data-cell="AS25" data-format="$ 0,0">
                                         </td>
-                                        <td class="actual">
+                                        <td class="budget">
                                             <input type="text" class="form-control input-xs w100" data-cell="AU25" data-format="$ 0,0">
                                         </td>
-                                        <td class="budget">
+                                        <td class="actual">
                                             <input type="text" class="form-control input-xs w100" data-cell="AV25" data-format="$ 0,0">
                                         </td>
                                         <td class="diff">
@@ -259,122 +2205,176 @@
                                         </td>
                                     </tr>
 
-                                    <!-- NET (Income - Expenses) -->
+                                    <!-- Projected End Balance -->
                                     <tr>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="budget">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="actual">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV26" data-format="$ 0,0">
+                                        </td>
+                                        <td class="diff">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW26" data-format="$ 0,0">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY26" data-format="$ 0,0">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ26" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                    </tr>
+
+                                    <!-- Actual End balance -->
+                                    <tr>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="C27" data-format="$ 0,0">
                                         </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="G27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="K27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="O27" data-format="$ 0,0">
                                         </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="S27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="W27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="AA27" data-format="$ 0,0">
                                         </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="AE27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="AI27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="AM27" data-format="$ 0,0">
                                         </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="AQ27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
+                                        <td class="diff">&nbsp;</td>
+                                        <td colspan="2" class="budget">
+                                            <input type="text" style="width:100%" class="form-control input-xs w100" data-cell="AU27" data-format="$ 0,0">
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td class="border-right">
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="" data-format="$ 0,0">
-                                        </td>
+                                        <td class="diff">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
                                     </tr>
                                 </tbody>
                             </table>
