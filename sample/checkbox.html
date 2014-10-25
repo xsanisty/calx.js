@@ -105,8 +105,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-7">Total</label>
-                                <div class="col-lg-5">
-                                    <input type="text" class="form-control input-sm" data-cell="B1" data-format="$ 0,0.00" data-formula="SUM(A1:A7)">
+                                <div class="col-lg-5 text-right">
+                                    <label data-cell="B1" data-format="$ 0,0.00" data-formula="SUM(A1:A7)"></label>
                                 </div>
                             </div>
                         </form>
@@ -183,8 +183,27 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">&nbsp;</div>
-
+                            <div class="form-group">
+                                <label class="col-lg-3">Fruit</label>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="fruit" data-cell="A4" value="2"> Banana
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="fruit" data-cell="B4" value="2.3"> Orange
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="fruit" data-cell="C4" value="2.8"> Apple
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 text-right">
+                                    <label data-cell="D4" data-formula="SUM(A4:C4)" data-format="$ 0,0.00"></label>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-lg-3">Total</label>
                                 <div class="col-lg-3 text-right col-lg-offset-6">

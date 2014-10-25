@@ -26,3 +26,36 @@ div.checkbox, label.radio-inline{
 #show_formula{
     margin-top:20px;
 }
+
+.border-right, .diff{
+    border-right: 1px #ddd solid !important;
+    font-weight: 600 !important;
+}
+
+.actual{
+    color: brown;
+}
+
+.budget{
+    color: #6020ff;
+}
+
+th.small{
+    font-weight: normal;
+}
+
+th.actual, th.budget, th.diff{
+    text-align:center;
+}
+
+.w100{
+    width:90px;
+    padding:0px 2px;
+    height:25px;
+    text-align: right;
+    font-size: 13px
+}
+
+label.normal{
+    font-weight: normal;
+}
