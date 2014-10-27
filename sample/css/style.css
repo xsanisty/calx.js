@@ -28,16 +28,16 @@ div.checkbox, label.radio-inline{
 }
 
 .border-right, .diff{
-    border-right: 1px #ddd solid !important;
+    border-right: 1px #ccc solid !important;
     font-weight: 600 !important;
 }
 
-.actual{
-    color: brown;
+.actual, td.actual input{
+    color: #090;
 }
 
-.budget{
-    color: #6020ff;
+.budget, td.budget input{
+    color: #009;
 }
 
 th.small{
@@ -48,15 +48,19 @@ th.actual, th.budget, th.diff{
     text-align:center;
 }
 
-/*
-td.budget, td.budget > input{
-    background: #aaf
+
+td.budget{
+    background: #009
 }
 
-td.actual, td.actual > input{
-    background: #3b3
+td.actual{
+    background: #090
 }
-*/
+
+td.diff{
+    background: #ccc;
+}
+
 
 .w100{
     width:90px;
@@ -76,4 +80,9 @@ tr.bggrey td{
 
 td{
     padding:2px !important;
+}
+
+.scrollable{
+    max-height: 400px;
+    overflow-y: auto;
 }

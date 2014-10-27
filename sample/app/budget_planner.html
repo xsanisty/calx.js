@@ -68,13 +68,13 @@
                     </div>
 
                     <div class="row" style="margin-top: 25px">
-                        <div class="col-md-3">
+                        <div class="col-md-3" style="padding-right:0">
                             <table class="table table-condensed table-stripped">
                                 <thead>
                                     <tr><th>&nbsp;</th></tr>
                                     <tr><th class="small">&nbsp;</th></tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="scrollable">
                                     <tr class="bggrey">
                                         <td><label class="normal" data-cell="A7">Total Income</label></td>
                                     </tr>
@@ -137,7 +137,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-9" style="overflow-x: auto">
+                        <div class="col-md-9" style="overflow-x: auto; padding-left:0">
                             <table class="table table-condensed table-stripped">
                                 <thead>
                                     <tr>
@@ -198,7 +198,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody class="scrollable">
                                     <!-- Total Income -->
                                     <tr class="bggrey">
                                         <td class="budget">
@@ -320,118 +320,118 @@
                                     <!-- Total Expense -->
                                     <tr class="bggrey">
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="C8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="C8" data-format="$ 0,0" data-formula="SUM(C10:C23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="D8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="D8" data-format="$ 0,0" data-formula="SUM(D10:D23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="E8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="E8" data-format="$ 0,0" data-formula="C8-D8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="G8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="G8" data-format="$ 0,0" data-formula="SUM(G10:G23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="H8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="H8" data-format="$ 0,0" data-formula="SUM(H10:H23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="I8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="I8" data-format="$ 0,0" data-formula="G8-H8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="K8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="K8" data-format="$ 0,0" data-formula="SUM(K10:K23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="L8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="L8" data-format="$ 0,0" data-formula="SUM(L10:L23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="M8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="M8" data-format="$ 0,0" data-formula="K8-L8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="O8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="O8" data-format="$ 0,0" data-formula="SUM(O10:O23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="P8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="P8" data-format="$ 0,0" data-formula="SUM(P10:P23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="Q8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Q8" data-format="$ 0,0" data-formula="O8-P8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="S8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="S8" data-format="$ 0,0" data-formula="SUM(S10:S23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="T8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="T8" data-format="$ 0,0" data-formula="SUM(T10:T23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="U8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="U8" data-format="$ 0,0" data-formula="S8-T8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="W8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="W8" data-format="$ 0,0" data-formula="SUM(W10:W23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="X8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="X8" data-format="$ 0,0" data-formula="SUM(X10:X23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="Y8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="Y8" data-format="$ 0,0" data-formula="W8-X8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AA8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AA8" data-format="$ 0,0" data-formula="SUM(AA10:AA23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AB8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AB8" data-format="$ 0,0" data-formula="SUM(AB10:AB23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AC8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AC8" data-format="$ 0,0" data-formula="AA8-AB8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AE8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AE8" data-format="$ 0,0" data-formula="SUM(AE10:AE23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AF8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AF8" data-format="$ 0,0" data-formula="SUM(AF10:AF23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AG8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AG8" data-format="$ 0,0" data-formula="AE8-AF8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AI8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AI8" data-format="$ 0,0" data-formula="SUM(AI10:AI23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AJ8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AJ8" data-format="$ 0,0" data-formula="SUM(AJ10:AJ23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AK8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AK8" data-format="$ 0,0" data-formula="AI8-AJ8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AM8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AM8" data-format="$ 0,0" data-formula="SUM(AM10:AM23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AN8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AN8" data-format="$ 0,0" data-formula="SUM(AN10:AN23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AO8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AO8" data-format="$ 0,0" data-formula="AM8-AN8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AQ8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AQ8" data-format="$ 0,0" data-formula="SUM(AQ10:AQ23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AR8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AR8" data-format="$ 0,0" data-formula="SUM(AR10:AR23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AS8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AS8" data-format="$ 0,0" data-formula="AQ8-AR8">
                                         </td>
                                         <td class="budget">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AU8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AU8" data-format="$ 0,0" data-formula="SUM(AU10:AU23)">
                                         </td>
                                         <td class="actual">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AV8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AV8" data-format="$ 0,0" data-formula="SUM(AV10:AV23)">
                                         </td>
                                         <td class="diff">
-                                            <input type="text" class="form-control input-xs w100" data-cell="AW8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AW8" data-format="$ 0,0" data-formula="AU8-AV8">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="AY8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AY8" data-format="$ 0,0" data-formula="">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control input-xs w100" data-cell="AZ8" data-format="$ 0,0">
+                                            <input type="text" class="form-control input-xs w100" data-cell="AZ8" data-format="$ 0,0" data-formula="">
                                         </td>
                                     </tr>
 
@@ -2387,7 +2387,14 @@
         <script src="../js/jquery-calx-sample-2.0.0.min.js" type="text/javascript"></script>
         <script src="../js/bootstrap.js" type="text/javascript"></script>
         <script>
-            $('#budget_planner').calx();
+            $('#budget_planner').calx({
+                onBeforeCalculate : function(){
+                    console.time('calculating');
+                },
+                onAfterRender : function(){
+                    console.timeEnd('calculating');
+                }
+            });
             $('#show_formula').click(function(e){
                 e.preventDefault();
 
