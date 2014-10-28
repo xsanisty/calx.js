@@ -7,7 +7,7 @@ sheet.fx.calculate = function(){
     this.clearAffectedCell();
 
     if(typeof(this.config.onBeforeCalculate) == 'function'){
-        this.config.onBeforeCalculate.apply(this);
+        this.config.onBeforeCalculate.call(this);
     }
 
     var a;
@@ -37,17 +37,17 @@ sheet.fx.calculate = function(){
     }
 
     if(typeof(this.config.onAfterCalculate) == 'function'){
-        this.config.onAfterCalculate.apply(this);
+        this.config.onAfterCalculate.call(this);
     }
 
     if(typeof(this.config.onBeforeRender) == 'function'){
-        this.config.onBeforeRender.apply(this);
+        this.config.onBeforeRender.call(this);
     }
 
     this.renderComputedValue();
 
     if(typeof(this.config.onAfterRender) == 'function'){
-        this.config.onAfterRender.apply(this);
+        this.config.onAfterRender.call(this);
     }
 
     return this;

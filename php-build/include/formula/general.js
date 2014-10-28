@@ -77,6 +77,51 @@ general: {
         return formula.general.VLOOKUP(value, table, rowIndex, approx);
     },
 
+    LOOKUP : function(value, lookup, target){
+        var lookupIndex, lookupLength, targetIndex, targetLength, delta = [],
+            deltaLength, deltaIndex, deltaMax, deltaMin;
+
+        target = typeof target == 'undefined' ? false : target;
+
+        if(typeof(lookup == 'object') && lookup.constructor.name == 'Object'){
+            lookup = utility.objectToArray(lookup);
+            lookupLength = lookup.length;
+        }
+
+        if(typeof(target == 'object') && target.constructor.name == 'Object'){
+            target = utility.objectToArray(target);
+            targetLength = target.length;
+        }
+
+        if(value < Math.min.apply(Math, lookup)){
+            return '#N/A!';
+        }
+
+        for(lookupIndex = 0; lookupIndex < lookupLength; lookupIndex++){
+
+            if(value == lookup[lookupIndex]){
+                return target ? target[lookupIndex] : lookup[lookupIndex];
+            }else{
+                delta[lookupIndex] = value - lookup[lookupIndex];
+            }
+        }
+
+        /** convert minus to max */
+        deltaLength = delta.length;
+        deltaMax    = Math.max.apply(Math, delta);
+        for(deltaIndex = 0; deltaIndex < deltaLength; deltaIndex++){
+            if(delta[deltaIndex] < 0){
+                delta[deltaIndex] = deltaMax;
+            }
+        }
+
+        deltaMin = Math.min.apply(Math, delta);
+        lookupIndex = delta.indexOf(deltaMin);
+
+        return (target) ? target[lookupIndex] : lookup[lookupIndex];
+
+    },
+
     SERVER : function(){
         if(this.config.ajaxUrl == null){
             return data.ERRKEY.ajaxUrlRequired;

@@ -230,11 +230,11 @@ var defaultConfig = {
 
                     break;
                 case 7:
-                    this.$ = sheet.comparator.equal.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = sheet.comparator.equal.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 8:
-                    this.$ =  formula.math.SUM.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ =  formula.math.SUM.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 9:
@@ -245,15 +245,15 @@ var defaultConfig = {
 
                     break;
                 case 11:
-                    this.$ = sheet.comparator.lessEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
+                    this.$ = sheet.comparator.lessEqual.call(sheet, $$[$0 - 3], $$[$0]);
 
                     break;
                 case 12:
-                    this.$ = sheet.comparator.greaterEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
+                    this.$ = sheet.comparator.greaterEqual.call(sheet, $$[$0 - 3], $$[$0]);
 
                     break;
                 case 13:
-                    this.$ = sheet.comparator.notEqual.apply(sheet, [$$[$0 - 3], $$[$0]]);
+                    this.$ = sheet.comparator.notEqual.call(sheet, $$[$0 - 3], $$[$0]);
 
                     break;
                 case 14:
@@ -261,27 +261,27 @@ var defaultConfig = {
 
                     break;
                 case 15:
-                    this.$ = sheet.comparator.greater.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = sheet.comparator.greater.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 16:
-                    this.$ = sheet.comparator.less.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = sheet.comparator.less.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 17:
-                    this.$ = formula.math.SUBTRACT.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = formula.math.SUBTRACT.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 18:
-                    this.$ = formula.math.MULTIPLY.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = formula.math.MULTIPLY.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 19:
-                    this.$ = formula.math.DIVIDE.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = formula.math.DIVIDE.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 20:
-                    this.$ = formula.math.POWER.apply(sheet, [$$[$0 - 2], $$[$0]]);
+                    this.$ = formula.math.POWER.call(sheet, $$[$0 - 2], $$[$0]);
 
                     break;
                 case 21:
@@ -5823,6 +5823,51 @@ logical : {
         return formula.general.VLOOKUP(value, table, rowIndex, approx);
     },
 
+    LOOKUP : function(value, lookup, target){
+        var lookupIndex, lookupLength, targetIndex, targetLength, delta = [],
+            deltaLength, deltaIndex, deltaMax, deltaMin;
+
+        target = typeof target == 'undefined' ? false : target;
+
+        if(typeof(lookup == 'object') && lookup.constructor.name == 'Object'){
+            lookup = utility.objectToArray(lookup);
+            lookupLength = lookup.length;
+        }
+
+        if(typeof(target == 'object') && target.constructor.name == 'Object'){
+            target = utility.objectToArray(target);
+            targetLength = target.length;
+        }
+
+        if(value < Math.min.apply(Math, lookup)){
+            return '#N/A!';
+        }
+
+        for(lookupIndex = 0; lookupIndex < lookupLength; lookupIndex++){
+
+            if(value == lookup[lookupIndex]){
+                return target ? target[lookupIndex] : lookup[lookupIndex];
+            }else{
+                delta[lookupIndex] = value - lookup[lookupIndex];
+            }
+        }
+
+        /** convert minus to max */
+        deltaLength = delta.length;
+        deltaMax    = Math.max.apply(Math, delta);
+        for(deltaIndex = 0; deltaIndex < deltaLength; deltaIndex++){
+            if(delta[deltaIndex] < 0){
+                delta[deltaIndex] = deltaMax;
+            }
+        }
+
+        deltaMin = Math.min.apply(Math, delta);
+        lookupIndex = delta.indexOf(deltaMin);
+
+        return (target) ? target[lookupIndex] : lookup[lookupIndex];
+
+    },
+
     SERVER : function(){
         if(this.config.ajaxUrl == null){
             return data.ERRKEY.ajaxUrlRequired;
@@ -8103,7 +8148,7 @@ cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     this.sheet.clearAffectedCell();
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeCalculate) == 'function'){
-        this.sheet.config.onBeforeCalculate.apply(this.sheet);
+        this.sheet.config.onBeforeCalculate.call(this.sheet);
     }
 
     calx.isCalculating = true;
@@ -8134,11 +8179,11 @@ cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){
-        this.sheet.config.onAfterCalculate.apply(this.sheet);
+        this.sheet.config.onAfterCalculate.call(this.sheet);
     }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeRender) == 'function'){
-        this.sheet.config.onBeforeRender.apply(this.sheet);
+        this.sheet.config.onBeforeRender.call(this.sheet);
     }
 
     if(renderComputedValue){
@@ -8146,7 +8191,7 @@ cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterRender) == 'function'){
-        this.sheet.config.onAfterRender.apply(this.sheet);
+        this.sheet.config.onAfterRender.call(this.sheet);
     }
 
     return this;
@@ -9011,7 +9056,7 @@ sheet.fx.calculate = function(){
     this.clearAffectedCell();
 
     if(typeof(this.config.onBeforeCalculate) == 'function'){
-        this.config.onBeforeCalculate.apply(this);
+        this.config.onBeforeCalculate.call(this);
     }
 
     var a;
@@ -9041,17 +9086,17 @@ sheet.fx.calculate = function(){
     }
 
     if(typeof(this.config.onAfterCalculate) == 'function'){
-        this.config.onAfterCalculate.apply(this);
+        this.config.onAfterCalculate.call(this);
     }
 
     if(typeof(this.config.onBeforeRender) == 'function'){
-        this.config.onBeforeRender.apply(this);
+        this.config.onBeforeRender.call(this);
     }
 
     this.renderComputedValue();
 
     if(typeof(this.config.onAfterRender) == 'function'){
-        this.config.onAfterRender.apply(this);
+        this.config.onAfterRender.call(this);
     }
 
     return this;

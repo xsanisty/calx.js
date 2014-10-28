@@ -10,7 +10,7 @@ cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     this.sheet.clearAffectedCell();
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeCalculate) == 'function'){
-        this.sheet.config.onBeforeCalculate.apply(this.sheet);
+        this.sheet.config.onBeforeCalculate.call(this.sheet);
     }
 
     calx.isCalculating = true;
@@ -41,11 +41,11 @@ cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterCalculate) == 'function'){
-        this.sheet.config.onAfterCalculate.apply(this.sheet);
+        this.sheet.config.onAfterCalculate.call(this.sheet);
     }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onBeforeRender) == 'function'){
-        this.sheet.config.onBeforeRender.apply(this.sheet);
+        this.sheet.config.onBeforeRender.call(this.sheet);
     }
 
     if(renderComputedValue){
@@ -53,7 +53,7 @@ cell.fx.calculate  = function(triggerEvent, renderComputedValue){
     }
 
     if(this.sheet.config.autoCalculate && triggerEvent && typeof(this.sheet.config.onAfterRender) == 'function'){
-        this.sheet.config.onAfterRender.apply(this.sheet);
+        this.sheet.config.onAfterRender.call(this.sheet);
     }
 
     return this;
