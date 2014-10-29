@@ -95,6 +95,10 @@ td{
     padding:2px !important;
 }
 
+.scrollable{
+    margin-bottom: 0;
+}
+
 .scrollable thead{
     display:block;
 }
