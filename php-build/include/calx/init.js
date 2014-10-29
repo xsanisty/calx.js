@@ -50,9 +50,10 @@ init : function (option) {
 
         /** calculate and render the result */
         if(calx.sheetRegistry[sheetIdentifier].config.autoCalculate){
-            calx.sheetRegistry[sheetIdentifier].renderComputedValue();
             calx.sheetRegistry[sheetIdentifier].calculate();
         }
+
+        calx.sheetRegistry[sheetIdentifier].renderComputedValue();
     }
 
     return this;
