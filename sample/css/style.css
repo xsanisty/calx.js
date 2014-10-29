@@ -49,16 +49,29 @@ th.actual, th.budget, th.diff{
 }
 
 
+td.budget input{
+    border-color: #009
+}
 td.budget{
-    background: #009
+    background: #ddf
 }
 
+td.actual input{
+    border-color: #090
+}
 td.actual{
-    background: #090
+    background: #dfd
 }
 
+td.diff input{
+    border-color: #ccc;
+}
 td.diff{
-    background: #ccc;
+    background: #ddd
+}
+
+tr.bggrey input{
+    border-color: #ccc;
 }
 
 
@@ -82,7 +95,25 @@ td{
     padding:2px !important;
 }
 
-.scrollable{
-    max-height: 400px;
+.scrollable thead{
+    display:block;
+}
+
+.scrollable thead .budget, .scrollable thead .actual, .scrollable thead .diff{
+    width: 100px;
+}
+
+.left-head td, .left-head th{
+    width:240px;
+}
+.scrollable tbody{
+    display:block;
+    max-height: 350px;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+
+hr{
+    margin-top:3px;
+    margin-bottom: 15px
 }

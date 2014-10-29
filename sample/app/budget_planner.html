@@ -60,21 +60,21 @@
                 <form action="" id="budget_planner">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="start_cash_balance" style="margin-top:8px; font-size:18px">Starting Cash Balance</label>
+                            <label for="start_cash_balance" style="font-size:16px">Starting Cash Balance</label>
                         </div>
                         <div class="col-md-3">
-                            <input class="form-control input-lg text-bold text-right" type="text" id="start_cash_balance" data-cell="C4" data-format="$ 0,0[.]00">
+                            <input class="form-control input-md text-bold text-right" type="text" id="start_cash_balance" data-cell="C4" data-format="$ 0,0[.]00">
                         </div>
                     </div>
 
-                    <div class="row" style="margin-top: 25px">
+                    <div class="row" style="margin-top: 15px">
                         <div class="col-md-3" style="padding-right:0">
-                            <table class="table table-condensed table-stripped">
+                            <table class="table table-condensed table-stripped scrollable left-head">
                                 <thead>
                                     <tr><th>&nbsp;</th></tr>
                                     <tr><th class="small">&nbsp;</th></tr>
                                 </thead>
-                                <tbody class="scrollable">
+                                <tbody style="overflow-x:hidden">
                                     <tr class="bggrey">
                                         <td><label class="normal" data-cell="A7">Total Income</label></td>
                                     </tr>
@@ -138,7 +138,7 @@
                             </table>
                         </div>
                         <div class="col-md-9" style="overflow-x: auto; padding-left:0">
-                            <table class="table table-condensed table-stripped">
+                            <table class="table table-condensed table-stripped scrollable">
                                 <thead>
                                     <tr>
                                         <th colspan="3" class="text-bold text-center">JAN</th>
@@ -198,7 +198,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody class="scrollable">
+                                <tbody style="overflow-y:hidden">
                                     <!-- Total Income -->
                                     <tr class="bggrey">
                                         <td class="budget">
@@ -2408,6 +2408,10 @@
                     $('span.formula').remove();
                     $(this).attr('data-shown', 0).html('Show Formula');
                 }
+            });
+
+            $('tbody').on('scroll', function () {
+                $('tbody').not(this).scrollTop($(this).scrollTop());
             });
         </script>
     </body>
