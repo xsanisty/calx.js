@@ -5,7 +5,7 @@
 cell.fx.init = function(){
     var $address = (this.el) ? this.el.attr('data-cell') : '',
         $formula = (this.el) ? this.el.attr('data-formula') : '',
-        $format  = (this.el) ? this.el.attr('data-format') : '',
+        $format  = (this.el) ? this.el.attr('data-format') : false,
         $value   = (this.el) ? this.el.val() : null,
         tagName  = this.el.prop('tagName').toLowerCase();
 
@@ -42,7 +42,7 @@ cell.fx.init = function(){
     }
 
     /** fallback to default format where data-format is not present or empty */
-    if(!$format || $.trim($format) == ''){
+    if($format === false || typeof($format) === 'undefined'){
         $format = this.sheet.config.defaultFormat;
     }
 
