@@ -41,6 +41,6 @@ require '../jquery-calx-2.0.0.min.js';
     jQuery  = jQuery    || Zepto;
 
     (function($){
-        $.fn.calx = function() {return false};
+        $.fn.calx = function() {return this};
     })(jQuery);
 }
