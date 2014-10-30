@@ -33,7 +33,7 @@ div.checkbox, label.radio-inline{
 }
 
 .actual, td.actual input{
-    color: #090;
+    color: #060;
 }
 
 .budget, td.budget input{
@@ -57,7 +57,7 @@ td.budget{
 }
 
 td.actual input{
-    border-color: #090
+    border-color: #060
 }
 td.actual{
     background: #dfd
@@ -68,6 +68,22 @@ td.diff input{
 }
 td.diff{
     background: #ddd
+}
+
+td.subheader{
+    height: 25px;
+    text-align:center;
+    font-weight: bold;
+}
+
+.row-total td{
+    background: #dfd;
+}
+
+.row-total input{
+    background: #dfd;
+    border-color: #080 !important;
+    color: #000 !important;
 }
 
 tr.bggrey input{
@@ -91,6 +107,12 @@ tr.bggrey td{
     background: #ddd;
 }
 
+tr.bggreen td{
+    background: #060;
+    color:white;
+    font-weight: bold;
+}
+
 td{
     padding:2px !important;
 }
@@ -104,7 +126,7 @@ td{
 }
 
 .scrollable thead .budget, .scrollable thead .actual, .scrollable thead .diff{
-    width: 100px;
+    width: 94.325px;
 }
 
 .left-head td, .left-head th{
