@@ -5937,6 +5937,9 @@ logical : {
                     },
                     stack: true
                 };
+                if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                    plotOptions.series.bars.horizontal = true;
+                }
                 break;
 
             case 'pie':
@@ -5974,7 +5977,6 @@ logical : {
 
         /**
          * change the table orientation if configured
-         * @type {[type]}
          */
         if(typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical'){
             graphData = utility.transposeTable(graphData);
@@ -6014,7 +6016,11 @@ logical : {
 
                 for(col = 0; col < colLength; col++){
                     data = graphData[row][col];
-                    graphData[row][col] = [col, data];
+                    if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                        graphData[row][col] = [data, col];
+                    }else{
+                        graphData[row][col] = [col, data];
+                    }
                 }
             }
         }
@@ -6047,6 +6053,8 @@ logical : {
             }
         };
 
+        console.log(plotOptions);
+        console.log(graphData);
         setTimeout(function(){
             $.plot(cellElement, graphData, plotOptions);
         }, 100);
@@ -7723,10 +7731,33 @@ logical : {
             row,
             col;
 
-        for (col = alphaAxisStart; col <= alphaAxisStop; col++) {
-            for (row = numAxisStart; row <= numAxisStop; row++) {
-                cellAddress = this.toChr(col) + row;
-                cellRange.push(cellAddress);
+        if(alphaAxisStart < alphaAxisStop){
+            for (col = alphaAxisStart; col <= alphaAxisStop; col++) {
+                if(numAxisStart < numAxisStop){
+                    for (row = numAxisStart; row <= numAxisStop; row++) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }else{
+                    for (row = numAxisStart; row >= numAxisStop; row--) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }
+            }
+        }else{
+            for (col = alphaAxisStart; col >= alphaAxisStop; col--) {
+                if(numAxisStart < numAxisStop){
+                    for (row = numAxisStart; row <= numAxisStop; row++) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }else{
+                    for (row = numAxisStart; row >= numAxisStop; row--) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }
             }
         }
 
