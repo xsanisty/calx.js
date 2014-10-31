@@ -78,6 +78,7 @@ td.subheader{
 
 .row-total td{
     background: #dfd;
+    border-top:solid 1px #333 !important;
 }
 
 .row-total input{
@@ -91,7 +92,7 @@ tr.bggrey input{
 }
 
 
-.w100{
+.w100 input{
     width:90px;
     padding:0px 2px;
     height:25px;
@@ -107,10 +108,20 @@ tr.bggrey td{
     background: #ddd;
 }
 
-tr.bggreen td{
+tr.bggreen td, tr.bgblue td{
     background: #060;
     color:white;
     font-weight: bold;
+    text-align: center;
+}
+
+tr.bgblue td{
+    background: #006;
+}
+
+.mo-head{
+    font-weight: bold;
+    text-align: center;
 }
 
 td{
