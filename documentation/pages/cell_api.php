@@ -91,7 +91,7 @@ cell.setConditionalStyle(function(cellValue, cellElement){
 </code></pre>
 
         <h4 class="method-title">setFormat</h4>
-        <p><code>sheet.setFormat(format)</code></p>
+        <p><codecellsetFormat(format)</code></p>
         <p>
             Set the formatting rule of the current cell.
         </p>
@@ -101,7 +101,7 @@ cell.setConditionalStyle(function(cellValue, cellElement){
         </p>
 
         <h4 class="method-title">setFormula</h4>
-        <p><code>sheet.setFormula(formula)</code></p>
+        <p><code>cell.setFormula(formula)</code></p>
         <p>
             Set the calculation formula of the current cell.
         </p>
@@ -111,7 +111,7 @@ cell.setConditionalStyle(function(cellValue, cellElement){
         </p>
 
         <h4 class="method-title">setValue</h4>
-        <p><code>sheet.setValue(value)</code></p>
+        <p><code>cell.setValue(value)</code></p>
         <p>
             Set the value of the current cell.
         </p>
