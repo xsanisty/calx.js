@@ -191,6 +191,9 @@ general: {
                     },
                     stack: true
                 };
+                if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                    plotOptions.series.bars.horizontal = true;
+                }
                 break;
 
             case 'pie':
@@ -228,7 +231,6 @@ general: {
 
         /**
          * change the table orientation if configured
-         * @type {[type]}
          */
         if(typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical'){
             graphData = utility.transposeTable(graphData);
@@ -268,7 +270,11 @@ general: {
 
                 for(col = 0; col < colLength; col++){
                     data = graphData[row][col];
-                    graphData[row][col] = [col, data];
+                    if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                        graphData[row][col] = [data, col];
+                    }else{
+                        graphData[row][col] = [col, data];
+                    }
                 }
             }
         }
@@ -301,6 +307,8 @@ general: {
             }
         };
 
+        console.log(plotOptions);
+        console.log(graphData);
         setTimeout(function(){
             $.plot(cellElement, graphData, plotOptions);
         }, 100);
