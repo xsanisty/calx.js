@@ -183,6 +183,9 @@ general: {
         switch(graphOptions.type){
             case 'bar':
                 graphData   = utility.rangeToTable(data);
+                if(typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true'){
+                    graphData.reverse();
+                }
                 plotOptions.series = {
                     bars: {
                         show: true,
@@ -226,6 +229,9 @@ general: {
 
             default:
                 graphData   = utility.rangeToTable(data);
+                if(typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true'){
+                    graphData.reverse();
+                }
                 break;
         }
 
@@ -297,6 +303,19 @@ general: {
             graphData = newGraphData;
         }
 
+        /**
+         * hide and show axis label
+         */
+        if(typeof(graphOptions.show_x_axis) != 'undefined' && graphOptions.show_x_axis == 'false'){
+            plotOptions.xaxis = plotOptions.xaxis || {};
+            plotOptions.xaxis.show = false;
+        }
+
+        if(typeof(graphOptions.show_y_axis) != 'undefined' && graphOptions.show_y_axis == 'false'){
+            plotOptions.yaxis = plotOptions.yaxis || {};
+            plotOptions.yaxis.show = false;
+        }
+
         plotOptions.grid = {
             backgroundColor: { colors: [ "#fff", "#eee" ] },
             borderWidth: {
@@ -307,8 +326,7 @@ general: {
             }
         };
 
-        console.log(plotOptions);
-        console.log(graphData);
+
         setTimeout(function(){
             $.plot(cellElement, graphData, plotOptions);
         }, 100);
