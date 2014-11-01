@@ -143,9 +143,14 @@ td{
 .left-head td, .left-head th{
     width:240px;
 }
+
+td a.pull-right{
+    color:white;
+}
+
 .scrollable tbody{
     display:block;
-    max-height: 350px;
+    max-height: 520px;
     overflow-y: auto;
     overflow-x: hidden;
 }
