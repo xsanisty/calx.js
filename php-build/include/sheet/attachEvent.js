@@ -37,11 +37,13 @@ sheet.fx.attachEvent = function(){
      */
     this.el.on('calx.setValue', 'input[data-cell], select[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
-            currentCell = currentSheet.cells[cellAddr];
+            currentCell = currentSheet.cells[cellAddr],
+            oldVal      = currentCell.getValue(),
+            newVal      = currentCell.el.val();
 
         if(currentCell.isCheckbox && currentCell.el.attr('type') == 'checkbox'){
             if(currentCell.el.prop('checked')){
-                currentCell.setValue(currentCell.el.val());
+                currentCell.setValue(newVal);
             }else{
                 var uncheckedVal = currentCell.el.attr('data-unchecked');
                     uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
@@ -49,7 +51,7 @@ sheet.fx.attachEvent = function(){
                 currentCell.setValue(uncheckedVal);
             }
         }else if(currentCell.isCheckbox && currentCell.el.attr('type') == 'radio'){
-            currentCell.setValue(currentCell.el.val());
+            currentCell.setValue(newVal);
 
             currentSheet.el
                         .find('[name='+currentCell.el.attr('name')+']')
@@ -64,7 +66,11 @@ sheet.fx.attachEvent = function(){
                             currentSheet.cells[cellAddr].setValue(uncheckedVal);
                         });
         }else{
-            currentCell.setValue(currentCell.el.val());
+            currentCell.setValue(newVal);
+        }
+
+        if(oldVal != newVal){
+            currentCell.setAffected(true);
         }
 
     });
@@ -82,6 +88,10 @@ sheet.fx.attachEvent = function(){
     this.el.on('calx.calculateCellDependant', 'input[data-cell], select[data-cell]', function(){
         var cellAddr    = $(this).attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr];
+
+        if(!currentCell.isAffected()){
+            return;
+        }
 
         if(true === calx.isCalculating){
             calx.isCalculating = false;
