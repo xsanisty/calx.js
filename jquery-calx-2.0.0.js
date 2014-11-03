@@ -2401,7 +2401,51 @@ var defaultConfig = {
                         break;
                 }
             },
-            rules: [/^(?:\s+)/, /^(?:"(\\["]|[^"])*")/, /^(?:'(\\[']|[^'])*')/, /^(?:#[A-Za-z0-9_]+)/, /^(?:[A-Za-z]{1,}[A-Za-z_0-9]+(?=[(]))/, /^(?:([0]?[1-9]|1[0-2])[:][0-5][0-9]([:][0-5][0-9])?[ ]?(AM|am|aM|Am|PM|pm|pM|Pm))/, /^(?:([0]?[0-9]|1[0-9]|2[0-3])[:][0-5][0-9]([:][0-5][0-9])?)/, /^(?:[A-Za-z0-9_]+>[A-Za-z0-9_]+)/, /^(?:\$[A-Za-z]+\$[0-9]+)/, /^(?:[A-Za-z]+[0-9]+)/, /^(?:[A-Za-z]+(?=[(]))/, /^(?:[A-Za-z]{1,}[A-Za-z_0-9]+)/, /^(?:[A-Za-z_]+)/, /^(?:[0-9]+)/, /^(?:\$)/, /^(?: )/, /^(?:[.])/, /^(?::)/, /^(?:;)/, /^(?:,)/, /^(?:\*)/, /^(?:\/)/, /^(?:-)/, /^(?:\+)/, /^(?:\^)/, /^(?:\()/, /^(?:\))/, /^(?:\[)/, /^(?:\])/, /^(?:>)/, /^(?:<)/, /^(?:NOT\b)/, /^(?:PI\b)/, /^(?:E\b)/, /^(?:TRUE\b)/, /^(?:FALSE\b)/, /^(?:NULL\b)/, /^(?:")/, /^(?:')/, /^(?:!)/, /^(?:=)/, /^(?:%)/, /^(?:[#])/, /^(?:[&])/, /^(?:$)/],
+            rules: [/^(?:\s+)/,
+                /^(?:"(\\["]|[^"])*")/,
+                /^(?:'(\\[']|[^'])*')/,
+                /^(?:#[A-Za-z0-9_]+)/,
+                /^(?:[A-Za-z]{1,}[A-Za-z_0-9]+(?=[(]))/,
+                /^(?:([0]?[1-9]|1[0-2])[:][0-5][0-9]([:][0-5][0-9])?[ ]?(AM|am|aM|Am|PM|pm|pM|Pm))/,
+                /^(?:([0]?[0-9]|1[0-9]|2[0-3])[:][0-5][0-9]([:][0-5][0-9])?)/,
+                /^(?:[A-Za-z0-9_]+>[A-Za-z0-9_]+)/,
+                /^(?:\$[A-Za-z]+\$[0-9]+)/,
+                /^(?:[A-Za-z]+[0-9]+)/,
+                /^(?:[A-Za-z]+(?=[(]))/,
+                /^(?:[A-Za-z]{1,}[A-Za-z_0-9]+)/,
+                /^(?:[A-Za-z_]+)/,
+                /^(?:[0-9]+)/,
+                /^(?:\$)/,
+                /^(?: )/,
+                /^(?:[.])/,
+                /^(?::)/,
+                /^(?:;)/,
+                /^(?:,)/,
+                /^(?:\*)/,
+                /^(?:\/)/,
+                /^(?:-)/,
+                /^(?:\+)/,
+                /^(?:\^)/,
+                /^(?:\()/,
+                /^(?:\))/,
+                /^(?:\[)/,
+                /^(?:\])/,
+                /^(?:>)/,
+                /^(?:<)/,
+                /^(?:NOT\b)/,
+                /^(?:PI\b)/,
+                /^(?:E\b)/,
+                /^(?:TRUE\b)/,
+                /^(?:FALSE\b)/,
+                /^(?:NULL\b)/,
+                /^(?:")/,
+                /^(?:')/,
+                /^(?:!)/,
+                /^(?:=)/,
+                /^(?:%)/,
+                /^(?:[#])/,
+                /^(?:[&])/,
+                /^(?:$)/],
             conditions: {
                 "INITIAL": {
                     "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
@@ -9160,10 +9204,18 @@ sheet.fx.buildCellDependency = function(){
         return null;
     }
 
-    if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
-        return '#UNDEFINED_VARIABLE!';
+    if(typeof(this.variables[varIndex]) == 'undefined'){
+        if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
+            return '#UNDEFINED_VARIABLE!';
+        }else if(typeof(data.VARIABLE[varIndex]) == 'function'){
+            return data.VARIABLE[varIndex].call(this);
+        }else{
+            return data.VARIABLE[varIndex];
+        }
+    }else if(typeof(this.variables[varIndex]) == 'function'){
+        return this.variables[varIndex].call(this);
     }else{
-        return data.VARIABLE[varIndex];
+        return this.variables[varIndex];
     }
 };sheet.fx.time = function(time){
     var $time   = time.split(':'),
@@ -9351,6 +9403,19 @@ sheet.fx.registerCell = function(cell){
 
     if(this.affectedCell.indexOf(cell.getAddress()) == -1){
         this.affectedCell.push(cell.getAddress());
+    }
+};/**
+ * register custom variable to the calx object
+ * @param  {string} varName     variable name
+ * @return {mixed}  varValue    variable value
+ */
+sheet.fx.registerVariable = function (varName, varValue) {
+    if(typeof(varName) == 'object'){
+        for(var a in varName){
+            this.variables[a] = varName[a];
+        }
+    }else{
+        this.variables[varName] = varValue;
     }
 };/**
  * get cell object based on given address
@@ -9709,16 +9774,31 @@ registerFunction : function (funcName, funcDefinition, override) {
         /**
  * register custom variable to the calx object
  * @param  {string} varName     variable name
- * @return {mixed}  varValue    variable value
+ * @param  {mixed}  varValue    variable value
+ * @param  {bool}   global      register variable as global or only in current sheet
  */
-registerVariable : function (varName, varValue) {
-    if(typeof(varName) == 'object'){
-        for(var a in varName){
-            data.VARIABLE[a] = varName[a];
+registerVariable : function (varName, varValue, global) {
+    global = typeof(global) == 'undefined' ? false : global;
+
+    if(global){
+        if(typeof(varName) == 'object'){
+            for(var a in varName){
+                data.VARIABLE[a] = varName[a];
+            }
+        }else{
+            data.VARIABLE[varName] = varValue;
         }
     }else{
-        data.VARIABLE[varName] = varValue;
+        this.each(function(){
+            var sheetIdentifier = $(this).attr('data-calx-identifier');
+
+            if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
+                calx.sheetRegistry[sheetIdentifier].registerVariable(varName, varValue);
+            }
+        });
     }
+
+    return this;
 },
         /**
  * refresh sheet reference to the current dom state and rebuild
