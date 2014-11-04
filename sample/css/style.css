@@ -97,7 +97,8 @@ tr.bggrey input{
     padding:0px 2px;
     height:25px;
     text-align: right;
-    font-size: 13px
+    font-size: 13px;
+    border-radius: 0;
 }
 
 label.normal{
