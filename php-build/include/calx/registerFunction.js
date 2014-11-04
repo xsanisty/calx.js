@@ -1,7 +1,9 @@
 /**
- * register custom function to the calx object
- * @param  {[type]} argument [description]
- * @return {[type]}          [description]
+ * register custom function to the calx formula sets
+ * @param  {string}     funcName        the function name, must be all uppercase
+ * @param  {function}   funcDefinition  the function definition to describe how the function should behave
+ * @param  {bool}       override        override flag, should it override built in function if the same name exists
+ * @return {void}
  */
 registerFunction : function (funcName, funcDefinition, override) {
     override = (typeof(override) == 'undefined') ? false : override;

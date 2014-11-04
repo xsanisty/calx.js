@@ -1,7 +1,8 @@
 /**
  * initialize sheet object and register to internal calx.sheetRegistry
+ *
  * @param  {object} option      option to override the default option
- * @return {object}             jQuery object for chaining
+ * @return {object}             jQuery object
  */
 init : function (option) {
     var a, sheetIdentifier;

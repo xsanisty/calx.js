@@ -12,6 +12,7 @@ sheet.fx.calculate = function(){
 
     var a;
 
+    this.calculateDependency(this.identifier);
     /** set all cell with formula as affected */
     this.clearProcessedFlag();
 
@@ -22,11 +23,13 @@ sheet.fx.calculate = function(){
     this.setCalculated();
     //console.log(this.isCalculated());
 
+    /*
     for(a in this.dependant){
         if(!this.dependant[a].isCalculated()){
             this.dependant[a].calculate();
         }
     }
+    */
 
     for(a in this.cells){
         //console.log('recalculating cell');
@@ -35,6 +38,9 @@ sheet.fx.calculate = function(){
             //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
         }
     }
+
+    this.calculateDependant(this.identifier);
+
 
     if(typeof(this.config.onAfterCalculate) == 'function'){
         this.config.onAfterCalculate.call(this);

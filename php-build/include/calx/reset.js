@@ -1,5 +1,5 @@
 /**
- * Reset the form to the initial value
+ * Reset the form to the initial value and re-sync the value with the sheet object
  */
 
 reset: function(){

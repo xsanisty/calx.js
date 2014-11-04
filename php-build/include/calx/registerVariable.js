@@ -1,5 +1,5 @@
 /**
- * register custom variable to the calx object
+ * register custom variable to the calx object / sheet object
  * @param  {string} varName     variable name
  * @param  {mixed}  varValue    variable value
  * @param  {bool}   global      register variable as global or only in current sheet
