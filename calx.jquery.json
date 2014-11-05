@@ -1,0 +1,30 @@
+{
+    "name": "calx",
+    "title": "jQuery Calx",
+    "description": "jQuery plugin for creating calculation form or calculation table with user provided formula",
+    "keywords": ["form", "calculator", "excel", "formula"],
+    "version": "1.1.9",
+    "author": {
+        "name": "Ikhsan Agustian",
+        "url": "http://www.xsanisty.com/"
+    },
+    "maintainers": [
+        {
+            "name": "Ikhsan Agustian",
+            "email": "ikhsan017@gmail.com",
+            "url": "http://www.xsanisty.com"
+        }
+    ],
+    "licenses": [{
+            "type": "MIT",
+            "url": "https://github.com/ikhsan017/calx/blob/master/MIT-license.txt"
+        }
+    ],
+    "bugs": "https://github.com/ikhsan017/calx/issues",
+    "homepage": "http://www.xsanisty.com/calx",
+    "docs": "http://www.xsanisty.com/calx",
+    "download": "https://github.com/ikhsan017/calx/archive/master.zip",
+    "dependencies": {
+        "jquery": ">=1.5"
+    }
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calx with simple aggregate function</title>
+    <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    <script src="../jquery-calx-1.1.9.min.js"></script>
+    <script type="text/javascript">
+	$(document).ready(function(){
+	    $('#calx').calx();
+	});
+    </script>
+    <style>
+	td{
+	    padding:5px 10px;
+	    border:solid 1px black;
+	}
+	th td{
+	    background: #ddd;
+	}
+	input[type="text"]{
+	    width:30px;
+	}
+    </style>
+</head>
+<body>
+    <table id="calx">
+	<tr>
+	    <td id="A1" style="width:150px">Years</td>
+	    <td id="B1">Jan</td>
+	    <td id="C1">Feb</td>
+	    <td id="D1">Mar</td>
+	    <td id="E1">Apr</td>
+	    <td id="F1">May</td>
+	    <td id="G1">Jun</td>
+	    <td id="H1">Jul</td>
+	    <td id="I1">Aug</td>
+	    <td id="J1">Sep</td>
+	    <td id="K1">Oct</td>
+	    <td id="L1">Nov</td>
+	    <td id="M1">Dec</td>
+	    <td id="N1" style="width:20px;border:none;">&nbsp;</td>
+	    <td id="O1">Average</td>
+	    <td id="P1">Sum</td>
+	    <td id="Q1">Min</td>
+	    <td id="R1">Max</td>
+	</tr>
+	<tr>
+	    <td id="A2" style="width:150px">2010</td>
+	    <td><input type="text" id="B2" value="24"></td>
+	    <td><input type="text" id="C2" value="54"></td>
+	    <td><input type="text" id="D2" value="12"></td>
+	    <td><input type="text" id="E2" value="65"></td>
+	    <td><input type="text" id="F2" value="21"></td>
+	    <td><input type="text" id="G2" value="65"></td>
+	    <td><input type="text" id="H2" value="87"></td>
+	    <td><input type="text" id="I2" value="12"></td>
+	    <td><input type="text" id="J2" value="10"></td>
+	    <td><input type="text" id="K2" value="43"></td>
+	    <td><input type="text" id="L2" value="76"></td>
+	    <td><input type="text" id="M2" value="12"></td>
+	    <td id="N2" style="border:none;">&nbsp;</td>
+	    <td data-format="0[.]00" id="O2" data-formula="AVG($B2,$M2)"></td>
+	    <td data-format="0[.]00" id="P2" data-formula="SUM($B2,$M2)"></td>
+	    <td data-format="0[.]00" id="Q2" data-formula="MIN($B2,$M2)"></td>
+	    <td data-format="0[.]00" id="R2" data-formula="MAX($B2,$M2)"></td>
+	</tr>
+	<tr>
+	    <td id="A3" style="width:150px">2011</td>
+	    <td><input type="text" id="B3" value="23"></td>
+	    <td><input type="text" id="C3" value="12"></td>
+	    <td><input type="text" id="D3" value="90"></td>
+	    <td><input type="text" id="E3" value="12"></td>
+	    <td><input type="text" id="F3" value="08"></td>
+	    <td><input type="text" id="G3" value="67"></td>
+	    <td><input type="text" id="H3" value="56"></td>
+	    <td><input type="text" id="I3" value="95"></td>
+	    <td><input type="text" id="J3" value="36"></td>
+	    <td><input type="text" id="K3" value="23"></td>
+	    <td><input type="text" id="L3" value="40"></td>
+	    <td><input type="text" id="M3" value="21"></td>
+	    <td id="N3" style="border:none;">&nbsp;</td>
+	    <td data-format="0[.]00" id="O3" data-formula="AVG($B3,$M3)"></td>
+	    <td data-format="0[.]00" id="P3" data-formula="SUM($B3,$M3)"></td>
+	    <td data-format="0[.]00" id="Q3" data-formula="MIN($B3,$M3)"></td>
+	    <td data-format="0[.]00" id="R3" data-formula="MAX($B3,$M3)"></td>
+	</tr>
+	
+	<tr>
+	    <td id="A4" style="width:150px">2012</td>
+	    <td><input type="text" id="B4" value="85"></td>
+	    <td><input type="text" id="C4" value="23"></td>
+	    <td><input type="text" id="D4" value="54"></td>
+	    <td><input type="text" id="E4" value="12"></td>
+	    <td><input type="text" id="F4" value="56"></td>
+	    <td><input type="text" id="G4" value="98"></td>
+	    <td><input type="text" id="H4" value="12"></td>
+	    <td><input type="text" id="I4" value="23"></td>
+	    <td><input type="text" id="J4" value="75"></td>
+	    <td><input type="text" id="K4" value="12"></td>
+	    <td><input type="text" id="L4" value="46"></td>
+	    <td><input type="text" id="M4" value="98"></td>
+	    <td id="N4" style="border:none;">&nbsp;</td>
+	    <td data-format="0[.]00" id="O4" data-formula="AVG($B4,$M4)"></td>
+	    <td data-format="0[.]00" id="P4" data-formula="SUM($B4,$M4)"></td>
+	    <td data-format="0[.]00" id="Q4" data-formula="MIN($B4,$M4)"></td>
+	    <td data-format="0[.]00" id="R4" data-formula="MAX($B4,$M4)"></td>
+	</tr>
+	
+	<tr><td colspan="18" style="border: none">&nbsp;</td></tr>
+	
+	<tr>
+	    <td id="A5">Average</td>
+	    <td id="B5" data-format="0[.]00" data-formula="AVG($B2,$B4)"></td>
+	    <td id="C5" data-format="0[.]00" data-formula="AVG($C2,$C4)"></td>
+	    <td id="D5" data-format="0[.]00" data-formula="AVG($D2,$D4)"></td>
+	    <td id="E5" data-format="0[.]00" data-formula="AVG($E2,$E4)"></td>
+	    <td id="F5" data-format="0[.]00" data-formula="AVG($F2,$F4)"></td>
+	    <td id="G5" data-format="0[.]00" data-formula="AVG($G2,$G4)"></td>
+	    <td id="H5" data-format="0[.]00" data-formula="AVG($H2,$H4)"></td>
+	    <td id="I5" data-format="0[.]00" data-formula="AVG($I2,$I4)"></td>
+	    <td id="J5" data-format="0[.]00" data-formula="AVG($J2,$J4)"></td>
+	    <td id="K5" data-format="0[.]00" data-formula="AVG($K2,$K4)"></td>
+	    <td id="L5" data-format="0[.]00" data-formula="AVG($L2,$L4)"></td>
+	    <td id="M5" data-format="0[.]00" data-formula="AVG($M2,$M4)"></td>
+	    <td id="N5" colspan="5" style="border:none;">&nbsp;</td>
+	</tr>
+	
+	<tr>
+	    <td id="A6">Sum</td>
+	    <td id="B6" data-format="0[.]00" data-formula="SUM($B2,$B4)"></td>
+	    <td id="C6" data-format="0[.]00" data-formula="SUM($C2,$C4)"></td>
+	    <td id="D6" data-format="0[.]00" data-formula="SUM($D2,$D4)"></td>
+	    <td id="E6" data-format="0[.]00" data-formula="SUM($E2,$E4)"></td>
+	    <td id="F6" data-format="0[.]00" data-formula="SUM($F2,$F4)"></td>
+	    <td id="G6" data-format="0[.]00" data-formula="SUM($G2,$G4)"></td>
+	    <td id="H6" data-format="0[.]00" data-formula="SUM($H2,$H4)"></td>
+	    <td id="I6" data-format="0[.]00" data-formula="SUM($I2,$I4)"></td>
+	    <td id="J6" data-format="0[.]00" data-formula="SUM($J2,$J4)"></td>
+	    <td id="K6" data-format="0[.]00" data-formula="SUM($K2,$K4)"></td>
+	    <td id="L6" data-format="0[.]00" data-formula="SUM($L2,$L4)"></td>
+	    <td id="M6" data-format="0[.]00" data-formula="SUM($M2,$M4)"></td>
+	    <td id="N6" colspan="5" style="border:none;">&nbsp;</td>
+	</tr>
+	
+	<tr>
+	    <td id="A7">Min</td>
+	    <td id="B7" data-format="0[.]00" data-formula="MIN($B2,$B4)"></td>
+	    <td id="C7" data-format="0[.]00" data-formula="MIN($C2,$C4)"></td>
+	    <td id="D7" data-format="0[.]00" data-formula="MIN($D2,$D4)"></td>
+	    <td id="E7" data-format="0[.]00" data-formula="MIN($E2,$E4)"></td>
+	    <td id="F7" data-format="0[.]00" data-formula="MIN($F2,$F4)"></td>
+	    <td id="G7" data-format="0[.]00" data-formula="MIN($G2,$G4)"></td>
+	    <td id="H7" data-format="0[.]00" data-formula="MIN($H2,$H4)"></td>
+	    <td id="I7" data-format="0[.]00" data-formula="MIN($I2,$I4)"></td>
+	    <td id="J7" data-format="0[.]00" data-formula="MIN($J2,$J4)"></td>
+	    <td id="K7" data-format="0[.]00" data-formula="MIN($K2,$K4)"></td>
+	    <td id="L7" data-format="0[.]00" data-formula="MIN($L2,$L4)"></td>
+	    <td id="M7" data-format="0[.]00" data-formula="MIN($M2,$M4)"></td>
+	    <td id="N7" colspan="5" style="border:none;">&nbsp;</td>
+	</tr>
+	
+	<tr>
+	    <td id="A8">Max</td>
+	    <td id="B8" data-format="0[.]00" data-formula="MAX($B2,$B4)"></td>
+	    <td id="C8" data-format="0[.]00" data-formula="MAX($C2,$C4)"></td>
+	    <td id="D8" data-format="0[.]00" data-formula="MAX($D2,$D4)"></td>
+	    <td id="E8" data-format="0[.]00" data-formula="MAX($E2,$E4)"></td>
+	    <td id="F8" data-format="0[.]00" data-formula="MAX($F2,$F4)"></td>
+	    <td id="G8" data-format="0[.]00" data-formula="MAX($G2,$G4)"></td>
+	    <td id="H8" data-format="0[.]00" data-formula="MAX($H2,$H4)"></td>
+	    <td id="I8" data-format="0[.]00" data-formula="MAX($I2,$I4)"></td>
+	    <td id="J8" data-format="0[.]00" data-formula="MAX($J2,$J4)"></td>
+	    <td id="K8" data-format="0[.]00" data-formula="MAX($K2,$K4)"></td>
+	    <td id="L8" data-format="0[.]00" data-formula="MAX($L2,$L4)"></td>
+	    <td id="M8" data-format="0[.]00" data-formula="MAX($M2,$M4)"></td>
+	    <td id="N8" colspan="5" style="border:none;">&nbsp;</td>
+	</tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calx on html element other than form</title>
+    <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    <script src="../jquery-calx-1.1.9.min.js"></script>
+    <script type="text/javascript">
+	$(document).ready(function(){
+	    $('#applycalx').click(function(){
+		$('#calx').calx();		
+	    });
+	    
+	    $('#detachcalx').click(function(){
+		$('#calx').calx('detach');	
+	    });
+	});
+    </script>
+    <style>
+	td{
+	    padding:5px 10px;
+	    border:solid 1px black;
+	}
+	th td{
+	    background: #ddd;
+	}
+    </style>
+</head>
+<body>
+    <form id="calx">
+	<table>
+	    <thead>
+		<tr>
+		    <td style="width:300px">Item Name</td>
+		    <td style="width:80px">Price</td>
+		    <td style="width:30px">Qty</td>
+		    <td style="width:30px">Discount</td>
+		    <td style="width:150px">Sub Total</td>
+		</tr>
+	    </thead>
+	    <tbody>
+		<tr>
+		    <td id="item1" >HDD Baracuda Black 2TB</td>
+		    <td id="price1" data-format="$ 0,0[.]00" >150</td>
+		    <td id="qty1" data-format="0" >1</td>
+		    <td id="disc1" data-format="0.00 %" >0.05</td>
+		    <td id="subtotal1" data-format="$ 0,0[.]00" data-formula="($price1*$qty1)*(1-$disc1)" ></td>
+		</tr>
+		<tr>
+		    <td id="item2" >LCD Monitor BENQ 21"</td>
+		    <td id="price2" data-format="$ 0,0[.]00" >250</td>
+		    <td id="qty2" data-format="0" >1</td>
+		    <td id="disc2" data-format="0.00 %" >0.1</td>
+		    <td id="subtotal2" data-format="$ 0,0[.]00" data-formula="($price2*$qty2)*(1-$disc2)" ></td>
+		</tr>
+		<tr>
+		    <td id="item3" >LiteOn DVD RW+</td>
+		    <td id="price3" data-format="$ 0,0[.]00" >120</td>
+		    <td id="qty3" data-format="0" >1</td>
+		    <td id="disc3" data-format="0.00 %" >0.2</td>
+		    <td id="subtotal3" data-format="$ 0,0[.]00" data-formula="($price3*$qty3)*(1-$disc3)" ></td>
+		</tr>
+		<tr>
+		    <td id="item4" >MotherBoard Gigabyte G5-XXX</td>
+		    <td id="price4" data-format="$ 0,0[.]00" >140</td>
+		    <td id="qty4" data-format="0" >1</td>
+		    <td id="disc4" data-format="0.00 %" >0.05</td>
+		    <td id="subtotal4" data-format="$ 0,0[.]00" data-formula="($price4*$qty4)*(1-$disc4)" ></td>
+		</tr>
+		<tr>
+		    <td id="item5" >PSU 600 Watt</td>
+		    <td id="price5" data-format="$ 0,0[.]00" >30</td>
+		    <td id="qty5" data-format="0" >1</td>
+		    <td id="disc5" data-format="0.00 %" >0</td>
+		    <td id="subtotal5" data-format="$ 0,0[.]00" data-formula="($price5*$qty5)*(1-$disc5)" ></td>
+		</tr>
+		
+		<tr>
+		    <td id="calculate" type="button" value="calculate" ></td>
+		    <td id="price_total" name="price_total" data-format="$ 0,0[.]00" data-formula="($price1+$price2+$price3+$price4+$price5)" ></td>
+		    <td colspan="2">Total Price :</td>
+		    <td id="total" name="total" data-format="$ 0,0[.]00" data-formula="($subtotal1+$subtotal2+$subtotal3+$subtotal4+$subtotal5)" ></td>
+		</tr>
+	    </tbody>
+	</table>
+	<input type="button" id="applycalx" value="Apply Calx" />
+	<input type="button" id="detachcalx" value="Detach Calx" />
+
+    </form>
+</body>
+</html>

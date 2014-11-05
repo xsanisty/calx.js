@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calx with simple aggregate function</title>
+    <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    <script src="../jquery-calx-1.1.9.min.js"></script>
+    <script type="text/javascript">
+	var currentRow = 3;
+	$(document).ready(function(){
+	    $('#calx').calx();
+	    
+	    $('#add_item').click(function(){
+			var $calx = $('#calx');
+			currentRow++;
+			
+			$calx.append('<tr>\
+			    <td><input type="text" id="A'+currentRow+'" value="" /></td>\
+			    <td><input type="text" id="B'+currentRow+'" value="" data-format="$ 0,0[.]00" /></td>\
+			    <td><input type="text" id="C'+currentRow+'" value="" data-format="0" /></td>\
+			    <td><input type="text" id="D'+currentRow+'" value="" data-format="0[.]00 %" /></td>\
+			    <td><input type="text" id="E'+currentRow+'" value="" data-format="$ 0,0[.]00" data-formula="($B'+currentRow+'*$C'+currentRow+')*(1-$D'+currentRow+')" /></td>\
+			    <td><input type="button" value="remove" class="btn-remove" /></td>\
+			</tr>');
+			
+			//update total formula
+			$('#F1').attr('data-formula','SUM($E1,$E'+currentRow+')');
+			$calx.calx('refresh');
+	    });
+
+	    $('#calx').on('click', '.btn-remove', function(){
+	    	$(this).parent().parent().remove();
+	    	$('#calx').calx('refresh');
+	    });
+	});
+    </script>
+    <style>
+	td{
+	    padding:5px 10px;
+	    border:solid 1px black;
+	}
+	th td{
+	    background: #ddd;
+	}
+	input[type="text"]{
+	    width:100%;
+	}
+    </style>
+</head>
+<body>
+    <table id="calx">
+	<thead>
+	    <tr>
+		<td style="width:250px">Item Name</td>
+		<td style="width:150px">Item Price</td>
+		<td style="width: 50px">Qty</td>
+		<td style="width: 80px">Discount</td>
+		<td style="width:150px">Sub Total</td>
+	    </tr>
+	</thead>
+	<tbody id="itemlist">
+	    <tr>
+			<td><input type="text" id="A1" value="HDD Baracuda Black 2TB" /></td>
+			<td><input type="text" id="B1" value="" data-format="$ 0,0[.]00" /></td>
+			<td><input type="text" id="C1" value="" data-format="0" /></td>
+			<td><input type="text" id="D1" value="" data-format="0[.]00 %" /></td>
+			<td><input type="text" id="E1" value="" data-format="$ 0,0[.]00" data-formula="($B1*$C1)*(1-$D1)" /></td>
+	    	<td><input type="button" value="remove" class="btn-remove" /></td>
+	    </tr>
+	    <tr>
+			<td><input type="text" id="A2" value="BenQ LED Monitor 21 inch" /></td>
+			<td><input type="text" id="B2" value="" data-format="$ 0,0[.]00" /></td>
+			<td><input type="text" id="C2" value="" data-format="0" /></td>
+			<td><input type="text" id="D2" value="" data-format="0[.]00 %" /></td>
+			<td><input type="text" id="E2" value="" data-format="$ 0,0[.]00" data-formula="($B2*$C2)*(1-$D2)" /></td>
+	    	<td><input type="button" value="remove" class="btn-remove" /></td>
+	    </tr>
+	    <tr>
+			<td><input type="text" id="A3" value="Intel Processor i3 2328" /></td>
+			<td><input type="text" id="B3" value="" data-format="$ 0,0[.]00" /></td>
+			<td><input type="text" id="C3" value="" data-format="0" /></td>
+			<td><input type="text" id="D3" value="" data-format="0[.]00 %" /></td>
+			<td><input type="text" id="E3" value="" data-format="$ 0,0[.]00" data-formula="($B3*$C3)*(1-$D3)" /></td>
+	    	<td><input type="button" value="remove" class="btn-remove" /></td>
+	    </tr>
+	</tbody>
+	<tfoot>
+	    <tr>
+		<td colspan="4" style="text-align: right">Total Price :</td>
+		<td id="F1" data-format="$ 0,0[.]00" data-formula="SUM($E1,$E3)"></td>
+	    </tr>
+	</tfoot>
+    </table>
+    <input type="button" value="Add new item" id="add_item" />
+</body>
+</html>

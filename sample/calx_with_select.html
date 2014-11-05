@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calx with select box</title>
+    <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    <script src="../jquery-calx-1.1.9.min.js"></script>
+    <script type="text/javascript">
+	$(document).ready(function(){
+	    $('#calx').calx({});
+	});
+    </script>
+    <style>
+	td{
+	    padding:5px 10px;
+	}
+    </style>
+</head>
+<body>
+    <h3>Choose Your VPS Package</h3>
+    <form id="calx">
+	<table>
+	    <tbody>
+		<tr>
+		    <td>Processor :</td>
+		    <td>
+			<select name="proc" id="proc">
+			    <option value="15">1 Core</option>
+			    <option value="22">2 Core</option>
+			    <option value="30">4 Core</option>
+			</select>
+		    </td>
+		</tr>
+		<tr>
+		    <td>RAM :</td>
+		    <td>
+			<select name="ram" id="ram">
+			    <option value="5">1 GB</option>
+			    <option value="8">2 GB</option>
+			    <option value="15">4 GB</option>
+			    <option value="25">8 GB</option>
+			    <option value="30">10 GB</option>
+			</select>
+		    </td>
+		</tr>
+		<tr>
+		    <td>HDD Space :</td>
+		    <td>
+			<select name="hdd" id="hdd">
+			    <option value="5">250 GB</option>
+			    <option value="7">500 GB</option>
+			    <option value="12">750 GB</option>
+			    <option value="15">1 TB</option>
+			    <option value="25">2 TB</option>
+			</select>
+		    </td>
+		</tr>
+		<tr>
+		    <td>Price per Month :</td>
+		    <td><span id="price" data-format="$ 0,0[.]00" data-formula="$hdd+$proc+$ram"></span> /Month</td>
+		</tr>
+		<tr>
+		    <td>Contract :</td>
+		    <td><input type="text" id="contract" data-format="0" style="width: 40px" value="12" /> Month(s)</td>
+		</tr>
+		<tr>
+		    <td>Total Price :</td>
+		    <td id="total_price" data-format="$ 0,0[.]00" data-formula="$contract*$price"></td>
+		</tr>
+	    </tbody>
+	</table>
+    </form>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calx with radio button</title>
+    <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    <script src="../jquery-calx-1.1.9.min.js"></script>
+    <script type="text/javascript">
+	$(document).ready(function(){
+	    $('#calx').calx({});
+	});
+    </script>
+    <style>
+	td{
+	    padding:5px 10px;
+	    vertical-align: top;
+	}
+    </style>
+</head>
+<body>
+    <h3>Choose Your VPS Package</h3>
+    <form id="calx">
+	<table>
+	    <tbody>
+		<tr>
+		    <td>Processor :</td>
+		    <td>
+			<input id="proc1" type="radio" name="proc" value="15">1 Core<br />
+			<input id="proc2" type="radio" name="proc" value="22">2 Core<br />
+			<input id="proc4" type="radio" name="proc" value="30">4 Core<br />
+		    </td>
+		</tr>
+		<tr>
+		    <td>RAM :</td>
+		    <td>
+			<input id="ram1" type="radio" name="ram" value="5">1 GB<br />
+			<input id="ram2" type="radio" name="ram" value="8">2 GB<br />
+			<input id="ram4" type="radio" name="ram" value="15">4 GB<br />
+			<input id="ram8" type="radio" name="ram" value="25">8 GB<br />
+			<input id="ram10" type="radio" name="ram" value="30">10 GB<br />
+		    </td>
+		</tr>
+		<tr>
+		    <td>HDD Space :</td>
+		    <td>
+			<input id="hdd1" type="radio" name="hdd" value="5">250 GB<br />
+			<input id="hdd2" type="radio" name="hdd" value="7">500 GB<br />
+			<input id="hdd3" type="radio" name="hdd" value="12">750 GB<br />
+			<input id="hdd4" type="radio" name="hdd" value="15">1 TB<br />
+			<input id="hdd5" type="radio" name="hdd" value="25">2 TB<br />
+		    </td>
+		</tr>
+		<tr>
+		    <td>Price per Month :</td>
+		    <td><span id="price" data-format="$ 0,0[.]00" data-formula="($proc1+$proc2+$proc4) + ($ram1+$ram2+$ram4+$ram8+$ram10) + ($hdd1+$hdd2+$hdd3+$hdd4+$hdd5)"></span> /Month</td>
+		</tr>
+		<tr>
+		    <td>Contract :</td>
+		    <td><input type="text" id="contract" data-format="0" style="width: 40px" value="12" /> Month(s)</td>
+		</tr>
+		<tr>
+		    <td>Total Price :</td>
+		    <td id="total_price" data-format="$ 0,0[.]00" data-formula="$contract*$price"></td>
+		</tr>
+	    </tbody>
+	</table>
+    </form>
+</body>
+</html>

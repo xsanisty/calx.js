@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Calx with custom language</title>
+    <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    <script src="../jquery-calx-1.1.9.min.js"></script>
+    <script type="text/javascript">
+	$(document).ready(function(){
+	    
+	    //register new language config
+	    $().calx('language',{
+		id : 'fr',
+		config: {
+		    delimiters: {
+			thousands: ' ',
+			decimal: ','
+		    },
+		    abbreviations: {
+			thousand: 'k',
+			million: 'm',
+			billion: 'b',
+			trillion: 't'
+		    },
+		    ordinal : function (number) {
+			return number === 1 ? 'er' : 'ème';
+		    },
+		    currency: {
+			symbol: '€'
+		    }
+	        }
+	    });
+	    
+	    //load the language
+	    $('#calx').calx({
+		language : 'fr'
+	    });
+	});
+    </script>
+    <style>
+	input[type="text"]{
+	    width:100%;
+	}
+	td{
+	    padding:5px 10px;
+	}
+    </style>
+</head>
+<body>
+    <form id="calx">
+	<table>
+	    <thead>
+		<tr>
+		    <td style="width:250px">Item Name</td>
+		    <td style="width:80px">Price</td>
+		    <td style="width:30px">Qty</td>
+		    <td style="width:30px">Discount</td>
+		    <td style="width:150px">Sub Total</td>
+		</tr>
+	    </thead>
+	    <tbody>
+		<tr>
+		    <td><input id="item1" type="text" name="item[]" value="HDD Baracuda Black 2TB" /></td>
+		    <td><input id="price1" type="text" name="price[]" value="152.65" data-format="$ 0,0[.]00" /></td>
+		    <td><input id="qty1" type="text" name="qty[]" value="4" data-format="0" /></td>
+		    <td><input id="disc1" type="text" name="disc[]" value="0" data-format="0.00 %" /></td>
+		    <td><input id="subtotal1" type="text" name="subtotal[]" value="" data-format="$ 0,0[.]00" data-formula="($price1*$qty1)*(1-$disc1)" /></td>
+		</tr>
+		<tr>
+		    <td><input id="item2" type="text" name="item[]" value="LCD Monitor BENQ 21"" /></td>
+		    <td><input id="price2" type="text" name="price[]" value="250" data-format="$ 0,0[.]00" /></td>
+		    <td><input id="qty2" type="text" name="qty[]" value="1" data-format="0" /></td>
+		    <td><input id="disc2" type="text" name="disc[]" value="0.1" data-format="0.00 %" /></td>
+		    <td><input id="subtotal2" type="text" name="subtotal[]" value="" data-format="$ 0,0[.]00" data-formula="($price2*$qty2)*(1-$disc2)" /></td>
+		</tr>
+		<tr>
+		    <td><input id="item3" type="text" name="item[]" value="LiteOn DVD RW+" /></td>
+		    <td><input id="price3" type="text" name="price[]" value="120" data-format="$ 0,0[.]00" /></td>
+		    <td><input id="qty3" type="text" name="qty[]" value="1" data-format="0" /></td>
+		    <td><input id="disc3" type="text" name="disc[]" value="0.2" data-format="0.00 %" /></td>
+		    <td><input id="subtotal3" type="text" name="subtotal[]" value="" data-format="$ 0,0[.]00" data-formula="($price3*$qty3)*(1-$disc3)" /></td>
+		</tr>
+		<tr>
+		    <td><input id="item4" type="text" name="item[]" value="MotherBoard Gigabyte G5-XXX" /></td>
+		    <td><input id="price4" type="text" name="price[]" value="140" data-format="$ 0,0[.]00" /></td>
+		    <td><input id="qty4" type="text" name="qty[]" value="1" data-format="0" /></td>
+		    <td><input id="disc4" type="text" name="disc[]" value="0.05" data-format="0.00 %" /></td>
+		    <td><input id="subtotal4" type="text" name="subtotal[]" value="" data-format="$ 0,0[.]00" data-formula="($price4*$qty4)*(1-$disc4)" /></td>
+		</tr>
+		<tr>
+		    <td><input id="item5" type="text" name="item[]" value="PSU 600 Watt" /></td>
+		    <td><input id="price5" type="text" name="price[]" value="30" data-format="$ 0,0[.]00" /></td>
+		    <td><input id="qty5" type="text" name="qty[]" value="1" data-format="0" /></td>
+		    <td><input id="disc5" type="text" name="disc[]" value="0" data-format="0.00 %" /></td>
+		    <td><input id="subtotal5" type="text" name="subtotal[]" value="" data-format="$ 0,0[.]00" data-formula="($price5*$qty5)*(1-$disc5)" /></td>
+		</tr>
+		
+		<tr>
+		    <td>&nbsp;</td>
+		    <td><input id="price_total" type="text" name="price_total" data-format="$ 0,0[.]00" data-formula="($price1+$price2+$price3+$price4+$price5)" /></td>
+		    <td colspan="2">Total Price :</td>
+		    <td><input id="total" type="text" name="total" value="" data-format="$ 0,0[.]00" data-formula="($subtotal1+$subtotal2+$subtotal3+$subtotal4+$subtotal5)" /></td>
+		</tr>
+	    </tbody>
+	</table>
+    </form>
+</body>
+</html>
