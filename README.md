@@ -26,7 +26,7 @@ to build calx from source, you need to do this in terminal
 $ cd php-build
 $ php build
 
-```
+```html
 
 to build sample calx, with alls required script included, use build-sample
 
