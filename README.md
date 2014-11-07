@@ -3,7 +3,7 @@ jQuery Calx is an Excel calculation engine and formula parser built as jQuery pl
 
 Creating caluclation form in html never been easier and simpler than this:
 
-```
+```html
 <form id="calx_form">
     <input data-cell="A1" type="text">
     <input data-cell="A2" type="text">
@@ -26,7 +26,7 @@ to build calx from source, you need to do this in terminal
 $ cd php-build
 $ php build
 
-```html
+```
 
 to build sample calx, with alls required script included, use build-sample
 
