@@ -10,6 +10,9 @@ Creating caluclation form in html never been easier and simpler than this:
     <input data-cell="A3" type="text">
 
     <input data-formula="SUM(A1:A3)" type="text">
+    <input data-formula="AVERAGE(A1:A3)" type="text">
+    <input data-formula="(A1+A2)*A3" type="text">
+    <input data-formula="(A1^2)+(A2^2)+(A3^2)" type="text">
 </form>
 
 <script>
