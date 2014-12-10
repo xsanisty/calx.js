@@ -133,7 +133,16 @@ sheet.fx.attachEvent = function(){
      * autoCalculate : on   => calx.calculateCellDependant
      * autoCalculate : off  => calx.setValue
      */
-    this.el.on('change', 'select[data-cell], input[data-cell][type=checkbox], input[data-cell][type=radio]', function(){
+    this.el.on('change', 'select[data-cell]', function(){
+        $(this).trigger('calx.setValue');
+
+        if(currentSheet.config.autoCalculate){
+            $(this).trigger('calx.calculateCellDependant');
+        }
+    });
+
+    this.el.on('click', 'input[data-cell][type=checkbox], input[data-cell][type=radio]', function(){
+
         $(this).trigger('calx.setValue');
 
         if(currentSheet.config.autoCalculate){

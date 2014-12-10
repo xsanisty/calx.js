@@ -8507,26 +8507,29 @@ cell.fx.buildDependency = function(){
 
     /** clear up the dependant and dependency reference */
     for(a in this.dependencies){
-        /** if not remote cell */
+
+        /** remove self from dependant registry in dependencies list before removing */
         if(a.indexOf('#') === -1){
             this.dependencies[a].removeDependant(cellAddress);
         }else{
             this.dependencies[a].removeDependant(sheetKey+'!'+cellAddress);
         }
 
+        /** remove cell from dependencies list after removing itself from dependant registry */
         delete this.dependencies[a];
     }
 
+
+    /** if formula exist, start scanning cell address inside the formula */
     if(formula){
-        /**
-         * searching for cells in formula
-         */
+        /** searching for cells in formula */
         for(a in pattern){
             cellMatch   = formula.match(pattern[a]);
             formula     = formula.replace(pattern[a], '');
 
             if(null !== cellMatch){
                 switch(a){
+                    /* First round, find the remote cell range and take it from formula */
                     case "remoteCellRange":
                         for(i = 0; i < cellMatch.length; i++){
                             formulaPart = cellMatch[i].split('!');
@@ -8535,16 +8538,27 @@ cell.fx.buildDependency = function(){
                             cellStart   = $.trim(cellPart[0]);
                             cellStop    = $.trim(cellPart[1]);
 
+                            /** list all cells in range as dependencies */
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
+
+                            /** get the calx identifier of the remote sheet */
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
+
+                            /** if not identified yet, init calx on it and get the identifier */
+                            if(typeof(sheetIdentifier) == 'undefined' || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+                                $(sheetId).calx();
+
+                                sheetIdentifier = $(sheetId).attr('data-calx-identifier');
+                            }
+
+                            /** build dependency relationship to each sheet */
                             if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
-                            }else{
-                                //console.log('#'+sheetId+' does not exist');
                             }
 
+                            /** build dependency relationship on current cell and it's dependencies */
                             for(j in dependencies){
                                 key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
@@ -8565,12 +8579,13 @@ cell.fx.buildDependency = function(){
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
+                            if(typeof(sheetIdentifier) == 'undefined' || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+                                $(sheetId).calx();
+                            }
+
                             if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
-                            }else{
-                                //console.log('#'+sheetId+' does not exist');
-
                             }
 
                             key = sheetId+'!'+cellPart;
@@ -8860,6 +8875,7 @@ cell.fx.evaluateFormula = function(){
         try{
             this.sheet.setActiveCell(this);
             this.computedValue = this.sheet.evaluate(this.formula);
+            //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : formula result: '+this.computedValue);
             return this.computedValue;
         }catch(e){
             //console.log(e);
@@ -9354,6 +9370,7 @@ sheet.fx.calculate = function(){
 
     var a;
 
+    this.calculateDependency(this.identifier);
     /** set all cell with formula as affected */
     this.clearProcessedFlag();
 
@@ -9364,11 +9381,13 @@ sheet.fx.calculate = function(){
     this.setCalculated();
     //console.log(this.isCalculated());
 
+    /*
     for(a in this.dependant){
         if(!this.dependant[a].isCalculated()){
             this.dependant[a].calculate();
         }
     }
+    */
 
     for(a in this.cells){
         //console.log('recalculating cell');
@@ -9377,6 +9396,9 @@ sheet.fx.calculate = function(){
             //console.log('recalculating cell #'+this.el.attr('id')+'!'+a+'='+this.cells[a].getValue());
         }
     }
+
+    this.calculateDependant(this.identifier);
+
 
     if(typeof(this.config.onAfterCalculate) == 'function'){
         this.config.onAfterCalculate.call(this);
@@ -9393,6 +9415,10 @@ sheet.fx.calculate = function(){
     }
 
     return this;
+};sheet.fx.calculateDependant = function(skip){
+
+};sheet.fx.calculateDependency = function(skip){
+
 };/**
  * register singgle cell to sheet's cell registry
  * @param  {object} cell    cell object
@@ -9659,7 +9685,16 @@ sheet.fx.getActiveCell = function(){
      * autoCalculate : on   => calx.calculateCellDependant
      * autoCalculate : off  => calx.setValue
      */
-    this.el.on('change', 'select[data-cell], input[data-cell][type=checkbox], input[data-cell][type=radio]', function(){
+    this.el.on('change', 'select[data-cell]', function(){
+        $(this).trigger('calx.setValue');
+
+        if(currentSheet.config.autoCalculate){
+            $(this).trigger('calx.calculateCellDependant');
+        }
+    });
+
+    this.el.on('click', 'input[data-cell][type=checkbox], input[data-cell][type=radio]', function(){
+
         $(this).trigger('calx.setValue');
 
         if(currentSheet.config.autoCalculate){
@@ -9706,8 +9741,9 @@ sheet.fx.detachEvent = function(){
 
         /**
  * initialize sheet object and register to internal calx.sheetRegistry
+ *
  * @param  {object} option      option to override the default option
- * @return {object}             jQuery object for chaining
+ * @return {object}             jQuery object
  */
 init : function (option) {
     var a, sheetIdentifier;
@@ -9765,9 +9801,11 @@ init : function (option) {
     return this;
 },
         /**
- * register custom function to the calx object
- * @param  {[type]} argument [description]
- * @return {[type]}          [description]
+ * register custom function to the calx formula sets
+ * @param  {string}     funcName        the function name, must be all uppercase
+ * @param  {function}   funcDefinition  the function definition to describe how the function should behave
+ * @param  {bool}       override        override flag, should it override built in function if the same name exists
+ * @return {void}
  */
 registerFunction : function (funcName, funcDefinition, override) {
     override = (typeof(override) == 'undefined') ? false : override;
@@ -9782,7 +9820,7 @@ registerFunction : function (funcName, funcDefinition, override) {
     formula.user_defined[funcName] = funcDefinition;
 },
         /**
- * register custom variable to the calx object
+ * register custom variable to the calx object / sheet object
  * @param  {string} varName     variable name
  * @param  {mixed}  varValue    variable value
  * @param  {bool}   global      register variable as global or only in current sheet
@@ -9813,6 +9851,8 @@ registerVariable : function (varName, varValue, global) {
         /**
  * refresh sheet reference to the current dom state and rebuild
  * the cell registry and dependency tree from the scratch
+ *
+ * @return {object}             jQuery object
  */
 refresh : function () {
     return this.each(function(){
@@ -9848,7 +9888,9 @@ getSheet : function(){
     return typeof(calx.sheetRegistry[$identifier]) == 'undefined' ? false : calx.sheetRegistry[$identifier];
 },
         /**
- * get cell object of current sheet bound to the element
+ * get cell object of current sheet related to the selected element,
+ * the selector should only select single object, e.g. $('#id')
+ *
  * @param  {string} address     the cell's address
  * @return {object}             the cell's object
  */
@@ -9859,11 +9901,17 @@ getCell : function(address){
 
     return $sheet.getCell(address);
 },
-        getUtility : function(){
+        /**
+ * Get the utility object in case its needed
+ * @return {object}     utility object
+ */
+getUtility : function(){
     return utility;
 },
         /**
- * Evaluate formula specific to sheet
+ * Evaluate formula specific to the selected sheet,
+ * the selector should only select single object, e.g. $('#id')
+ *
  * @param  {string} formula     the formula to be evaluated
  * @return {mixed}              result of the formula evaluation
  */
@@ -9876,6 +9924,7 @@ evaluate : function(formula){
 },
         /**
  * Destroy calx instance and remove reference from the element
+ *
  * @return {object}     jQuery Object
  */
 destroy : function(){
@@ -9896,7 +9945,7 @@ destroy : function(){
     return this;
 },
         /**
- * Reset the form to the initial value
+ * Reset the form to the initial value and re-sync the value with the sheet object
  */
 
 reset: function(){
@@ -9909,12 +9958,19 @@ reset: function(){
         }
     });
 },
-        calculate : function(){
+        /**
+ * calculate sheet object related to the selected element
+ *
+ * @return {object} jQuery Object
+ */
+calculate : function(){
 
     return this.each(function(){
+        /** get the sheet identifier attached to the element */
         var sheetIdentifier = $(this).attr('data-calx-identifier');
         //console.log(sheetIdentifier);
 
+        /** retrieve te sheet objectfrom registry, and calculate */
         if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
             calx.sheetRegistry[sheetIdentifier].calculate();
         }

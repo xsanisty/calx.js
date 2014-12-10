@@ -9,6 +9,7 @@ cell.fx.evaluateFormula = function(){
         try{
             this.sheet.setActiveCell(this);
             this.computedValue = this.sheet.evaluate(this.formula);
+            //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : formula result: '+this.computedValue);
             return this.computedValue;
         }catch(e){
             //console.log(e);
