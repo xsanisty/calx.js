@@ -14,10 +14,6 @@ cell.fx.resyncValue = function(){
             elValue = this.el.attr('data-unchecked-value') || '';
         }
 
-        if(this.el.attr('data-format') && $.trim(elValue) != ''){
-            this.setValue(numeral().unformat( elValue+'' ));
-        }else{
-            this.setValue(elValue);
-        }
+        this.setValue(elValue);
     }
 };
