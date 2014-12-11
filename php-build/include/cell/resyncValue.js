@@ -10,10 +10,10 @@ cell.fx.resyncValue = function(){
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             elValue     = (isFormTag) ? this.el.val() : this.el.text();
 
-        if(this.el.attr('data-format') && $.trim(elValue) != ''){
-            this.setValue(numeral().unformat( elValue+'' ));
-        }else{
-            this.setValue(elValue);
+        if(this.isCheckbox && !this.el.prop('checked')){
+            elValue = this.el.attr('data-unchecked-value') || '';
         }
+
+        this.setValue(elValue);
     }
 };

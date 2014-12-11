@@ -128,17 +128,24 @@
 
         <tr>
             <td colspan="3">VLOOKUP(2002, A2:J6, 5)</td>
-            <td colspan="8" data-formula="VLOOKUP(2002, A2:J6, 5)" data-format="0.00"></td>
+            <td colspan="5" data-formula="VLOOKUP(2002, A2:J6, 5)" data-format="0.00"></td>
+            <td colspan="3" rowspan="2">
+                <button id="calculate">Calculate</button>
+            </td>
         </tr>
         <tr>
             <td colspan="3">HLOOKUP('Russia', B1:J6, 5)</td>
-            <td colspan="8" data-formula="HLOOKUP('Russia', B1:J6, 5)" data-format="0.00"></td>
+            <td colspan="5" data-formula="HLOOKUP('Russia', B1:J6, 5)" data-format="0.00"></td>
         </tr>
     </table>
 
-    <script src="jquery-calx-sample-2.0.0.min.js"></script>
+    <script src="../js/numeral.min.js"></script>
+    <script src="../jquery-1.9.1.min.js"></script>
+    <script src="../php-build/calx-build.php"></script>
     <script>
-        var calc  = $('#sheet1').calx();
+        var calc  = $('#sheet1').calx({
+            autoCalculate:false
+        });
         var sheet = calc.calx('getSheet');
         var range = sheet.getCellRange('B2', 'J6');
 
@@ -148,6 +155,11 @@
         }
 
         sheet.calculate();
+
+        $('#calculate').click(function(e){
+            e.preventDefault();
+            sheet.calculate();
+        });
     </script>
 </body>
 </html>

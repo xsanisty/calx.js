@@ -62,13 +62,14 @@
 "="                                 {return '=';}
 "%"                                 {return '%';}
 [#]                                 {return '#';}
+[&]                                 {return '&';}
 <<EOF>>                             {return 'EOF';}
 
 
 /lex
 
 /* operator associations and precedence (low-top, high- bottom) */
-%left '='
+%left '=', '&'
 %left '<=' '>=' '<>' 'NOT' '||'
 %left '>' '<'
 %left '+' '-'
@@ -122,13 +123,17 @@ e :
         {
             $$ = $1.substring(1, $1.length - 1);
         }
+    | e '&' e
+        {
+            $$ = ''+$1+$3;
+        }
     | e '=' e
         {
-            $$ = sheet.comparator.equal.apply(sheet, [$1, $3]);
+            $$ = sheet.comparator.equal.call(sheet, $1, $3);
         }
     | e '+' e
         {
-            $$ = formula.math.SUM.apply(sheet, [$1, $3]);
+            $$ = formula.math.SUM.call(sheet, $1, $3);
         }
     | '(' e ')'
         {$$ = $2 * 1;}
@@ -138,15 +143,15 @@ e :
         }
     | e '<' '=' e
         {
-            $$ = sheet.comparator.lessEqual.apply(sheet, [$1, $4]);
+            $$ = sheet.comparator.lessEqual.call(sheet, $1, $4);
         }
     | e '>' '=' e
         {
-            $$ = sheet.comparator.greaterEqual.apply(sheet, [$1, $4]);
+            $$ = sheet.comparator.greaterEqual.call(sheet, $1, $4);
         }
     | e '<' '>' e
         {
-            $$ = sheet.comparator.notEqual.apply(sheet, [$1, $4]);
+            $$ = sheet.comparator.notEqual.call(sheet, $1, $4);
         }
     | e NOT e
         {
@@ -154,27 +159,27 @@ e :
         }
     | e '>' e
         {
-            $$ = sheet.comparator.greater.apply(sheet, [$1, $3]);
+            $$ = sheet.comparator.greater.call(sheet, $1, $3);
         }
     | e '<' e
         {
-            $$ = sheet.comparator.less.apply(sheet, [$1, $3]);
+            $$ = sheet.comparator.less.call(sheet, $1, $3);
         }
     | e '-' e
         {
-            $$ = formula.math.SUBTRACT.apply(sheet, [$1, $3]);
+            $$ = formula.math.SUBTRACT.call(sheet, $1, $3);
         }
     | e '*' e
         {
-            $$ = formula.math.MULTIPLY.apply(sheet, [$1, $3]);
+            $$ = formula.math.MULTIPLY.call(sheet, $1, $3);
         }
     | e '/' e
         {
-            $$ = formula.math.DIVIDE.apply(sheet, [$1, $3]);
+            $$ = formula.math.DIVIDE.call(sheet, $1, $3);
         }
     | e '^' e
         {
-            $$ = formula.math.POWER.apply(sheet, [$1, $3]);
+            $$ = formula.math.POWER.call(sheet, $1, $3);
         }
     | '-' e
         {

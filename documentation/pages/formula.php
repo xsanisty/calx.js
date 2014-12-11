@@ -88,6 +88,26 @@
                     legend: <br>
                     legend is used to give explanation on the chart. If none is given, the legend will be blank
                 </li>
+                <li>
+                    bar_orientation: <br>
+                    if the chart type is bar, you can define bar_orientaion, it could be vertical or horizontal.
+                    If none is given, the default will be vertical
+                </li>
+                <li>
+                    show_x_axis: <br>
+                    show_x_axis is used to control the appearance of x axis label, it could be true or false.
+                    If none is given, default is true.
+                </li>
+                <li>
+                    show_y_axis: <br>
+                    show_y_axis is used to control the appearance of y axis label, it could be true or false.
+                    If none is given, default is true.
+                </li>
+                <li>
+                    reverse: <br>
+                    revers is used to control the order of the data, it could be true or false.
+                    If none is given, default is false.
+                </li>
                 <!--<li>
                     color: <br>
                     color is used to tell jQuery Calx in which color the graph should be drawn, you can use

@@ -106,7 +106,10 @@ var Zepto   = Zepto     || undefined,
         require 'include/sheet/evaluate.js';
         require 'include/sheet/update.js';
         require 'include/sheet/calculate.js';
+        require 'include/sheet/calculateDependency.js';
+        require 'include/sheet/calculateDependant.js';
         require 'include/sheet/registerCell.js';
+        require 'include/sheet/registerVariable.js';
         require 'include/sheet/getCell.js';
         require 'include/sheet/getCellRange.js';
         require 'include/sheet/applyChange.js';

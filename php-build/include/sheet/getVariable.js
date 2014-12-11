@@ -14,9 +14,17 @@ sheet.fx.getVariable = function(varName){
         return null;
     }
 
-    if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
-        return '#UNDEFINED_VARIABLE!';
+    if(typeof(this.variables[varIndex]) == 'undefined'){
+        if(typeof(data.VARIABLE[varIndex]) == 'undefined'){
+            return '#UNDEFINED_VARIABLE!';
+        }else if(typeof(data.VARIABLE[varIndex]) == 'function'){
+            return data.VARIABLE[varIndex].call(this);
+        }else{
+            return data.VARIABLE[varIndex];
+        }
+    }else if(typeof(this.variables[varIndex]) == 'function'){
+        return this.variables[varIndex].call(this);
     }else{
-        return data.VARIABLE[varIndex];
+        return this.variables[varIndex];
     }
 };

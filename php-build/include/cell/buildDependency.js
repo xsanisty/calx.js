@@ -25,26 +25,29 @@ cell.fx.buildDependency = function(){
 
     /** clear up the dependant and dependency reference */
     for(a in this.dependencies){
-        /** if not remote cell */
+
+        /** remove self from dependant registry in dependencies list before removing */
         if(a.indexOf('#') === -1){
             this.dependencies[a].removeDependant(cellAddress);
         }else{
             this.dependencies[a].removeDependant(sheetKey+'!'+cellAddress);
         }
 
+        /** remove cell from dependencies list after removing itself from dependant registry */
         delete this.dependencies[a];
     }
 
+
+    /** if formula exist, start scanning cell address inside the formula */
     if(formula){
-        /**
-         * searching for cells in formula
-         */
+        /** searching for cells in formula */
         for(a in pattern){
             cellMatch   = formula.match(pattern[a]);
             formula     = formula.replace(pattern[a], '');
 
             if(null !== cellMatch){
                 switch(a){
+                    /* First round, find the remote cell range and take it from formula */
                     case "remoteCellRange":
                         for(i = 0; i < cellMatch.length; i++){
                             formulaPart = cellMatch[i].split('!');
@@ -53,16 +56,27 @@ cell.fx.buildDependency = function(){
                             cellStart   = $.trim(cellPart[0]);
                             cellStop    = $.trim(cellPart[1]);
 
+                            /** list all cells in range as dependencies */
                             dependencies = this.sheet.getRemoteCellRange(sheetId, cellStart, cellStop);
+
+                            /** get the calx identifier of the remote sheet */
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
+
+                            /** if not identified yet, init calx on it and get the identifier */
+                            if(typeof(sheetIdentifier) == 'undefined' || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+                                $(sheetId).calx();
+
+                                sheetIdentifier = $(sheetId).attr('data-calx-identifier');
+                            }
+
+                            /** build dependency relationship to each sheet */
                             if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
-                            }else{
-                                //console.log('#'+sheetId+' does not exist');
                             }
 
+                            /** build dependency relationship on current cell and it's dependencies */
                             for(j in dependencies){
                                 key = sheetId+'!'+j;
                                 if(typeof(this.dependencies[key]) == 'undefined' && false !== dependencies[j]){
@@ -83,12 +97,13 @@ cell.fx.buildDependency = function(){
                             dependencies = this.sheet.getRemoteCell(sheetId, cellPart);
                             sheetIdentifier = $(sheetId).attr('data-calx-identifier');
 
+                            if(typeof(sheetIdentifier) == 'undefined' || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
+                                $(sheetId).calx();
+                            }
+
                             if(typeof(sheetIdentifier) !='undefined' && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                                 calx.sheetRegistry[sheetIdentifier].registerDependant(this.sheet);
                                 this.sheet.registerDependency(calx.sheetRegistry[sheetIdentifier]);
-                            }else{
-                                //console.log('#'+sheetId+' does not exist');
-
                             }
 
                             key = sheetId+'!'+cellPart;

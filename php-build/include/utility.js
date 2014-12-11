@@ -49,10 +49,33 @@ var utility = {
             row,
             col;
 
-        for (col = alphaAxisStart; col <= alphaAxisStop; col++) {
-            for (row = numAxisStart; row <= numAxisStop; row++) {
-                cellAddress = this.toChr(col) + row;
-                cellRange.push(cellAddress);
+        if(alphaAxisStart < alphaAxisStop){
+            for (col = alphaAxisStart; col <= alphaAxisStop; col++) {
+                if(numAxisStart < numAxisStop){
+                    for (row = numAxisStart; row <= numAxisStop; row++) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }else{
+                    for (row = numAxisStart; row >= numAxisStop; row--) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }
+            }
+        }else{
+            for (col = alphaAxisStart; col >= alphaAxisStop; col--) {
+                if(numAxisStart < numAxisStop){
+                    for (row = numAxisStart; row <= numAxisStop; row++) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }else{
+                    for (row = numAxisStart; row >= numAxisStop; row--) {
+                        cellAddress = this.toChr(col) + row;
+                        cellRange.push(cellAddress);
+                    }
+                }
             }
         }
 

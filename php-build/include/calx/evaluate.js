@@ -1,5 +1,7 @@
 /**
- * Evaluate formula specific to sheet
+ * Evaluate formula specific to the selected sheet,
+ * the selector should only select single object, e.g. $('#id')
+ *
  * @param  {string} formula     the formula to be evaluated
  * @return {mixed}              result of the formula evaluation
  */

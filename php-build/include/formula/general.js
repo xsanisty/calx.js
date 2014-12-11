@@ -77,6 +77,51 @@ general: {
         return formula.general.VLOOKUP(value, table, rowIndex, approx);
     },
 
+    LOOKUP : function(value, lookup, target){
+        var lookupIndex, lookupLength, targetIndex, targetLength, delta = [],
+            deltaLength, deltaIndex, deltaMax, deltaMin;
+
+        target = typeof target == 'undefined' ? false : target;
+
+        if(typeof(lookup == 'object') && lookup.constructor.name == 'Object'){
+            lookup = utility.objectToArray(lookup);
+            lookupLength = lookup.length;
+        }
+
+        if(typeof(target == 'object') && target.constructor.name == 'Object'){
+            target = utility.objectToArray(target);
+            targetLength = target.length;
+        }
+
+        if(value < Math.min.apply(Math, lookup)){
+            return '#N/A!';
+        }
+
+        for(lookupIndex = 0; lookupIndex < lookupLength; lookupIndex++){
+
+            if(value == lookup[lookupIndex]){
+                return target ? target[lookupIndex] : lookup[lookupIndex];
+            }else{
+                delta[lookupIndex] = value - lookup[lookupIndex];
+            }
+        }
+
+        /** convert minus to max */
+        deltaLength = delta.length;
+        deltaMax    = Math.max.apply(Math, delta);
+        for(deltaIndex = 0; deltaIndex < deltaLength; deltaIndex++){
+            if(delta[deltaIndex] < 0){
+                delta[deltaIndex] = deltaMax;
+            }
+        }
+
+        deltaMin = Math.min.apply(Math, delta);
+        lookupIndex = delta.indexOf(deltaMin);
+
+        return (target) ? target[lookupIndex] : lookup[lookupIndex];
+
+    },
+
     SERVER : function(){
         if(this.config.ajaxUrl == null){
             return data.ERRKEY.ajaxUrlRequired;
@@ -138,6 +183,9 @@ general: {
         switch(graphOptions.type){
             case 'bar':
                 graphData   = utility.rangeToTable(data);
+                if(typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true'){
+                    graphData.reverse();
+                }
                 plotOptions.series = {
                     bars: {
                         show: true,
@@ -146,6 +194,9 @@ general: {
                     },
                     stack: true
                 };
+                if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                    plotOptions.series.bars.horizontal = true;
+                }
                 break;
 
             case 'pie':
@@ -178,12 +229,14 @@ general: {
 
             default:
                 graphData   = utility.rangeToTable(data);
+                if(typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true'){
+                    graphData.reverse();
+                }
                 break;
         }
 
         /**
          * change the table orientation if configured
-         * @type {[type]}
          */
         if(typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical'){
             graphData = utility.transposeTable(graphData);
@@ -223,7 +276,11 @@ general: {
 
                 for(col = 0; col < colLength; col++){
                     data = graphData[row][col];
-                    graphData[row][col] = [col, data];
+                    if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                        graphData[row][col] = [data, col];
+                    }else{
+                        graphData[row][col] = [col, data];
+                    }
                 }
             }
         }
@@ -246,6 +303,19 @@ general: {
             graphData = newGraphData;
         }
 
+        /**
+         * hide and show axis label
+         */
+        if(typeof(graphOptions.show_x_axis) != 'undefined' && graphOptions.show_x_axis == 'false'){
+            plotOptions.xaxis = plotOptions.xaxis || {};
+            plotOptions.xaxis.show = false;
+        }
+
+        if(typeof(graphOptions.show_y_axis) != 'undefined' && graphOptions.show_y_axis == 'false'){
+            plotOptions.yaxis = plotOptions.yaxis || {};
+            plotOptions.yaxis.show = false;
+        }
+
         plotOptions.grid = {
             backgroundColor: { colors: [ "#fff", "#eee" ] },
             borderWidth: {
@@ -256,7 +326,11 @@ general: {
             }
         };
 
-        $.plot(cellElement, graphData, plotOptions);
+
+        setTimeout(function(){
+            $.plot(cellElement, graphData, plotOptions);
+        }, 100);
+
 
         return false;
 

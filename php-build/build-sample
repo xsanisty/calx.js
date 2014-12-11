@@ -1,6 +1,6 @@
 <?php
-$unminifiedFile = '../sample/jquery-calx-sample-2.0.0.js';
-$minifiedFile   = '../sample/jquery-calx-sample-2.0.0.min.js';
+$unminifiedFile = '../sample/js/jquery-calx-sample-2.0.0.js';
+$minifiedFile   = '../sample/js/jquery-calx-sample-2.0.0.min.js';
 
 /**
  * gathering all js source and build into one package
