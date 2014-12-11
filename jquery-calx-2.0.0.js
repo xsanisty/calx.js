@@ -9594,7 +9594,8 @@ sheet.fx.getActiveCell = function(){
                 currentCell.setValue(newVal);
             }else{
                 var uncheckedVal = currentCell.el.attr('data-unchecked');
-                    uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal;
+                    uncheckedVal = (typeof(uncheckedVal) == 'undefined') ? '' : uncheckedVal,
+                    newVal       = uncheckedVal;
 
                 currentCell.setValue(uncheckedVal);
             }
