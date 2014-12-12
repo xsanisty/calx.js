@@ -65,11 +65,12 @@
                                 <thead>
                                     <tr>
                                         <td style="width:  5%" class="text-center"><label>No.</label></td>
-                                        <td style="width: 50%"><label>Item Name</label></td>
+                                        <td style="width: 45%"><label>Item Name</label></td>
                                         <td style="width: 15%" class="text-center"><label>Price</label></td>
                                         <td style="width:  5%" class="text-center"><label>Qty</label></td>
                                         <td style="width:  5%" class="text-center"><label>% Disc</label></td>
                                         <td style="width: 15%" class="text-center"><label>Total Price</label></td>
+                                        <td style="width:  5%" class="text-center"><label>Remove</label></td>
                                     </tr>
                                 </thead>
                                 <tbody id="itemlist">
@@ -80,6 +81,7 @@
                                         <td><input class="form-control input-sm text-right" data-cell="D1" data-format="0[.]00"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="E1" data-format="0,0[.]00 %"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="F1" data-format="$ 0,0.00" data-formula="D1*(C1-(C1*E1))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control input-sm text-right" data-cell="A2" data-format="0"></td>
@@ -88,6 +90,7 @@
                                         <td><input class="form-control input-sm text-right" data-cell="D2" data-format="0[.]00"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="E2" data-format="0,0[.]00 %"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="F2" data-format="$ 0,0.00" data-formula="D2*(C2-(C2*E2))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control input-sm text-right" data-cell="A3" data-format="0"></td>
@@ -96,6 +99,7 @@
                                         <td><input class="form-control input-sm text-right" data-cell="D3" data-format="0[.]00"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="E3" data-format="0,0[.]00 %"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="F3" data-format="$ 0,0.00" data-formula="D3*(C3-(C3*E3))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control input-sm text-right" data-cell="A4" data-format="0"></td>
@@ -104,6 +108,7 @@
                                         <td><input class="form-control input-sm text-right" data-cell="D4" data-format="0[.]00"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="E4" data-format="0,0[.]00 %"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="F4" data-format="$ 0,0.00" data-formula="D4*(C4-(C4*E4))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
                                     </tr>
                                     <tr>
                                         <td><input class="form-control input-sm text-right" data-cell="A5" data-format="0"></td>
@@ -112,6 +117,7 @@
                                         <td><input class="form-control input-sm text-right" data-cell="D5" data-format="0[.]00"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="E5" data-format="0,0[.]00 %"></td>
                                         <td><input class="form-control input-sm text-right" data-cell="F5" data-format="$ 0,0.00" data-formula="D5*(C5-(C5*E5))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -125,6 +131,7 @@
                                         <td class="text-right">
                                             <label data-cell="G1" data-format="$ 0,0.00" data-formula="SUM(F1:F5)"></label>
                                         </td>
+                                        <td>&nbsp;</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -139,10 +146,11 @@
         <script>
             $form       = $('#dynamic').calx();
             $itemlist   = $('#itemlist');
+            $counter    = 5;
 
             $('#add_item').click(function(e){
                 e.preventDefault();
-                var i = $itemlist.find('tr').length+1;
+                var i = ++$counter;
                 $itemlist.append(
                     '<tr>\
                         <td><input class="form-control input-sm text-right" data-cell="A'+i+'" data-format="0"></td>\
@@ -151,6 +159,7 @@
                         <td><input class="form-control input-sm text-right" data-cell="D'+i+'" data-format="0[.]00"></td>\
                         <td><input class="form-control input-sm text-right" data-cell="E'+i+'" data-format="0,0[.]00 %"></td>\
                         <td><input class="form-control input-sm text-right" data-cell="F'+i+'" data-format="$ 0,0.00" data-formula="D'+i+'*(C'+i+'-(C'+i+'*E'+i+'))"></td>\
+                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>\
                     </tr>'
                 );
                 //console.log('new row appended');
@@ -159,6 +168,12 @@
                 $form.calx('getCell', 'G1').setFormula('SUM(F1:F'+i+')');
 
                 //console.log($form.calx('getSheet'));
+            });
+
+            $('#itemlist').on('click', '.btn-remove', function(){
+                $(this).parent().parent().remove();
+                $form.calx('update');
+                $form.calx('getCell', 'G1').calculate();
             });
 
             $('#show_formula').click(function(e){
