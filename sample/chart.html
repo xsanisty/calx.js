@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table table-stripped table-condensed">
-                                <tbody>
+                                <thead>
                                     <tr>
                                         <td class="chead">&nbsp;</td>
                                         <td class="text-center chead">A</td>
@@ -76,6 +76,8 @@
                                         <td class="text-center chead">I</td>
                                         <td class="text-center chead">J</td>
                                     </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td class="rhead">1</td>
                                         <td><input class="form-control input-sm" data-cell="A1"></td>
@@ -155,6 +157,13 @@
                                         <td><input class="form-control input-sm" data-cell="J6" data-format="0.00"></td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="11" class="text-right">
+                                            <button class="btn btn-sm btn-primary" id="randomize">Randomize</button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -223,8 +232,20 @@
                 range[a].renderComputedValue();
             }
 
-
             sheet.calculate();
+
+            $('#randomize').click(function(e){
+                e.preventDefault();
+                var range = sheet.getCellRange('B2', 'J6');
+
+                for(var a in range){
+                    range[a].setValue(Math.random(10, 1000)*100);
+                    range[a].renderComputedValue();
+                }
+
+                sheet.calculate();
+            });
+
 
             $('#show_formula').click(function(e){
                 e.preventDefault();
