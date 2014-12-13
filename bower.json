@@ -1,11 +1,11 @@
 {
   "name": "jquery-calx",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "authors": [
     "Ikhsan Agustian <ikhsan017@gmail.com>"
   ],
   "description": "jQuery plugin for building excel-formula based calculation form",
-  "main": "jquery-calx-2.0.0.min.js",
+  "main": "jquery-calx-2.0.3.min.js",
   "moduleType": [
     "globals"
   ],
@@ -15,6 +15,9 @@
     "formula",
     "calculator"
   ],
+  "dependencies": {
+    "jquery": ">=1.5.0"
+  },
   "license": "MIT",
   "homepage": "http://www.xsanisty.com/project/calx2",
   "ignore": [
