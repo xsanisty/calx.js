@@ -1,8 +1,18 @@
-var Zepto   = Zepto     || undefined,
-    jQuery  = jQuery    || Zepto,
-    numeral = numeral   || undefined,
-    moment  = moment    || undefined,
-    jStat   = jStat     || undefined;
+if(typeof(Zepto)     == 'undefined'){
+    Zepto    = undefined;
+}
+if(typeof(jQuery)    == 'undefined'){
+    jQuery   = Zepto;
+}
+if(typeof(numeral)   == 'undefined'){
+    numeral  = undefined;
+}
+if(typeof(moment)    == 'undefined'){
+    moment   = undefined;
+}
+if(typeof(jStat)     == 'undefined'){
+    jStat    = undefined;
+}
 
 (function($, numeral, moment, jStat){
 
@@ -220,7 +230,7 @@ var defaultConfig = {
                     return $$[$0 - 1];
                     break;
                 case 2:
-                    this.$ = sheet.getVariable($$[$0])
+                    this.$ = sheet.getVariable($$[$0]);
 
                     break;
                 case 3:
@@ -6117,7 +6127,7 @@ logical : {
             params['params['+a+']'] = arguments[a];
         }
 
-        params.function = funcName;
+        params['function'] = funcName;
 
         $.ajax({
             url: this.config.ajaxUrl,

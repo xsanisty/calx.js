@@ -1,9 +1,19 @@
 <?php header('Content-Type', 'text/javascript') ?>
-var Zepto   = Zepto     || undefined,
-    jQuery  = jQuery    || Zepto,
-    numeral = numeral   || undefined,
-    moment  = moment    || undefined,
-    jStat   = jStat     || undefined;
+if(typeof(Zepto)     == 'undefined'){
+    Zepto    = undefined;
+}
+if(typeof(jQuery)    == 'undefined'){
+    jQuery   = Zepto;
+}
+if(typeof(numeral)   == 'undefined'){
+    numeral  = undefined;
+}
+if(typeof(moment)    == 'undefined'){
+    moment   = undefined;
+}
+if(typeof(jStat)     == 'undefined'){
+    jStat    = undefined;
+}
 
 (function($, numeral, moment, jStat){
 

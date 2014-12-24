@@ -135,7 +135,7 @@ general: {
             params['params['+a+']'] = arguments[a];
         }
 
-        params.function = funcName;
+        params['function'] = funcName;
 
         $.ajax({
             url: this.config.ajaxUrl,

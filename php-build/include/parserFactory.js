@@ -143,7 +143,7 @@ function parserFactory(sheet) {
                     return $$[$0 - 1];
                     break;
                 case 2:
-                    this.$ = sheet.getVariable($$[$0])
+                    this.$ = sheet.getVariable($$[$0]);
 
                     break;
                 case 3:
