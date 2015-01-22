@@ -20,6 +20,6 @@ sheet.fx.comparator = {
     },
 
     notEqual: function(a,b){
-        return a!= b;
+        return a != b;
     }
 };

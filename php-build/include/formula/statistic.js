@@ -179,8 +179,8 @@ statistic: {
     },
 
     COUNTIF : function(range, criteria) {
-        var matches = 0;
-        for (var i = 0; i < range.length; i++) {
+        var matches = 0, i;
+        for (i in range) {
             if (range[i].match(new RegExp(criteria))) {
                 matches++;
             }
@@ -192,7 +192,8 @@ statistic: {
         var criteria = (arguments.length - 1) / 2;
         var range = arguments[0];
         var result = 0;
-        for (var i = 0; i < range.length; i++) {
+        var i;
+        for (i in range) {
             var fit = true;
             for (var j = 0; j < criteria; j++) {
                 if (!eval(arguments[2 * j + 1][i] + arguments[2 * j + 2])) {

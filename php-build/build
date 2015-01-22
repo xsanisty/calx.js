@@ -1,6 +1,6 @@
 <?php
-$unminifiedFile = '../jquery-calx-2.0.4.js';
-$minifiedFile   = '../jquery-calx-2.0.4.min.js';
+$unminifiedFile = '../jquery-calx-2.0.5.js';
+$minifiedFile   = '../jquery-calx-2.0.5.min.js';
 
 /**
  * gathering all js source and build into one package
@@ -25,5 +25,5 @@ $compiler = new ClosureCompiler;
 $compiler->addSourceFile($unminifiedFile);
 $compiler->setTargetFile($minifiedFile);
 
-$compiler->compile();
+echo $compiler->compile();
 ?>

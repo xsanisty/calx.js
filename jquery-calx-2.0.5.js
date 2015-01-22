@@ -4727,8 +4727,8 @@ financial: {
     },
 
     COUNTIF : function(range, criteria) {
-        var matches = 0;
-        for (var i = 0; i < range.length; i++) {
+        var matches = 0, i;
+        for (i in range) {
             if (range[i].match(new RegExp(criteria))) {
                 matches++;
             }
@@ -4740,7 +4740,8 @@ financial: {
         var criteria = (arguments.length - 1) / 2;
         var range = arguments[0];
         var result = 0;
-        for (var i = 0; i < range.length; i++) {
+        var i;
+        for (i in range) {
             var fit = true;
             for (var j = 0; j < criteria; j++) {
                 if (!eval(arguments[2 * j + 1][i] + arguments[2 * j + 2])) {
@@ -9208,7 +9209,7 @@ sheet.fx.buildCellDependency = function(){
     },
 
     notEqual: function(a,b){
-        return a!= b;
+        return a != b;
     }
 };sheet.fx.getVariable = function(varName){
     var varIndex = varName[0],
@@ -9982,6 +9983,25 @@ calculate : function(){
             calx.sheetRegistry[sheetIdentifier].calculate();
         }
     });
+},
+        /**
+ * set value of specific cell on the sheet related to the selected element,
+ * the selector should only select single object, e.g. $('#id')
+ *
+ * @param  {string} address     the cell's address
+ * @param  {string} value       the cell's value
+ * @return {void}
+ */
+setValue : function(address, value){
+    var $this       = $(this),
+        $identifier = $this.attr('data-calx-identifier'),
+        $sheet      = calx.sheetRegistry[$identifier],
+        $cell       = $sheet.getCell(address);
+
+    $cell.setValue(value);
+    $cell.processDependant();
+
+    $sheet.renderComputedValue();
 }
     };    /**
      * the surrogate of the calx world to the jQuery world

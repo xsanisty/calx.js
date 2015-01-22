@@ -20,6 +20,7 @@
         <?php require 'include/calx/evaluate.js' ?>,
         <?php require 'include/calx/destroy.js' ?>,
         <?php require 'include/calx/reset.js' ?>,
-        <?php require 'include/calx/calculate.js' ?>
+        <?php require 'include/calx/calculate.js' ?>,
+        <?php require 'include/calx/setValue.js' ?>
 
     };
