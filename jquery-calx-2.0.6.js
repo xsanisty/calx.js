@@ -86,6 +86,7 @@ var defaultConfig = {
     'checkCircularReference': false
 
 };function parserFactory(sheet) {
+
     var parser = {
         trace: function trace() {},
         yy: {},
@@ -230,7 +231,7 @@ var defaultConfig = {
                     return $$[$0 - 1];
                     break;
                 case 2:
-                    this.$ = sheet.getVariable($$[$0]);
+                    this.$ = sheet.getVariable($$[$0])
 
                     break;
                 case 3:
@@ -1824,68 +1825,68 @@ var defaultConfig = {
                     action = table[state] && table[state][symbol]
                 }
                 _handle_error: if (typeof action === "undefined" || !action.length || !action[0]) {
-                    var error_rule_depth;
-                    var errStr = "";
+                        var error_rule_depth;
+                        var errStr = "";
 
-                    function locateNearestErrorRecoveryRule(state) {
-                        var stack_probe = stack.length - 1;
-                        var depth = 0;
-                        for (;;) {
-                            if (TERROR.toString() in table[state]) {
-                                return depth
-                            }
-                            if (state === 0 || stack_probe < 2) {
-                                return false
-                            }
-                            stack_probe -= 2;
-                            state = stack[stack_probe];
-                            ++depth
-                        }
-                    }
-                    if (!recovering) {
-                        error_rule_depth = locateNearestErrorRecoveryRule(state);
-                        expected = [];
-                        for (p in table[state]) {
-                            if (this.terminals_[p] && p > TERROR) {
-                                expected.push("'" + this.terminals_[p] + "'")
+                        function locateNearestErrorRecoveryRule(state) {
+                            var stack_probe = stack.length - 1;
+                            var depth = 0;
+                            for (;;) {
+                                if (TERROR.toString() in table[state]) {
+                                    return depth
+                                }
+                                if (state === 0 || stack_probe < 2) {
+                                    return false
+                                }
+                                stack_probe -= 2;
+                                state = stack[stack_probe];
+                                ++depth
                             }
                         }
-                        if (this.lexer.showPosition) {
-                            errStr = "Parse error on line " + (yylineno + 1) + ":\n" + this.lexer.showPosition() + "\nExpecting " + expected.join(", ") + ", got '" + (this.terminals_[symbol] || symbol) + "'"
-                        } else {
-                            errStr = "Parse error on line " + (yylineno + 1) + ": Unexpected " + (symbol == EOF ? "end of input" : "'" + (this.terminals_[symbol] || symbol) + "'")
+                        if (!recovering) {
+                            error_rule_depth = locateNearestErrorRecoveryRule(state);
+                            expected = [];
+                            for (p in table[state]) {
+                                if (this.terminals_[p] && p > TERROR) {
+                                    expected.push("'" + this.terminals_[p] + "'")
+                                }
+                            }
+                            if (this.lexer.showPosition) {
+                                errStr = "Parse error on line " + (yylineno + 1) + ":\n" + this.lexer.showPosition() + "\nExpecting " + expected.join(", ") + ", got '" + (this.terminals_[symbol] || symbol) + "'"
+                            } else {
+                                errStr = "Parse error on line " + (yylineno + 1) + ": Unexpected " + (symbol == EOF ? "end of input" : "'" + (this.terminals_[symbol] || symbol) + "'")
+                            }
+                            this.parseError(errStr, {
+                                text: this.lexer.match,
+                                token: this.terminals_[symbol] || symbol,
+                                line: this.lexer.yylineno,
+                                loc: yyloc,
+                                expected: expected,
+                                recoverable: error_rule_depth !== false
+                            })
+                        } else if (preErrorSymbol !== EOF) {
+                            error_rule_depth = locateNearestErrorRecoveryRule(state)
                         }
-                        this.parseError(errStr, {
-                            text: this.lexer.match,
-                            token: this.terminals_[symbol] || symbol,
-                            line: this.lexer.yylineno,
-                            loc: yyloc,
-                            expected: expected,
-                            recoverable: error_rule_depth !== false
-                        })
-                    } else if (preErrorSymbol !== EOF) {
-                        error_rule_depth = locateNearestErrorRecoveryRule(state)
-                    }
-                    if (recovering == 3) {
-                        if (symbol === EOF || preErrorSymbol === EOF) {
-                            throw new Error(errStr || "Parsing halted while starting to recover from another error.")
+                        if (recovering == 3) {
+                            if (symbol === EOF || preErrorSymbol === EOF) {
+                                throw new Error(errStr || "Parsing halted while starting to recover from another error.")
+                            }
+                            yyleng = this.lexer.yyleng;
+                            yytext = this.lexer.yytext;
+                            yylineno = this.lexer.yylineno;
+                            yyloc = this.lexer.yylloc;
+                            symbol = lex()
                         }
-                        yyleng = this.lexer.yyleng;
-                        yytext = this.lexer.yytext;
-                        yylineno = this.lexer.yylineno;
-                        yyloc = this.lexer.yylloc;
-                        symbol = lex()
+                        if (error_rule_depth === false) {
+                            throw new Error(errStr || "Parsing halted. No suitable error recovery rule available.")
+                        }
+                        popStack(error_rule_depth);
+                        preErrorSymbol = symbol == TERROR ? null : symbol;
+                        symbol = TERROR;
+                        state = stack[stack.length - 1];
+                        action = table[state] && table[state][TERROR];
+                        recovering = 3
                     }
-                    if (error_rule_depth === false) {
-                        throw new Error(errStr || "Parsing halted. No suitable error recovery rule available.")
-                    }
-                    popStack(error_rule_depth);
-                    preErrorSymbol = symbol == TERROR ? null : symbol;
-                    symbol = TERROR;
-                    state = stack[stack.length - 1];
-                    action = table[state] && table[state][TERROR];
-                    recovering = 3
-                }
                 if (action[0] instanceof Array && action.length > 1) {
                     throw new Error("Parse Error: multiple actions possible at state: " + state + ", token: " + symbol)
                 }
@@ -1994,8 +1995,9 @@ var defaultConfig = {
                     this.yylloc.last_line++
                 } else {
                     this.yylloc.last_column++
-                } if (this.options.ranges) {
-                    this.yylloc.range[1]++
+                }
+                if (this.options.ranges) {
+                    this.yylloc.range[1] ++
                 }
                 this._input = this._input.slice(1);
                 return ch
@@ -2267,7 +2269,7 @@ var defaultConfig = {
                 switch ($avoiding_name_collisions) {
                     case 0:
                         /* skip whitespace */
-                            break;
+                        break;
                     case 1:
                         return 13;
                         break;
@@ -2287,138 +2289,132 @@ var defaultConfig = {
                         return 11;
                         break;
                     case 7:
-                        if (sheet.obj.type == 'cell') return 35;
-                        return 39;
-
-
-                        break;
-                    case 8:
                         if (sheet.obj.type == 'cell') return 32;
                         return 39;
 
 
                         break;
-                    case 9:
+                    case 8:
                         if (sheet.obj.type == 'cell') return 34;
                         return 39;
 
 
                         break;
-                    case 10:
+                    case 9:
                         return 30;
+                        break;
+                    case 10:
+                        return 39;
                         break;
                     case 11:
                         return 39;
                         break;
                     case 12:
-                        return 39;
-                        break;
-                    case 13:
                         return 41;
                         break;
-                    case 14:
+                    case 13:
                         /* skip whitespace */
-                            break;
-                    case 15:
+                        break;
+                    case 14:
                         return ' ';
                         break;
-                    case 16:
+                    case 15:
                         return 40;
                         break;
-                    case 17:
+                    case 16:
                         return 33;
                         break;
-                    case 18:
+                    case 17:
                         return 37;
                         break;
-                    case 19:
+                    case 18:
                         return 38;
                         break;
-                    case 20:
+                    case 19:
                         return 26;
                         break;
-                    case 21:
+                    case 20:
                         return 27;
                         break;
-                    case 22:
+                    case 21:
                         return 25;
                         break;
-                    case 23:
+                    case 22:
                         return 16;
                         break;
-                    case 24:
+                    case 23:
                         return 28;
                         break;
-                    case 25:
+                    case 24:
                         return 17;
                         break;
-                    case 26:
+                    case 25:
                         return 18;
                         break;
-                    case 27:
+                    case 26:
                         return 19;
                         break;
-                    case 28:
+                    case 27:
                         return 21;
                         break;
-                    case 29:
+                    case 28:
                         return 23;
                         break;
-                    case 30:
+                    case 29:
                         return 22;
                         break;
-                    case 31:
+                    case 30:
                         return 24;
                         break;
-                    case 32:
+                    case 31:
                         return 'PI';
                         break;
-                    case 33:
+                    case 32:
                         return 29;
                         break;
-                    case 34:
+                    case 33:
                         return 7;
                         break;
-                    case 35:
+                    case 34:
                         return 8;
                         break;
-                    case 36:
+                    case 35:
                         return 9;
                         break;
-                    case 37:
+                    case 36:
                         return '"';
                         break;
-                    case 38:
+                    case 37:
                         return "'";
                         break;
-                    case 39:
+                    case 38:
                         return "!";
                         break;
-                    case 40:
+                    case 39:
                         return 15;
                         break;
-                    case 41:
+                    case 40:
                         return 42;
                         break;
-                    case 42:
+                    case 41:
                         return 43;
                         break;
-                    case 43:
+                    case 42:
                         return 14;
                         break;
-                    case 44:
+                    case 43:
                         return 5;
                         break;
                 }
             },
-            rules: [/^(?:\s+)/,
+            rules: [
+                /^(?:\s+)/,
                 /^(?:"(\\["]|[^"])*")/,
                 /^(?:'(\\[']|[^'])*')/,
                 /^(?:#[A-Za-z0-9_]+)/,
                 /^(?:[A-Za-z]{1,}[A-Za-z_0-9]+(?=[(]))/,
                 /^(?:([0]?[1-9]|1[0-2])[:][0-5][0-9]([:][0-5][0-9])?[ ]?(AM|am|aM|Am|PM|pm|pM|Pm))/,
                 /^(?:([0]?[0-9]|1[0-9]|2[0-3])[:][0-5][0-9]([:][0-5][0-9])?)/,
-                /^(?:[A-Za-z0-9_]+>[A-Za-z0-9_]+)/,
                 /^(?:\$[A-Za-z]+\$[0-9]+)/,
                 /^(?:[A-Za-z]+[0-9]+)/,
                 /^(?:[A-Za-z]+(?=[(]))/,
@@ -2458,7 +2454,7 @@ var defaultConfig = {
                 /^(?:$)/],
             conditions: {
                 "INITIAL": {
-                    "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
+                    "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
                     "inclusive": true
                 }
             }
