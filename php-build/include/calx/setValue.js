@@ -12,6 +12,6 @@ setValue : function(address, value){
         $sheet      = calx.sheetRegistry[$identifier],
         $cell       = $sheet.getCell(address);
 
-    $cell.setValue(value);
+    $cell.setValue(value).renderComputedValue();
     $sheet.calculate();
 }
