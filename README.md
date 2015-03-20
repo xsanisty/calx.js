@@ -39,7 +39,7 @@ and load the required script into your html page
 ```
 <script src="jquery.min.js"></script>
 <script src="numeral.min.js"></script>
-<script src="jquery-calx-2.0.3.min.js"></script>
+<script src="jquery-calx-2.1.0.min.js"></script>
 ```
 
 ### Building from source

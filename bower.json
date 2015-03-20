@@ -1,13 +1,13 @@
 {
   "name": "jquery-calx",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "authors": [
-    "Ikhsan Agustian <ikhsan017@gmail.com>"
+    "Xsanisty Developer Team <developers@xsanisty.com>"
   ],
   "repo": "xsanisty/jquery-calx",
   "description": "jQuery plugin for building excel-formula based calculation form",
-  "main": "jquery-calx-2.0.4.min.js",
-  "scripts": ["jquery-calx-2.0.4.min.js"],
+  "main": "jquery-calx-2.1.0.min.js",
+  "scripts": ["jquery-calx-2.1.0.min.js"],
   "moduleType": [
     "globals"
   ],
