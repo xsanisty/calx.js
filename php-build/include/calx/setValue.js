@@ -13,5 +13,8 @@ setValue : function(address, value){
         $cell       = $sheet.getCell(address);
 
     $cell.setValue(value).renderComputedValue();
-    $sheet.calculate();
+
+    if($sheet.config.autoCalculate){
+        $sheet.calculate();
+    }
 }
