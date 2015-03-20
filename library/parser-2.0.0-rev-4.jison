@@ -11,12 +11,6 @@
                                     {return 'TIME_AMPM';}
 ([0]?[0-9]|1[0-9]|2[0-3])[:][0-5][0-9]([:][0-5][0-9])?
                                     {return 'TIME_24';}
-[A-Za-z0-9_]+'>'[A-Za-z0-9_]+
-%{
-    if (sheet.obj.type == 'cell') return 'SHEET';
-    return 'VARIABLE';
-
-%}
 '$'[A-Za-z]+'$'[0-9]+
 %{
     if (sheet.obj.type == 'cell') return 'FIXEDCELL';

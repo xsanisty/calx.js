@@ -9994,10 +9994,8 @@ setValue : function(address, value){
         $sheet      = calx.sheetRegistry[$identifier],
         $cell       = $sheet.getCell(address);
 
-    $cell.setValue(value);
-    $cell.processDependant();
-
-    $sheet.renderComputedValue();
+    $cell.setValue(value).renderComputedValue();
+    $sheet.calculate();
 }
     };    /**
      * the surrogate of the calx world to the jQuery world
