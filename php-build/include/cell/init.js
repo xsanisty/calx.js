@@ -53,5 +53,6 @@ cell.fx.init = function(){
 
     //console.log('cell[#'+this.sheet.elementId+'!'+$address+'] : Initializing the cell');
     this.setValue($value);
+    this.renderComputedValue();
     //this.attachEvent();
 };

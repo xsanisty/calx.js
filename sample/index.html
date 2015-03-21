@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>
-            jQuery Calx 2.1.0 Sample
+            jQuery Calx 2.1.1 Sample
         </title>
         <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
@@ -20,7 +20,7 @@
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                         <span class="sr-only">Toggle navigation</span>
                     </button>
-                    <a class="navbar-brand" href="#">jQuery Calx 2.1.0 Sample</a>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.1.1 Sample</a>
                 </div>
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
@@ -49,11 +49,33 @@
                 </div>
             </nav>
             <div id="page-wrapper">
-                Index page
+                <form action="" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-1">Formula</label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="formula">
+                        </div>
+                        <div class="col-md-4" id="calx"><span data-cell="A1" data-formula=""></span></div>
+                    </div>
+
+                    <div class="form-group" id="calx2">
+                        <div class="col-md-2" data-cell="B1" data-format="$ 0,0">$ 1,000</div>
+                        <div class="col-md-2" data-cell="B2" data-format="$ 0,0">$ 2,000</div>
+                        <div class="col-md-2" data-cell="B3" data-format="$ 0,0" data-formula="B1+B2"></div>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <script src="js/jquery-calx-sample-2.1.0.min.js" type="text/javascript"></script>
+        <script src="js/jquery-calx-sample-2.1.1.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.js" type="text/javascript"></script>
+        <script>
+            $('#calx, #calx2').calx();
+
+            $('#formula').keyup(function(){
+                $('#calx').calx('getCell', 'A1').setFormula($(this).val());
+                $('#calx').calx('calculate');
+            });
+        </script>
     </body>
 </html>

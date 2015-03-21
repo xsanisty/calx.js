@@ -34,7 +34,7 @@ if(
 <?php
 require '../js/flot_plugin/jquery.flot.pie.js';
 require '../js/flot_plugin/jquery.flot.stack.js';
-require '../jquery-calx-2.1.0.min.js';
+require '../jquery-calx-2.1.1.min.js';
 ?>
 }else{
     var Zepto   = Zepto     || undefined,
