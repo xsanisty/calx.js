@@ -5,7 +5,7 @@
     "keywords": ["form", "calculator", "excel", "formula"],
     "version": "2.1.1",
     "author": {
-        "name": "Ikhsan Agustian",
+        "name": "Xsanisty Development Team",
         "url": "http://www.xsanisty.com/"
     },
     "maintainers": [
@@ -17,13 +17,13 @@
     ],
     "licenses": [{
             "type": "MIT",
-            "url": "https://github.com/ikhsan017/calx/blob/master/MIT-license.txt"
+            "url": "https://github.com/xsanisty/calx/blob/master/MIT-license.txt"
         }
     ],
-    "bugs": "https://github.com/ikhsan017/calx/issues",
+    "bugs": "https://github.com/xsanisty/calx/issues",
     "homepage": "http://www.xsanisty.com/calx",
     "docs": "http://www.xsanisty.com/calx",
-    "download": "https://github.com/ikhsan017/calx/archive/master.zip",
+    "download": "https://github.com/xsanisty/calx/archive/master.zip",
     "dependencies": {
         "jquery": ">=1.5"
     }
