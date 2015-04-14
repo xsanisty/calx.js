@@ -4,36 +4,39 @@
 
 var defaultConfig = {
     /** tell calx to perform auto calculate after change has been made or trigger calculation manually */
-    'autoCalculate'         : true,
+    autoCalculate         : true,
 
     /** event that trigger calculation to be executed */
-    'autoCalculateTrigger'  : 'blur',
+    autoCalculateTrigger  : 'blur',
 
     /** callback triggered right before calculation is performed */
-    'onBeforeCalculate'     : null ,
+    onBeforeCalculate     : null ,
 
     /** callback triggered right after calculation is performed */
-    'onAfterCalculate'      : null ,
+    onAfterCalculate      : null ,
 
     /** callback triggered right before calculation result is applied */
-    'onBeforeRender'         : null ,
+    onBeforeRender         : null ,
 
     /** callback triggered right after calculation result is applied */
-    'onAfterRender'          : null ,
+    onAfterRender          : null ,
 
     /** default fomatting rule when data-format is not present */
-    'defaultFormat'         : false,
+    defaultFormat         : false,
 
     /** used for server side formula */
-    'ajaxUrl'               : null,
+    ajaxUrl               : null,
 
     /** ajax method used for requesting formula result */
-    'ajaxMethod'            : 'get',
+    ajaxMethod            : 'get',
 
     /** Available option is morris, highchart, d3 */
-    'graphHandler'          : 'flot',
+    graphHandler          : 'flot',
 
     /** check for circular reference on init, default false */
-    'checkCircularReference': false
+    checkCircularReference: false,
+
+    /** the sheet data contain list of cells with value, formula, and format */
+    data                  : {}
 
 };
