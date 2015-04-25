@@ -7,6 +7,10 @@
 registerVariable : function (varName, varValue, global) {
     global = typeof(global) == 'undefined' ? false : global;
 
+    if(this.length === 0){
+        global = true;
+    }
+
     if(global){
         if(typeof(varName) == 'object'){
             for(var a in varName){
@@ -21,6 +25,7 @@ registerVariable : function (varName, varValue, global) {
 
             if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                 calx.sheetRegistry[sheetIdentifier].registerVariable(varName, varValue);
+                calx.sheetRegistry[sheetIdentifier].calculate();
             }
         });
     }

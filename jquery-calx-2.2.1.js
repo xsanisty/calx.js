@@ -9056,7 +9056,7 @@ cell.fx.highlightDependency = function(){
 };
 
 /**
- * Sheet object, represent each cell as single sheet
+ * Sheet object, represent each element as single sheet
  * @param  {string}     identifier :unique key for accessing sheet object internally
  * @param  {domElement} element    :dom element as scope for sheet to work with
  * @param  {object}     config     : configuration object
@@ -9857,6 +9857,10 @@ registerFunction : function (funcName, funcDefinition, override) {
 registerVariable : function (varName, varValue, global) {
     global = typeof(global) == 'undefined' ? false : global;
 
+    if(this.length === 0){
+        global = true;
+    }
+
     if(global){
         if(typeof(varName) == 'object'){
             for(var a in varName){
@@ -9871,6 +9875,7 @@ registerVariable : function (varName, varValue, global) {
 
             if(sheetIdentifier && typeof(calx.sheetRegistry[sheetIdentifier]) != 'undefined'){
                 calx.sheetRegistry[sheetIdentifier].registerVariable(varName, varValue);
+                calx.sheetRegistry[sheetIdentifier].calculate();
             }
         });
     }
