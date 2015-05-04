@@ -15,7 +15,10 @@
     "excel",
     "jquery",
     "formula",
-    "calculator"
+    "calculator",
+    "calx",
+    "spreadsheet",
+    "form"
   ],
   "dependencies": {
     "jquery": ">= 1.9.1"
