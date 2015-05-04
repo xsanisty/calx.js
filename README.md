@@ -1,10 +1,7 @@
 #jQuery Calx
-jQuery Calx is an Excel calculation engine and formula parser built as jQuery plugin, it offer
-spreadsheet like functionality without bringing spreadsheet like user interface into html.
+jQuery Calx is an Excel calculation engine and formula parser built as jQuery plugin, it offer spreadsheet like functionality without bringing spreadsheet like user interface into html.
 
-In the core of jQuery Calx is formula parser generated using [jison](https://github.com/zaach/jison)
-and formula set imported from [formula.js](https://github.com/sutoiku/formula.js), glued together by
-virtual cell and sheet.
+In the core of jQuery Calx is formula parser generated using [jison](https://github.com/zaach/jison) and formula set imported from [formula.js](https://github.com/sutoiku/formula.js), glued together by virtual cell and sheet.
 
 Creating caluclation form in html never been easier and simpler than this:
 
@@ -25,8 +22,7 @@ Creating caluclation form in html never been easier and simpler than this:
 </script>
 ```
 
-If you don't want the formula make your html looks messy, you can move all formula and formatting rule
-into the js, and leave only `data-cell` attribute.
+If you don't want the formula make your html looks messy, you can move all formula and formatting rule into the js, and leave only `data-cell` attribute.
 
 ```html
 <form id="calx_form">
@@ -76,10 +72,8 @@ and load the required script into your html page
 
 # Building from source
 
-I am not so cool at javascrit world and still don't know how properly build the js file using grunt or gulp,
-but willing to learn to improve my skill.
-So, to make the full plugin easily maintainable, I split up into several js, concatenate it using single
-php script and minify using closure compiler.
+I am not so cool at javascrit world and still don't know how properly build the js file using grunt or gulp, but willing to learn to improve my skill.
+So, to make the full plugin easily maintainable, I split up into several js, concatenate it using single php script and minify using closure compiler.
 
 The full source of jQuery calx is located in `php-build/include` directory, and splitted up based on object API
 
