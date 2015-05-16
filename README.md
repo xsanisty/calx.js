@@ -1,4 +1,6 @@
 #jQuery Calx
+
+[![Join the chat at https://gitter.im/xsanisty/jquery-calx](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/xsanisty/jquery-calx?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 jQuery Calx is an Excel calculation engine and formula parser built as jQuery plugin, it offer spreadsheet like functionality without bringing spreadsheet like user interface into html.
 
 In the core of jQuery Calx is formula parser generated using [jison](https://github.com/zaach/jison) and formula set imported from [formula.js](https://github.com/sutoiku/formula.js), glued together by virtual cell and sheet.
