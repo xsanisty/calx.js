@@ -3452,18 +3452,27 @@ date: {
     },
 
     SUMPRODUCT : function() {
-        var arrays = arguments.length + 1;
-        var result = 0;
-        for (var i = 0; i < arguments[0].length; i++) {
-            for (var j = 0; j < arguments[0][i].length; j++) {
-                var product = 1;
-                for (var k = 1; k < arrays; k++) {
-                    product *= arguments[k - 1][i][j];
-                }
-                result += product;
+        for (var a in arguments) {
+            arguments[a] = utility.objectToArray(arguments[a]);
+
+            if (a > 0 && arguments[(a - 1)].length !== arguments[a].length) {
+                return '#VALUE!';
             }
         }
-        return result;
+
+        var resultArray = [];
+
+        for(var i = 0; i < arguments.length; i++){
+            for(var j = 0; j < arguments[i].length; j++){
+                if(0 == i){
+                    resultArray[j] = arguments[i][j];
+                } else {
+                    resultArray[j] = formula.math.MULTIPLY(resultArray[j] , arguments[i][j]);
+                }
+            }
+        }
+
+        return formula.math.SUM(resultArray);
     },
 
     SUMSQ : function() {
