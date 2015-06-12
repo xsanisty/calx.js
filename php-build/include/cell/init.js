@@ -54,7 +54,7 @@ cell.fx.init = function(){
     //console.log('cell[#'+this.sheet.elementId+'!'+$address+'] : Initializing the cell');
     this.setValue($value);
 
-    if($value.trim() != '' && $.isNumeric($value)){
+    if($.trim($value) != '' && $.isNumeric($value)){
         this.renderComputedValue();
     }
     //this.attachEvent();
