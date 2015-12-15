@@ -6,6 +6,9 @@
         /** flag to indicate that calx is calculating */
         isCalculating : false,
 
+        /** Calx version */
+        version : '2.2.4',
+
         /** sheets collection */
         sheetRegistry : {},
 
