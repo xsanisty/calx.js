@@ -6074,66 +6074,67 @@ logical : {
 },
     general: {
 
-    VLOOKUP : function(value, table, colIndex, approx){
+    VLOOKUP: function(value, table, colIndex, approx) {
         var col, row, rowLength, colLength;
 
-        if(typeof(table == 'object') && table.constructor.name == 'Object'){
+        if (typeof(table == 'object') && table.constructor.name == 'Object') {
             table = utility.rangeToTable(table);
         }
 
         rowLength = table.length;
         colLength = table[0].length;
-        colIndex  = colIndex-1;
+        colIndex  = colIndex - 1;
         /** default approx to false */
         approx = typeof(approx) == 'undefined' ? false : approx;
 
-        if(colIndex > colLength-1){
+        if (colIndex > colLength - 1) {
             return '#REF!';
         }
 
-        if(colIndex < 0){
+        if (colIndex < 0) {
             return '#VALUE!';
         }
 
-        if(false == approx){
-            for(row = 0; row < rowLength; row++){
-                if(value == table[row][0]){
+        if (false == approx) {
+            for (row = 0; row < rowLength; row++) {
+                if (value == table[row][0]) {
                     return table[row][colIndex];
                 }
             }
 
             return '#N/A!';
-        }else{
-            var delta = [], deltaMin, rowIndex, deltaLength;
+        } else {
+            var delta = {}, deltaMax, deltaLength, difference;
 
-            for(row = 0; row < rowLength; row++){
-                if(value == table[row][0]){
+            /** collect the difference between value on index 0, dismiss if delta is positive */
+            for (row = 0; row < rowLength; row++) {
+                if (value == table[row][0]) {
                     return table[row][colIndex];
                 }
-                delta[row] = Math.abs(table[row][0] - value);
 
-                if(isNaN(delta[row])){
-                    delta[row] = -1;
-                }
+                difference = table[row][0] - value;
 
-            }
-
-            deltaLength = delta.length;
-            deltaMin    = null;
-
-            for(var a = 0; a < deltaLength; a++){
-                if(delta[a] >= 0){
-                    if(deltaMin === null){
-                        deltaMin = delta[a];
-                    }else{
-                        deltaMin = (deltaMin < delta[a]) ? deltaMin : delta[a];
-                    }
+                if (difference < 0) {
+                    delta[row] = difference;
                 }
             }
 
-            rowIndex = delta.indexOf(deltaMin);
+            var deltaLength = delta.length;
+            var deltaMax = null;
+            var rowIndex = null;
 
-            if(rowIndex < 0){
+
+            for (var a in delta) {
+                if (deltaMax == null) {
+                    deltaMax = delta[a];
+                    rowIndex = a;
+                } else {
+                    deltaMax = (deltaMax > delta[a]) ? deltaMax : delta[a];
+                    rowIndex = (deltaMax > delta[a]) ? rowIndex : a;
+                }
+            }
+
+            if (rowIndex == null) {
                 return '#N/A!';
             }
 
@@ -6141,8 +6142,8 @@ logical : {
         }
     },
 
-    HLOOKUP : function(value, table, rowIndex, approx){
-        if(typeof(table == 'object')){
+    HLOOKUP: function(value, table, rowIndex, approx) {
+        if (typeof(table == 'object')) {
             table = utility.rangeToTable(table);
         }
 
@@ -6151,40 +6152,40 @@ logical : {
         return formula.general.VLOOKUP(value, table, rowIndex, approx);
     },
 
-    LOOKUP : function(value, lookup, target){
+    LOOKUP: function(value, lookup, target) {
         var lookupIndex, lookupLength, targetIndex, targetLength, delta = [],
             deltaLength, deltaIndex, deltaMax, deltaMin;
 
         target = typeof target == 'undefined' ? false : target;
 
-        if(typeof(lookup == 'object') && lookup.constructor.name == 'Object'){
+        if (typeof(lookup == 'object') && lookup.constructor.name == 'Object') {
             lookup = utility.objectToArray(lookup);
             lookupLength = lookup.length;
         }
 
-        if(typeof(target == 'object') && target.constructor.name == 'Object'){
+        if (typeof(target == 'object') && target.constructor.name == 'Object') {
             target = utility.objectToArray(target);
             targetLength = target.length;
         }
 
-        if(value < Math.min.apply(Math, lookup)){
+        if (value < Math.min.apply(Math, lookup)) {
             return '#N/A!';
         }
 
-        for(lookupIndex = 0; lookupIndex < lookupLength; lookupIndex++){
+        for (lookupIndex = 0; lookupIndex < lookupLength; lookupIndex++) {
 
-            if(value == lookup[lookupIndex]){
+            if (value == lookup[lookupIndex]) {
                 return target ? target[lookupIndex] : lookup[lookupIndex];
-            }else{
+            } else {
                 delta[lookupIndex] = value - lookup[lookupIndex];
             }
         }
 
         /** convert minus to max */
         deltaLength = delta.length;
-        deltaMax    = Math.max.apply(Math, delta);
-        for(deltaIndex = 0; deltaIndex < deltaLength; deltaIndex++){
-            if(delta[deltaIndex] < 0){
+        deltaMax = Math.max.apply(Math, delta);
+        for (deltaIndex = 0; deltaIndex < deltaLength; deltaIndex++) {
+            if (delta[deltaIndex] < 0) {
                 delta[deltaIndex] = deltaMax;
             }
         }
@@ -6196,8 +6197,8 @@ logical : {
 
     },
 
-    SERVER : function(){
-        if(this.config.ajaxUrl == null){
+    SERVER: function() {
+        if (this.config.ajaxUrl == null) {
             return data.ERRKEY.ajaxUrlRequired;
         }
 
@@ -6205,8 +6206,8 @@ logical : {
             funcName = arguments[0],
             params = {};
 
-        for (var a = 1; a < arguments.length; a++){
-            params['params['+a+']'] = arguments[a];
+        for (var a = 1; a < arguments.length; a++) {
+            params['params[' + a + ']'] = arguments[a];
         }
 
         params['function'] = funcName;
@@ -6216,10 +6217,10 @@ logical : {
             method: this.config.ajaxMethod,
             data: params,
             async: false,
-            success: function(response){
+            success: function(response) {
                 result = response;
             },
-            error: function(response){
+            error: function(response) {
                 result = data.ERRKEY.sendRequestError;
             }
         });
@@ -6227,18 +6228,18 @@ logical : {
         return result;
     },
 
-    GRAPH : function(data, options){
+    GRAPH: function(data, options) {
 
-        var graphOptions= {},
+        var graphOptions = {},
             cellElement = this.getActiveCell().el,
             plotOptions = {},
-            options     = (typeof(options) == 'undefined') ? [] : options,
+            options = (typeof(options) == 'undefined') ? [] : options,
             keyval, graphData;
 
         /**
          * parsing option come from formula into javascript object
          */
-        for(var a = 0; a < options.length; a++){
+        for (var a = 0; a < options.length; a++) {
             keyval = options[a].split('=');
             graphOptions[keyval[0]] = keyval[1];
         }
@@ -6246,18 +6247,18 @@ logical : {
         /**
          * setup default height and width
          */
-        if(!cellElement.height()){
+        if (!cellElement.height()) {
             cellElement.css('height', '300px');
         }
 
-        if(!cellElement.width){
+        if (!cellElement.width) {
             cellElement.css('width', '300px');
         }
 
-        switch(graphOptions.type){
+        switch (graphOptions.type) {
             case 'bar':
-                graphData   = utility.rangeToTable(data);
-                if(typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true'){
+                graphData = utility.rangeToTable(data);
+                if (typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true') {
                     graphData.reverse();
                 }
                 plotOptions.series = {
@@ -6268,13 +6269,13 @@ logical : {
                     },
                     stack: true
                 };
-                if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                if (typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal') {
                     plotOptions.series.bars.horizontal = true;
                 }
                 break;
 
             case 'pie':
-                graphData   = utility.objectToArray(data);
+                graphData = utility.objectToArray(data);
                 plotOptions.series = {
                     pie: {
                         show: true,
@@ -6282,13 +6283,13 @@ logical : {
                     }
                 };
                 plotOptions.legend = {
-                    show:false
+                    show: false
                 }
                 break;
 
             case 'doughnut':
             case 'donut':
-                graphData   = utility.objectToArray(data);
+                graphData = utility.objectToArray(data);
                 plotOptions.series = {
                     pie: {
                         show: true,
@@ -6297,13 +6298,13 @@ logical : {
                     }
                 };
                 plotOptions.legend = {
-                    show:false
+                    show: false
                 }
                 break;
 
             default:
-                graphData   = utility.rangeToTable(data);
-                if(typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true'){
+                graphData = utility.rangeToTable(data);
+                if (typeof(graphOptions.reverse != 'undefined') && graphOptions.reverse == 'true') {
                     graphData.reverse();
                 }
                 break;
@@ -6312,24 +6313,24 @@ logical : {
         /**
          * change the table orientation if configured
          */
-        if(typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical'){
+        if (typeof(graphOptions.orientation) != 'undefined' && graphOptions.orientation == 'vertical') {
             graphData = utility.transposeTable(graphData);
         }
 
         /**
          * parsing label as x-axis label
          */
-        if(typeof(graphOptions.label) != 'undefined'){
+        if (typeof(graphOptions.label) != 'undefined') {
             var label = this.evaluate(graphOptions.label),
                 label = utility.objectToArray(label),
                 rowLength = graphData.length,
                 colLength, row, col, data;
 
-            for(row = 0; row < rowLength; row++){
+            for (row = 0; row < rowLength; row++) {
 
                 colLength = graphData[row].length;
 
-                for(col = 0; col < colLength; col++){
+                for (col = 0; col < colLength; col++) {
                     data = graphData[row][col];
                     graphData[row][col] = [label[col], data];
                 }
@@ -6339,20 +6340,20 @@ logical : {
                 mode: "categories",
                 tickLength: 0
             };
-        }else{
+        } else {
 
             var rowLength = graphData.length,
                 colLength, row, col, data;
 
-            for(row = 0; row < rowLength; row++){
+            for (row = 0; row < rowLength; row++) {
 
                 colLength = graphData[row].length;
 
-                for(col = 0; col < colLength; col++){
+                for (col = 0; col < colLength; col++) {
                     data = graphData[row][col];
-                    if(typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal'){
+                    if (typeof(graphOptions.bar_orientation) != 'undefined' && graphOptions.bar_orientation == 'horizontal') {
                         graphData[row][col] = [data, col];
-                    }else{
+                    } else {
                         graphData[row][col] = [col, data];
                     }
                 }
@@ -6362,15 +6363,15 @@ logical : {
         /**
          * parsing legend and merge with the graph data
          */
-        if(typeof(graphOptions.legend) != 'undefined'){
+        if (typeof(graphOptions.legend) != 'undefined') {
             var legend = this.evaluate(graphOptions.legend),
                 legend = utility.objectToArray(legend),
                 newGraphData = [];
 
-            for(var graphLength = 0; graphLength < graphData.length; graphLength++){
+            for (var graphLength = 0; graphLength < graphData.length; graphLength++) {
                 newGraphData.push({
-                    label : legend[graphLength],
-                    data  : graphData[graphLength]
+                    label: legend[graphLength],
+                    data: graphData[graphLength]
                 });
             }
 
@@ -6380,18 +6381,20 @@ logical : {
         /**
          * hide and show axis label
          */
-        if(typeof(graphOptions.show_x_axis) != 'undefined' && graphOptions.show_x_axis == 'false'){
+        if (typeof(graphOptions.show_x_axis) != 'undefined' && graphOptions.show_x_axis == 'false') {
             plotOptions.xaxis = plotOptions.xaxis || {};
             plotOptions.xaxis.show = false;
         }
 
-        if(typeof(graphOptions.show_y_axis) != 'undefined' && graphOptions.show_y_axis == 'false'){
+        if (typeof(graphOptions.show_y_axis) != 'undefined' && graphOptions.show_y_axis == 'false') {
             plotOptions.yaxis = plotOptions.yaxis || {};
             plotOptions.yaxis.show = false;
         }
 
         plotOptions.grid = {
-            backgroundColor: { colors: [ "#fff", "#eee" ] },
+            backgroundColor: {
+                colors: ["#fff", "#eee"]
+            },
             borderWidth: {
                 top: 0,
                 right: 0,
@@ -6401,7 +6404,7 @@ logical : {
         };
 
 
-        setTimeout(function(){
+        setTimeout(function() {
             $.plot(cellElement, graphData, plotOptions);
         }, 100);
 
@@ -8432,15 +8435,8 @@ logical : {
  * @param  {element}    element     dom element represent the cell (optional)
  * @return {void}
  */
-function cell(sheet, element){
+function cell(sheet, element, address){
     this.sheet = sheet;
-
-    /** set cell element, is it in dom, or in memory */
-    if(typeof(element) != 'undefined'){
-        this.el = $(element);
-    }else{
-        this.el = false;
-    }
 
     this.value              = null;
     this.formattedValue     = null;
@@ -8454,6 +8450,15 @@ function cell(sheet, element){
     this.address            = '';
     this.remoteDependency   = false;
     this.isCheckbox         = false;
+
+    /** set cell element, is it in dom, or in memory */
+    if(typeof(element) != 'undefined'){
+        this.el = $(element);
+    }else{
+        this.el = false;
+        this.address = typeof(address) != 'undefined' ? address : '';
+    }
+
     this.init();
 };
 
@@ -8462,11 +8467,11 @@ cell.fx = cell.prototype;/**
  * @return {void}
  */
 cell.fx.init = function(){
-    var $address = (this.el) ? this.el.attr('data-cell') : '',
+    var $address = (this.el) ? this.el.attr('data-cell') : this.address,
         $formula = (this.el) ? this.el.attr('data-formula') : '',
         $format  = (this.el) ? this.el.attr('data-format') : false,
         $value   = (this.el) ? this.el.val() : null,
-        tagName  = this.el.prop('tagName').toLowerCase();
+        tagName  = (this.el) ? this.el.prop('tagName').toLowerCase() : '';
 
     /** assign address if data-cell is not present */
     if(!$address || $.trim($address) == ''){
@@ -8496,7 +8501,7 @@ cell.fx.init = function(){
         this.isCheckbox = true;
     }
 
-    if(this.formTags.indexOf(tagName) == -1){
+    if(this.el && this.formTags.indexOf(tagName) == -1){
         $value = this.el.text();
     }
 
@@ -9207,6 +9212,14 @@ sheet.fx = sheet.prototype;sheet.fx.init = function(){
         sheet.registerCell($cell);
     });
 
+
+    for(var cellAddr in this.config.data){
+        if(typeof(this.cells[cellAddr]) == 'undefined'){
+            $cell = new cell(sheet, undefined, cellAddr);
+            sheet.registerCell($cell);
+        }
+    }
+
     //sheet.buildCellDependency();
     sheet.attachEvent();
 };/**
@@ -9875,7 +9888,7 @@ sheet.fx.detachEvent = function(){
         isCalculating : false,
 
         /** Calx version */
-        version : '2.2.4',
+        version : '2.2.5',
 
         /** sheets collection */
         sheetRegistry : {},
