@@ -13,6 +13,14 @@ sheet.fx.init = function(){
         sheet.registerCell($cell);
     });
 
+
+    for(var cellAddr in this.config.data){
+        if(typeof(this.cells[cellAddr]) == 'undefined'){
+            $cell = new cell(sheet, undefined, cellAddr);
+            sheet.registerCell($cell);
+        }
+    }
+
     //sheet.buildCellDependency();
     sheet.attachEvent();
 };
