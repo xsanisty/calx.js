@@ -4,15 +4,8 @@
  * @param  {element}    element     dom element represent the cell (optional)
  * @return {void}
  */
-function cell(sheet, element){
+function cell(sheet, element, address){
     this.sheet = sheet;
-
-    /** set cell element, is it in dom, or in memory */
-    if(typeof(element) != 'undefined'){
-        this.el = $(element);
-    }else{
-        this.el = false;
-    }
 
     this.value              = null;
     this.formattedValue     = null;
@@ -26,6 +19,15 @@ function cell(sheet, element){
     this.address            = '';
     this.remoteDependency   = false;
     this.isCheckbox         = false;
+
+    /** set cell element, is it in dom, or in memory */
+    if(typeof(element) != 'undefined'){
+        this.el = $(element);
+    }else{
+        this.el = false;
+        this.address = typeof(address) != 'undefined' ? address : '';
+    }
+
     this.init();
 };
 

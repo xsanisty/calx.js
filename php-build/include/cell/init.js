@@ -3,11 +3,11 @@
  * @return {void}
  */
 cell.fx.init = function(){
-    var $address = (this.el) ? this.el.attr('data-cell') : '',
+    var $address = (this.el) ? this.el.attr('data-cell') : this.address,
         $formula = (this.el) ? this.el.attr('data-formula') : '',
         $format  = (this.el) ? this.el.attr('data-format') : false,
         $value   = (this.el) ? this.el.val() : null,
-        tagName  = this.el.prop('tagName').toLowerCase();
+        tagName  = (this.el) ? this.el.prop('tagName').toLowerCase() : '';
 
     /** assign address if data-cell is not present */
     if(!$address || $.trim($address) == ''){
@@ -37,7 +37,7 @@ cell.fx.init = function(){
         this.isCheckbox = true;
     }
 
-    if(this.formTags.indexOf(tagName) == -1){
+    if(this.el && this.formTags.indexOf(tagName) == -1){
         $value = this.el.text();
     }
 
