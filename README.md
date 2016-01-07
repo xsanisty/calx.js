@@ -8,7 +8,7 @@ calculate the formula without bringing table-like spreadsheet interface.
 In the core of jQuery Calx is formula parser generated using [jison](https://github.com/zaach/jison) which parse and process the
 formula and set of formulas imported from [formula.js](https://github.com/sutoiku/formula.js).
 
-Creating caluclation form in html never been easier and simpler than this:
+Creating calculation form in html never been easier and simpler than this:
 
 ```html
 <form id="calx_form">
