@@ -88,7 +88,7 @@ bower install xsanisty/jquery-calx
 
 and load the required script into your html page
 
-```
+```html
 <!-- the only required dependency -->
 <script src="jquery.min.js"></script>
 <!-- required for number formatting only -->
