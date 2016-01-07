@@ -70,6 +70,7 @@ You can even completely remove hidden cell that act as proxy or intermediate cel
         }
     });
 </script>
+```
 
 # Installation
 
