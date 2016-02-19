@@ -575,11 +575,15 @@ math : {
         var criteria = (arguments.length - 1) / 2;
         var range = utility.objectToArray(arguments[0]);
         var result = 0;
+
         for (var i = 0; i < range.length; i++) {
             var fit = true;
             for (var j = 0; j < criteria; j++) {
-                if (!eval(arguments[2 * j + 1][i] + arguments[2 * j + 2])) {
-                    fit = false;
+                var criteria_clause = arguments[2 * j + 1];
+                var criteria_range  = utility.objectToArray(arguments[2 * j + 2]);
+
+                if (fit) {
+                    fit = this.evaluate(criteria_range[i] + criteria_clause);
                 }
             }
             result += (fit) ? range[i] : 0;
