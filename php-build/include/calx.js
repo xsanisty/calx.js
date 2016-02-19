@@ -7,7 +7,7 @@
         isCalculating : false,
 
         /** Calx version */
-        version : '2.2.5',
+        version : '2.2.6',
 
         /** sheets collection */
         sheetRegistry : {},

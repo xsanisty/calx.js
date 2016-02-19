@@ -1,4 +1,14 @@
 <?php header('Content-Type', 'text/javascript') ?>
+/**
+ * jQuery Calx 2.2.6
+ *
+ * author       : Xsanisty Developer Team <developers@xsanisty.com>
+ *                Ikhsan Agustian <ikhsan017@gmail.com>
+ * website      : http://www.xsanisty.com/project/calx2
+ * repository   : https://github.com/xsanisty/jquery-calx
+ * license      : MIT
+ */
+
 if(typeof(Zepto)     == 'undefined'){
     Zepto    = undefined;
 }

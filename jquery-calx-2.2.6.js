@@ -1,3 +1,13 @@
+/**
+ * jQuery Calx 2.2.6
+ *
+ * author       : Xsanisty Developer Team <developers@xsanisty.com>
+ *                Ikhsan Agustian <ikhsan017@gmail.com>
+ * website      : http://www.xsanisty.com/project/calx2
+ * repository   : https://github.com/xsanisty/jquery-calx
+ * license      : MIT
+ */
+
 if(typeof(Zepto)     == 'undefined'){
     Zepto    = undefined;
 }
@@ -19,7 +29,7 @@ if(typeof(jStat)     == 'undefined'){
     if(typeof($) == 'undefined'){
         return false;
     }
-    
+
     /************************************************
      *                Begin of IE Hack              *
      ************************************************/
@@ -3523,11 +3533,15 @@ date: {
         var criteria = (arguments.length - 1) / 2;
         var range = utility.objectToArray(arguments[0]);
         var result = 0;
+
         for (var i = 0; i < range.length; i++) {
             var fit = true;
             for (var j = 0; j < criteria; j++) {
-                if (!eval(arguments[2 * j + 1][i] + arguments[2 * j + 2])) {
-                    fit = false;
+                var criteria_clause = arguments[2 * j + 1];
+                var criteria_range  = utility.objectToArray(arguments[2 * j + 2]);
+
+                if (fit) {
+                    fit = this.evaluate(criteria_range[i] + criteria_clause);
                 }
             }
             result += (fit) ? range[i] : 0;
@@ -5812,7 +5826,7 @@ logical : {
 
 },
     geometry : {
-    
+
 },
     text:{
     CONCAT : function(){
@@ -6081,7 +6095,7 @@ logical : {
     }
 },
     trigonometry:{
-    
+
 },
     general: {
 
@@ -9904,7 +9918,7 @@ sheet.fx.detachEvent = function(){
         isCalculating : false,
 
         /** Calx version */
-        version : '2.2.5',
+        version : '2.2.6',
 
         /** sheets collection */
         sheetRegistry : {},
