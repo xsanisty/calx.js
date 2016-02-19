@@ -552,17 +552,28 @@ math : {
         }
     },
 
-    SUMIF : function(range, criteria) {
+    SUMIF : function(range, criteria, sum_range) {
         var result = 0;
-        for (var i = 0; i < range.length; i++) {
-            result += (eval(range[i] + criteria)) ? range[i] : 0;
+            range = utility.objectToArray(range);
+
+        if(typeof(sum_range) == 'undefined'){
+            sum_range = range;
+        } else {
+            sum_range = utility.objectToArray(sum_range);
         }
+
+        for(var i = 0; i < range.length; i++) {
+            if (this.evaluate(range[i] + criteria)) {
+                result += sum_range[i];
+            }
+        }
+
         return result;
     },
 
     SUMIFS : function() {
         var criteria = (arguments.length - 1) / 2;
-        var range = arguments[0];
+        var range = utility.objectToArray(arguments[0]);
         var result = 0;
         for (var i = 0; i < range.length; i++) {
             var fit = true;

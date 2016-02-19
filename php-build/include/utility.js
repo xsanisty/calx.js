@@ -164,6 +164,11 @@ var utility = {
         return Array.prototype.slice.call(args, 0);
     },
 
+    /**
+     * Converting object into plain array
+     * @param  {object} obj Object need to be converted
+     * @return {array}      Plain array
+     */
     objectToArray: function(obj){
         var ar = [], a;
 
