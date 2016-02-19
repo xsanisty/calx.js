@@ -20,6 +20,7 @@
         <?php require 'include/calx/getSheet.js' ?>,
         <?php require 'include/calx/getCell.js' ?>,
         <?php require 'include/calx/getUtility.js' ?>,
+        <?php require 'include/calx/getFormula.js' ?>,
         <?php require 'include/calx/evaluate.js' ?>,
         <?php require 'include/calx/destroy.js' ?>,
         <?php require 'include/calx/reset.js' ?>,
