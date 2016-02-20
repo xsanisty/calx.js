@@ -12,7 +12,7 @@ sheet.fx.attachEvent = function(){
             cellValue   = currentCell.getValue(),
             cellFormat  = currentCell.getFormat();
 
-        if(cellFormat && cellFormat.indexOf('%') > -1){
+        if(cellFormat && cellFormat.indexOf('%') >= 0){
             cellValue = cellValue*100+' %';
         }
 
@@ -36,10 +36,12 @@ sheet.fx.attachEvent = function(){
      * update value of the current cell internally
      */
     this.el.on('calx.setValue', 'input[data-cell], select[data-cell]', function(){
-        var cellAddr    = $(this).attr('data-cell'),
+        var element     = $(this),
+            cellAddr    = element.attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr],
             oldVal      = currentCell.getValue(),
-            newVal      = currentCell.el.val();
+            newVal      = currentCell.el.val(),
+            cellFormat  = currentCell.getFormat();
 
         if(currentCell.isCheckbox && currentCell.el.attr('type') == 'checkbox'){
             if(currentCell.el.prop('checked')){
@@ -67,7 +69,18 @@ sheet.fx.attachEvent = function(){
                             currentSheet.cells[cellAddr].setValue(uncheckedVal);
                         });
         }else{
-            currentCell.setValue(newVal);
+            if(cellFormat && typeof(numeral) != 'undefined' && $.trim(newVal) !== ''){
+                rawValue = numeral().unformat(newVal);
+
+                if(cellFormat.indexOf('%') > -1 && (newVal).indexOf('%') == -1){
+                    rawValue = rawValue/100;
+
+                }
+            }else{
+                rawValue = ($.isNumeric(newVal)) ? parseFloat(newVal) : newVal;
+            }
+
+            currentCell.setValue(rawValue);
         }
 
         if(oldVal != newVal){
