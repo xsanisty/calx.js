@@ -22,6 +22,10 @@ sheet.fx.registerCell = function(cell){
         if(typeof cellConfig.formula != 'undefined'){
             cell.setFormula(cellConfig.formula);
         }
+
+        if(typeof cellConfig.conditional_style != 'undefined'){
+            cell.setConditionalStyle(cellConfig.conditional_style);
+        }
     }
 
     if(this.affectedCell.indexOf(cell.getAddress()) == -1){
