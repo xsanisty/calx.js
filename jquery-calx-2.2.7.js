@@ -8547,7 +8547,7 @@ cell.fx.init = function(){
 
     //console.log('cell[#'+this.sheet.elementId+'!'+$address+'] : Initializing the cell');
     if($format && typeof(numeral) != 'undefined' && $.trim($value) !== ''){
-        rawValue = numeral().unformat($value);
+        var rawValue = numeral().unformat($value);
 
         if($format.indexOf('%') > -1 && ($value).indexOf('%') == -1){
             rawValue = rawValue/100;
