@@ -1,6 +1,6 @@
 <?php header('Content-Type', 'text/javascript') ?>
 /**
- * jQuery Calx 2.2.6
+ * jQuery Calx 2.2.7
  *
  * author       : Xsanisty Developer Team <developers@xsanisty.com>
  *                Ikhsan Agustian <ikhsan017@gmail.com>

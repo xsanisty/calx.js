@@ -1,5 +1,5 @@
 /**
- * jQuery Calx 2.2.6
+ * jQuery Calx 2.2.7
  *
  * author       : Xsanisty Developer Team <developers@xsanisty.com>
  *                Ikhsan Agustian <ikhsan017@gmail.com>
@@ -29,7 +29,7 @@ if(typeof(jStat)     == 'undefined'){
     if(typeof($) == 'undefined'){
         return false;
     }
-
+    
     /************************************************
      *                Begin of IE Hack              *
      ************************************************/
@@ -5826,7 +5826,7 @@ logical : {
 
 },
     geometry : {
-
+    
 },
     text:{
     CONCAT : function(){
@@ -6095,7 +6095,7 @@ logical : {
     }
 },
     trigonometry:{
-
+    
 },
     general: {
 
@@ -8546,7 +8546,18 @@ cell.fx.init = function(){
 
 
     //console.log('cell[#'+this.sheet.elementId+'!'+$address+'] : Initializing the cell');
-    this.setValue($value);
+    if($format && typeof(numeral) != 'undefined' && $.trim($value) !== ''){
+        rawValue = numeral().unformat($value);
+
+        if($format.indexOf('%') > -1 && ($value).indexOf('%') == -1){
+            rawValue = rawValue/100;
+
+        }
+    }else{
+        rawValue = ($.isNumeric($value)) ? parseFloat($value) : $value;
+    }
+
+    this.setValue(rawValue);
 
     if($.trim($value) != '' && $.isNumeric($value)){
         this.renderComputedValue();
@@ -9102,21 +9113,12 @@ cell.fx.getFormattedValue = function(){
 };/**
  * set cell value and sync it with the bound element, and trigger recalculation on all cell depend to it
  * @param {mixed}   value       value to be inserted into the cell
- * @param {bool}    render      render computed value of it's dependant or not
  */
-cell.fx.setValue = function(value, render){
+cell.fx.setValue = function(value){
 
     //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : setting value to be : '+value);
 
-    if(this.format && typeof(numeral) != 'undefined' && $.trim(value) !== ''){
-        this.value = numeral().unformat(value+'');
-
-        if(this.format.indexOf('%') > -1 && (value+'').indexOf('%') == -1){
-            this.value = this.value/100;
-        }
-    }else{
-        this.value = ($.isNumeric(value)) ? parseFloat(value) : value;
-    }
+    this.value = value;
 
     if(this.sheet.affectedCell.indexOf(this.address) == -1){
         this.sheet.affectedCell.push(this.address);
@@ -9605,6 +9607,10 @@ sheet.fx.registerCell = function(cell){
         if(typeof cellConfig.formula != 'undefined'){
             cell.setFormula(cellConfig.formula);
         }
+
+        if(typeof cellConfig.conditional_style != 'undefined'){
+            cell.setConditionalStyle(cellConfig.conditional_style);
+        }
     }
 
     if(this.affectedCell.indexOf(cell.getAddress()) == -1){
@@ -9744,7 +9750,7 @@ sheet.fx.getActiveCell = function(){
             cellValue   = currentCell.getValue(),
             cellFormat  = currentCell.getFormat();
 
-        if(cellFormat && cellFormat.indexOf('%') > -1){
+        if(cellFormat && cellFormat.indexOf('%') >= 0){
             cellValue = cellValue*100+' %';
         }
 
@@ -9768,10 +9774,12 @@ sheet.fx.getActiveCell = function(){
      * update value of the current cell internally
      */
     this.el.on('calx.setValue', 'input[data-cell], select[data-cell]', function(){
-        var cellAddr    = $(this).attr('data-cell'),
+        var element     = $(this),
+            cellAddr    = element.attr('data-cell'),
             currentCell = currentSheet.cells[cellAddr],
             oldVal      = currentCell.getValue(),
-            newVal      = currentCell.el.val();
+            newVal      = currentCell.el.val(),
+            cellFormat  = currentCell.getFormat();
 
         if(currentCell.isCheckbox && currentCell.el.attr('type') == 'checkbox'){
             if(currentCell.el.prop('checked')){
@@ -9799,7 +9807,18 @@ sheet.fx.getActiveCell = function(){
                             currentSheet.cells[cellAddr].setValue(uncheckedVal);
                         });
         }else{
-            currentCell.setValue(newVal);
+            if(cellFormat && typeof(numeral) != 'undefined' && $.trim(newVal) !== ''){
+                rawValue = numeral().unformat(newVal);
+
+                if(cellFormat.indexOf('%') > -1 && (newVal).indexOf('%') == -1){
+                    rawValue = rawValue/100;
+
+                }
+            }else{
+                rawValue = ($.isNumeric(newVal)) ? parseFloat(newVal) : newVal;
+            }
+
+            currentCell.setValue(rawValue);
         }
 
         if(oldVal != newVal){
@@ -9918,7 +9937,7 @@ sheet.fx.detachEvent = function(){
         isCalculating : false,
 
         /** Calx version */
-        version : '2.2.6',
+        version : '2.2.7',
 
         /** sheets collection */
         sheetRegistry : {},
@@ -10096,6 +10115,13 @@ getCell : function(address){
  */
 getUtility : function(){
     return utility;
+},
+        /**
+ * Get the full forula set object in case its needed
+ * @return {object}     formula object
+ */
+getFormula : function(){
+    return formula;
 },
         /**
  * Evaluate formula specific to the selected sheet,

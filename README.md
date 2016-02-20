@@ -94,7 +94,7 @@ and load the required script into your html page
 <!-- required for number formatting only -->
 <script src="numeral.min.js"></script>
 <!-- the jquery calx lib -->
-<script src="jquery-calx-2.2.5.min.js"></script>
+<script src="jquery-calx-2.2.7.min.js"></script>
 ```
 
 For detailed documentation, [http://www.xsanisty.com/project/calx2](http://www.xsanisty.com/project/calx2).

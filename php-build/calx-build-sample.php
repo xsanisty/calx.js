@@ -7,4 +7,4 @@ require '../js/jquery.flot.min.js';
 require '../js/flot_plugin/jquery.flot.categories.js';
 require '../js/flot_plugin/jquery.flot.pie.js';
 require '../js/flot_plugin/jquery.flot.stack.js';
-require '../jquery-calx-2.2.6.min.js';
+require '../jquery-calx-2.2.7.min.js';
