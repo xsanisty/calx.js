@@ -19,6 +19,7 @@ function cell(sheet, element, address){
     this.address            = '';
     this.remoteDependency   = false;
     this.isCheckbox         = false;
+    this.hasDynamicDependency = false;
 
     /** set cell element, is it in dom, or in memory */
     if(typeof(element) != 'undefined'){

@@ -30,6 +30,7 @@ statistic: {
         return jStat.mean(utility.arrayMerge(arguments));
     },
 
+    /** need fix */
     AVERAGEIF : function(range, criteria, average_range) {
         average_range = (typeof average_range === 'undefined') ? range : average_range;
         var average_count = 0;
@@ -43,6 +44,7 @@ statistic: {
         return result / average_count;
     },
 
+    /** need fix */
     AVERAGEIFS : function() {
         var criteria = (arguments.length - 1) / 2;
         var range = arguments[0];
@@ -178,6 +180,7 @@ statistic: {
         return blanks;
     },
 
+    /** need review */
     COUNTIF : function(range, criteria) {
         var matches = 0, i;
         for (i in range) {
@@ -188,6 +191,7 @@ statistic: {
         return matches;
     },
 
+    /** need review */
     COUNTIFS : function() {
         var criteria = (arguments.length - 1) / 2;
         var range = arguments[0];

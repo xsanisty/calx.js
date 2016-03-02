@@ -25,6 +25,7 @@
 %}
 
 [A-Za-z]+[:][A-Za-z]+               {return 'COLUMNRANGE';}
+[0-9]+[:][0-9]+                     {return 'ROWRANGE';}
 [A-Za-z]+(?=[(])                    {return 'FUNCTION';}
 [A-Za-z]{1,}[A-Za-z_0-9]+           {return 'VARIABLE';}
 [A-Za-z_]+                          {return 'VARIABLE';}
@@ -236,6 +237,14 @@ cell :
     | SHEET '!' COLUMNRANGE
         {
             $$ = sheet.getRemoteColumnRange($1, $3);
+        }
+    | ROWRANGE
+        {
+            $$ = sheet.getRowRange($1)
+        }
+    | SHEET '!' ROWRANGE
+        {
+            $$ = sheet.getRemoteRowRange($1, $3);
         }
 ;
 

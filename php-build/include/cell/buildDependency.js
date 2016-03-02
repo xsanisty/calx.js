@@ -3,11 +3,15 @@
  * @return {void}
  */
 cell.fx.buildDependency = function(){
-    var pattern = {
-            remoteCellRange : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
-            remoteCell      : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+/g,
-            cellRange       : /[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
-            cell            : /[A-Z]+[0-9]+/g
+    var patterns = {
+            remoteColumnRange   : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+\s*:\s*[A-Za-z]+/g,
+            remoteRowRange      : /\#[A-Za-z0-9_]+\s*!\s*[0-9]+\s*:\s*[0-9]+/g,
+            remoteCellRange     : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
+            remoteCell          : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+/g,
+            columnRange         : /[A-Za-z]+\s*:\s*[A-Za-z]+/g,
+            rowRange            : /[0-9]+\s*:\s*[0-9]+/g,
+            cellRange           : /[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
+            cell                : /[A-Z]+[0-9]+/g
         },
         formula     = this.formula,
         sheetKey    = '#'+this.sheet.el.attr('id'),
@@ -27,7 +31,7 @@ cell.fx.buildDependency = function(){
     for(a in this.dependencies){
 
         /** remove self from dependant registry in dependencies list before removing */
-        if(a.indexOf('#') === -1){
+        if(a.indexOf('#') < 0){
             this.dependencies[a].removeDependant(cellAddress);
         }else{
             this.dependencies[a].removeDependant(sheetKey+'!'+cellAddress);
@@ -41,9 +45,9 @@ cell.fx.buildDependency = function(){
     /** if formula exist, start scanning cell address inside the formula */
     if(formula){
         /** searching for cells in formula */
-        for(a in pattern){
-            cellMatch   = formula.match(pattern[a]);
-            formula     = formula.replace(pattern[a], '');
+        for(a in patterns){
+            cellMatch   = formula.match(patterns[a]);
+            formula     = formula.replace(patterns[a], '');
 
             if(null !== cellMatch){
                 switch(a){

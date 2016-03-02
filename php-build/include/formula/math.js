@@ -571,6 +571,7 @@ math : {
         return result;
     },
 
+    /** need review */
     SUMIFS : function() {
         var criteria = (arguments.length - 1) / 2;
         var range = utility.objectToArray(arguments[0]);
@@ -591,6 +592,7 @@ math : {
         return result;
     },
 
+    /** need review */
     SUMPRODUCT : function() {
         for (var a in arguments) {
             arguments[a] = utility.objectToArray(arguments[a]);
