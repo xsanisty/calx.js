@@ -1,4 +1,6 @@
 sheet.fx.callFunction = function(functionName, params){
+    console.log('<==== calling function '+functionName+' ====>');
+    console.log(params);
     var category, func;
 
     func = functionName.toUpperCase();

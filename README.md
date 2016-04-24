@@ -1,5 +1,6 @@
 #jQuery Calx
 
+[![Baikal](https://baikal.io/badges/xsanisty/jquery-calx)](https://baikal.io/xsanisty/jquery-calx)
 [![Join the chat at https://gitter.im/xsanisty/jquery-calx](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/xsanisty/jquery-calx?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 jQuery Calx is an Excel calculation engine and formula parser built as jQuery plugin, it offer spreadsheet ability to process and
