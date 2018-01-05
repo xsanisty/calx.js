@@ -9957,7 +9957,7 @@ init : function (option) {
         sheetIdentifier = $(this).attr('data-calx-identifier');
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
-            sheetIdentifier = 'CALX'+(new Date()).valueOf();
+            sheetIdentifier = 'CALX'+Object.keys(calx.sheetRegistry).length;
 
             calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
 
