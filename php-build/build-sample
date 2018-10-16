@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-$unminifiedFile = '../sample/js/jquery-calx-sample-2.2.7.js';
-$minifiedFile   = '../sample/js/jquery-calx-sample-2.2.7.min.js';
+$unminifiedFile = '../sample/js/jquery-calx-sample-2.2.8.js';
+$minifiedFile   = '../sample/js/jquery-calx-sample-2.2.8.min.js';
 
 /**
  * gathering all js source and build into one package
@@ -29,5 +29,5 @@ $compiler->setCompilationLevel('SIMPLE');
 
 $compiler->compile();
 
-unlink($unminifiedFile);
+//unlink($unminifiedFile);
 ?>
