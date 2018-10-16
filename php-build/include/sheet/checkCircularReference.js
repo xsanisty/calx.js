@@ -18,4 +18,4 @@ sheet.fx.checkCircularReference = function(){
     }
 
     return response;
-}
+};

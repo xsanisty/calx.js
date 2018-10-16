@@ -29,7 +29,7 @@ cell.fx.processDependency = function(){
             this.sheet.affectedCell.push(this.address);
             //console.log(this.sheet.affectedCell);
         }
-    }else{
+    } else {
         //console.log('cell[#'+this.sheet.elementId+'!'+this.address+'] : processing flag is ['+this.processed+'], leaving...')
     }
 

@@ -7,21 +7,11 @@ cell.fx.renderComputedValue = function(){
 
     if(this.formula && this.formula.substring(0,5).toLowerCase() == 'graph'){
         return this;
-    }else if(false !== this.el){
+    } else if (false !== this.el){
         var tagName     = this.el.prop('tagName').toLowerCase(),
             isFormTag   = this.formTags.indexOf(tagName) > -1,
             originalVal = (this.formula) ? this.computedValue : this.value,
-            formattedVal= (
-                            this.format != ''
-                            && typeof(numeral) != 'undefined'
-                            && originalVal !== ''
-                            && originalVal !== false
-                            && originalVal !== null
-                            && data.ERROR.indexOf(originalVal) == -1
-                            && $.isNumeric(originalVal)
-                        )
-                        ? numeral(originalVal).format(this.format)
-                        : originalVal;
+            formattedVal= this.getFormattedValue();
 
         //console.log('render computed value of '+this.address+ ' with formula '+this.formula);
         if(isFormTag){
@@ -39,8 +29,17 @@ cell.fx.renderComputedValue = function(){
 
     //console.log(typeof(this.conditionalStyle));
 
+    //deprecated
     if(typeof(this.conditionalStyle) == 'function'){
         var css = this.conditionalStyle.apply(null, [this.getValue(), this.el]);
+
+        if(typeof(css) == 'object'){
+            this.el.css(css);
+        }
+    }
+
+    if(typeof(this.styleFormatter) == 'function'){
+        var css = this.styleFormatter.apply(null, [this.getValue(), this.el]);
 
         if(typeof(css) == 'object'){
             this.el.css(css);

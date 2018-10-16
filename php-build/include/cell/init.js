@@ -3,11 +3,23 @@
  * @return {void}
  */
 cell.fx.init = function(){
-    var $address = (this.el) ? this.el.attr('data-cell') : this.address,
-        $formula = (this.el) ? this.el.attr('data-formula') : '',
-        $format  = (this.el) ? this.el.attr('data-format') : false,
-        $value   = (this.el) ? this.el.val() : null,
-        tagName  = (this.el) ? this.el.prop('tagName').toLowerCase() : '';
+    /** set cell element, is it in dom, or in memory */
+    if(typeof(this.options.element) != 'undefined'){
+        this.el = $(this.options.element);
+    }else{
+        this.el = false;
+        this.address = typeof(this.options.address) != 'undefined' ? this.options.address : '';
+    }
+
+    /** Set cell options based on given options or data attributes */
+    var $address        = (this.el && this.el.attr('data-cell'))            ? this.el.attr('data-cell')    : this.options.address,
+        $formula        = (this.el && this.el.attr('data-formula'))         ? this.el.attr('data-formula') : this.options.formula,
+        $format         = (this.el && this.el.attr('data-format'))          ? this.el.attr('data-format')  : this.options.format,
+        $value          = (this.el && this.el.val())                        ? this.el.val()                : this.options.value,
+        $formatter      = (this.el && this.el.attr('data-formatter'))       ? window[this.el.attr('data-formatter')]        : this.options.formatter,
+        $unformatter    = (this.el && this.el.attr('data-unformatter'))     ? window[this.el.attr('data-unformatter')]      : this.options.unformatter,
+        $styleFormatter = (this.el && this.el.attr('data-style-formatter')) ? window[this.el.attr('data-style-formatter')]  : this.options.styleFormatter,
+        tagName         = (this.el) ? this.el.prop('tagName').toLowerCase() : '';
 
     /** assign address if data-cell is not present */
     if(!$address || $.trim($address) == ''){
@@ -46,9 +58,13 @@ cell.fx.init = function(){
         $format = this.sheet.config.defaultFormat;
     }
 
-    this.formula    = $formula;
-    this.format     = $format;
-    this.address    = $address;
+    this.formula            = $formula;
+    this.format             = $format;
+    this.address            = $address;
+    this.formatter          = $formatter;
+    this.unformatter        = $unformatter;
+    this.conditionalStyle   = $styleFormatter; //deprecated
+    this.styleFormatter     = $styleFormatter;
 
 
     //console.log('cell[#'+this.sheet.elementId+'!'+$address+'] : Initializing the cell');
@@ -57,9 +73,10 @@ cell.fx.init = function(){
 
         if($format.indexOf('%') > -1 && ($value).indexOf('%') == -1){
             rawValue = rawValue/100;
-
         }
-    }else{
+    } else if (this.unformatter) {
+        rawValue = this.unformatter($value, $format);
+    } else {
         rawValue = ($.isNumeric($value)) ? parseFloat($value) : $value;
     }
 

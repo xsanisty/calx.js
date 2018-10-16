@@ -1,3 +1,7 @@
+/**
+ * Get final raw value of the cell
+ * @return {mixed}     the cell value
+ */
 cell.fx.getValue = function(){
     var returnValue;
 

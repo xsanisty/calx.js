@@ -12,6 +12,9 @@ function sheet(identifier, element, config){
     /** @type {object} jQuery dom element */
     this.el           = $(element);
 
+    /** @type {string} The id of the element where the sheet is initialized and bound */
+    this.elementId    = this.el.attr('id');
+
     /** @type {string} Default language setting */
     this.lang         = 'en';
 
@@ -22,16 +25,13 @@ function sheet(identifier, element, config){
     this.variables    = {};
 
     /** @type {object} Sheet configuration object */
-    this.config       = $.extend({}, defaultConfig, config);
+    this.config       = config;
 
     /** @type {number} Cell counter, count total cell in the sheet */
     this.counter      = 1;
 
     /** @type {boolean} Indicate if the sheet has relation with other sheet */
     this.relatedSheet = false;
-
-    /** @type {string} The id of the element where the sheet is initialized and bound */
-    this.elementId    = this.el.attr('id');
 
     /** @type {object} Registry containing sheets that depend on this sheet */
     this.dependant    = {};

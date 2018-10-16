@@ -23,7 +23,9 @@ sheet.fx.update = function(){
 
         if(cellAddr && typeof(sheet.cells[cellAddr]) == 'undefined'){
             //console.log('new cell found '+cellAddr);
-            $cell = new cell(sheet, this);
+            var cellOptions = $.extend({element: this, address: cellAddr}, defaultCellOptions, sheet.config.data[cellAddr]);
+
+            $cell = new cell(sheet, cellOptions);
             sheet.registerCell($cell);
         }else{
             //console.log('resync cell '+cellAddr);

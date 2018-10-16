@@ -5,17 +5,25 @@
  * @return {object}             jQuery object
  */
 init : function (option) {
-    var a, sheetIdentifier;
+    var a, sheetIdentifier, sheetElementId, sheetOption;
 
     /** initializing sheet object on each elements */
     this.each(function(){
         //console.log('initialize sheet');
         sheetIdentifier = $(this).attr('data-calx-identifier');
+        sheetElementId  = $(this).attr('id');
+
+        /** extract option data for individual sheet if it exists */
+        sheetOption     = $.extend({}, defaultConfig, option);
+
+        if (typeof(sheetOption.data[sheetElementId]) !== 'undefined') {
+            sheetOption.data = sheetOption.data[sheetElementId];
+        }
 
         if(!sheetIdentifier || typeof(calx.sheetRegistry[sheetIdentifier]) == 'undefined'){
             sheetIdentifier = 'CALX'+(new Date()).valueOf();
 
-            calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, option);
+            calx.sheetRegistry[sheetIdentifier] = new sheet(sheetIdentifier, this, sheetOption);
 
         }else{
             //console.log('second call should be refresh');

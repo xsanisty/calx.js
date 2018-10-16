@@ -14,6 +14,18 @@ cell.fx.resyncValue = function(){
             elValue = this.el.attr('data-unchecked-value') || '';
         }
 
-        this.setValue(elValue);
+        if(this.format && typeof(numeral) != 'undefined' && $.trim(elValue) !== ''){
+            var rawValue = numeral().unformat(elValue);
+
+            if(this.format.indexOf('%') > -1 && (elValue).indexOf('%') == -1){
+                rawValue = rawValue/100;
+            }
+        } else if (this.unformatter) {
+            rawValue = this.unformatter(elValue, this.format);
+        } else {
+            rawValue = ($.isNumeric(elValue)) ? parseFloat(elValue) : elValue;
+        }
+
+        this.setValue(rawValue);
     }
 };

@@ -5,3 +5,11 @@
 cell.fx.getFormat = function(){
     return this.format;
 };
+
+cell.fx.getFormatter = function(){
+    return this.formatter;
+}
+
+cell.fx.getUnformatter = function(){
+    return this.unformatter;
+}

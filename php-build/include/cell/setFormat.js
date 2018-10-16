@@ -15,3 +15,11 @@ cell.fx.setFormat = function(format){
 
     return this;
 };
+
+cell.fx.setFormatter = function(formatter){
+    this.formatter = formatter;
+}
+
+cell.fx.setUnformatter = function(unformatter){
+    this.unformatter = unformatter;
+}
