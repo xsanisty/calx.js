@@ -29,7 +29,7 @@ if(typeof(jStat)     == 'undefined'){
     if(typeof($) == 'undefined'){
         return false;
     }
-    
+
     /************************************************
      *                Begin of IE Hack              *
      ************************************************/
@@ -6044,7 +6044,7 @@ logical : {
 
 },
     geometry : {
-    
+
 },
     text:{
     CONCAT : function(){
@@ -6313,7 +6313,7 @@ logical : {
     }
 },
     trigonometry:{
-    
+
 },
     general: {
 
@@ -10171,7 +10171,7 @@ sheet.fx.attachEvent = function(){
             currentCell.setValue(newVal);
 
             currentSheet.el
-                        .find('[name='+currentCell.el.attr('name')+']')
+                        .find('[name="'+currentCell.el.attr('name')+'"]')
                         .not(currentCell.el)
                         .each(function(){
                             var radioBox     = $(this),
