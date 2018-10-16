@@ -29,7 +29,7 @@ logical : {
         if (test) {
             return (typeof then_value === 'undefined') ? true : then_value;
         } else {
-            return (typeof otherwise_value === 'undefined') ? true : otherwise_value;
+            return (typeof otherwise_value === 'undefined') ? false : otherwise_value;
         }
     },
 
