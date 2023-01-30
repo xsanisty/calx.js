@@ -11,9 +11,9 @@
     "browserify": "^17.0.0",
     "jest": "^27.5.1",
     "jison-gho": "^0.6.1-216",
-    "ts-loader": "^7.0.3",
-    "typescript": "^4.6.2",
-    "webpack": "^4.43.0",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.9.2",
+    "webpack": "^5.0.0",
     "webpack-cli": "^4.5.0"
   },
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xsanisty/calxjs.git"
+    "url": "git+https://github.com/xsanisty/calx.js.git"
   },
   "keywords": [
     "calx",
@@ -36,7 +36,7 @@
   "author": "Xsanisty",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xsanisty/calxjs/issues"
+    "url": "https://github.com/xsanisty/calx.js/issues"
   },
   "homepage": "https://xsanisty.com/project/calxjs",
   "directories": {

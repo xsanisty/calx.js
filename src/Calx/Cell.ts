@@ -1,30 +1,8 @@
 import Sheet from './Sheet';
-
-export enum CellDataType {
-    TEXT    = 'text',
-    NUMBER  = 'number',
-    DATE    = 'date',
-}
-
-export enum CellErrorType {
-    DIV_BY_ZERO  = '#DIV/0!',
-    INVALID_NAME = '#NAME?',
-    INVALID_REF  = '#REF!',
-    INVALID_VAL  = '#VALUE!',
-    INVALID_NUM  = '#NUM!',
-    NA           = '#N/A!',
-    NULL         = '#NULL!'
-}
-
-export enum CellEvent {
-    VALUE_CHANGED       = 'value.changed',
-    FORMULA_CHANGED     = 'fomula.changed',
-    FORMULA_CALCULATED  = 'formula.calculated',
-}
-
-export interface CellFormatter {
-    format(rawValue : any) : string;
-}
+import { Event } from './Cell/Event';
+import { DataType } from './Cell/DataType';
+import { ErrorType } from './Cell/ErrorType';
+import { FormatterInterface } from './Cell/Formatter';
 
 export default class Cell {
     private _value : any;           //Cell original value
@@ -32,8 +10,8 @@ export default class Cell {
     private _formula : string;      //Cell formula
     private _computed : any;        //Result of the computed formula
 
-    protected precedents :Record<string, Cell> = {}; //Cells registry required by the formula
-    protected dependents :Record<string, Cell> = {}; //Cells registry that depend on this cell
+    protected precedents : Record<string, Cell> = {}; //Cells registry required by the formula
+    protected dependents : Record<string, Cell> = {}; //Cells registry that depend on this cell
 
     /** Flags */
     private _affected : boolean = false;
@@ -41,13 +19,13 @@ export default class Cell {
     private _hasDynamicPrecedents : boolean = false;
 
     protected format : string;
-    protected formatter : CellFormatter;
+    protected formatter : FormatterInterface;
     protected el ?: HTMLElement;
 
     constructor(
         address : string,
         protected sheet : Sheet,
-        protected _type : string = CellDataType.TEXT
+        protected _type : string = DataType.TEXT
     ) {
         this.address = address;
         this.init();
@@ -64,7 +42,7 @@ export default class Cell {
 
     /** Check if cell has error value */
     public isError() {
-        return Object.values(CellErrorType).includes(this.value as CellErrorType);
+        return Object.values(ErrorType).includes(this.value as ErrorType);
     }
 
     /** Check if cell has empty-able value, like null, empty string, undefined */
@@ -116,7 +94,7 @@ export default class Cell {
         this._formula = formula;
 
         this.sheet.dispatcher.dispatch(
-            CellEvent.FORMULA_CHANGED, 
+            Event.FORMULA_CHANGED, 
             {
                 cell : this.address, 
                 oldFormula : oldFormula, 
@@ -139,6 +117,6 @@ export default class Cell {
         this._value = value;
         this._formula = null;
 
-        this.sheet.dispatcher.dispatch(CellEvent.VALUE_CHANGED, {cell : this.address, value : value});
+        this.sheet.dispatcher.dispatch(Event.VALUE_CHANGED, {cell : this.address, value : value});
     }
 }

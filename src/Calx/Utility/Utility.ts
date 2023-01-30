@@ -5,7 +5,7 @@ import Cell from "../Cell";
  * @param  {integer} num    numeric value translated to alphabet
  * @return {string}         alphabet representation of the value
  */
-export function numToChar(num: number): string {
+export function numToStr(num: number): string {
     var s = "";
     num = Math.round(num - 1);
     while (num >= 0) {
@@ -20,7 +20,7 @@ export function numToChar(num: number): string {
  * @param  {string} char    Alphabet [A-Z]
  * @return {integer}        Integer representation of the alphabet
  */
-export function charToNum(char: string): number {
+export function strToNum(char: string): number {
     const chars = char.toUpperCase().split('');
     const base = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
     let i, j, result = 0;
@@ -53,11 +53,11 @@ export function getCellsInRange(range : string) {
         rangeEnd = range.split(':')[1],
         boundaries = {
             start : {
-                col : charToNum(rangeStart.match(regex.alpha)[0]), //alpha part
+                col : strToNum(rangeStart.match(regex.alpha)[0]), //alpha part
                 row : parseInt(rangeStart.match(regex.num)[0]), //numeric part
             },
             end : {
-                col : charToNum(rangeEnd.match(regex.alpha)[0]), //alpha part
+                col : strToNum(rangeEnd.match(regex.alpha)[0]), //alpha part
                 row : parseInt(rangeEnd.match(regex.num)[0]), //numeric part
             }
         },
@@ -73,7 +73,7 @@ export function getCellsInRange(range : string) {
             row <= Math.max(boundaries.start.row, boundaries.end.row); 
             row++
         ) {
-            cellRange.push(numToChar(col) + row + '');
+            cellRange.push(numToStr(col) + row + '');
         }
     }
 
@@ -216,7 +216,7 @@ export function rangeToTable(cellRange: Array<Array<any>>): Array<Array<any>> {
 
     for (cell in cellRange) {
 
-        col = charToNum(cell.match(alphaPattern)[0]) - 1;
+        col = strToNum(cell.match(alphaPattern)[0]) - 1;
         row = parseInt(cell.match(numPattern)[0], 10) - 1;
 
         if (typeof arrayTable[row] == 'undefined') {

@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/Calx.ts',
@@ -20,6 +21,13 @@ module.exports = {
     extensions: [ '.tsx', '.ts', '.js' ],
     
   },
+  devtool: false,
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      filename: 'calx.js.map',
+      exclude: ['vendor.js'],
+    })
+  ],
   output: {
     filename: 'calx.js',
     path: path.resolve(__dirname, './dist'),
