@@ -1,13 +1,18 @@
 import Workbook from './Workbook';
 import Cell from './Cell';
 import EventDispatcher from './Utility/EventDispatcher';
-import { Event } from './Sheet/Event';
+import { SheetEvent, SheetState } from './Sheet/SheetEvent';
+import CellRegistry from './Sheet/CellRegistry';
+import DependencyTree from './Workbook/DependencyTree';
+import DependencyBuilder from './Workbook/DependencyBuilder';
 
 export default class Sheet {
     private _el : HTMLElement;
     private _id : string;
-    private _cells : Record<string, Cell> = {};
-    private _eventPaused : boolean = false;
+    private _cells : CellRegistry;
+    private _states : Record<string, any> = {
+        calculation : SheetState.CALCULATION_IDLE,
+    };
 
     public needCalculate : Array<string>;
     public needRender : Array<HTMLElement>;
@@ -20,6 +25,11 @@ export default class Sheet {
         this._id = this._generateId();
     }
 
+    /**
+     * Generate unique id for sheet.
+     *
+     * @returns generated id
+     */
     private _generateId() : string {
         return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, (c) => {
             const random = Math.floor(Math.random() * 16);
@@ -35,19 +45,28 @@ export default class Sheet {
 
         this._el = el;
 
-        !this._eventPaused && this.dispatcher.dispatch(Event.ELEMENT_ATTACHED, {sheet : this, el : el});
+        this.dispatcher.dispatch(SheetEvent.ELEMENT_ATTACHED, {sheet : this, el : el});
     }
 
+    /**
+     * Get element where sheet is mounted
+     */
     public get element() : HTMLElement {
         return this._el;
     }
 
+    /**
+     * Get sheet id
+     */
     public get id() : string {
         return this._id;
     }
 
+    /**
+     * Get cells collection
+     */
     public get cells() : Record<string, Cell> {
-        return this._cells
+        return this._cells.all();
     }
 
     /**
@@ -57,46 +76,46 @@ export default class Sheet {
      */
     public calculate(options : {withoutEvent : boolean} = {withoutEvent : false}) {
         if (options.withoutEvent) {
-            this.pauseEvent();
+            this.dispatcher.pauseListener();
         }
 
 
-        this.resumeEvent();
+        this.dispatcher.resumeListener();
+    }
+
+    /**
+     * Request particular cell to be calculated.
+     *
+     * @param address cell address
+     */
+    public requestCalculate(address : string) {
+
     }
 
     /**
      * Get specified cell object
      */
     public getCell(address : string) : Cell {
-        if (!this._cells[address]) {
-            const cell = new Cell(address, this);
-            this._cells[address] = cell;
-        }
+        return this._cells.get(address);
+    }
 
-        return this._cells[address];
+    public getCellValue(cellAddr : string) : any {
+        return this.getCell(cellAddr).value;
     }
 
     /**
      * Evaluate the given formula.
      */
     public eval(formula : string) : any {
-        this.workbook.parser.yy.activeSheet = this;
+        this.workbook.setActiveSheet(this);
 
         return this.workbook.parser.parse(formula);
     }
 
-    public pauseEvent() {
-        this._eventPaused = true;
-    }
-
-    public resumeEvent() {
-        this._eventPaused = false;
-    }
-
     /**
-     * Build dependency graph for all registered cells
+     * Build dependency tree for all registered cells
      */
-    public buildDependencyGraph() : void {
+    public buildDependencyTree() : void {
 
     }
 }

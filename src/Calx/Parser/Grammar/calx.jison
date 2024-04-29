@@ -72,7 +72,7 @@
 
 %start expressions
 
-%% 
+%%
 
 /* language grammar */
 
@@ -84,7 +84,7 @@ expressions
 e :
     variableSequence
         {
-            $$ = yy.activeSheet.getVariable($1)
+            $$ = yy.workbook.getVariable($1)
         }
     | TRUE
         {
@@ -136,15 +136,15 @@ e :
         }
     | e LTE e
         {
-            $$ = yy.comparator.lessEqualThan.call(yy, $1, $3);
+            $$ = yy.comparator.lessEqualThan.call(yy.activeSheet, $1, $3);
         }
     | e GTE e
         {
-            $$ = yy.comparator.greaterEqualThan.call(yy, $1, $3);
+            $$ = yy.comparator.greaterEqualThan.call(yy.activeSheet, $1, $3);
         }
     | e NE e
         {
-            $$ = yy.comparator.notEqual.call(yy, $1, $3);
+            $$ = yy.comparator.notEqual.call(yy.activeSheet, $1, $3);
         }
     | e NOT e
         {
@@ -190,17 +190,17 @@ e :
         }
     | IF '(' expseq ',' expseq ',' expseq ')'
         {
-            $$ = yy.activeSheet.eval($2) 
-                ? yy.activeSheet.eval($4) 
+            $$ = yy.activeSheet.eval($2)
+                ? yy.activeSheet.eval($4)
                 : yy.activeSheet.eval($6);
         }
     | FUNCTION '(' ')'
         {
-            $$ = yy.utility.callFormula($1);
+            $$ = yy.workbook.callFunction($1);
         }
     | FUNCTION '(' expseq ')'
         {
-            $$ = yy.utility.callFormula($1, $3);
+            $$ = yy.workbook.callFunction($1, $3);
         }
     | cell
     | error

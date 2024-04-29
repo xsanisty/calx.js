@@ -10,9 +10,13 @@ import Comparator from "./Utility/Comparator";
 
 export default class Workbook {
     private _sheets : Record<string, Sheet>;
+    private _functions : Record<string, Function>;
     private _parser : Parser;
     private _dispatcher : EventDispatcher;
     private _nameManager : NameManager
+
+    private _deps : DependencyTree;
+    private _depsBuilder : DependencyBuilder;
 
     private constructor(
         parser : Parser,
@@ -21,10 +25,14 @@ export default class Workbook {
     ) {
         this._sheets = {};
         this._parser = parser;
-        this._dispatcher = dispatcher;
-        this._nameManager = nameManager;
+        this._dispatcher    = dispatcher;
+        this._nameManager   = nameManager;
 
         this._nameManager.setContext(this);
+
+        this._parser.yy.nameManager = this._nameManager;
+        this._parser.yy.workbook    = this;
+        this._parser.yy.sheets      = this._sheets;
     }
 
     public get parser() {
@@ -35,7 +43,54 @@ export default class Workbook {
         return this._dispatcher;
     }
 
-    /** 
+    public setActiveSheet(sheet : Sheet) {
+        this._parser.yy.activeSheet = sheet;
+    }
+
+    /**
+     * Calculate the whole workbook
+     */
+    public calculcate() {
+
+    }
+
+    /**
+     * Build the workbook, create dependency tree, and other necessary things
+     */
+    public build() {
+
+    }
+
+    /**
+     * Hydrate object using data from the workbook recusively
+     *
+     * {
+     *   someKey : '#sheet1!A1',
+     *   anotherKey : '#sheet2!B2',
+     *   nested : {
+     *    key : '#sheet3!C3'
+     *   }
+     * }
+     *
+     * @param obj
+     */
+    public hydrateObj(obj : any) {
+        for (const key in obj) {
+            if (typeof obj[key] === 'object') {
+                this.hydrateObj(obj[key]);
+            } else {
+                if (typeof obj[key] === 'string' && obj[key].startsWith('#')) {
+                    const [sheetName, address] = obj[key].split('!');
+
+                    if (sheetName in this._sheets) {
+                        obj[key] = this._sheets[sheetName].getCell(address).value;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Create new sheet object and register it to workbook sheet registry and parser shared context.
      */
     public createSheet(name: string, element ?: HTMLElement) :Sheet
@@ -47,7 +102,7 @@ export default class Workbook {
         if (this._sheets[name]) {
             throw new Error(`Sheet with the name "${name}" is already exists`);
         }
-        
+
         const sheet = new Sheet(this, name);
 
         if (element) {
@@ -60,15 +115,15 @@ export default class Workbook {
         return sheet;
     }
 
-    /** 
-     * Get sheets collection from the workbook 
+    /**
+     * Get sheets collection from the workbook
      */
     public getSheets() : Record<string, Sheet> {
         return this._sheets;
     }
 
-    /** 
-     * Get particular sheet in the workbook sheet registry 
+    /**
+     * Get particular sheet in the workbook sheet registry
      */
     public getSheet(name : string) : Sheet | void {
         if (name in this._sheets) {
@@ -78,8 +133,8 @@ export default class Workbook {
         throw Error(`Sheet not found with name ${name}`);
     }
 
-    /** 
-     * Create workbook object from given config 
+    /**
+     * Create workbook object from given config
      */
     public static createFromConfig(config : Config) {
         const sharedContext = {
@@ -91,7 +146,7 @@ export default class Workbook {
         const parser = createParser(sharedContext);
         const dispatcher = new EventDispatcher();
         const nameManager = new NameManager();
-        
+
         const workbook = new Workbook(parser, nameManager, dispatcher);
 
         sharedContext.workbook = workbook;
@@ -100,7 +155,7 @@ export default class Workbook {
         return workbook;
     }
 
-    /** 
+    /**
      * Create workbook object from given element, and parse related data-tag
      */
     public static createFromElement(element : HTMLElement, config ?: Config) {
@@ -110,11 +165,12 @@ export default class Workbook {
             comparator : null,
         } as SharedContext);
 
-        const dispatcher = new EventDispatcher();
-        const nameManager = new NameManager();
-        
-        const workbook = new Workbook(parser, nameManager, dispatcher);
+        const dispatcher    = new EventDispatcher();
+        const nameManager   = new NameManager();
+        const workbook      = new Workbook(parser, nameManager, dispatcher);
         /** TODO : traverse element and read the configuration and configure the workbook */
+
+        share
 
         return workbook;
     }

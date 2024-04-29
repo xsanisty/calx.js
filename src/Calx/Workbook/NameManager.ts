@@ -1,5 +1,8 @@
 import Workbook from "../Workbook";
 
+/**
+ * Manage named cell or cell range
+ */
 export class NameManager {
     private _workbook : Workbook
     private _nameRegistry : Record<string, string> = {};
@@ -10,7 +13,7 @@ export class NameManager {
 
     /**
      * Define named cell or cell range.
-     * 
+     *
      * @param name the alias name
      * @param target the cell or cell range to be aliased
      */
@@ -19,9 +22,9 @@ export class NameManager {
     }
 
     /**
-     * 
+     *
      * @param name the alias name
-     * 
+     *
      * @returns target cell value or list of cell address and value
      */
     public resolve(name : string) {
@@ -30,7 +33,7 @@ export class NameManager {
 
     /**
      * Remove the alias
-     * 
+     *
      * @param name the alias name
      */
     public remove(name : string) {

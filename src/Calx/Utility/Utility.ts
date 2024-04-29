@@ -44,7 +44,7 @@ export function getCellsInRange(range : string) {
             num     : /[0-9]+/,
             cellRange   : /^[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+$/,
         };
-    
+
     if (!range.match(regex.cellRange)) {
         throw new Error("Invalid range syntax!");
     }
@@ -62,15 +62,15 @@ export function getCellsInRange(range : string) {
             }
         },
         cellRange = [];
-        
+
     for (
-        let col = Math.min(boundaries.start.col, boundaries.end.col) ; 
-        col <= Math.max(boundaries.start.col, boundaries.end.col); 
+        let col = Math.min(boundaries.start.col, boundaries.end.col) ;
+        col <= Math.max(boundaries.start.col, boundaries.end.col);
         col++
     ) {
         for (
-            let row = Math.min(boundaries.start.row, boundaries.end.row); 
-            row <= Math.max(boundaries.start.row, boundaries.end.row); 
+            let row = Math.min(boundaries.start.row, boundaries.end.row);
+            row <= Math.max(boundaries.start.row, boundaries.end.row);
             row++
         ) {
             cellRange.push(numToStr(col) + row + '');
@@ -170,13 +170,7 @@ export function toArray(args : any) {
  * @return {array}      Plain array
  */
 export function objectToArray(obj: any) {
-    const array = [];
-
-    for (let a in obj) {
-        array.push(obj[a]);
-    }
-
-    return array;
+    return Object.values(obj);
 }
 
 /**

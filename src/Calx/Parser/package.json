@@ -2,5 +2,5 @@
     "name": "@xsanisty/calxjs-parser",
     "version": "3.0.0",
     "description": "Calx Formula Parser",
-    "main": "Parser.js"
+    "main": "dist/calx.js"
 }

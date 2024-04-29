@@ -8,6 +8,11 @@ export type SharedContext = {
     workbook ?: Workbook,
 
     /**
+     * Collection of sheets in the workbook
+     */
+    sheets : Record<string, Sheet>,
+
+    /**
      * Current active sheet which the parser will refer to when parsing formula
      */
     activeSheet ?: Sheet,
@@ -27,5 +32,5 @@ export type SharedContext = {
         greaterThan : (a : any, b : any) => boolean,
         lessEqualThan : (a : any, b : any) => boolean,
         greaterEqualThan : (a : any, b : any) => boolean,
-    } 
+    }
 }

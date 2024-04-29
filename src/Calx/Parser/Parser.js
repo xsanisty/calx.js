@@ -1035,8 +1035,8 @@ case 27:
 case 28:
     /*! Production::    e : IF "(" expseq "," expseq "," expseq ")" */
 
-    this.$ = yy.activeSheet.eval(yyvstack[yysp - 6]) 
-    ? yy.activeSheet.eval(yyvstack[yysp - 4]) 
+    this.$ = yy.activeSheet.eval(yyvstack[yysp - 6])
+    ? yy.activeSheet.eval(yyvstack[yysp - 4])
     : yy.activeSheet.eval(yyvstack[yysp - 2]);
     break;
 
