@@ -9,6 +9,7 @@ export enum SheetEvent {
 
     CELL_ADDED          = 'cell.added',
     CELL_REMOVED        = 'cell.removed',
+    CELL_CREATED        = "CELL_CREATED",
 
     ELEMENT_ATTACHED    = 'element.attached',
     ELEMENT_DETACHED    = 'element.detached',

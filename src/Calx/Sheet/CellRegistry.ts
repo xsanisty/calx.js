@@ -1,6 +1,7 @@
 import Cell from "../Cell";
 import Sheet from "../Sheet";
 import EventDispatcher from "../Utility/EventDispatcher";
+import { CellData } from "../Workbook/Data";
 import { SheetEvent } from "./SheetEvent";
 
 export default class CellRegistry {
@@ -31,6 +32,25 @@ export default class CellRegistry {
         } else {
             // create new cell
             const cell = new Cell(address, this.sheet );
+        }
+    }
+
+    public has (address : string) : boolean {
+        return this.cells.hasOwnProperty(address);
+    }
+
+    public create (address : string, data : CellData) : Cell {
+        if (this.has(address)) {
+            throw new Error(`Cell ${address} already exists`);
+        }
+
+        const cell = new Cell(address, this.sheet, data);
+
+        this.cells[cell.address] = cell;
+
+        this.event.dispatch(SheetEvent.CELL_CREATED, {cell : cell});
+
+        return cell;
     }
 
     public all () : Record<string, Cell> {
