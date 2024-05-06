@@ -2,11 +2,12 @@ import Sheet from "./Sheet";
 import { Parser } from "./Parser/Parser";
 import createParser from "./Parser/ParserFactory";
 import { SharedContext } from "./Parser/SharedContext";
-import * as utility from './Utility/Utility';
+import * as Utility from './Utility/Utility';
 import EventDispatcher from "./Utility/EventDispatcher";
 import { NameManager } from "./Workbook/NameManager";
-import { Config } from "./Workbook/Config";
+import { CellData, Data } from "./Workbook/Data";
 import Comparator from "./Utility/Comparator";
+import Cell from "./Cell";
 
 export default class Workbook {
     private _sheets : Record<string, Sheet>;
@@ -45,6 +46,14 @@ export default class Workbook {
 
     public setActiveSheet(sheet : Sheet) {
         this._parser.yy.activeSheet = sheet;
+    }
+
+    public getActiveSheet() {
+        return this._parser.yy.activeSheet;
+    }
+
+    public isValidCellAddress(address : string) {
+        return address.match(/^[A-Z]+\d+$/);
     }
 
     /**
@@ -133,13 +142,36 @@ export default class Workbook {
         throw Error(`Sheet not found with name ${name}`);
     }
 
+
+    /**
+     * Load configuration to workbook
+     */
+    public loadData(data : Data) {
+        for (const sheetName in data.sheets) {
+            const sheet = this.createSheet(sheetName, data.sheets[sheetName]?.element);
+
+            for (const cellKey in data.sheets[sheetName].cells) {
+                const cellData = data.sheets[sheetName].cells[cellKey];
+
+                // check if cell is individual cell or grouped cells
+                if (cellData.hasOwnProperty('formula')) {
+                    sheet.createCell(cellKey, cellData);
+                } else {
+                    for (const cellKey in cellData) {
+                        sheet.createCell(cellKey, cellData[cellKey] as CellData);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Create workbook object from given config
      */
-    public static createFromConfig(config : Config) {
+    public static createFromData(data : Data) {
         const sharedContext = {
             sheets : {},
-            utility : utility,
+            utility : Utility,
             comparator : Comparator,
         } as SharedContext;
 
@@ -150,7 +182,9 @@ export default class Workbook {
         const workbook = new Workbook(parser, nameManager, dispatcher);
 
         sharedContext.workbook = workbook;
+
         /** TODO : read the configuration and configure the workbook */
+        workbook.loadData(data);
 
         return workbook;
     }
@@ -158,19 +192,20 @@ export default class Workbook {
     /**
      * Create workbook object from given element, and parse related data-tag
      */
-    public static createFromElement(element : HTMLElement, config ?: Config) {
+    public static createFromElement(element : HTMLElement, data ?: Data) {
         const parser = createParser({
             sheets : {},
-            utility : utility,
+            utility : Utility,
             comparator : null,
         } as SharedContext);
 
         const dispatcher    = new EventDispatcher();
         const nameManager   = new NameManager();
         const workbook      = new Workbook(parser, nameManager, dispatcher);
+
         /** TODO : traverse element and read the configuration and configure the workbook */
 
-        share
+        workbook.loadData(data);
 
         return workbook;
     }

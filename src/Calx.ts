@@ -1,18 +1,18 @@
 import Workbook from "./Calx/Workbook";
-import { Config } from "./Calx/Workbook/Config";
+import { Data } from "./Calx/Workbook/Data";
 
 export function createWorkbook() {
-    const config : Config = {
+    const data : Data = {
         sheets : {},
     }
 
-    return createWorkbookFromConfig(config);
+    return createWorkbookFromData(data);
 }
 
-export function createWorkbookFromConfig(config : Config) {
-    return Workbook.createFromConfig(config);
+export function createWorkbookFromData(data : Data) {
+    return Workbook.createFromData(data);
 }
 
-export function createWorkbookFromElement(element : HTMLElement, config ?: Config) {
-    return Workbook.createFromElement(element, config);
+export function createWorkbookFromElement(element : HTMLElement, data ?: Data) {
+    return Workbook.createFromElement(element, data);
 }

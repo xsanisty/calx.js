@@ -5,6 +5,7 @@ import { SheetEvent, SheetState } from './Sheet/SheetEvent';
 import CellRegistry from './Sheet/CellRegistry';
 import DependencyTree from './Workbook/DependencyTree';
 import DependencyBuilder from './Workbook/DependencyBuilder';
+import { CellData } from './Workbook/Data';
 
 export default class Sheet {
     private _el : HTMLElement;
@@ -101,6 +102,10 @@ export default class Sheet {
 
     public getCellValue(cellAddr : string) : any {
         return this.getCell(cellAddr).value;
+    }
+
+    public createCell(address : string, data : CellData) : Cell {
+        return this._cells.create(address, data);
     }
 
     /**
