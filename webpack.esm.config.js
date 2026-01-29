@@ -27,18 +27,22 @@ module.exports = {
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
-
   },
   devtool: false,
   plugins: [
     new webpack.SourceMapDevToolPlugin({
-      filename: 'calx.js.map',
+      filename: 'calx.esm.js.map',
       exclude: ['vendor.js'],
     })
   ],
   output: {
-    filename: 'index.js',
+    filename: 'calx.esm.js',
     path: path.resolve(__dirname, './dist'),
-    libraryTarget: 'umd',
+    library: {
+      type: 'module',
+    },
+  },
+  experiments: {
+    outputModule: true,
   },
 };

@@ -2,7 +2,20 @@
   "name": "@xsanisty/calxjs",
   "version": "3.0.0",
   "description": "Spreadsheet Calculation Engine",
-  "main": "dist/calx.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/calx.esm.js",
+      "require": "./dist/index.js"
+    },
+    "./jquery": "./dist/jquery.calx.js"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/jquery.calx.js",
+    "dist/index.d.ts"
+  ],
   "dependencies": {
     "@formulajs/formulajs": "^3.1.1",
     "chevrotain": "^10.5.0",
