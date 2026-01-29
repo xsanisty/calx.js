@@ -7,6 +7,7 @@ import { CellRegistry } from './Sheet/CellRegistry';
 import { DependencyTree } from './Workbook/DependencyTree';
 import { DependencyBuilder } from './Workbook/DependencyBuilder';
 import { CellData } from './Workbook/Data';
+import { strToNum, numToStr, translateFormula } from './Utility/Utility';
 
 export class Sheet {
     private _el!: any;
@@ -393,5 +394,67 @@ export class Sheet {
         }
 
         return result;
+    }
+
+    /**
+     * Load data from a 2D array into the sheet, starting at the anchor cell
+     * Formulas are automatically translated to the correct cell addresses based on the anchor offset
+     *
+     * @param data 2D array of values (numbers, strings, or formulas starting with =)
+     * @param anchor Cell address where the array should start (e.g., 'B2')
+     *
+     * @example
+     * sheet.loadArray([
+     *   [100, 200, 300],
+     *   [400, 500, 600],
+     *   ['=SUM(A1:C1)', 0, 0]
+     * ], 'B2');
+     * // Creates cells at B2, C2, D2, B3, C3, D3, B4, C4, D4
+     * // Formula '=SUM(A1:C1)' at array[2][0] becomes '=SUM(B2:D2)' at cell B4
+     */
+    public loadArray(data: any[][], anchor: string): void {
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error('Data must be a non-empty 2D array');
+        }
+
+        // Parse anchor address to get column and row
+        const anchorMatch = anchor.match(/^([A-Z]+)(\d+)$/i);
+        if (!anchorMatch) {
+            throw new Error(`Invalid anchor address: ${anchor}`);
+        }
+
+        const anchorCol = anchorMatch[1].toUpperCase();
+        const anchorRow = parseInt(anchorMatch[2]);
+        const anchorColNum = strToNum(anchorCol);
+
+        // Calculate the offset that applies to all formulas in the array
+        // This is the offset from the theoretical position (A1) to the actual anchor
+        const formulaRowOffset = anchorRow - 1;
+        const formulaColOffset = anchorColNum - 1;
+
+        // Iterate through the array and create cells
+        for (let rowIdx = 0; rowIdx < data.length; rowIdx++) {
+            const row = data[rowIdx];
+            if (!Array.isArray(row)) {
+                throw new Error(`Row ${rowIdx} is not an array`);
+            }
+
+            for (let colIdx = 0; colIdx < row.length; colIdx++) {
+                const value = row[colIdx];
+                const targetCol = numToStr(anchorColNum + colIdx);
+                const targetRow = anchorRow + rowIdx;
+                const targetAddress = `${targetCol}${targetRow}`;
+
+                // Determine if it's a formula or a value
+                if (typeof value === 'string' && value.startsWith('=')) {
+                    // Translate formula using the same offset for all cells
+                    const translatedFormula = translateFormula(value, formulaRowOffset, formulaColOffset);
+                    this.createCell(targetAddress, { formula: translatedFormula });
+                } else {
+                    // Regular value
+                    this.createCell(targetAddress, { value });
+                }
+            }
+        }
     }
 }
