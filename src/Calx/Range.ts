@@ -29,15 +29,18 @@ export class Range {
      * Parse address and determine if single cell or range
      */
     private parseAddress(address: string) {
+        // Remove $ signs (absolute reference markers) for cell lookup
+        const cleanAddress = (addr: string) => addr.replace(/\$/g, '');
+
         if (address.includes(':')) {
-            // Range like "A1:B10"
+            // Range like "A1:B10" or "$A$1:$B$10"
             const [start, end] = address.split(':');
-            this._startAddress = start.trim();
-            this._endAddress = end.trim();
+            this._startAddress = cleanAddress(start.trim());
+            this._endAddress = cleanAddress(end.trim());
         } else {
-            // Single cell like "A1"
-            this._startAddress = address.trim();
-            this._endAddress = address.trim();
+            // Single cell like "A1" or "$A$1"
+            this._startAddress = cleanAddress(address.trim());
+            this._endAddress = cleanAddress(address.trim());
         }
     }
 

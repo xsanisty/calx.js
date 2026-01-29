@@ -11,7 +11,7 @@ import { CellData } from './Workbook/Data';
 export class Sheet {
     private _el!: any;
     private _id : string;
-    private _cells : CellRegistry;
+    private _cells! : CellRegistry;
     private _states : Record<string, any> = {
         calculation : SheetState.CALCULATION_IDLE,
     };
@@ -21,12 +21,18 @@ export class Sheet {
 
     public needCalculate!: Array<string>;
     public needRender!: Array<any>;
+    public workbook: Workbook;
+    public name: string;
+    public dispatcher: EventDispatcher;
 
     constructor(
-        private workbook : Workbook,
-        public name : string,
-        public dispatcher : EventDispatcher = new EventDispatcher
+        workbook : Workbook,
+        name : string,
+        dispatcher : EventDispatcher = new EventDispatcher()
     ) {
+        this.workbook = workbook;
+        this.name = name;
+        this.dispatcher = dispatcher;
         this._id = this._generateId();
         this._cells = new CellRegistry(this, this.dispatcher);
     }
@@ -57,6 +63,24 @@ export class Sheet {
      */
     public set autoCalculate(value: boolean) {
         this._autoCalculate = value;
+    }
+
+    /**
+     * Recalculate all dirty cells (used for dynamic precedents)
+     */
+    public recalculateDirtyCells(): void {
+        // Temporarily disable auto-calculate to avoid infinite recursion
+        const wasAutoCalculate = this._autoCalculate;
+        this._autoCalculate = false;
+
+        this._cells.each((cell: Cell) => {
+            if (cell.isDirty()) {
+                cell.calculate();
+            }
+        });
+
+        // Restore auto-calculate setting
+        this._autoCalculate = wasAutoCalculate;
     }
 
     /**
@@ -92,6 +116,14 @@ export class Sheet {
     }
 
     /**
+     * Listen to sheet events
+     * Convenience method that delegates to the dispatcher
+     */
+    public listen(event: string, callback: (data: any) => void): void {
+        this.dispatcher.listen(event, callback);
+    }
+
+    /**
      * Calculate the entire sheet
      *
      * @param options calculation option
@@ -116,6 +148,14 @@ export class Sheet {
                     }
                 }
             }
+
+            // After dependency tree calculation, also calculate cells with dynamic precedents
+            // that might not be in the tree (e.g., cells with only column/row references)
+            this._cells.each((cell: Cell) => {
+                if (cell.hasDynamicPrecedents() && (cell.isDirty() || !cell.isCalculated())) {
+                    cell.calculate();
+                }
+            });
         } else {
             // No dependency tree, calculate all cells
             for (const address in this.cells) {
@@ -174,8 +214,13 @@ export class Sheet {
         return this.getRange(cellAddr).value;
     }
 
-    public createCell(address : string, data : CellData) : Cell {
-        return this._cells.create(address, data);
+    public createCell(address : string, data? : CellData) : Cell {
+        const cell = this._cells.create(address, data || {});
+
+        // Mark cells with dynamic precedents that might reference this new cell
+        this.invalidateDynamicDependents(address);
+
+        return cell;
     }
 
     /**
@@ -194,6 +239,28 @@ export class Sheet {
         const builder = new DependencyBuilder();
         builder.setWorkbook(this.workbook);
         this._depTree = builder.build(this._cells);
+    }
+
+    /**
+     * Mark cells with dynamic precedents (column/row ranges) as dirty
+     * when a cell at the given address is created or modified
+     */
+    public invalidateDynamicDependents(address: string): void {
+        // Parse the address to get column and row
+        const match = address.match(/^([A-Z]+)(\d+)$/);
+        if (!match) return;
+
+        const column = match[1];
+        const row = parseInt(match[2]);
+
+        // Check all cells in the sheet for dynamic dependencies
+        this._cells.each((cell: Cell) => {
+            if (cell.hasDynamicPrecedents()) {
+                if (cell.dependsOnColumn(column) || cell.dependsOnRow(row)) {
+                    cell.markAsDirty();
+                }
+            }
+        });
     }
 
     /**

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.2.8 Sample
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brandom" href="#">jQuery Calx 2.2.8 Sample</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li class="active"><a href="#">Index</a></li>
+                        <li><a href="basic.html">Basic Calculation</a></li>
+                        <li><a href="dynamic_form.html">Dynamic Form</a></li>
+                        <li><a href="checkbox.html">Cehckbox, Radio, and Select</a></li>
+                        <li><a href="chart.html">Drawing Chart</a></li>
+                        <li><a href="multisheet.html">Multiple Sheet</a></li>
+                        <li><a href="formula.html">Formula Showcase</a></li>
+                        <li><a href="server_side.html">Server Side Formula</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                Sample Application
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="app/budget_planner.html">Budget Planner</a></li>
+                                <li><a href="app/amortization_schedule.html">Amortization Schedule</a></li>
+                                <li><a href="app/home_mortgage.html">Home Mortgage Calc</a></li>
+                                <li><a href="app/home_expense.html">Home Expense Calc</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <form id="calx" action="" class="form-horizontal">
+                    <table class="table table-condensed">
+                        <tr>
+                            <th class="text-center" colspan="10">Data</th>
+                            <th class="text-center">SUM</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="5"></td>
+                            <td><input class="form-control" data-cell="A1"></td>
+                            <td><input class="form-control" data-cell="A2"></td>
+                            <td><input class="form-control" data-cell="A3"></td>
+                            <td><input class="form-control" data-cell="A4"></td>
+                            <td><input class="form-control" data-cell="A5"></td>
+                            <td><input class="form-control" data-cell="A6"></td>
+                            <td><input class="form-control" data-cell="A7"></td>
+                            <td><input class="form-control" data-cell="A8"></td>
+                            <td><input class="form-control" data-cell="A9"></td>
+                            <td><input class="form-control" data-cell="A10"></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" data-cell="B1"></td>
+                            <td><input class="form-control" data-cell="B2"></td>
+                            <td><input class="form-control" data-cell="B3"></td>
+                            <td><input class="form-control" data-cell="B4"></td>
+                            <td><input class="form-control" data-cell="B5"></td>
+                            <td><input class="form-control" data-cell="B6"></td>
+                            <td><input class="form-control" data-cell="B7"></td>
+                            <td><input class="form-control" data-cell="B8"></td>
+                            <td><input class="form-control" data-cell="B9"></td>
+                            <td><input class="form-control" data-cell="B10"></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" data-cell="C1"></td>
+                            <td><input class="form-control" data-cell="C2"></td>
+                            <td><input class="form-control" data-cell="C3"></td>
+                            <td><input class="form-control" data-cell="C4"></td>
+                            <td><input class="form-control" data-cell="C5"></td>
+                            <td><input class="form-control" data-cell="C6"></td>
+                            <td><input class="form-control" data-cell="C7"></td>
+                            <td><input class="form-control" data-cell="C8"></td>
+                            <td><input class="form-control" data-cell="C9"></td>
+                            <td><input class="form-control" data-cell="C10"></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" data-cell="D1"></td>
+                            <td><input class="form-control" data-cell="D2"></td>
+                            <td><input class="form-control" data-cell="D3"></td>
+                            <td><input class="form-control" data-cell="D4"></td>
+                            <td><input class="form-control" data-cell="D5"></td>
+                            <td><input class="form-control" data-cell="D6"></td>
+                            <td><input class="form-control" data-cell="D7"></td>
+                            <td><input class="form-control" data-cell="D8"></td>
+                            <td><input class="form-control" data-cell="D9"></td>
+                            <td><input class="form-control" data-cell="D10"></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" data-cell="E1"></td>
+                            <td><input class="form-control" data-cell="E2"></td>
+                            <td><input class="form-control" data-cell="E3"></td>
+                            <td><input class="form-control" data-cell="E4"></td>
+                            <td><input class="form-control" data-cell="E5"></td>
+                            <td><input class="form-control" data-cell="E6"></td>
+                            <td><input class="form-control" data-cell="E7"></td>
+                            <td><input class="form-control" data-cell="E8"></td>
+                            <td><input class="form-control" data-cell="E9"></td>
+                            <td><input class="form-control" data-cell="E10"></td>
+                        </tr>
+                        <tr>
+                            <th>Average</th>
+                            <td><input class="form-control" data-cell="F1"></td>
+                            <td><input class="form-control" data-cell="F2"></td>
+                            <td><input class="form-control" data-cell="F3"></td>
+                            <td><input class="form-control" data-cell="F4"></td>
+                            <td><input class="form-control" data-cell="F5"></td>
+                            <td><input class="form-control" data-cell="F6"></td>
+                            <td><input class="form-control" data-cell="F7"></td>
+                            <td><input class="form-control" data-cell="F8"></td>
+                            <td><input class="form-control" data-cell="F9"></td>
+                            <td><input class="form-control" data-cell="F10"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+        <script src="js/jquery-calx-sample-2.2.8.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap.js" type="text/javascript"></script>
+        <script>
+            $('#calx').calx({
+                defaultFormat : '0,0.00',
+                data : {
+                    A1 : {value : Math.random()},
+                    A2 : {value : Math.random()},
+                    A3 : {value : Math.random()},
+                    A4 : {value : Math.random()},
+                    A5 : {value : Math.random()},
+                    A6 : {value : Math.random()},
+                    A7 : {value : Math.random()},
+                    A8 : {value : Math.random()},
+                    A9 : {value : Math.random()},
+                    A10: {value : Math.random(), formula : 'SUM(A1:A9)'},
+                    B1 : {value : Math.random()},
+                    B2 : {value : Math.random()},
+                    B3 : {value : Math.random()},
+                    B4 : {value : Math.random()},
+                    B5 : {value : Math.random()},
+                    B6 : {value : Math.random()},
+                    B7 : {value : Math.random()},
+                    B8 : {value : Math.random()},
+                    B9 : {value : Math.random()},
+                    B10: {value : Math.random(), formula : 'SUM(B1:B9)'},
+                    C1 : {value : Math.random()},
+                    C2 : {value : Math.random()},
+                    C3 : {value : Math.random()},
+                    C4 : {value : Math.random()},
+                    C5 : {value : Math.random()},
+                    C6 : {value : Math.random()},
+                    C7 : {value : Math.random()},
+                    C8 : {value : Math.random()},
+                    C9 : {value : Math.random()},
+                    C10: {value : Math.random(), formula : 'SUM(C1:C9)'},
+                    D1 : {value : Math.random()},
+                    D2 : {value : Math.random()},
+                    D3 : {value : Math.random()},
+                    D4 : {value : Math.random()},
+                    D5 : {value : Math.random()},
+                    D6 : {value : Math.random()},
+                    D7 : {value : Math.random()},
+                    D8 : {value : Math.random()},
+                    D9 : {value : Math.random()},
+                    D10: {value : Math.random(), formula : 'SUM(D1:D9)'},
+                    E1 : {value : Math.random()},
+                    E2 : {value : Math.random()},
+                    E3 : {value : Math.random()},
+                    E4 : {value : Math.random()},
+                    E5 : {value : Math.random()},
+                    E6 : {value : Math.random()},
+                    E7 : {value : Math.random()},
+                    E8 : {value : Math.random()},
+                    E9 : {value : Math.random()},
+                    E10: {value : Math.random(), formula : 'SUM(E1:E9)'},
+                    F1 : {formula : 'AVERAGE(A1:E1)'},
+                    F2 : {formula : 'AVERAGE(A2:E2)'},
+                    F3 : {formula : 'AVERAGE(A3:E3)'},
+                    F4 : {formula : 'AVERAGE(A4:E4)'},
+                    F5 : {formula : 'AVERAGE(A5:E5)'},
+                    F6 : {formula : 'AVERAGE(A6:E6)'},
+                    F7 : {formula : 'AVERAGE(A7:E7)'},
+                    F8 : {formula : 'AVERAGE(A8:E8)'},
+                    F9 : {formula : 'AVERAGE(A9:E9)'},
+                    F10: {formula : 'AVERAGE(A10:E10)'}
+                }
+            })
+        </script>
+    </body>
+</html>

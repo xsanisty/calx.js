@@ -21,7 +21,18 @@ export class FormulaJSWrapper {
     getFunction(name: string): Function | undefined {
         const upperName = name.toUpperCase();
 
-        // Check for custom implementations first
+        // Check for custom user functions first (registered via Calx.setFormula)
+        // Access via require to avoid circular dependency
+        try {
+            const { Calx } = require('../../Calx');
+            if (Calx.formulae && Calx.formulae[upperName]) {
+                return Calx.formulae[upperName];
+            }
+        } catch (e) {
+            // Ignore if Calx is not available yet
+        }
+
+        // Check for custom implementations
         if (upperName === 'SEQUENCE') {
             return this.sequenceFunction.bind(this);
         }

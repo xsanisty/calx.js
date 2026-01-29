@@ -15,7 +15,7 @@ export class Cell {
     private _formula!: string;                          //Cell formula
     private _computed : any;                            //Result of the computed formula
     private _rules : Record<string, RegExp> = {
-        address : /^[A-Z]+[0-9]+$/,                     //Cell address validation rule
+        address : /^\$?[A-Z]+\$?[0-9]+$/,               //Cell address validation rule (allows $ for absolute refs)
     };
 
     protected precedents : Record<string, Cell> = {};   //Cells registry required by the formula
@@ -23,6 +23,12 @@ export class Cell {
 
     protected remotePrecedents : Record<string, Cell> = {}; //Cells registry required by the formula from other sheets
     protected remoteDependents : Record<string, Cell> = {}; //Cells registry that depend on this cell from other sheets
+
+    /** Dynamic precedents (column/row ranges) */
+    private dynamicPrecedents: {
+        columnRanges?: string[];  // e.g., ["A:A", "B:C"]
+        rowRanges?: string[];     // e.g., ["1:1", "5:10"]
+    } = {};
 
     /** Flags */
     private _dirty : boolean = false;
@@ -92,6 +98,10 @@ export class Cell {
                 return this.handleArrayResult(result);
             }
 
+            // Check if value changed to mark dependents as dirty
+            const oldValue = this._computed;
+            const valueChanged = oldValue !== result;
+
             this._computed = result;
             this._calculated = true;
             this._dirty = false;
@@ -101,6 +111,15 @@ export class Cell {
                 cell : this.address,
                 value : this._computed
             });
+
+            // If value changed, mark dependents as dirty and recalculate if auto-calculate is enabled
+            if (valueChanged) {
+                this._markDependentsAsDirty();
+
+                if (this.sheet.autoCalculate) {
+                    this._recalculateDependents();
+                }
+            }
 
             return this._computed;
         } catch (error) {
@@ -335,6 +354,9 @@ export class Cell {
         const oldFormula = this._formula;
         this._formula = formula;
 
+        // Detect and store dynamic precedents (column/row ranges)
+        this.updateDynamicPrecedents(formula);
+
         this.sheet.dispatcher.dispatch(
             CellEvent.FORMULA_CHANGED,
             {
@@ -342,7 +364,71 @@ export class Cell {
                 oldFormula : oldFormula,
                 newFormula : formula
             }
-        )
+        );
+
+        // When formula changes, we need to rebuild dependencies
+        // Remove old precedents
+        const oldPrecedents = this.getPrecedents();
+        if (oldPrecedents) {
+            for (const addr in oldPrecedents) {
+                const precedent = oldPrecedents[addr];
+                if (precedent) {
+                    precedent.removeDependent(this);
+                }
+            }
+        }
+
+        // Clear precedents - they will be rebuilt on next calculation
+        this.precedents = {};
+
+        // Mark as dirty so it recalculates and rebuilds dependencies on next calculate()
+        this.markAsDirty();
+
+        // Trigger immediate dependency rebuild if workbook has been built
+        if (this.sheet.workbook && formula) {
+            this.rebuildDependencies();
+        }
+    }
+
+    /**
+     * Rebuild dependencies for this cell based on current formula
+     */
+    private rebuildDependencies(): void {
+        if (!this._formula) return;
+
+        const builder = new (require('./Workbook/DependencyBuilder').DependencyBuilder)();
+        builder.setWorkbook(this.sheet.workbook);
+
+        const { localDeps, remoteDeps } = builder.getFormulaDependencies(this._formula);
+
+        // Resolve local dependencies
+        const dependencies: Record<string, Cell> = {};
+        for (const address in localDeps) {
+            const precedentCell = this.sheet.getCellDirect(address);
+            if (precedentCell) {
+                dependencies[address] = precedentCell;
+                precedentCell.addDependent(this);
+            }
+        }
+
+        this.setPrecedents(dependencies);
+
+        // Handle remote (cross-sheet) dependencies
+        for (const remoteRef in remoteDeps) {
+            try {
+                const { sheetName, cellAddress } = builder.parseRemoteReference(remoteRef);
+                const targetSheet = this.sheet.workbook.getSheet(sheetName);
+                if (targetSheet) {
+                    const targetCell = targetSheet.getCellDirect(cellAddress);
+                    if (targetCell) {
+                        targetCell.addRemoteDependent(this);
+                        this.addRemotePrecedent(targetCell);
+                    }
+                }
+            } catch (e) {
+                // Ignore errors for invalid references
+            }
+        }
     }
 
     /**
@@ -390,6 +476,45 @@ export class Cell {
      * Set cell value, this will reset the formula
      */
     public set value(value : any) {
+        // Convert boolean strings to actual booleans for BOOLEAN type cells
+        if (this._type === DataType.BOOLEAN && typeof value === 'string') {
+            const upperValue = value.trim().toUpperCase();
+            if (upperValue === 'TRUE') {
+                value = true;
+            } else if (upperValue === 'FALSE') {
+                value = false;
+            }
+        }
+
+        // Convert date strings to Excel serial numbers for DATE type cells
+        if (this._type === DataType.DATE || this._type === DataType.DATETIME) {
+            if (typeof value === 'string' && value.trim() !== '') {
+                try {
+                    // Try to parse as ISO date string (YYYY-MM-DD)
+                    // Use local date to avoid timezone issues
+                    const parts = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+                    if (parts) {
+                        const year = parseInt(parts[1], 10);
+                        const month = parseInt(parts[2], 10) - 1; // Month is 0-based
+                        const day = parseInt(parts[3], 10);
+                        const date = new Date(year, month, day);
+                        const serial = DateUtil.dateToSerial(date);
+                        value = serial;
+                    } else {
+                        // Fallback to default Date parsing
+                        const date = new Date(value);
+                        if (!isNaN(date.getTime())) {
+                            value = DateUtil.dateToSerial(date);
+                        }
+                    }
+                } catch (e) {
+                    // If parsing fails, keep original value
+                }
+            } else if (value instanceof Date) {
+                value = DateUtil.dateToSerial(value);
+            }
+        }
+
         this._value = value;
         this._formula = '';
 
@@ -398,9 +523,14 @@ export class Cell {
         // Mark dependents as dirty regardless of autoCalculate setting
         this._markDependentsAsDirty();
 
+        // Also invalidate any formulas that reference this cell through column/row ranges
+        this.sheet.invalidateDynamicDependents(this.address);
+
         // Auto-recalculate dependents if autoCalculate is enabled
         if (this.sheet.autoCalculate) {
             this._recalculateDependents();
+            // After recalculating explicit dependents, recalculate cells with dynamic precedents
+            this.sheet.recalculateDirtyCells();
         }
     }
 
@@ -575,7 +705,8 @@ export class Cell {
     }
 
     public getDependents() : Record<string, Cell> {
-        return this.dependents;
+        // Combine local and remote dependents
+        return {...this.dependents, ...this.remoteDependents};
     }
 
     public setDependents(dependents : Record<string, Cell>) {
@@ -584,5 +715,110 @@ export class Cell {
 
     public addDependent(cell : Cell) {
         this.dependents[cell.address] = cell;
+    }
+
+    public removeDependent(cell : Cell) {
+        delete this.dependents[cell.address];
+    }
+
+    public addRemoteDependent(cell : Cell) {
+        // Use sheet name + address as key to differentiate cells from different sheets
+        const key = cell.sheet.name + '!' + cell.address;
+        this.remoteDependents[key] = cell;
+        this._hasRemoteDependents = true;
+    }
+
+    public addRemotePrecedent(cell : Cell) {
+        // Use sheet name + address as key to differentiate cells from different sheets
+        const key = cell.sheet.name + '!' + cell.address;
+        this.remotePrecedents[key] = cell;
+    }
+
+    /**
+     * Update dynamic precedents by parsing formula for column/row ranges
+     */
+    private updateDynamicPrecedents(formula: string): void {
+        if (!formula) {
+            this.dynamicPrecedents = {};
+            this._hasDynamicPrecedents = false;
+            return;
+        }
+
+        const columnRanges: string[] = [];
+        const rowRanges: string[] = [];
+
+        // Match column ranges: A:A, B:C, etc.
+        const columnPattern = /\b([A-Z]+)\s*:\s*([A-Z]+)\b/g;
+        let match;
+        while ((match = columnPattern.exec(formula)) !== null) {
+            columnRanges.push(match[0]);
+        }
+
+        // Match row ranges: 1:1, 5:10, etc. (but not cell ranges like A1:B2)
+        const rowPattern = /\b(\d+)\s*:\s*(\d+)\b/g;
+        while ((match = rowPattern.exec(formula)) !== null) {
+            // Make sure it's not part of a cell range (no letter before the number)
+            const beforeMatch = formula[match.index - 1];
+            if (!beforeMatch || !/[A-Z]/i.test(beforeMatch)) {
+                rowRanges.push(match[0]);
+            }
+        }
+
+        this.dynamicPrecedents = {};
+        if (columnRanges.length > 0) {
+            this.dynamicPrecedents.columnRanges = columnRanges;
+        }
+        if (rowRanges.length > 0) {
+            this.dynamicPrecedents.rowRanges = rowRanges;
+        }
+
+        this._hasDynamicPrecedents = columnRanges.length > 0 || rowRanges.length > 0;
+    }
+
+    /**
+     * Check if this cell has dynamic precedents
+     */
+    public hasDynamicPrecedents(): boolean {
+        return this._hasDynamicPrecedents;
+    }
+
+    /**
+     * Check if this cell depends on a specific column
+     */
+    public dependsOnColumn(column: string): boolean {
+        if (!this._hasDynamicPrecedents || !this.dynamicPrecedents.columnRanges) {
+            return false;
+        }
+
+        const colNum = this.columnToNumber(column);
+        return this.dynamicPrecedents.columnRanges.some(range => {
+            const [start, end] = range.split(':').map(c => this.columnToNumber(c.trim()));
+            return colNum >= start && colNum <= end;
+        });
+    }
+
+    /**
+     * Check if this cell depends on a specific row
+     */
+    public dependsOnRow(row: number): boolean {
+        if (!this._hasDynamicPrecedents || !this.dynamicPrecedents.rowRanges) {
+            return false;
+        }
+
+        return this.dynamicPrecedents.rowRanges.some(range => {
+            const [start, end] = range.split(':').map(r => parseInt(r.trim()));
+            return row >= start && row <= end;
+        });
+    }
+
+    /**
+     * Convert column letter to number (A=1, B=2, etc.)
+     */
+    private columnToNumber(col: string): number {
+        let num = 0;
+        for (let i = 0; i < col.length; i++) {
+            num = num * 26 + (col.charCodeAt(i) - 64);
+        }
+        return num;
     }
 }

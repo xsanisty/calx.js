@@ -1,0 +1,3 @@
+sheet.fx.scan = function(){
+
+};

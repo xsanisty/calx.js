@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Basic Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="jquery-basic.html" class="active">Basic</a>
+                <a href="jquery-datatypes.html">Data Types</a>
+                <a href="jquery-dynamic-form.html">Dynamic Form</a>
+                <a href="jquery-formatters.html">Formatters</a>
+                <a href="jquery-multisheet.html">Multisheet</a>
+                <a href="jquery-mortgage.html">Mortgage Calculator</a>
+                <a href="jquery-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Basic Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Introduction:</strong> This example demonstrates the fundamentals of jQuery Calx including cell references, simple formulas, and automatic calculation.
+        </div>
+
+    <form id="calx_form">
+        <div class="form-group">
+            <label>Price:</label>
+            <input type="number" data-cell="A1" value="100" placeholder="Enter price">
+        </div>
+
+        <div class="form-group">
+            <label>Quantity:</label>
+            <input type="number" data-cell="A2" value="5" placeholder="Enter quantity">
+        </div>
+
+        <div class="form-group">
+            <label>Tax Rate (%):</label>
+            <input type="number" data-cell="A3" value="10" placeholder="Enter tax rate">
+        </div>
+
+        <div class="result">
+            <div class="form-group">
+                <label>Subtotal:</label>
+                <input type="text" data-cell="B1" data-formula="A1*A2" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Tax Amount:</label>
+                <input type="text" data-cell="B2" data-formula="B1*(A3/100)" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Total:</label>
+                <input type="text" data-cell="B3" data-formula="B1+B2" readonly>
+            </div>
+        </div>
+    </form>
+
+    <footer class="footer">
+        <p>
+            <a href="index.html">← Back to Examples</a> |
+            <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+        </p>
+    </footer>
+    </div>
+
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load jQuery Calx -->
+    <script src="../dist/jquery.calx.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Calx on the form
+            $('#calx_form').calx();
+
+            console.log('jQuery Calx initialized!');
+        });
+    </script>
+</body>
+</html>

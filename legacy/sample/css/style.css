@@ -1,0 +1,162 @@
+p{
+    font-size:14px;
+    text-align: justify;
+}
+
+.method-title{
+    margin-top:30px;
+}
+
+.formula{
+    font-size:10px;
+    display: block;
+}
+
+div.checkbox, label.radio-inline{
+    padding-top:0px !important;
+}
+
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"]{
+    margin-top: 1px !important;
+}
+
+#show_formula{
+    margin-top:20px;
+}
+
+.border-right, .diff{
+    border-right: 1px #ccc solid !important;
+    font-weight: 600 !important;
+}
+
+.actual, td.actual input{
+    color: #060;
+}
+
+.budget, td.budget input{
+    color: #009;
+}
+
+th.small{
+    font-weight: normal;
+}
+
+th.actual, th.budget, th.diff{
+    text-align:center;
+}
+
+
+td.budget input{
+    border-color: #009
+}
+td.budget{
+    background: #ddf
+}
+
+td.actual input{
+    border-color: #060
+}
+td.actual{
+    background: #dfd
+}
+
+td.diff input{
+    border-color: #ccc;
+}
+td.diff{
+    background: #ddd
+}
+
+td.subheader{
+    height: 25px;
+    text-align:center;
+    font-weight: bold;
+}
+
+.row-total td{
+    background: #dfd;
+    border-top:solid 1px #333 !important;
+}
+
+.row-total input{
+    background: #dfd;
+    border-color: #080 !important;
+    color: #000 !important;
+}
+
+tr.bggrey input{
+    border-color: #ccc;
+}
+
+
+.w100 input{
+    width:90px;
+    padding:0px 2px;
+    height:25px;
+    text-align: right;
+    font-size: 13px;
+    border-radius: 0;
+}
+
+label.normal{
+    font-weight: normal;
+}
+
+tr.bggrey td{
+    background: #ddd;
+}
+
+tr.bggreen td, tr.bgblue td{
+    background: #060;
+    color:white;
+    font-weight: bold;
+    text-align: center;
+}
+
+tr.bgblue td{
+    background: #006;
+}
+
+.mo-head{
+    font-weight: bold;
+    text-align: center;
+}
+
+td{
+    padding:2px !important;
+}
+
+.scrollable{
+    margin-bottom: 0;
+}
+
+.scrollable thead{
+    display:block;
+}
+
+.scrollable thead .budget, .scrollable thead .actual, .scrollable thead .diff{
+    width: 94.325px;
+}
+
+.left-head td, .left-head th{
+    width:240px;
+}
+
+td a.pull-right{
+    color:white;
+}
+
+.scrollable tbody{
+    display:block;
+    max-height: 520px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+hr{
+    margin-top:3px;
+    margin-bottom: 15px
+}

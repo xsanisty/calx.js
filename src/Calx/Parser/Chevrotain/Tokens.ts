@@ -27,7 +27,7 @@ const Variable = createToken({
 
 const SheetName = createToken({
     name: "SheetName",
-    pattern: /[A-Za-z_][A-Za-z0-9_]*!/
+    pattern: /[A-Za-z_][A-Za-z0-9_-]*!/
 });
 
 const CellRange = createToken({

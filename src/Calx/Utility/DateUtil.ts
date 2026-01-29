@@ -19,8 +19,10 @@ export class DateUtil {
             throw new Error('Invalid serial date: must be a number');
         }
 
+        // Excel epoch: December 30, 1899 at midnight local time
+        const epochDate = new Date(1899, 11, 30, 0, 0, 0, 0);
         const ms = serialDate * DateUtil.MS_PER_DAY;
-        return new Date(DateUtil.EXCEL_EPOCH + ms);
+        return new Date(epochDate.getTime() + ms);
     }
 
     /**
@@ -33,7 +35,9 @@ export class DateUtil {
             throw new Error('Invalid date: must be a valid Date object');
         }
 
-        const ms = date.getTime() - DateUtil.EXCEL_EPOCH;
+        // Excel epoch: December 30, 1899 at midnight local time
+        const epochDate = new Date(1899, 11, 30, 0, 0, 0, 0);
+        const ms = date.getTime() - epochDate.getTime();
         return Math.floor(ms / DateUtil.MS_PER_DAY);
     }
 

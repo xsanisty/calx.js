@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.2.8 Sample - Checkbox, Radio Button, and Select Box
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.2.8 Sample</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><a href="index.html">Index</a></li>
+                        <li><a href="basic.html">Basic Calculation</a></li>
+                        <li><a href="dynamic_form.html">Dynamic Form</a></li>
+                        <li class="active"><a href="#">Cehckbox, Radio, and Select</a></li>
+                        <li><a href="chart.html">Drawing Chart</a></li>
+                        <li><a href="multisheet.html">Multiple Sheet</a></li>
+                        <li><a href="formula.html">Formula Showcase</a></li>
+                        <li><a href="server_side.html">Server Side Formula</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                Sample Application
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="app/budget_planner.html">Budget Planner</a></li>
+                                <li><a href="app/amortization_schedule.html">Amortization Schedule</a></li>
+                                <li><a href="app/home_mortgage.html">Home Mortgage Calc</a></li>
+                                <li><a href="app/home_expense.html">Home Expense Calc</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>Working with Checkbox, Radio Button, and Select Box</h2>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary pull-right" id="show_formula" data-shown="0">Show Formula</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <form class="form-horizontal" id="pizza">
+                            <h3>Pizza Order</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="col-lg-7">Normal Pizza</label>
+                                <div class="col-lg-5">
+                                    <input type="text" class="form-control input-sm" value="75" data-cell="A1" data-format="$ 0,0.00">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-7">Add Cheese Topping</label>
+                                <div class="col-lg-5">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="12" data-cell="A2">
+                                            $ 12.00
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-7">Add Bacon</label>
+                                <div class="col-lg-5">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="23" data-cell="A3">
+                                            $ 23.00
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-7">With SoftDrink</label>
+                                <div class="col-lg-5">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="15" data-cell="A4">
+                                            $ 15.00
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-7">Total</label>
+                                <div class="col-lg-5 text-right">
+                                    <label data-cell="B1" data-format="$ 0,0.00" data-formula="SUM(A1:A7)"></label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-7 col-lg-offset-1">
+
+                        <form class="form-horizontal" id="burger">
+                            <h3>Burger Package</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="col-lg-3">Burger</label>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="burger" data-cell="A1" value="22"> Cheese
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="burger" data-cell="B1" value="28"> Beef
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="burger" data-cell="C1" value="25"> Chicken
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 text-right">
+                                    <label data-cell="D1" data-formula="SUM(A1:C1)" data-format="$ 0,0.00"></label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3">Soft Drink</label>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="softdrink" data-cell="A2" value="12"> Pepsi
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="softdrink" data-cell="B2" value="13.5"> CocaCola
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="softdrink" data-cell="C2" value="14.25"> Fanta
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 text-right">
+                                    <label data-cell="D2" data-formula="SUM(A2:C2)" data-format="$ 0,0.00"></label>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-lg-3">Snack</label>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="snack" data-cell="A3" value="5"> Onion Ring
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="snack" data-cell="B3" value="6"> FrenchFries
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="snack" data-cell="C3" value="8"> Chicken Nugget
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 text-right">
+                                    <label data-cell="D3" data-formula="SUM(A3:C3)" data-format="$ 0,0.00"></label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3">Fruit</label>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="fruit" data-cell="A4" value="2"> Banana
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="fruit" data-cell="B4" value="2.3"> Orange
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="fruit" data-cell="C4" value="2.8"> Apple
+                                    </label>
+                                </div>
+                                <div class="col-lg-3 text-right">
+                                    <label data-cell="D4" data-formula="SUM(A4:C4)" data-format="$ 0,0.00"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3">Total</label>
+                                <div class="col-lg-3 text-right col-lg-offset-6">
+                                    <label data-cell="D6" data-format="$ 0,0.00" data-formula="SUM(D1:D5)"></label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-calx-sample-2.2.8.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap.js" type="text/javascript"></script>
+        <script>
+            $('#pizza, #burger').calx();
+            $('#show_formula').click(function(e){
+                e.preventDefault();
+
+                if($(this).attr('data-shown') == '0'){
+                    $('[data-formula],[data-cell]').each(function(){
+                        $(this).after('<span class="formula">'+$(this).attr('data-cell')+($(this).attr('data-formula') ? ' = '+$(this).attr('data-formula') : '')+'&nbsp;</span>');
+                    });
+
+                    $(this).attr('data-shown', 1).html('Hide Formula');
+                }else{
+                    $('span.formula').remove();
+                    $(this).attr('data-shown', 0).html('Show Formula');
+                }
+            });
+        </script>
+    </body>
+</html>

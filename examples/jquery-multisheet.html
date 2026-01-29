@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Multiple Sheets Example</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Page-specific overrides */
+        .content { max-width: 1200px; }
+        .sheet {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .sheet h2 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .output {
+            font-weight: bold;
+            color: #2c5282;
+        }
+        .currency {
+            color: #38a169;
+        }
+        .percentage {
+            color: #d69e2e;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="jquery-basic.html">Basic</a>
+                <a href="jquery-datatypes.html">Data Types</a>
+                <a href="jquery-dynamic-form.html">Dynamic Form</a>
+                <a href="jquery-formatters.html">Formatters</a>
+                <a href="jquery-multisheet.html" class="active">Multisheet</a>
+                <a href="jquery-mortgage.html">Mortgage Calculator</a>
+                <a href="jquery-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content wide">
+        <h1>Multiple Sheets Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Multiple Sheets:</strong> This example demonstrates working with multiple calculation sheets and cross-sheet references using Sheet1!A1 notation.
+        </div>
+
+    <!-- Sales Sheet -->
+    <div id="Sales" class="sheet">
+        <h2>Sales Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Widget A</td>
+                    <td><input data-cell="B2" data-type="number" value="99.99" /></td>
+                    <td><input data-cell="C2" data-type="number" value="5" /></td>
+                    <td><span data-cell="D2" data-formula="B2*C2" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr>
+                    <td>Widget B</td>
+                    <td><input data-cell="B3" data-type="number" value="149.99" /></td>
+                    <td><input data-cell="C3" data-type="number" value="3" /></td>
+                    <td><span data-cell="D3" data-formula="B3*C3" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr>
+                    <td>Widget C</td>
+                    <td><input data-cell="B4" data-type="number" value="79.99" /></td>
+                    <td><input data-cell="C4" data-type="number" value="10" /></td>
+                    <td><span data-cell="D4" data-formula="B4*C4" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr>
+                    <th colspan="3">Total Sales</th>
+                    <td><span data-cell="D5" data-formula="SUM(D2:D4)" data-format="currency" class="output currency">0</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tax Sheet -->
+    <div id="Tax" class="sheet">
+        <h2>Tax Configuration</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <th>Tax Rate</th>
+                    <td><input data-cell="A1" data-type="number" value="0.08" /></td>
+                    <td><span  data-cell="B1" data-formula="A1*100" class="percentage">8</span> %</td>
+                </tr>
+                <tr>
+                    <th>Discount Rate</th>
+                    <td><input data-cell="A2" data-type="number" value="0.10" /></td>
+                    <td><span  data-cell="B2" data-formula="A2*100" class="percentage">10</span> %</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Report Sheet -->
+    <div id="Report" class="sheet">
+        <h2>Order Summary</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <th>Subtotal</th>
+                    <td><span data-cell="B1" data-formula="Sales!D5" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr>
+                    <th>Discount (Applied via Variable)</th>
+                    <td><span data-cell="B2" data-formula="B1*DiscountRate" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr>
+                    <th>After Discount</th>
+                    <td><span data-cell="B3" data-formula="B1-B2" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr>
+                    <th>Tax (Applied via Variable)</th>
+                    <td><span data-cell="B4" data-formula="B3*TaxRate" data-format="currency" class="output currency">0</span></td>
+                </tr>
+                <tr style="background-color: #f7fafc;">
+                    <th style="font-size: 1.2em;">Total Amount</th>
+                    <td><span data-cell="B5" data-formula="B3+B4" data-format="currency" class="output currency" style="font-size: 1.2em;">0</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../dist/jquery.calx.js"></script>
+    <script>
+        // Register custom formatters
+        $.calx.registerFormatter('currency', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                }
+                return '$0.00';
+            }
+        });
+
+        $.calx.registerFormatter('percentage', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    return (value * 100).toFixed(1) + '%';
+                }
+                return '0%';
+            }
+        });
+
+        // Register a custom function (example: DOUBLE)
+        $.calx.registerFunction('DOUBLE', function(value) {
+            return value * 2;
+        });
+
+        // Initialize Calx on multiple elements with variables
+        $('#Sales, #Tax, #Report').calx({
+            autoCalculate: true,
+            variables: {
+                TaxRate: 'Tax!A1',
+                DiscountRate: 'Tax!A2'
+            },
+            data: {
+                // You can also define hidden cells here (not attached to HTML elements)
+                Sales: {
+                    A1: { value: 'Sales Data' }
+                },
+                Tax: {
+                    B1: { formula: 'A1*100', format: 'percentage' }, // Tax percentage display
+                    B2: { formula: 'A2*100', format: 'percentage' }  // Discount percentage display
+                },
+                Report: {
+                    C1: { formula: 'DOUBLE(B5)' } // Hidden cell using custom function
+                }
+            }
+        });
+
+        // Demonstrate programmatic access
+        setTimeout(function() {
+            console.log('Sales Total:', $('#Sales').calx('getCellValue', 'D5'));
+            console.log('Final Total:', $('#Report').calx('getCellValue', 'B5'));
+            console.log('Hidden cell (double total):', $('#Report').calx('getCellValue', 'C1'));
+        }, 100);
+    </script>
+
+    <div class="footer">
+        <a href="index.html">← Back to Examples</a>
+    </div>
+    </div>
+</body>
+</html>

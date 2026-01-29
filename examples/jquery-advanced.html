@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Advanced Example with Data Config</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Page-specific overrides */
+        .content { max-width: 800px; }
+        h1 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[readonly] {
+            background-color: #f5f5f5;
+        }
+        .result {
+            background-color: #e3f2fd;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="jquery-basic.html">Basic</a>
+                <a href="jquery-datatypes.html">Data Types</a>
+                <a href="jquery-dynamic-form.html">Dynamic Form</a>
+                <a href="jquery-formatters.html">Formatters</a>
+                <a href="jquery-multisheet.html">Multisheet</a>
+                <a href="jquery-mortgage.html">Mortgage Calculator</a>
+                <a href="jquery-advanced.html" class="active">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Advanced Example - Data Config</h1>
+
+        <div class="alert alert-info">
+            <strong>Data Configuration:</strong> This example uses the <code>data</code> option to define formulas in JavaScript instead of HTML attributes. It also demonstrates hidden cells (A1, A2, A3) that have no corresponding HTML elements.
+        </div>
+
+    <form id="calx_form">
+        <!-- Input cells -->
+        <div class="form-group">
+            <label>Item 1 Price:</label>
+            <input type="number" data-cell="B1" placeholder="Enter price">
+        </div>
+
+        <div class="form-group">
+            <label>Item 1 Quantity:</label>
+            <input type="number" data-cell="B2" placeholder="Enter quantity">
+        </div>
+
+        <div class="form-group">
+            <label>Item 2 Price:</label>
+            <input type="number" data-cell="C1" placeholder="Enter price">
+        </div>
+
+        <div class="form-group">
+            <label>Item 2 Quantity:</label>
+            <input type="number" data-cell="C2" placeholder="Enter quantity">
+        </div>
+
+        <!-- Result cells -->
+        <div class="result">
+            <div class="form-group">
+                <label>Item 1 Total:</label>
+                <input type="text" data-cell="D1" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Item 2 Total:</label>
+                <input type="text" data-cell="D2" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Subtotal:</label>
+                <input type="text" data-cell="D3" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Discount (10%):</label>
+                <input type="text" data-cell="D4" readonly>
+            </div>
+
+            <div class="form-group">
+                <label><strong>Grand Total:</strong></label>
+                <input type="text" data-cell="D5" readonly>
+            </div>
+        </div>
+    </form>
+
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load jQuery Calx -->
+    <script src="../dist/jquery.calx.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Calx with data configuration
+            $('#calx_form').calx({
+                data: {
+                    // Hidden cells (no HTML element)
+                    A1: { value: 100 },     // Default price 1
+                    A2: { value: 200 },     // Default price 2
+                    A3: { value: 0.1 },     // Discount rate (10%)
+
+                    // Formulas for visible cells
+                    D1: { formula: 'B1*B2' },                    // Item 1 total
+                    D2: { formula: 'C1*C2' },                    // Item 2 total
+                    D3: { formula: 'D1+D2' },                    // Subtotal
+                    D4: { formula: 'D3*A3' },                    // Discount amount
+                    D5: { formula: 'D3-D4' }                     // Grand total
+                }
+            });
+
+            console.log('jQuery Calx initialized with data config!');
+
+            // Example: Access cell value programmatically
+            setTimeout(function() {
+                var grandTotal = $('#calx_form').calx('getCellValue', 'D5');
+                console.log('Grand Total:', grandTotal);
+            }, 1000);
+        });
+    </script>
+
+    <div class="footer">
+        <a href="index.html">← Back to Examples</a>
+    </div>
+    </div>
+</body>
+</html>

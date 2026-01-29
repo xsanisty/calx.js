@@ -6,10 +6,10 @@ import { Workbook } from "../Workbook";
 
 export class DependencyBuilder {
     private patterns : Record<string, RegExp> = {
-        remoteColumnRange   : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+\s*:\s*[A-Za-z]+/g,
-        remoteRowRange      : /\#[A-Za-z0-9_]+\s*!\s*[0-9]+\s*:\s*[0-9]+/g,
-        remoteCellRange     : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
-        remoteCell          : /\#[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+/g,
+        remoteColumnRange   : /\#?[A-Za-z0-9_]+\s*!\s*[A-Za-z]+\s*:\s*[A-Za-z]+/g,
+        remoteRowRange      : /\#?[A-Za-z0-9_]+\s*!\s*[0-9]+\s*:\s*[0-9]+/g,
+        remoteCellRange     : /\#?[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
+        remoteCell          : /\#?[A-Za-z0-9_]+\s*!\s*[A-Za-z]+[0-9]+/g,
         columnRange         : /[A-Za-z]+\s*:\s*[A-Za-z]+/g,
         rowRange            : /[0-9]+\s*:\s*[0-9]+/g,
         cellRange           : /[A-Za-z]+[0-9]+\s*:\s*[A-Za-z]+[0-9]+/g,
@@ -27,15 +27,15 @@ export class DependencyBuilder {
         this.workbook = workbook;
     }
 
-    build(cells : CellRegistry) : DependencyTree {
+    build(cells : CellRegistry, sheet?: any) : DependencyTree {
         // Build dependencies for each cell
         cells.each((cell : Cell) => {
             if (cell.formula) {
-                const dependencyAddresses = this.getFormulaDependencies(cell.formula);
+                const { localDeps, remoteDeps } = this.getFormulaDependencies(cell.formula);
 
-                // Resolve addresses to actual Cell objects
+                // Resolve local addresses to actual Cell objects
                 const dependencies: Record<string, Cell> = {};
-                for (const address in dependencyAddresses) {
+                for (const address in localDeps) {
                     const precedentCell = cells.get(address);
                     if (precedentCell) {
                         dependencies[address] = precedentCell;
@@ -45,11 +45,30 @@ export class DependencyBuilder {
                 // Set precedents for this cell
                 cell.setPrecedents(dependencies);
 
-                // Set this cell as dependent for each precedent
+                // Set this cell as dependent for each local precedent
                 for (const address in dependencies) {
                     const precedentCell = dependencies[address];
                     if (precedentCell) {
                         precedentCell.addDependent(cell);
+                    }
+                }
+
+                // Handle remote (cross-sheet) dependencies
+                if (this.workbook) {
+                    for (const remoteRef in remoteDeps) {
+                        const { sheetName, cellAddress } = this.parseRemoteReference(remoteRef);
+                        try {
+                            const remoteSheet = this.workbook.getSheet(sheetName);
+                            if (remoteSheet) {
+                                const remoteCellObj = remoteSheet.getCellDirect(cellAddress);
+                                if (remoteCellObj) {
+                                    // Add this cell as a remote dependent of the precedent cell
+                                    remoteCellObj.addRemoteDependent(cell);
+                                }
+                            }
+                        } catch (e) {
+                            // Sheet might not exist yet
+                        }
                     }
                 }
             }
@@ -58,8 +77,19 @@ export class DependencyBuilder {
         return new DependencyTree(cells, new EventDispatcher, this);
     }
 
-    private getFormulaDependencies(formula : string) : Record<string, boolean> {
-        const dependencies: Record<string, boolean> = {};
+    public parseRemoteReference(remoteRef: string): { sheetName: string, cellAddress: string } {
+        // Remove # prefix if present
+        const cleanRef = remoteRef.replace(/^#/, '').trim();
+        const parts = cleanRef.split('!');
+        return {
+            sheetName: parts[0].trim(),
+            cellAddress: parts[1].trim()
+        };
+    }
+
+    public getFormulaDependencies(formula : string) : { localDeps: Record<string, boolean>, remoteDeps: Record<string, boolean> } {
+        const localDeps: Record<string, boolean> = {};
+        const remoteDeps: Record<string, boolean> = {};
 
         // Remove leading '=' if present
         let cleanFormula = formula.startsWith('=') ? formula.substring(1) : formula;
@@ -71,10 +101,7 @@ export class DependencyBuilder {
         const remoteColumnMatches = cleanFormula.match(this.patterns.remoteColumnRange);
         if (remoteColumnMatches) {
             remoteColumnMatches.forEach(match => {
-                // Extract sheet name and column range
-                const [sheetPart, rangePart] = match.split('!');
-                // Mark as dependency (will need special handling for remote refs)
-                dependencies[match.trim()] = true;
+                remoteDeps[match.trim()] = true;
             });
             cleanFormula = cleanFormula.replace(this.patterns.remoteColumnRange, '');
         }
@@ -83,7 +110,7 @@ export class DependencyBuilder {
         const remoteRowMatches = cleanFormula.match(this.patterns.remoteRowRange);
         if (remoteRowMatches) {
             remoteRowMatches.forEach(match => {
-                dependencies[match.trim()] = true;
+                remoteDeps[match.trim()] = true;
             });
             cleanFormula = cleanFormula.replace(this.patterns.remoteRowRange, '');
         }
@@ -93,10 +120,10 @@ export class DependencyBuilder {
         if (remoteCellRangeMatches) {
             remoteCellRangeMatches.forEach(match => {
                 const [sheetPart, rangePart] = match.split('!');
-                // Expand range into individual cells
+                // Expand range into individual cells and add with sheet name
                 const addresses = this.expandCellRange(rangePart.trim());
                 addresses.forEach(addr => {
-                    dependencies[addr] = true;
+                    remoteDeps[sheetPart + '!' + addr] = true;
                 });
             });
             cleanFormula = cleanFormula.replace(this.patterns.remoteCellRange, '');
@@ -106,8 +133,7 @@ export class DependencyBuilder {
         const remoteCellMatches = cleanFormula.match(this.patterns.remoteCell);
         if (remoteCellMatches) {
             remoteCellMatches.forEach(match => {
-                const [sheetPart, cellPart] = match.split('!');
-                dependencies[cellPart.trim()] = true;
+                remoteDeps[match.trim()] = true;
             });
             cleanFormula = cleanFormula.replace(this.patterns.remoteCell, '');
         }
@@ -119,7 +145,7 @@ export class DependencyBuilder {
                 // Expand range into individual cells
                 const addresses = this.expandCellRange(match);
                 addresses.forEach(addr => {
-                    dependencies[addr] = true;
+                    localDeps[addr] = true;
                 });
             });
             cleanFormula = cleanFormula.replace(this.patterns.cellRange, '');
@@ -131,7 +157,7 @@ export class DependencyBuilder {
             cellMatches.forEach(match => {
                 // Filter out function names and keywords
                 if (!this.isFunctionOrKeyword(match)) {
-                    dependencies[match] = true;
+                    localDeps[match] = true;
                 }
             });
         }
@@ -152,16 +178,22 @@ export class DependencyBuilder {
                     if (this.workbook!.nameManager.has(identifier)) {
                         const reference = this.workbook!.nameManager.getReference(identifier);
                         if (reference) {
-                            // Parse the reference to extract cell addresses
-                            if (reference.includes(':')) {
-                                // It's a range
-                                const addresses = this.expandCellRange(reference);
-                                addresses.forEach(addr => {
-                                    dependencies[addr] = true;
-                                });
-                            } else if (/^[A-Z]+[0-9]+$/.test(reference)) {
-                                // It's a single cell
-                                dependencies[reference] = true;
+                            // Check if it's a remote reference (contains !)
+                            if (reference.includes('!')) {
+                                // It's a cross-sheet reference
+                                remoteDeps[reference] = true;
+                            } else {
+                                // Parse the reference to extract cell addresses
+                                if (reference.includes(':')) {
+                                    // It's a range
+                                    const addresses = this.expandCellRange(reference);
+                                    addresses.forEach(addr => {
+                                        localDeps[addr] = true;
+                                    });
+                                } else if (/^[A-Z]+[0-9]+$/.test(reference)) {
+                                    // It's a single cell
+                                    localDeps[reference] = true;
+                                }
                             }
                         }
                     }
@@ -172,7 +204,7 @@ export class DependencyBuilder {
         // Note: Column ranges (A:A) and row ranges (1:1) are dynamic dependencies
         // and should be handled separately as they don't have fixed precedents
 
-        return dependencies;
+        return { localDeps, remoteDeps };
     }
 
     private isFunctionOrKeyword(text: string): boolean {

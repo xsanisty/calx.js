@@ -1,0 +1,41 @@
+{
+  "name": "jquery-calx",
+  "version": "2.2.8",
+  "authors": [
+    "Xsanisty Developer Team <developers@xsanisty.com>"
+  ],
+  "repo": "xsanisty/jquery-calx",
+  "description": "jQuery plugin for building excel-formula based calculation form",
+  "main": "jquery-calx-2.2.8.min.js",
+  "scripts": ["jquery-calx-2.2.8.min.js"],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "excel",
+    "jquery",
+    "formula",
+    "calculator",
+    "calx",
+    "spreadsheet",
+    "form"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.9.1"
+  },
+  "license": "MIT",
+  "homepage": "http://www.xsanisty.com/project/calx2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "php-build",
+    "library",
+    "sample",
+    "documentation",
+    "js",
+    "jquery-1.9.1.min.js"
+  ]
+}

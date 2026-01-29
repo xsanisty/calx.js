@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.2.8 Sample - Formula Showcase
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+        <style>
+            .chead{
+                background:#ccf;
+                text-align: center;
+                vertical-align: middle;
+                width: 9.7%;
+            }
+
+            .rhead{
+                background: #cfc;
+                padding: 0 5px;
+                text-align: right;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.2.8 Sample</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><a href="index.html">Index</a></li>
+                        <li><a href="basic.html">Basic Calculation</a></li>
+                        <li><a href="dynamic_form.html">Dynamic Form</a></li>
+                        <li><a href="checkbox.html">Cehckbox, Radio, and Select</a></li>
+                        <li><a href="chart.html">Drawing Chart</a></li>
+                        <li><a href="multisheet.html">Multiple Sheet</a></li>
+                        <li class="active"><a href="#">Formula Showcase</a></li>
+                        <li><a href="server_side.html">Server Side Formula</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                Sample Application
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="app/budget_planner.html">Budget Planner</a></li>
+                                <li><a href="app/amortization_schedule.html">Amortization Schedule</a></li>
+                                <li><a href="app/home_mortgage.html">Home Mortgage Calc</a></li>
+                                <li><a href="app/home_expense.html">Home Expense Calc</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>Formula Showcase</h2>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary pull-right" id="show_formula" data-shown="0">Show Formula</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form class="form-horizontal" id="sheet1">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td style="width: 3%">&nbsp;</td>
+                                        <td class="chead">A</td>
+                                        <td class="chead">B</td>
+                                        <td class="chead">C</td>
+                                        <td class="chead">D</td>
+                                        <td class="chead">E</td>
+                                        <td class="chead">F</td>
+                                        <td class="chead">G</td>
+                                        <td class="chead">H</td>
+                                        <td class="chead">I</td>
+                                        <td class="chead">J</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="rhead">1</td>
+                                        <td data-cell="A1"></td>
+                                        <td data-cell="B1">USA</td>
+                                        <td data-cell="C1">Canada</td>
+                                        <td data-cell="D1">China</td>
+                                        <td data-cell="E1">Russia</td>
+                                        <td data-cell="F1">Asia</td>
+                                        <td data-cell="G1">Europe</td>
+                                        <td data-cell="H1">Africa</td>
+                                        <td data-cell="I1">Australia</td>
+                                        <td data-cell="J1">South America</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="rhead">2</td>
+                                        <td data-cell="A2">2002</td>
+                                        <td data-cell="B2" data-format="0.00">10</td>
+                                        <td data-cell="C2" data-format="0.00">10</td>
+                                        <td data-cell="D2" data-format="0.00">10</td>
+                                        <td data-cell="E2" data-format="0.00">10</td>
+                                        <td data-cell="F2" data-format="0.00">10</td>
+                                        <td data-cell="G2" data-format="0.00">10</td>
+                                        <td data-cell="H2" data-format="0.00">10</td>
+                                        <td data-cell="I2" data-format="0.00">10</td>
+                                        <td data-cell="J2" data-format="0.00">10</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="rhead">3</td>
+                                        <td data-cell="A3">2003</td>
+                                        <td data-cell="B3" data-format="0.00">10</td>
+                                        <td data-cell="C3" data-format="0.00">10</td>
+                                        <td data-cell="D3" data-format="0.00">10</td>
+                                        <td data-cell="E3" data-format="0.00">10</td>
+                                        <td data-cell="F3" data-format="0.00">10</td>
+                                        <td data-cell="G3" data-format="0.00">10</td>
+                                        <td data-cell="H3" data-format="0.00">10</td>
+                                        <td data-cell="I3" data-format="0.00">10</td>
+                                        <td data-cell="J3" data-format="0.00">10</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="rhead">4</td>
+                                        <td data-cell="A4">2004</td>
+                                        <td data-cell="B4" data-format="0.00">10</td>
+                                        <td data-cell="C4" data-format="0.00">10</td>
+                                        <td data-cell="D4" data-format="0.00">10</td>
+                                        <td data-cell="E4" data-format="0.00">10</td>
+                                        <td data-cell="F4" data-format="0.00">10</td>
+                                        <td data-cell="G4" data-format="0.00">10</td>
+                                        <td data-cell="H4" data-format="0.00">10</td>
+                                        <td data-cell="I4" data-format="0.00">10</td>
+                                        <td data-cell="J4" data-format="0.00">10</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="rhead">5</td>
+                                        <td data-cell="A5">2005</td>
+                                        <td data-cell="B5" data-format="0.00">10</td>
+                                        <td data-cell="C5" data-format="0.00">10</td>
+                                        <td data-cell="D5" data-format="0.00">10</td>
+                                        <td data-cell="E5" data-format="0.00">10</td>
+                                        <td data-cell="F5" data-format="0.00">10</td>
+                                        <td data-cell="G5" data-format="0.00">10</td>
+                                        <td data-cell="H5" data-format="0.00">10</td>
+                                        <td data-cell="I5" data-format="0.00">10</td>
+                                        <td data-cell="J5" data-format="0.00">10</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="rhead">6</td>
+                                        <td data-cell="A6">2006</td>
+                                        <td data-cell="B6" data-format="0.00">10</td>
+                                        <td data-cell="C6" data-format="0.00">10</td>
+                                        <td data-cell="D6" data-format="0.00">10</td>
+                                        <td data-cell="E6" data-format="0.00">10</td>
+                                        <td data-cell="F6" data-format="0.00">10</td>
+                                        <td data-cell="G6" data-format="0.00">10</td>
+                                        <td data-cell="H6" data-format="0.00">10</td>
+                                        <td data-cell="I6" data-format="0.00">10</td>
+                                        <td data-cell="J6" data-format="0.00">10</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="11">&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3"><input class="form-control input-sm" id="formula" value="VLOOKUP(2002, A2:J6, 5)" style="width:100%; text-align:left"/></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" id="apply">Apply</button>
+                                        </td>
+                                        <td style="text-align:right">Result : </td>
+                                        <td colspan="4"><label data-cell="K1" data-formula="VLOOKUP(2002, A2:J6, 5)" data-format="0.00"></label></td>
+                                        <td colspan="3">
+                                            <button class="btn btn-sm btn-primary" id="randomize">Randomize</button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-calx-sample-2.2.8.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap.js" type="text/javascript"></script>
+        <script>
+
+            var calc  = $('#sheet1').calx();
+            var sheet = calc.calx('getSheet');
+
+            $('#randomize').click(function(e){
+                e.preventDefault();
+                var range = sheet.getCellRange('B2', 'J6');
+
+                for(var a in range){
+                    range[a].setValue(Math.random(10, 1000)*100);
+                    range[a].renderComputedValue();
+                }
+
+                sheet.calculate();
+            });
+
+            $('#apply').click(function(e){
+                e.preventDefault();
+                sheet.getCell('K1').setFormula($('#formula').val())
+                                   .calculate();
+            });
+
+            $('#show_formula').click(function(e){
+                e.preventDefault();
+
+                if($(this).attr('data-shown') == '0'){
+                    $('[data-formula],[data-cell]').each(function(){
+                        $(this).after('<span class="formula">'+$(this).attr('data-cell')+($(this).attr('data-formula') ? ' = '+$(this).attr('data-formula') : '')+'&nbsp;</span>');
+                    });
+
+                    $(this).attr('data-shown', 1).html('Hide Formula');
+                }else{
+                    $('span.formula').remove();
+                    $(this).attr('data-shown', 0).html('Show Formula');
+                }
+            });
+        </script>
+    </body>
+</html>

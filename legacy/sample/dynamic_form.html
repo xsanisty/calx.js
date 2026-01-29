@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.2.8 Sample - Checkbox, Radio Button, and Select Box
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.2.8 Sample</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><a href="index.html">Index</a></li>
+                        <li><a href="basic.html">Basic Calculation</a></li>
+                        <li class="active"><a href="#">Dynamic Form</a></li>
+                        <li><a href="checkbox.html">Cehckbox, Radio, and Select</a></li>
+                        <li><a href="chart.html">Drawing Chart</a></li>
+                        <li><a href="multisheet.html">Multiple Sheet</a></li>
+                        <li><a href="formula.html">Formula Showcase</a></li>
+                        <li><a href="server_side.html">Server Side Formula</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                Sample Application
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="app/budget_planner.html">Budget Planner</a></li>
+                                <li><a href="app/amortization_schedule.html">Amortization Schedule</a></li>
+                                <li><a href="app/home_mortgage.html">Home Mortgage Calc</a></li>
+                                <li><a href="app/home_expense.html">Home Expense Calc</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>Working with Dynamic Form</h2>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary pull-right" id="show_formula" data-shown="0">Show Formula</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form class="form-horizontal" id="dynamic">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td style="width:  5%" class="text-center"><label>No.</label></td>
+                                        <td style="width: 45%"><label>Item Name</label></td>
+                                        <td style="width: 15%" class="text-center"><label>Price</label></td>
+                                        <td style="width:  5%" class="text-center"><label>Qty</label></td>
+                                        <td style="width:  5%" class="text-center"><label>% Disc</label></td>
+                                        <td style="width: 15%" class="text-center"><label>Total Price</label></td>
+                                        <td style="width:  5%" class="text-center"><label>Remove</label></td>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemlist">
+                                    <tr>
+                                        <td><input class="form-control input-sm text-right" data-cell="A1" data-format="0"></td>
+                                        <td><input class="form-control input-sm" data-cell="B1"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="C1" data-format="$ 0,0.00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="D1" data-format="0[.]00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="E1" data-format="0,0[.]00 %"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="F1" data-format="$ 0,0.00" data-formula="D1*(C1-(C1*E1))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control input-sm text-right" data-cell="A2" data-format="0"></td>
+                                        <td><input class="form-control input-sm" data-cell="B2"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="C2" data-format="$ 0,0.00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="D2" data-format="0[.]00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="E2" data-format="0,0[.]00 %"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="F2" data-format="$ 0,0.00" data-formula="D2*(C2-(C2*E2))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control input-sm text-right" data-cell="A3" data-format="0"></td>
+                                        <td><input class="form-control input-sm" data-cell="B3"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="C3" data-format="$ 0,0.00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="D3" data-format="0[.]00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="E3" data-format="0,0[.]00 %"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="F3" data-format="$ 0,0.00" data-formula="D3*(C3-(C3*E3))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control input-sm text-right" data-cell="A4" data-format="0"></td>
+                                        <td><input class="form-control input-sm" data-cell="B4"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="C4" data-format="$ 0,0.00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="D4" data-format="0[.]00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="E4" data-format="0,0[.]00 %"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="F4" data-format="$ 0,0.00" data-formula="D4*(C4-(C4*E4))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="form-control input-sm text-right" data-cell="A5" data-format="0"></td>
+                                        <td><input class="form-control input-sm" data-cell="B5"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="C5" data-format="$ 0,0.00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="D5" data-format="0[.]00"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="E5" data-format="0,0[.]00 %"></td>
+                                        <td><input class="form-control input-sm text-right" data-cell="F5" data-format="$ 0,0.00" data-formula="D5*(C5-(C5*E5))"></td>
+                                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="margin-top:30px">
+                                        <td>
+                                            <button id="add_item" class="btn btn-sm btn-primary">Add Item</button>
+                                        </td>
+                                        <td colspan="4" class="text-right">
+                                            <label for="total">Total Price - Discount :</label>
+                                        </td>
+                                        <td class="text-right">
+                                            <label data-cell="G1" data-format="$ 0,0.00" data-formula="SUM(F1:F5)"></label>
+                                        </td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-calx-sample-2.2.8.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap.js" type="text/javascript"></script>
+        <script>
+            $form       = $('#dynamic').calx();
+            $itemlist   = $('#itemlist');
+            $counter    = 5;
+
+            $('#add_item').click(function(e){
+                e.preventDefault();
+                var i = ++$counter;
+                $itemlist.append(
+                    '<tr>\
+                        <td><input class="form-control input-sm text-right" data-cell="A'+i+'" data-format="0"></td>\
+                        <td><input class="form-control input-sm" data-cell="B'+i+'"></td>\
+                        <td><input class="form-control input-sm text-right" data-cell="C'+i+'" data-format="$ 0,0.00"></td>\
+                        <td><input class="form-control input-sm text-right" data-cell="D'+i+'" data-format="0[.]00"></td>\
+                        <td><input class="form-control input-sm text-right" data-cell="E'+i+'" data-format="0,0[.]00 %"></td>\
+                        <td><input class="form-control input-sm text-right" data-cell="F'+i+'" data-format="$ 0,0.00" data-formula="D'+i+'*(C'+i+'-(C'+i+'*E'+i+'))"></td>\
+                        <td class="text-center"><button class="btn-remove btn btn-sm btn-danger"><i class="fa fa-times fa-fw"></i></button></td>\
+                    </tr>'
+                );
+                //console.log('new row appended');
+
+                $form.calx('update');
+                $form.calx('getCell', 'G1').setFormula('SUM(F1:F'+i+')');
+
+                //console.log($form.calx('getSheet'));
+            });
+
+            $('#itemlist').on('click', '.btn-remove', function(){
+                $(this).parent().parent().remove();
+                $form.calx('update');
+                $form.calx('getCell', 'G1').calculate();
+            });
+
+            $('#show_formula').click(function(e){
+                e.preventDefault();
+
+                if($(this).attr('data-shown') == '0'){
+                    $('[data-formula],[data-cell]').each(function(){
+                        $(this).after('<span class="formula">'+$(this).attr('data-cell')+($(this).attr('data-formula') ? ' = '+$(this).attr('data-formula') : '')+'&nbsp;</span>');
+                    });
+
+                    $(this).attr('data-shown', 1).html('Hide Formula');
+                }else{
+                    $('span.formula').remove();
+                    $(this).attr('data-shown', 0).html('Show Formula');
+                }
+            });
+        </script>
+    </body>
+</html>

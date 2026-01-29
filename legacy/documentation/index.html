@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.0.0 documentation
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.0.0</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#initialize">Initializing</a></li>
+                        <li><a href="#configure">Configuration</a></li>
+                        <li><a href="#formula">Formula</a></li>
+                        <li><a href="#format">Formatting</a></li>
+                        <li><a href="#calx">Calx API</a></li>
+                        <li><a href="#sheet">Sheet API</a></li>
+                        <li><a href="#cell">Cell API</a></li>
+                        <li><a href="#dependency">Dependencies</a></li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+                <!-- Overview -->
+<a name="overview"></a><br><br>
+<div class="row page-header" style="margin-top: 0">
+    <div class="col-md-12">
+        <h3>
+            jQuery Calx Overview
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <p>
+            jQuery Calx is an excel calculation engine that wrapped as jQuery plugin,
+            It is useful for building calculation in html page using excel formula, create calculation table,
+            build custom calculator, convert excel spreadsheet into web page, etc.
+        </p>
+
+        <p>
+            jQuery Calx also come with a lot formula function defined, and adopted from <a href="https://github.com/sutoiku/formula.js">formula.js</a>.
+            If the default formula set is not enough, you can always define your own formula function
+            and register it via <code>registerFunction</code> method.
+        </p>
+
+        <h4 class="method-title">Server Side Calculation</h4>
+        <p>
+            In case you don't want the calculation formula to be exposed to the end user, you can always hide it
+            by processing the calculation logic in the server side by using the <code>SERVER()</code> formula.
+        </p>
+
+        <h4 class="method-title">Chart Drawing</h4>
+        <p>
+            When you need to represent your data in graphical way, there is <code>GRAPH()</code> formula to help you
+            draw the chart.
+        </p>
+
+        <h4 class="method-title">Resport Bug/Issue</h4>
+        <p>
+            If some bug or abnormal behaviour is found, you can always report the issue via jQuery Calx issue tracker
+            here <a href="https://bitbucket.org/xsanisty/jquery-calx-2/issues">https://bitbucket.org/xsanisty/jquery-calx-2/issues</a>
+        </p>
+    </div>
+</div>                <!-- initialize -->
+<a name="initialize"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Initializing
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            The very first step to enable jQuery Calx, is to load jQuery and the jQuery Calx itself
+        </p>
+<pre><code>&lt;script type="text/javascript" src="path/to/jquery-1.10.2.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="path/to/jquery-calx-2.0.0.min.js"&gt;&lt;/script&gt;
+</code></pre>
+        <p>
+            Like any other jQuery plugin, it is easy to initialize jQuery Calx, you just need to prepare the element
+            with configured <code>data-cell</code>, <code>data-formula</code>, or <code>data-format</code> attribute
+            and call <code>$('selector').calx()</code> to enable jQuery Calx.
+        </p>
+        <p>
+            We are using <code>data-cell</code> attribute to define the cell address,
+            <code>data-formula</code> attribute to define the calculation formula, and <code>data-format</code> attribute
+            to define formatting rule, and then, let jQuery Calx do the magic.
+        </p>
+        <p>
+            Once jQuery Calx is initialized, it will respond to any changes occured in cell's element,
+            and do the calculation based on the cell value and formula, let's see below example:
+        </p>
+        <div class="highlight">
+        <pre>
+&lt;form id="sheet"&gt;
+    &lt;input type="text" data-cell="A1"&gt; &lt;br&gt;
+    &lt;input type="text" data-cell="A2"&gt; &lt;br&gt;
+    &lt;input type="text" data-cell="A3"&gt; &lt;br&gt;
+    &lt;input type="text" data-cell="A4" data-formula="SUM(A1:A3)"&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+$('#sheet').calx();
+&lt;/script&gt;
+        </pre>
+        </div>
+
+        <p>
+            In the above sample code snippet, <code>A4</code> will display whatever result of <code>SUM(A1:A3)</code>, any change occured
+            in <code>A1</code>, <code>A2</code>, or <code>A3</code> will be represented in <code>A4</code> since <code>A4</code>
+            depend on cell ranged from <code>A1</code> to <code>A3</code>.
+        </p>
+        <p>
+            If you are familiar with any spreadsheet application like Microsoft Excel or LibreOffice,
+            you will also get familiar with jQuery Calx. We use term <code>sheet</code> for wrapper element like
+            <code>form#sheet</code> where the jQuery Calx is initialized, and <code>cell</code> for all element inside the <code>form#sheet</code> that
+            involved in calculation process, this mean all element that has <code>data-cell</code> and/or <code>data-formula</code> attribute.
+        </p>
+        <p>
+            In case <code>data-formula</code> attribute present without <code>data-cell</code> attribute, jQuery Calx will assign reserved cell address
+            prefixed with <code>CALX</code> and count the index incrementally, the resulting cell address will be like <code>CALX1</code>,
+            <code>CALX2</code>,<code>CALX3</code>,<code>CALX4</code>
+        </p>
+    </div>
+</div>                <!-- Configuration -->
+<a name="configure"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Configuration
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            You can configure how jQuery Calx should behave by passing configuration object when initializing
+            jQuery Calx, the default configuration is used when you pass nothing to initialize jQuery Calx.
+            The default configuration is shown as below:
+        </p>
+<pre>
+    <code>
+/************************************************
+ *             Default Configuration            *
+ ************************************************/
+
+var defaultConfig = {
+    /**
+     * tell calx to perform auto calculation after change has been made,
+     * if autoCalculate is false, you need to trigger calculation manually
+     * by calling the calculate method $(selector).calx('calculate');
+     */
+    'autoCalculate'         : true,
+
+    /**
+     * event that trigger calculation to be executed when autoCalculate is true
+     */
+    'autoCalculateTrigger'  : 'blur',
+
+    /**
+     * callback triggered right before calculation is performed
+     * when callback is executed, jQuery Calx will pass sheet object as the context
+     * so you can access all sheet API via &lt;this&gt; keyword
+     */
+    'onBeforeCalculate'     : null ,
+
+    /**
+     * callback triggered right after calculation is performed
+     */
+    'onAfterCalculate'      : null ,
+
+    /**
+     * callback triggered right before calculation result is rendered
+     */
+    'onBeforeRender'         : null ,
+
+    /**
+     * callback triggered right after calculation result is rendered
+     */
+    'onAfterRender'          : null ,
+
+    /**
+     * default fomatting rule when data-format is not present
+     */
+    'defaultFormat'         : false,
+
+    /**
+     * used for server side formula, when you call the SERVER() function,
+     * jQuery Calx will pass everything to this URL, and wait for the response
+     * before processing the next calculation
+     */
+    'ajaxUrl'               : null,
+
+    /**
+     * ajax method used for requesting formula result from the server side
+     */
+    'ajaxMethod'            : 'get',
+
+    /**
+     * check for circular reference upon initialization, default false
+     */
+    'checkCircularReference': false
+
+};
+    </code>
+</pre>
+    </div>
+</div>                <!-- Formula -->
+<a name="formula"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Formula
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            Formula is used to define calculation rule, you can define the formula inside the
+            <code>data-formula</code> attribute and write the formula like the you write it in excel. There are a lot excel
+            compatible formula can be used from simple <code>SUM</code>, <code>HLOOKUP</code>, <code>VLOOKUP</code>
+            to complex financial function like <code>NPV</code>, <code>IRR</code>, etc.
+        </p>
+
+        <p>
+            Beside the excel compatible formula, there is also custom formula built in jQuery Calx, they are
+            <code>SERVER()</code> and <code>GRAPH()</code>
+        </p>
+
+        <h4 class="method-title">SERVER()</h4>
+        <p>
+            This is special function to perform calculation in server side, you must define <code>ajaxUrl</code>
+            parameter when configuring calx. The first parameter of this function is the formula name, and the rest is
+            formula parameters
+        </p>
+        <p>
+            When it invoked, jQuery Calx will send the request to the configured ajaxUrl and wait for the response
+            before continue to the next formula execution.
+        </p>
+        <p>
+            <pre><code>SERVER('SUM', A1:A3, B4)</code></pre>
+        </p>
+        <p>
+            Formula above will send request looks like below
+        </p>
+        <p>
+<pre><code>
+[
+    function    => 'SUM',
+    params      => array(
+        /* range from A1 to A3 */
+        1   => array(
+            A1  => 'value of A1',
+            A2  => 'value of A2',
+            A3  => 'value of A3'
+        ),
+
+        /* the value of B4 */
+        2   => 'value of B4'
+    )
+]
+</code></pre>
+        </p>
+
+        <p>
+            <code>#ERROR_SEND_REQUEST!</code> will be returned when error occured.
+        </p>
+
+        <h4 class="method-title">GRAPH()</h4>
+        <p>
+            This is special function used to draw graphic or chart to represent the data in graphical way.
+            You need to place the GRAPH formula in the div element with specified height and width.
+        </p>
+
+        <p>
+            <pre><code>&lt;div data-formula="GRAPH(B2:G8, ['type=bar', 'label=B1:G1', 'legend=A2:A8'])"&gt;&lt;/div&gt;</code></pre>
+        </p>
+
+        <p>
+            The first parameter is cell range contains data that need to be represented as graphic. <br>
+            The second parameter is array containing some 'key=value' to define how the chart should be rendered.
+
+            <ul type="square">
+                <li>
+                    type: <br>
+                    type could be one of the following bar, line, pie, or doughnut, default is line.
+                </li>
+                <li>
+                    label: <br>
+                    label is used in bar or line type chart to draw label in the x-axis of the chart.
+                    If none is given, the label will be incremental number starting from 0.
+                </li>
+                <li>
+                    legend: <br>
+                    legend is used to give explanation on the chart. If none is given, the legend will be blank
+                </li>
+                <!--<li>
+                    color: <br>
+                    color is used to tell jQuery Calx in which color the graph should be drawn, you can use
+                    comma separated color to define color sequence.
+                    If none is given, it will use auto-generated color squence.
+                </li>-->
+                <li>
+                    orientation: <br>
+                    orientation is used to define the table orientation, it could be vertical or horizontal,
+                    default it horizontal<br>
+
+                    Horizontal table:<br>
+                    jQuery Calx will parse single row as single series.<br>
+<pre>
++-------+-------+-------+-------+-------+
+| val 1 | val 2 | val 3 | val 4 | val 5 |
++-------+-------+-------+-------+-------+
+| val 1 | val 2 | val 3 | val 4 | val 5 |
++-------+-------+-------+-------+-------+
+</pre>
+
+                    Vertical table: <br>
+                    jQuery Calx will parse single column as single series.<br>
+
+<pre>
++-------+-------+
+| val 1 | val 1 |
++-------+-------+
+| val 2 | val 2 |
++-------+-------+
+| val 3 | val 3 |
++-------+-------+
+| val 4 | val 4 |
++-------+-------+
+| val 5 | val 5 |
++-------+-------+
+
+</pre>
+
+                </li>
+            </ul>
+        </p>
+
+    </div>
+</div>                <!-- Formatting -->
+                <a name="format"></a><br><br>
+                <div class="row page-header" style="margin-top:0">
+                    <div class="col-md-12">
+                        <h3>
+                            Formatting
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            jQuery Calx depends on <code>numeral.js</code> for output formatting. In jQuery Calx version 1.x , numeral is integrated
+                            into the core, but no longer integrated in jQuery Calx 2.x and listed as dependency, you need to load it before loading
+                            jQuery Calx if you need the formatting feature.
+                        </p>
+                        <pre>
+&lt;script src="js/numeral.min.js"&gt;&lt/script&gt;
+&lt;script src="jquery-1.9.1.min.js"&gt;&lt/script&gt;
+&lt;script src="jquery-calx-2.0.0.min.js"&gt;&lt/script&gt; </pre><br>
+
+                        <h4>Setting up locale</h4>
+                        <p>
+                            In jQuery Calx 1.x, locale settings are defined inside the jQuery Calx configuration, since jQuery Calx 2 no longer
+                            integrated with numeral.js, local settings are defined in numeral config
+                        </p>
+                        <pre>
+// load a language
+    numeral.language('fr', {
+        delimiters: {
+            thousands: ' ',
+            decimal: ','
+        },
+        abbreviations: {
+            thousand: 'k',
+            million: 'm',
+            billion: 'b',
+            trillion: 't'
+        },
+        ordinal : function (number) {
+            return number === 1 ? 'er' : 'ème';
+        },
+        currency: {
+            symbol: '€'
+        }
+    });
+
+// switch between languages
+    numeral.language('fr');
+                        </pre><br>
+
+                        <h4>
+                            Formatting Value
+                        </h4>
+                        <p>
+                            Cell value formatting is defined in the <code>data-format</code> attribute using pre-defined rule, below is example
+                            of how to format the cell value and list of available formatting rules.
+                        </p>
+                        <pre>
+&lt;input data-cell="A1" data-format="$ 0,0[.]00" /&gt;</pre>
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <h4>Numbers</h4>
+                                <table id="format-numbers" class="table striped bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Format</th>
+                                            <th>String</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr><td>10000</td><td>'0,0.0000'</td><td>10,000.0000</td></tr><tr><td>10000.23</td><td>'0,0'</td><td>10,000</td></tr><tr><td>10000.23</td><td>'+0,0'</td><td>+10,000</td></tr><tr><td>-10000</td><td>'0,0.0'</td><td>-10,000.0</td></tr><tr><td>10000.1234</td><td>'0.000'</td><td>10000.123</td></tr><tr><td>10000.1234</td><td>'0[.]00000'</td><td>10000.12340</td></tr><tr><td>-10000</td><td>'(0,0.0000)'</td><td>(10,000.0000)</td></tr><tr><td>-0.23</td><td>'.00'</td><td>-.23</td></tr><tr><td>-0.23</td><td>'(.00)'</td><td>(.23)</td></tr><tr><td>0.23</td><td>'0.00000'</td><td>0.23000</td></tr><tr><td>0.23</td><td>'0.0[0000]'</td><td>0.23</td></tr><tr><td>1230974</td><td>'0.0a'</td><td>1.2m</td></tr><tr><td>1460</td><td>'0 a'</td><td>1 k</td></tr><tr><td>-104000</td><td>'0a'</td><td>-104k</td></tr><tr><td>1</td><td>'0o'</td><td>1st</td></tr><tr><td>52</td><td>'0o'</td><td>52nd</td></tr><tr><td>23</td><td>'0o'</td><td>23rd</td></tr><tr><td>100</td><td>'0o'</td><td>100th</td></tr></tbody>
+                                </table>
+
+
+                                <h4>Percentages</h4>
+                                <table id="format-percentage" class="table striped bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Format</th>
+                                            <th>String</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr><td>1</td><td>'0%'</td><td>100%</td></tr><tr><td>0.974878234</td><td>'0.000%'</td><td>97.488%</td></tr><tr><td>-0.43</td><td>'0 %'</td><td>-43 %</td></tr><tr><td>0.43</td><td>'(0.000 %)'</td><td>43.000 %</td></tr></tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Currency</h4>
+                                <table id="format-currency" class="table striped bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Format</th>
+                                            <th>String</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr><td>1000.234</td><td>'$0,0.00'</td><td>$1,000.23</td></tr><tr><td>1000.2</td><td>'0,0[.]00 $'</td><td>1,000.20 $</td></tr><tr><td>1001</td><td>'$ 0,0[.]00'</td><td>$ 1,001</td></tr><tr><td>-1000.234</td><td>'($0,0)'</td><td>($1,000)</td></tr><tr><td>-1000.234</td><td>'$0.00'</td><td>-$1000.23</td></tr><tr><td>1230974</td><td>'($ 0.00 a)'</td><td>$ 1.23 m</td></tr></tbody>
+                                </table>
+                                <h4>Bytes</h4>
+                                <table id="format-bytes" class="table striped bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Format</th>
+                                            <th>String</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr><td>100</td><td>'0b'</td><td>100B</td></tr><tr><td>2048</td><td>'0 b'</td><td>2 KB</td></tr><tr><td>7884486213</td><td>'0.0b'</td><td>7.3GB</td></tr><tr><td>3467479682787</td><td>'0.000 b'</td><td>3.154 TB</td></tr></tbody>
+                                </table>
+
+                                <h4>Time</h4>
+                                <table id="format-time" class="table striped bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Format</th>
+                                            <th>String</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><tr><td>25</td><td>'00:00:00'</td><td>0:00:25</td></tr><tr><td>238</td><td>'00:00:00'</td><td>0:03:58</td></tr><tr><td>63846</td><td>'00:00:00'</td><td>17:44:06</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>                <!-- Calx API -->
+<a name="calx"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Calx API
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        Calx comes with several API that can be invoked using this syntax <code>$('selector').calx('method')</code>,
+        here is list of available method that can be accessed by jQuery Calx:
+
+        <ul type="none">
+            <li>
+                <h4 class="method-title">calculate</h4>
+                <p><code>$('selector').calx('calculate')</code></p>
+                <p>
+                    This method is used to trigger calculation process on the sheet related to the selected element,
+                    which is useful when you configure jQuery Calx with <code>autoCalculate : false</code> or working
+                    with large sheet where the calculation process take some times to finish and need to be triggerred
+                    manually.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">destroy</h4>
+                <p><code>$('selector').calx('destroy')</code></p>
+                <p>
+                    This method is used to destroy sheet object related to the selected element, any formula referenced
+                    to the cells inside this sheet will become invalid, and may result in wrong calculation.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">evaluate</h4>
+                <p><code>$('selector').calx('evaluate', formula)</code></p>
+                <p>
+                    This method is used to evaluate formula against the current selected sheet, all cell adrresses and
+                    variables are referenced to the current sheet.
+                </p>
+
+                <p>
+                    You can do something like :
+
+                    <code>$('selector').calx('evaluate', 'SUM(A1:A5)')</code>
+
+                    and jQuery Calx will return the result of the formula.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">getCell</h4>
+                <p><code>$('selector').calx('getCell', cellAddress)</code></p>
+                <p>
+                    This method is used to retreive specified cell object of the selected sheet.
+                    Please refer to <a href="#cell">Cell API</a> for detailed documentation about cell object.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">getSheet</h4>
+                <p><code>$('selector').calx('getSheet')</code></p>
+                <p>
+                    This method is used to retreive sheet object related to the selected element.
+                    Please refer to <a href="#sheet">Sheet API</a> for detailed documentation about sheet object.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">getUtility</h4>
+                <p><code>$('selector').calx('getUtility')</code></p>
+                <p>
+                    This method is used to retreive utility object when you need some help with the cell or cell range.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">refresh</h4>
+                <p><code>$('selector').calx('refresh')</code></p>
+                <p>
+                    This method is used to force jQuery Calx to rebuild the sheet of the selected element.
+                    It will destroy the cell registry and rebuild it from scratch.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">registerFunction</h4>
+                <p><code>$('selector').calx('registerFunction', FUNCTION_NAME, function_definition [, override])</code></p>
+                <p>
+                    This method is used to register new function and can be used in <code>data-formula</code> attribute.
+                    The parameters is described as below:
+                    <ul type="square">
+                        <li>FUNCTION_NAME<br>the function name such as SUM, AVG, etc, must be uppercase letter</li>
+                        <li>
+                            function_definition<br>the function definition define how the function should behave <code>function(){ /** bla bla bla **/ }</code>,
+                            jQuery Calx will pass the sheet object as the context, so you can access all the sheet API via
+                            <code>this</code> keyword.
+                        </li>
+                        <li>
+                            override<br>the optional override flag, could be true or false to indicate if new function should override the
+                            original one or not. If true, the built in function will be overrided, default value is false.
+                        </li>
+                    </ul>
+                </p>
+                <p>
+<pre>
+<code>
+$('selector').calx('registerFunction', 'CUSTOM', function(args1, args2, ... , argsN){
+    //&lt;this&gt; keyword will be sheet object where the current formula is evaluated
+    //if data-formula look like CUSTOM(A1), the value of A1 will be passed as args1
+    //if data-formula look like CUSTOM(A1:B2), the value of args1 will be like
+    //{A1:value, A2:value, B1:value, B2:value}
+
+    //function should return calculated value to be rendered into the cell that invoke this function
+});
+</code>
+</pre>
+                </p>
+                <p>
+                    And after the function is registered, you can simply write it in the <code>data-formula</code> attribute:
+                    <code>&lt;span data-formula="CUSTOM(A1,A2,100,C1:D5)"&gt;&lt;/span&gt;</code>
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">registerVariable</h4>
+                <p><code>$('selector').calx('registerVariable', var_name [, var_value])</code></p>
+                <p>
+                    This method is used to register variables to the calx, and are available to all sheet. The variable name
+                    should be all lowercase and underscore character ([a-z_]) and the value could be anything as far as the function
+                    can handle it.
+                </p>
+                <p>
+                    <pre><code>$().calx('registerVariable', 'the_year_i_was_born', 1988)</code></pre>
+                </p>
+                <p>
+                    Or you can define multiple variable at one time using javascript object
+                </p>
+                <p>
+                    <pre><code>$().calx('registerVariable', {varname: 'value', another_var: 'another value'})</code></pre>
+                </p>
+                <p>
+                    After variable is registered, you can reference it in data-formula attribute like
+                    <code>data-formula="CONCAT('I was born in ', the_year_i_was_born)"</code>
+                </p>
+                <p>
+                    Please note that there are predefined variables: true, false, and null disregard of the character is lower
+                    case or upper case, or mix of both, which mean true, TRUE, tRue are all the same.
+                </p>
+            </li>
+            <li>
+                <h4 class="method-title">update</h4>
+                <p><code>$('selector').calx('update')</code></p>
+                <p>
+                    This method is used to update cell registry against any change in the element related to the sheet,
+                    <code>update</code> is similar to <code>refresh</code>, but instead of rebuild the cell registry from
+                    the scratch, it only add or delete cell that has been added or removed from the sheet's element.
+                </p>
+                <p>
+                    This is useful when you are working with dynamic form where form elements are added or removed on the fly.
+                </p>
+            </li>
+
+            <li>
+                <h4 class="method-title">reset</h4>
+                <p><code>$('selector').calx('reset')</code></p>
+                <p>
+                    This method is used to reset the form inside the sheet element to its original state.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>                <!-- Sheet API -->
+<a name="sheet"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Sheet API
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            Each time jQuery Calx is initialized, sheet object is created for each selected element and
+            stored in the sheet registry inside the calx object, you can retreive this sheet object using
+            <code>getSheet</code> method.
+        </p>
+        <p>
+            <pre><code>$('selector').calx('getSheet')</code></pre>
+        </p>
+        <p>
+            Please note, that selector should retrieve single dom element to get correct sheet object. After sheet
+            object is retreived, you can call all the method available.
+        </p>
+
+        <h4 class="method-title">calculate</h4>
+        <p><code>sheet.calculate()</code></p>
+        <p>
+            Calculate the whole sheet and display the result in each cell.
+        </p>
+
+        <h4 class="method-title">checkCircularReference</h4>
+        <p><code>sheet.checkCircularReference()</code></p>
+        <p>
+            Checking if circular reference exist in the sheet.
+        </p>
+
+        <h4 class="method-title">evaluate</h4>
+        <p><code>sheet.evaluate(formula)</code></p>
+        <p>
+            Evaluating formula in the current sheet.
+        </p>
+
+        <h4 class="method-title">getCell</h4>
+        <p><code>sheet.getCell(cellAddress)</code></p>
+        <p>
+            Get the cell object on the specified address.
+        </p>
+
+        <h4 class="method-title">getCellValue</h4>
+        <p><code>sheet.getCellValue(cellAddress)</code></p>
+        <p>
+            get value of the cell on specified address
+        </p>
+
+        <h4 class="method-title">getCellRange</h4>
+        <p><code>sheet.getCellRange(rangeStart, rangeStop)</code></p>
+        <p>
+            Get the cells object in the range, the result will be object looks like below
+<pre><code>{
+    A1: cellObject,
+    A2: cellObject,
+    ...
+}</code></pre>
+        </p>
+
+        <h4 class="method-title">getCellRangeValue</h4>
+        <p><code>sheet.getCellRangeValue(rangeStart, rangeStop)</code></p>
+        <p>
+            Get value of the cells in the range, the result will be object looks like below
+<pre><code>{
+    A1: 'some value',
+    A2: 100
+    ...
+}</code></pre>
+        </p>
+
+        <h4 class="method-title">getVariable</h4>
+        <p><code>sheet.getVariable(varName)</code></p>
+        <p>
+            Get the defined variable value.
+        </p>
+
+        <h4 class="method-title">refresh</h4>
+        <p><code>sheet.refresh()</code></p>
+        <p>
+            Rebuild cell registry from the scratch.
+        </p>
+
+        <h4 class="method-title">reset</h4>
+        <p><code>sheet.reset()</code></p>
+        <p>
+            Reset the form inside sheet element to its original state.
+        </p>
+
+        <h4 class="method-title">update</h4>
+        <p><code>sheet.update()</code></p>
+        <p>
+            Update cell registry against any change in the sheet element.
+        </p>
+    </div>
+</div>                <!-- Cell API -->
+<a name="cell"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Cell API
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            Cell object is created after sheet object is completely initialized, and is stored in the
+            cells registry inside the sheet object. You can retreive this cell object using two methods,
+            via calx api, and via sheet object
+        </p>
+
+        <p>
+            <code>$(selector).calx('getCell', cellAddress)</code>
+        </p>
+        <p>or</p>
+        <p>
+            <code>sheet.getCell(cellAddress)</code>
+        </p>
+        <p>
+            After cell object is retrieved, you can access all the method available in cell object
+        </p>
+
+        <h4 class="method-title">calculate</h4>
+        <p><code>cell.calculate()</code></p>
+        <p>
+            Evaluate the formula of the current cell, and all it's dependant (all cells that depends on this cell)
+        </p>
+
+        <h4 class="method-title">evaluateFormula</h4>
+        <p><code>cell.evaluateFormula()</code></p>
+        <p>
+            Calculate only formula of this cell, and return the value.
+        </p>
+
+        <h4 class="method-title">getAddress</h4>
+        <p><code>cell.getAddress()</code></p>
+        <p>
+            Get the cell address of current cell object.
+        </p>
+
+        <h4 class="method-title">getFormat</h4>
+        <p><code>cell.getFormat()</code></p>
+        <p>
+            Get the formatting rule.
+        </p>
+
+        <h4 class="method-title">getFormattedValue</h4>
+        <p><code>cell.getFormattedValue()</code></p>
+        <p>
+            Get the formatted value
+        </p>
+
+        <h4 class="method-title">getFormula</h4>
+        <p><code>cell.getFormula()</code></p>
+        <p>
+            Get the formula
+        </p>
+
+        <h4 class="method-title">getValue</h4>
+        <p><code>cell.getValue()</code></p>
+        <p>
+            Get the raw value of the cell, if cell has formula defined, it will return the calculated value
+        </p>
+
+        <h4 class="method-title">renderComputedValue</h4>
+        <p><code>cell.renderComputedValue()</code></p>
+        <p>
+            Render the computed value to the cell's element
+        </p>
+
+        <h4 class="method-title">setConditionalStyle</h4>
+        <p><code>cell.setConditionalStyle(function(value, element){})</code></p>
+        <p>
+            Setup conditional styling for the cell element, it should be function with the cell value as first
+            parameter, and jQuery object of the cell element as second parameter
+        </p>
+<pre><code>
+cell.setConditionalStyle(function(cellValue, cellElement){
+    if(cellValue < 0){
+        cellElement.css('color', 'red');
+    }else{
+        cellElement.css('color', 'green');
+    }
+});
+</code></pre>
+
+        <h4 class="method-title">setFormat</h4>
+        <p><codecellsetFormat(format)</code></p>
+        <p>
+            Set the formatting rule of the current cell.
+        </p>
+        <p>
+            Please note that you must not set the format on the fly via <code>$(selector).attr('data-format', format)</code>
+            since jQuery Calx will not notice the change.
+        </p>
+
+        <h4 class="method-title">setFormula</h4>
+        <p><code>cell.setFormula(formula)</code></p>
+        <p>
+            Set the calculation formula of the current cell.
+        </p>
+        <p>
+            Please note that you must not set the formula on the fly via <code>$(selector).attr('data-formula', formula)</code>
+            since jQuery Calx will not notice the change.
+        </p>
+
+        <h4 class="method-title">setValue</h4>
+        <p><code>cell.setValue(value)</code></p>
+        <p>
+            Set the value of the current cell.
+        </p>
+        <p>
+            Please note that you must not set the value on the fly via <code>$(selector).val(value)</code>
+            since jQuery Calx will not notice the change.<br>
+            Cell with formula defined, will not affected by this change since it will always return the
+            calculated value. <br>
+            Cell with <code>data-format</code> caontains % like <code>0%</code>, <code>0.00 %</code>, will parse
+            10 as 10% (0.1), 10% as 10%.
+
+        </p>
+    </div>
+</div>                <!-- Dependency -->
+<a name="dependency"></a><br><br>
+<div class="row page-header" style="margin-top:0">
+    <div class="col-md-12">
+        <h3>
+            Dependencies
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            By default, the only dependency of jQuery Calx is jQuery, the other dependencies located in <code>js</code> directory only required when you perform
+            specific formula, including value formatting, date operation, and statistic operation. jQuery Calx using formula
+            sets from <a href="https://github.com/sutoiku/formula.js">formula.js</a> in the core,
+            but it already modified to work seamlessly with jQuery Calx to minimize dependencies.
+        </p>
+
+        <h4 class="method-title">Value Formatting</h4>
+        <p>
+            In regards to format value using the <code>data-format</code> attribute, you need to include <code>numeral.min.js</code> located
+            in <code>js</code> directory, or you can download the latest version from
+            <a href="https://github.com/adamwdraper/Numeral-js">https://github.com/adamwdraper/Numeral-js</a>.
+
+            If <code>numeral.js</code> is not included, jQuery Calx will render the raw value instead of formatted one.
+        </p>
+
+        <h4 class="method-title">Date Processing</h4>
+        <p>
+            Most of the date processing formula like <code>DATE</code>, <code>DATEDIF()</code> require <code>moment.js</code> to be executed correctly,
+            you need to include <code>moment.min.js</code> located in <code>js</code> directory.
+            If <code>moment.js</code> is not loaded, jQuery Calx will return <code>#ERROR_MOMENT_JS_REQUIRED</code> error.
+        </p>
+
+        <h4 class="method-title">Statistical Calculation</h4>
+        <p>
+            Most of the statistical processing formula like <code>CORREL()</code>, <code>EXPONDIF()</code> require <code>jstat.js</code> to be executed.
+            you need to include <code>jstat.min.js</code> located in <code>js</code> directory.
+            If <code>jstat.js</code> is not loaded, jQuery Calx will return <code>#ERROR_JSTAT_JS_REQUIRED</code> error.
+        </p>
+
+        <h4 class="method-title">Chart Drawing and Plotting</h4>
+        <p>
+            Currently, jQuery calx only support chart drawing and plotting using jQuery Flot (<a href="http://www.flotcharts.org">http://www.flotcharts.org</a>)
+            therefore you need to include jQuery Flot script and required plugin to draw the chart.
+        </p><br>
+
+        <pre>
+&lt;script src="jquery-1.9.1.min.js"&gt;&lt/script&gt;
+&lt;script src="js/jquery.flot.min.js"&gt;&lt/script&gt;
+&lt;script src="js/flot_plugin/jquery.flot.pie.js"&gt;&lt/script&gt;
+&lt;script src="js/flot_plugin/jquery.flot.categries.js"&gt;&lt/script&gt;
+&lt;script src="js/numeral.min.js"&gt;&lt/script&gt;
+&lt;script src="js/moment.min.js"&gt;&lt/script&gt;
+&lt;script src="js/jstat.min.js"&gt;&lt/script&gt;
+&lt;script src="jquery-calx-2.0.0.min.js"&gt;&lt/script&gt; </pre><br>
+    </div>
+</div>            </div>
+        </div>
+
+        <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="js/bootstrap.js" type="text/javascript"></script>
+    </body>
+</html>

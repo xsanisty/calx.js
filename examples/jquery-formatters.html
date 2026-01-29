@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Formatters Example</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Page-specific overrides */
+        .content { max-width: 1400px; }
+        .help-text {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        .info-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .info-box li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="jquery-basic.html">Basic</a>
+                <a href="jquery-datatypes.html">Data Types</a>
+                <a href="jquery-dynamic-form.html">Dynamic Form</a>
+                <a href="jquery-formatters.html" class="active">Formatters</a>
+                <a href="jquery-multisheet.html">Multisheet</a>
+                <a href="jquery-mortgage.html">Mortgage Calculator</a>
+                <a href="jquery-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content wide">
+        <h1>🎨 jQuery Calx - Formatters Example</h1>
+
+        <div class="alert alert-info">
+            <strong>About Formatters:</strong> This example demonstrates the built-in formatters (currency, percent, number, integer, text), input-mask behavior, and conditional styling with smart parsing.
+        </div>
+
+    <h2>Basic Formatters</h2>
+    <form id="basic-formatters">
+        <div class="container">
+            <div class="example-card">
+                <h3>💰 Currency Formatter</h3>
+                <div class="form-group">
+                    <label>Enter Amount:</label>
+                    <input type="text" data-cell="A1" value="1234.56" data-format="currency">
+                    <div class="help-text">Try typing: <code>5000</code>, <code>$500</code>, <code>123.45</code>, or <code>$1234</code></div>
+                </div>
+                <div class="form-group">
+                    <label>Formatted (currency) <span class="badge">focus/blur</span>:</label>
+                    <input type="text" data-cell="B1" data-formula="A1" data-format="currency" readonly>
+                    <div class="help-text">Click to see raw value, blur to see formatted</div>
+                </div>
+                <div class="form-group">
+                    <label>Display Output:</label>
+                    <div class="display-value" data-cell="C1" data-formula="A1" data-format="currency"></div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>📊 Percent Formatter</h3>
+                <div class="form-group">
+                    <label>Enter Percent:</label>
+                    <input type="text" data-cell="A2" value="0.25" data-format="percent">
+                    <div class="help-text">Try typing: <code>15</code> (becomes 15.00%), <code>15%</code>, or <code>0.15</code></div>
+                </div>
+                <div class="form-group">
+                    <label>Formatted (percent) <span class="badge">focus/blur</span>:</label>
+                    <input type="text" data-cell="B2" data-formula="A2" data-format="percent" readonly>
+                    <div class="help-text">Multiplies by 100 and adds %</div>
+                </div>
+                <div class="form-group">
+                    <label>Display Output:</label>
+                    <div class="display-value" data-cell="C2" data-formula="A2" data-format="percent"></div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>🔢 Number Formatter</h3>
+                <div class="form-group">
+                    <label>Enter Number:</label>
+                    <input type="text" data-cell="A3" value="123.456789">
+                    <div class="help-text">Try: 99.999 or 3.14159</div>
+                </div>
+                <div class="form-group">
+                    <label>Formatted (number) <span class="badge">focus/blur</span>:</label>
+                    <input type="text" data-cell="B3" data-formula="A3" data-format="number" readonly>
+                    <div class="help-text">Rounds to 2 decimal places</div>
+                </div>
+                <div class="form-group">
+                    <label>Display Output:</label>
+                    <div class="display-value" data-cell="C3" data-formula="A3" data-format="number"></div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>🎯 Integer Formatter</h3>
+                <div class="form-group">
+                    <label>Enter Number:</label>
+                    <input type="text" data-cell="A4" value="99.7">
+                    <div class="help-text">Try: 50.5 or 99.4</div>
+                </div>
+                <div class="form-group">
+                    <label>Formatted (integer) <span class="badge">focus/blur</span>:</label>
+                    <input type="text" data-cell="B4" data-formula="A4" data-format="integer" readonly>
+                    <div class="help-text">Rounds to whole number</div>
+                </div>
+                <div class="form-group">
+                    <label>Display Output:</label>
+                    <div class="display-value" data-cell="C4" data-formula="A4" data-format="integer"></div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>📝 Text Formatter</h3>
+                <div class="form-group">
+                    <label>Enter Any Value:</label>
+                    <input type="text" data-cell="A5" value="Hello Calx!">
+                    <div class="help-text">Try: text, numbers, or mixed</div>
+                </div>
+                <div class="form-group">
+                    <label>Formatted (text) <span class="badge">focus/blur</span>:</label>
+                    <input type="text" data-cell="B5" data-formula="A5" data-format="text" readonly>
+                    <div class="help-text">Converts to string</div>
+                </div>
+                <div class="form-group">
+                    <label>Display Output:</label>
+                    <div class="display-value" data-cell="C5" data-formula="A5" data-format="text"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <h2>Real-World Example: Shopping Cart</h2>
+    <form id="shopping-cart">
+        <div class="container">
+            <div class="example-card">
+                <h3>🛒 Product 1</h3>
+                <div class="form-group">
+                    <label>Price:</label>
+                    <input type="text" data-cell="P1" value="29.99" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <input type="text" data-cell="Q1" value="2" data-format="integer">
+                </div>
+                <div class="form-group">
+                    <label>Subtotal:</label>
+                    <input type="text" data-formula="P1*Q1" data-format="currency" readonly>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>🛒 Product 2</h3>
+                <div class="form-group">
+                    <label>Price:</label>
+                    <input type="text" data-cell="P2" value="15.50" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <input type="text" data-cell="Q2" value="3" data-format="integer">
+                </div>
+                <div class="form-group">
+                    <label>Subtotal:</label>
+                    <input type="text" data-formula="P2*Q2" data-format="currency" readonly>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>💳 Totals</h3>
+                <div class="form-group">
+                    <label>Items Subtotal:</label>
+                    <input type="text" data-formula="P1*Q1+P2*Q2" data-format="currency" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Tax Rate:</label>
+                    <input type="text" data-cell="D3" data-var="TAX" value="0.08" data-format="percent">
+                </div>
+                <div class="form-group">
+                    <label>Tax Amount:</label>
+                    <input type="text" data-formula="(P1*Q1+P2*Q2)*TAX" data-format="currency" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Grand Total:</label>
+                    <div class="display-value" data-formula="(P1*Q1+P2*Q2)*(1+TAX)" data-format="currency"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <h2>Conditional Styling Example: Profit/Loss</h2>
+    <form id="profit-loss">
+        <div class="container">
+            <div class="example-card">
+                <h3>📊 Month 1</h3>
+                <div class="form-group">
+                    <label>Revenue:</label>
+                    <input type="text" data-cell="R1" value="5000" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Expenses:</label>
+                    <input type="text" data-cell="E1" value="3500" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Profit/Loss <span class="badge">conditional</span>:</label>
+                    <input type="text" data-formula="R1-E1" data-format="currency" data-style-if="negative" readonly>
+                    <div class="help-text">Negative values show in red</div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>📊 Month 2</h3>
+                <div class="form-group">
+                    <label>Revenue:</label>
+                    <input type="text" data-cell="R2" value="3000" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Expenses:</label>
+                    <input type="text" data-cell="E2" value="4200" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Profit/Loss <span class="badge">conditional</span>:</label>
+                    <input type="text" data-formula="R2-E2" data-format="currency" data-style-if="negative" readonly>
+                    <div class="help-text">Try changing revenue to see red/black colors</div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>💰 Total</h3>
+                <div class="form-group">
+                    <label>Total Revenue:</label>
+                    <input type="text" data-formula="R1+R2" data-format="currency" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Total Expenses:</label>
+                    <input type="text" data-formula="E1+E2" data-format="currency" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Net Profit/Loss <span class="badge">conditional</span>:</label>
+                    <div class="display-value" data-formula="R1+R2-E1-E2" data-format="currency" data-style-if="negative"></div>
+                    <div class="help-text" style="font-weight: bold">Red = Loss, Black = Profit</div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <h2>Financial Example: Loan Calculator</h2>
+    <form id="loan-calc">
+        <div class="container">
+            <div class="example-card">
+                <h3>💰 Loan Details</h3>
+                <div class="form-group">
+                    <label>Loan Amount:</label>
+                    <input type="text" data-cell="L1" data-var="PRINCIPAL" value="250000" data-format="currency">
+                </div>
+                <div class="form-group">
+                    <label>Annual Interest Rate:</label>
+                    <input type="text" data-cell="L2" data-var="RATE" value="0.045" data-format="percent">
+                </div>
+                <div class="form-group">
+                    <label>Loan Term (years):</label>
+                    <input type="text" data-cell="L3" data-var="YEARS" value="30" data-format="integer">
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>📈 Monthly Payment</h3>
+                <div class="form-group">
+                    <label>Monthly Rate:</label>
+                    <input type="text" data-formula="RATE/12" data-format="percent" readonly>
+                    <div class="help-text">Annual rate ÷ 12</div>
+                </div>
+                <div class="form-group">
+                    <label>Number of Payments:</label>
+                    <input type="text" data-formula="YEARS*12" data-format="integer" readonly>
+                    <div class="help-text">Years × 12</div>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Payment:</label>
+                    <div class="display-value" data-formula="PMT(RATE/12, YEARS*12, -PRINCIPAL)" data-format="currency"></div>
+                    <div class="help-text">Using PMT function</div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <h3>💵 Total Cost</h3>
+                <div class="form-group">
+                    <label>Total Paid:</label>
+                    <input type="text" data-formula="PMT(RATE/12, YEARS*12, -PRINCIPAL)*YEARS*12" data-format="currency" readonly>
+                    <div class="help-text">Monthly payment × number of payments</div>
+                </div>
+                <div class="form-group">
+                    <label>Total Interest:</label>
+                    <input type="text" data-formula="PMT(RATE/12, YEARS*12, -PRINCIPAL)*YEARS*12 - PRINCIPAL" data-format="currency" readonly>
+                    <div class="help-text">Total paid - principal</div>
+                </div>
+                <div class="form-group">
+                    <label>Interest as % of Loan:</label>
+                    <div class="display-value" data-formula="(PMT(RATE/12, YEARS*12, -PRINCIPAL)*YEARS*12 - PRINCIPAL)/PRINCIPAL" data-format="percent"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="info-box">
+        <h3>💡 How to Use</h3>
+        <ul>
+            <li><strong>Type freely:</strong> For currency, type <code>2</code>, <code>$2</code>, or <code>$2.00</code> - all become <code>$2.00</code> when you blur</li>
+            <li><strong>For percents:</strong> Type <code>15</code>, <code>15%</code>, or <code>0.15</code> - all work! The formatter handles it</li>
+            <li><strong>Named variables:</strong> Use <code>data-var="TAX"</code> to create named variables that can be referenced in formulas</li>
+            <li><strong>Edit easily:</strong> Click on an input to see the raw value for easy editing</li>
+            <li><strong>Automatic calculation:</strong> All dependent cells update automatically when you change values</li>
+            <li><strong>Mix formatters:</strong> Different cells can use different formatters</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>📚 Code Example</h3>
+        <p>Here's how to use formatters with input-mask behavior:</p>
+        <pre>&lt;!-- Currency input with mask - accepts 2, $2, $2.00 --&gt;
+&lt;input data-cell="A1" value="1234.56" data-format="currency"&gt;
+
+&lt;!-- Named variable using data-var --&gt;
+&lt;input data-cell="B1" data-var="TAX" value="0.08" data-format="percent"&gt;
+
+&lt;!-- Use the named variable in formulas --&gt;
+&lt;input data-formula="A1*TAX" data-format="currency" readonly&gt;
+
+&lt;!-- Percent input with mask - accepts 15, 15%, 0.15 --&gt;
+&lt;input data-cell="A2" value="0.08" data-format="percent"&gt;
+
+&lt;!-- Readonly calculated field with formatting --&gt;
+&lt;input data-formula="A1*1.08" data-format="currency" readonly&gt;
+
+&lt;!-- Display-only element --&gt;
+&lt;div data-formula="A1*A2" data-format="currency"&gt;&lt;/div&gt;
+
+&lt;!-- Initialize Calx --&gt;
+&lt;script&gt;
+$('#myform').calx({
+    autoCalculate: true
+});
+&lt;/script&gt;</pre>
+    </div>
+
+    <div class="info-box">
+        <h3>🎨 Available Formatters</h3>
+        <ul>
+            <li><code>currency</code> - Formats as $1,234.56 with thousand separators. Accepts: 1234.56, $1234.56, $1,234.56</li>
+            <li><code>percent</code> - Formats as 12.34%. Accepts: 0.1234, 12.34, 12.34%</li>
+            <li><code>number</code> - Formats with 2 decimal places (123.46). Accepts any numeric input</li>
+            <li><code>integer</code> - Rounds to whole number (100). Accepts any numeric input</li>
+            <li><code>text</code> - Converts to string representation</li>
+        </ul>
+        <p><strong>Input-mask feature:</strong> All formatters intelligently parse your input, so you can type naturally!</p>
+        <p><strong>Custom formatters:</strong> You can register your own formatters with parse() and format() methods!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>🎨 Conditional Styling (Style Formatters)</h3>
+        <p>Apply CSS styles based on cell values using <code>data-style-if</code> attribute:</p>
+        <ul>
+            <li><code>negative</code> - Applies red color when value < 0</li>
+            <li><code>positive</code> - Applies green color when value > 0</li>
+            <li><code>zero</code> - Applies gray color when value = 0</li>
+        </ul>
+        <p><strong>Example:</strong></p>
+        <pre>&lt;!-- Show negative profit in red --&gt;
+&lt;input data-formula="REVENUE-EXPENSES"
+       data-format="currency"
+       data-style-if="negative"
+       readonly&gt;</pre>
+        <p><strong>Custom style formatters:</strong> Register your own via JavaScript!</p>
+        <pre>$('#myform').calx({
+    styleFormatters: {
+        warning: function(value, $element) {
+            if (value > 1000) {
+                return {
+                    color: 'orange',
+                    fontWeight: 'bold'
+                };
+            }
+            return {};
+        }
+    }
+});</pre>
+    </div>
+
+    <footer class="footer">
+        <p>
+            <a href="index.html">← Back to Examples</a> |
+            <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+        </p>
+    </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../dist/jquery.calx.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize all forms with auto-calculation
+            $('#basic-formatters, #shopping-cart, #profit-loss, #loan-calc').calx({
+                autoCalculate: true
+            });
+        });
+    </script>
+</body>
+</html>

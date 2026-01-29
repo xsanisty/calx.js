@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ClosureCompiler" default="hello">
+
+    <target name="hello">
+        <echo msg="Usage: phing [update|test]" />
+    </target>
+
+    <target name="update">
+        <echo msg="Updating from Git..." />
+        <exec command="git pull " passthru="true" />
+        <echo msg="Updating Composer..." />
+        <exec command="composer update "  passthru="true" />
+        <echo msg="Done." />
+    </target>
+    <target name="test" depends="update">
+        <echo msg="Running PHPunit..." />
+        <exec command="php vendor/bin/phpunit "  passthru="true" />
+        <exec command="rm compiled.js" />
+        <echo msg="Test done." />
+    </target>
+
+
+</project>

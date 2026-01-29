@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx 3.0 - Documentation</title>
+    <link rel="stylesheet" href="../examples/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        .docs-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            margin-top:20px;
+            width: 280px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 80px;
+            align-self: flex-start;
+            height: fit-content;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .sidebar h3 {
+            margin: 0;
+            padding: 25px 20px 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .sidebar nav {
+            padding: 10px 0;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav li {
+            margin: 0;
+            position: relative;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar nav a::before {
+            content: '▸';
+            margin-right: 10px;
+            opacity: 0;
+            transform: translateX(-5px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: rgba(255,255,255,0.5);
+            padding-left: 25px;
+        }
+
+        .sidebar nav a:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .sidebar nav a.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border-left-color: white;
+            font-weight: 600;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar nav a.active::before {
+            content: '●';
+            opacity: 1;
+            transform: translateX(0);
+            font-size: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .docs-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+                max-height: none;
+            }
+        }
+
+        .content {
+            flex: 1;
+            min-width: 0;
+            max-width: 1200px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 30px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin: 0 0 20px 0;
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .doc-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .doc-section h2 {
+            color: #667eea;
+            margin-top: 0;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .doc-section h3 {
+            color: #555;
+            margin-top: 30px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-item {
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-item h4 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+
+        .feature-item p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .code-block {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-block pre {
+            margin: 0 !important;
+            border-radius: 8px;
+
+        .code-block code {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .migration-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .migration-note h4 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .api-table th {
+            background: #f7fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .api-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .api-table code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .quick-link {
+            display: block;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .quick-link:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .toc {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc li {
+            margin: 10px 0;
+        }
+
+        .toc a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="../examples/index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx 3.0
+            </a>
+            <div class="navbar-links">
+                <a href="index.html" class="active">Documentation</a>
+                <a href="../examples/index.html">Examples</a>
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <h3>📑 Documentation</h3>
+            <nav>
+                <ul>
+                    <li><a href="#introduction" class="nav-link">Introduction</a></li>
+                    <li><a href="#whats-new" class="nav-link">What's New in 3.0</a></li>
+                    <li><a href="#installation" class="nav-link">Installation</a></li>
+                    <li><a href="#quick-start" class="nav-link">Quick Start</a></li>
+                    <li><a href="#migration" class="nav-link">Migration from 2.x</a></li>
+                    <li><a href="#features" class="nav-link">Key Features</a></li>
+                    <li><a href="#api" class="nav-link">API Reference</a></li>
+                    <li><a href="#examples-link" class="nav-link">Live Examples</a></li>
+                    <li><a href="#contributing" class="nav-link">Contributing</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="hero">
+                <h1>jQuery Calx 3.0</h1>
+                <p>Modern spreadsheet-like calculation engine for the web</p>
+                <div class="version-badge">Version 3.0.0 | TypeScript Rewrite</div>
+            </div>
+
+        <!-- Introduction -->
+        <div class="doc-section scroll-padding" id="introduction">
+            <h2>📖 Introduction</h2>
+            <p>
+                jQuery Calx 3.0 is a complete TypeScript rewrite of the popular jQuery Calx plugin. It transforms
+                your HTML forms into powerful spreadsheet-like calculators with real-time formula evaluation,
+                cell dependencies, and Excel-compatible functions.
+            </p>
+            <p>
+                Whether you're building a mortgage calculator, invoice generator, order form, or any interactive
+                calculation interface, jQuery Calx provides an intuitive and powerful solution.
+            </p>
+        </div>
+
+        <!-- What's New -->
+        <div class="doc-section scroll-padding" id="whats-new">
+            <h2>✨ What's New in 3.0</h2>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4>🔧 TypeScript Rewrite</h4>
+                    <p>Complete rewrite in TypeScript for better type safety and developer experience</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>⚡ Dynamic Precedents</h4>
+                    <p>Optimized dependency tracking with pattern-based precedent detection</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>💰 Input Masking</h4>
+                    <p>Built-in formatters with parse/format methods for currency, percentage, and more</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎨 Conditional Styling</h4>
+                    <p>Apply CSS styles based on cell values with data-style-if attribute</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🏷️ Named Variables</h4>
+                    <p>Use readable variable names with data-var attribute (e.g., TAX, DISCOUNT)</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📊 Multi-Sheet Support</h4>
+                    <p>Work with multiple calculation sheets and cross-sheet references</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🚀 Auto CALX Addresses</h4>
+                    <p>Formula-only cells automatically assigned addresses (CALX1, CALX2, etc.)</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📱 Responsive Design</h4>
+                    <p>Mobile-friendly examples and modern UI components</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Installation -->
+        <div class="doc-section scroll-padding" id="installation">
+            <h2>📦 Installation</h2>
+
+            <h3>Via CDN (Coming Soon)</h3>
+            <div class="code-block">
+                <pre><code class="language-html">&lt;!-- jQuery (required) --&gt;
+&lt;script src="https://code.jquery.com/jquery-3.6.0.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- jQuery Calx --&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/@xsanisty/calxjs@3.0.0/dist/jquery.calx.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
+
+            <h3>Via NPM</h3>
+            <div class="code-block">
+                <pre><code class="language-bash">npm install @xsanisty/calxjs</code></pre>
+            <h3>Manual Download</h3>
+            <p>Download the latest release from <a href="https://github.com/xsanisty/calx.js/releases" target="_blank">GitHub Releases</a></p>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="doc-section scroll-padding" id="quick-start">
+            <h2>🚀 Quick Start</h2>
+
+            <h3>Basic Example</h3>
+            <div class="code-block">
+                <pre><code class="language-html">&lt;form id="calculator"&gt;
+    &lt;input type="number" data-cell="A1" value="10"&gt;
+    &lt;input type="number" data-cell="A2" value="20"&gt;
+    &lt;input type="text" data-cell="A3" data-formula="A1+A2" readonly&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+    $('#calculator').calx();
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <h3>With Formatting</h3>
+            <div class="code-block">
+                <pre><code class="language-html">&lt;form id="invoice"&gt;
+    &lt;input data-cell="A1" data-var="PRICE" value="100" data-format="currency"&gt;
+    &lt;input data-cell="A2" data-var="QTY" value="5"&gt;
+    &lt;input data-cell="A3" data-var="TAX" value="0.08" data-format="percent"&gt;
+    &lt;input data-formula="PRICE*QTY*(1+TAX)" data-format="currency" readonly&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+    $('#invoice').calx({ autoCalculate: true });
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <!-- Migration Guide -->
+        <div class="doc-section scroll-padding" id="migration">
+            <h2>🔄 Migration from 2.x to 3.0</h2>
+
+            <div class="migration-note">
+                <h4>✅ Backward Compatible</h4>
+                <p>jQuery Calx 3.0 maintains full backward compatibility with 2.x. Your existing code will continue to work without changes.</p>
+            </div>
+
+            <h3>1. TypeScript Rewrite</h3>
+            <p><strong>What changed:</strong> Complete rewrite in TypeScript with improved type safety and modern architecture.</p>
+            <p>The jQuery plugin API remains the same, but the underlying implementation is now TypeScript-based with better maintainability and extensibility.</p>
+
+            <h3>2. Enhanced Style Formatters</h3>
+            <p><strong>Improved:</strong> Style formatters now properly reset styles when conditions change.</p>
+            <div class="code-block">
+                <pre><code class="language-javascript">&lt;!-- Conditional styling (existed in 2.x, improved in 3.0) --&gt;
+&lt;input data-formula="Revenue-Expenses" data-style-if="negative"&gt;
+
+&lt;!-- Custom style formatter --&gt;
+$.calx.registerStyleFormatter('myStyle', function(value) {
+    if (value > 100) return { color: 'red', fontWeight: 'bold' };
+    return { color: '' }; // Properly resets in 3.0
+});</code></pre>
+            </div>
+
+            <h3>3. Improved Parser</h3>
+            <p><strong>What changed:</strong> Updated formula parser with better error handling and support for more complex expressions.</p>
+            <p>All existing formulas continue to work, with additional support for nested functions and complex calculations.</p>
+
+            <h3>4. Named Variables (Available since 2.0)</h3>
+            <p>Use <code>data-var</code> for readable cell references. This feature existed in 2.x and continues to work in 3.0.</p>
+            <div class="code-block">
+                <pre><code class="language-html">&lt;input data-cell="A1" data-var="PRINCIPAL" value="250000"&gt;
+&lt;input data-cell="A2" data-var="RATE" value="6.5"&gt;
+&lt;input data-formula="PMT(RATE/100/12, 360, -PRINCIPAL)" readonly&gt;</code></pre>
+            </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="doc-section scroll-padding" id="features">
+            <h2>🎯 Key Features</h2>
+
+            <h3>Supported Data Attributes</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>data-cell</code></td>
+                        <td>Cell address (A1, B5, etc.)</td>
+                        <td><code>data-cell="A1"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>data-formula</code></td>
+                        <td>Formula expression</td>
+                        <td><code>data-formula="A1+A2"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>data-format</code></td>
+                        <td>Formatter name</td>
+                        <td><code>data-format="currency"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>data-type</code></td>
+                        <td>Data type (number, text, boolean)</td>
+                        <td><code>data-type="number"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>data-var</code></td>
+                        <td>Named variable</td>
+                        <td><code>data-var="TAX"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>data-style-if</code></td>
+                        <td>Conditional style formatter</td>
+                        <td><code>data-style-if="negative"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>data-sheet</code></td>
+                        <td>Sheet name for multi-sheet</td>
+                        <td><code>data-sheet="Sales"</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Built-in Formatters</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Formatter</th>
+                        <th>Description</th>
+                        <th>Input → Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>currency</code></td>
+                        <td>Currency formatting with $ and commas</td>
+                        <td>$4000 → $4,000.00</td>
+                    </tr>
+                    <tr>
+                        <td><code>percent</code></td>
+                        <td>Percentage with % symbol</td>
+                        <td>25% → 25.00%</td>
+                    </tr>
+                    <tr>
+                        <td><code>number</code></td>
+                        <td>Number with 2 decimals</td>
+                        <td>1234.5 → 1234.50</td>
+                    </tr>
+                    <tr>
+                        <td><code>integer</code></td>
+                        <td>Rounded integer</td>
+                        <td>123.7 → 124</td>
+                    </tr>
+                    <tr>
+                        <td><code>text</code></td>
+                        <td>Plain text</td>
+                        <td>Hello → Hello</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Built-in Style Formatters</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Style Formatter</th>
+                        <th>Condition</th>
+                        <th>Style Applied</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>negative</code></td>
+                        <td>value < 0</td>
+                        <td>color: red</td>
+                    </tr>
+                    <tr>
+                        <td><code>positive</code></td>
+                        <td>value > 0</td>
+                        <td>color: green</td>
+                    </tr>
+                    <tr>
+                        <td><code>zero</code></td>
+                        <td>value === 0</td>
+                        <td>color: gray</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- API Reference -->
+        <div class="doc-section scroll-padding" id="api">
+            <h2>📚 API Reference</h2>
+
+            <h3>Initialization Options</h3>
+            <div class="code-block">
+                <pre><code class="language-javascript">$('#form').calx({
+    autoCalculate: true,        // Auto-calculate on input change
+    data: {                      // Initial cell data
+        A1: { value: 100, format: 'currency' }
+    },
+    variables: {                 // Named variables
+        TAX: 'A1'
+    },
+    functions: {                 // Custom functions
+        DOUBLE: function(x) { return x * 2; }
+    }
+});</code></pre>
+
+            <h3>Methods</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>getCellValue(address)</code></td>
+                        <td>Get cell value</td>
+                        <td><code>$('#form').calx('getCellValue', 'A1')</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>setCellValue(address, value)</code></td>
+                        <td>Set cell value</td>
+                        <td><code>$('#form').calx('setCellValue', 'A1', 100)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>getCell(address)</code></td>
+                        <td>Get cell object</td>
+                        <td><code>$('#form').calx('getCell', 'A1')</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>calculate()</code></td>
+                        <td>Trigger calculation</td>
+                        <td><code>$('#form').calx('calculate')</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>getSheet()</code></td>
+                        <td>Get sheet object</td>
+                        <td><code>$('#form').calx('getSheet')</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Registering Custom Formatters</h3>
+            <div class="code-block">
+                <pre><code class="language-javascript">$.calx.registerFormatter('phone', {
+    format: function(value) {
+        // Format: (123) 456-7890
+        return '(' + value.slice(0,3) + ') ' +
+               value.slice(3,6) + '-' + value.slice(6);
+    },
+    parse: function(input) {
+        // Remove formatting
+        return input.replace(/[^\d]/g, '');
+    }
+});</code></pre>
+            </div>
+
+            <h3>Registering Custom Functions</h3>
+            <div class="code-block">
+                <pre><code class="language-javascript">$.calx.registerFunction('DISCOUNT', function(price, percent) {
+    return price * (1 - percent);
+});
+
+// Usage: data-formula="DISCOUNT(A1, 0.15)"</code></pre>
+            </div>
+        </div>
+
+        <!-- Examples Link -->
+        <div class="doc-section scroll-padding" id="examples-link">
+            <h2>📝 Live Examples</h2>
+            <p>Explore interactive examples to see jQuery Calx in action:</p>
+
+            <div class="quick-links">
+                <a href="../examples/jquery-basic.html" class="quick-link">Basic Calculator</a>
+                <a href="../examples/jquery-formatters.html" class="quick-link">Formatters & Masks</a>
+                <a href="../examples/jquery-datatypes.html" class="quick-link">Data Types</a>
+                <a href="../examples/jquery-dynamic-form.html" class="quick-link">Dynamic Forms</a>
+                <a href="../examples/jquery-multisheet.html" class="quick-link">Multiple Sheets</a>
+                <a href="../examples/jquery-mortgage.html" class="quick-link">Mortgage Calculator</a>
+                <a href="../examples/jquery-advanced.html" class="quick-link">Advanced Features</a>
+            </div>
+        </div>
+
+<!-- Contributing -->
+        <div class="doc-section scroll-padding" id="contributing">
+            <h2>🤝 Contributing</h2>
+            <p>
+                jQuery Calx is open source! Contributions, bug reports, and feature requests are welcome on
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>.
+            </p>
+            <p>
+                <strong>Legacy Documentation:</strong> Looking for jQuery Calx 2.x documentation?
+                Visit <a href="https://www.xsanisty.com/project/calx2/" target="_blank">www.xsanisty.com/project/calx2/</a>
+            </p>
+        </div>
+        </div><!-- End content -->
+    </div><!-- End docs-container -->
+
+    <div class="footer">
+        <p>© 2015-2026 <a href="https://www.xsanisty.com" target="_blank">Xsanisty</a> |
+           <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a> |
+           <a href="https://github.com/xsanisty/calx.js/issues" target="_blank">Report Issues</a>
+        </p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script>
+        // Highlight active section in sidebar
+        const navLinks = document.querySelectorAll('.sidebar .nav-link');
+        const sections = document.querySelectorAll('.doc-section');
+
+        function updateActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveLink);
+        window.addEventListener('load', updateActiveLink);
+    </script>

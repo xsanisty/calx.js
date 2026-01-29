@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form action="" id="sheet1">
+        <label for="">
+            <input type="radio" data-cell="A1" name="selection" value="Selection 1"> Selection 1 <br>
+        </label>
+        <label for="">
+            <input type="radio" data-cell="A2" name="selection" value="Selection 2"> Selection 2 <br>
+        </label>
+        <label for="">
+            <input type="radio" data-cell="A3" name="selection" value="Selection 3"> Selection 3 <br>
+        </label>
+        <label for="">
+            <input type="radio" data-cell="A4" name="selection" value="Selection 4"> Selection 4 <br>
+        </label>
+        <label for="">
+            <input type="radio" data-cell="A5" name="selection" value="Selection 5"> Selection 5 <br>
+        </label>
+
+        <div style="display:block" data-formula="CONCAT(A1, A2, A3, A4, A5)"></div>
+    </form>
+    <script src="jquery-calx-sample-2.2.8.min.js"></script>
+    <script>
+        $('#sheet1').calx();
+    </script>
+</body>
+</html>

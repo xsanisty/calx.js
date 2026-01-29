@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Mortgage Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Page-specific overrides */
+        .content { max-width: 1000px; }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .calculator-section h3 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[readonly] {
+            background-color: #f7fafc;
+            border-color: #e2e8f0;
+            font-weight: bold;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .result-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .result-highlight h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .result-highlight .amount {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .summary-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .summary-table tr {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .summary-table td {
+            padding: 12px 0;
+        }
+
+        .summary-table td:first-child {
+            color: #666;
+        }
+
+        .summary-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+            color: #2c5282;
+        }
+
+        .amortization-preview {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .amortization-preview h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        table.amortization {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        table.amortization th {
+            background-color: #f7fafc;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        table.amortization td {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        table.amortization tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-box h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+
+        .info-box ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="jquery-basic.html">Basic</a>
+                <a href="jquery-datatypes.html">Data Types</a>
+                <a href="jquery-dynamic-form.html">Dynamic Form</a>
+                <a href="jquery-formatters.html">Formatters</a>
+                <a href="jquery-multisheet.html">Multisheet</a>
+                <a href="jquery-mortgage.html" class="active">Mortgage Calculator</a>
+                <a href="jquery-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>🏠 Mortgage Payment Calculator</h1>
+
+        <div class="alert alert-info">
+            <strong>Complex Calculation Example:</strong> This mortgage calculator demonstrates advanced features including
+            the PMT function, named variables, currency formatting, and conditional styling. All calculations happen in real-time!
+        </div>
+
+        <form id="mortgageCalc">
+            <div class="calculator-grid">
+                <!-- Left Panel: Inputs -->
+                <div class="calculator-section">
+                    <h3>Loan Details</h3>
+
+                    <div class="form-group">
+                        <label>Home Price</label>
+                        <input type="text"
+                               data-cell="A1"
+                               data-var="HOME_PRICE"
+                               value="350000"
+                               data-format="currency">
+                        <p class="help-text">Total purchase price of the home</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Down Payment</label>
+                        <input type="text"
+                               data-cell="A2"
+                               data-var="DOWN_PAYMENT"
+                               value="70000"
+                               data-format="currency">
+                        <p class="help-text">Initial payment (typically 10-20%)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Down Payment %</label>
+                        <input type="text"
+                               data-cell="A3"
+                               data-formula="DOWN_PAYMENT/HOME_PRICE"
+                               data-format="percent"
+                               readonly>
+                        <p class="help-text">Calculated automatically</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loan Amount</label>
+                        <input type="text"
+                               data-cell="A4"
+                               data-var="LOAN_AMOUNT"
+                               data-formula="HOME_PRICE-DOWN_PAYMENT"
+                               data-format="currency"
+                               readonly>
+                        <p class="help-text">Amount to be financed</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Interest Rate (Annual %)</label>
+                        <input type="text"
+                               data-cell="A5"
+                               data-var="ANNUAL_RATE"
+                               value="6.5"
+                               data-format="number">
+                        <p class="help-text">Annual interest rate (e.g., 6.5 for 6.5%)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loan Term (Years)</label>
+                        <input type="text"
+                               data-cell="A6"
+                               data-var="LOAN_YEARS"
+                               value="30"
+                               data-format="integer">
+                        <p class="help-text">Length of mortgage (15, 20, or 30 years)</p>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Monthly Payment Breakdown -->
+                <div class="calculator-section">
+                    <h3>Monthly Payment</h3>
+
+                    <div class="result-highlight">
+                        <h3>Monthly Payment (P&I)</h3>
+                        <p class="amount">
+                            <input type="text"
+                                   data-cell="B1"
+                                   data-var="MONTHLY_PI"
+                                   data-formula="PMT(ANNUAL_RATE/100/12, LOAN_YEARS*12, -LOAN_AMOUNT)"
+                                   data-format="currency"
+                                   readonly
+                                   style="background: transparent; border: none; color: white; font-size: 36px; font-weight: bold; padding: 0; width: 100%; text-align: left;">
+                        </p>
+                    </div>
+
+                    <h3 style="margin-top: 25px;">Additional Costs</h3>
+
+                    <div class="form-group">
+                        <label>Property Tax (Monthly)</label>
+                        <input type="text"
+                               data-cell="B2"
+                               data-var="PROPERTY_TAX"
+                               value="350"
+                               data-format="currency">
+                        <p class="help-text">Estimated monthly property tax</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Home Insurance (Monthly)</label>
+                        <input type="text"
+                               data-cell="B3"
+                               data-var="INSURANCE"
+                               value="150"
+                               data-format="currency">
+                        <p class="help-text">Monthly home insurance premium</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>PMI (if down payment < 20%)</label>
+                        <input type="text"
+                               data-cell="B4"
+                               data-var="PMI"
+                               data-formula="IF(A3<0.2, LOAN_AMOUNT*0.005/12, 0)"
+                               data-format="currency"
+                               readonly>
+                        <p class="help-text">Private Mortgage Insurance</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>HOA Fees (Monthly)</label>
+                        <input type="text"
+                               data-cell="B5"
+                               data-var="HOA"
+                               value="100"
+                               data-format="currency">
+                        <p class="help-text">Homeowners association dues</p>
+                    </div>
+
+                    <div class="result-highlight" style="margin-top: 20px;">
+                        <h3>Total Monthly Payment</h3>
+                        <p class="amount">
+                            <input type="text"
+                                   data-cell="B6"
+                                   data-var="TOTAL_MONTHLY"
+                                   data-formula="MONTHLY_PI+PROPERTY_TAX+INSURANCE+PMI+HOA"
+                                   data-format="currency"
+                                   readonly
+                                   style="background: transparent; border: none; color: white; font-size: 36px; font-weight: bold; padding: 0; width: 100%; text-align: left;">
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="calculator-section">
+                <h3>Loan Summary</h3>
+
+                <table class="summary-table">
+                    <tr>
+                        <td>Total of 360 Payments</td>
+                        <td>
+                            <input type="text"
+                                   data-cell="C1"
+                                   data-formula="MONTHLY_PI*LOAN_YEARS*12"
+                                   data-format="currency"
+                                   readonly
+                                   style="background: transparent; border: none; text-align: right; font-weight: bold; color: #2c5282; padding: 0; width: 100%;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total Interest Paid</td>
+                        <td>
+                            <input type="text"
+                                   data-cell="C2"
+                                   data-formula="(MONTHLY_PI*LOAN_YEARS*12)-LOAN_AMOUNT"
+                                   data-format="currency"
+                                   readonly
+                                   style="background: transparent; border: none; text-align: right; font-weight: bold; color: #2c5282; padding: 0; width: 100%;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total Cost (Principal + Interest)</td>
+                        <td>
+                            <input type="text"
+                                   data-cell="C3"
+                                   data-formula="DOWN_PAYMENT+(MONTHLY_PI*LOAN_YEARS*12)"
+                                   data-format="currency"
+                                   readonly
+                                   style="background: transparent; border: none; text-align: right; font-weight: bold; color: #2c5282; padding: 0; width: 100%;">
+                        </td>
+                    </tr>
+                    <tr style="border-top: 2px solid #667eea;">
+                        <td><strong>Debt-to-Income Ratio (Monthly Payment / $5,000 Income)</strong></td>
+                        <td>
+                            <input type="text"
+                                   data-cell="C4"
+                                   data-formula="TOTAL_MONTHLY/5000"
+                                   data-format="percent"
+                                   data-style-if="dti-warning"
+                                   readonly
+                                   style="background: transparent; border: none; text-align: right; font-weight: bold; padding: 0; width: 100%;">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- First Year Amortization -->
+            <div class="amortization-preview">
+                <h3>First Year Amortization Schedule (Preview)</h3>
+
+                <div class="info-box">
+                    <h4>Understanding Your Payments</h4>
+                    <ul>
+                        <li><strong>Principal:</strong> The portion that pays down your loan balance</li>
+                        <li><strong>Interest:</strong> The cost of borrowing (goes to the lender)</li>
+                        <li><strong>Balance:</strong> Remaining amount you owe</li>
+                        <li>In early years, most of your payment goes toward interest!</li>
+                    </ul>
+                </div>
+
+                <table class="amortization">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Payment</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Remaining Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="amortizationTable">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        <a href="index.html">← Back to Examples</a>
+    </div>
+
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load jQuery Calx -->
+    <script src="../dist/jquery.calx.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Register custom style formatter for debt-to-income warning
+            $.calx.registerStyleFormatter('dti-warning', function(value) {
+                if (value > 0.43) {
+                    return { color: '#e74c3c', fontWeight: 'bold' }; // Red if over 43%
+                } else if (value > 0.28) {
+                    return { color: '#f39c12', fontWeight: 'bold' }; // Orange if 28-43%
+                } else {
+                    return { color: '#27ae60', fontWeight: 'bold' }; // Green if under 28%
+                }
+            });
+
+            // Initialize Calx
+            $('#mortgageCalc').calx({
+                autoCalculate: true
+            });
+
+            // Function to generate amortization schedule
+            function updateAmortizationTable() {
+                const loanAmount = $('#mortgageCalc').calx('getCellValue', 'A4');
+                const annualRate = $('#mortgageCalc').calx('getCellValue', 'A5');
+                const years = $('#mortgageCalc').calx('getCellValue', 'A6');
+                const monthlyPayment = $('#mortgageCalc').calx('getCellValue', 'B1');
+
+                if (!loanAmount || !annualRate || !years || !monthlyPayment) return;
+
+                const monthlyRate = (annualRate / 100) / 12;
+                let balance = loanAmount;
+
+                let html = '';
+
+                // Show first 12 months only
+                for (let month = 1; month <= 12 && month <= years * 12; month++) {
+                    const interestPayment = balance * monthlyRate;
+                    const principalPayment = monthlyPayment - interestPayment;
+                    balance -= principalPayment;
+
+                    html += `
+                        <tr>
+                            <td>${month}</td>
+                            <td>$${monthlyPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+                            <td>$${principalPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+                            <td>$${interestPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+                            <td>$${balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+                        </tr>
+                    `;
+                }
+
+                $('#amortizationTable').html(html);
+            }
+
+            // Update amortization table on any input change
+            $('#mortgageCalc').on('blur change', 'input', function() {
+                setTimeout(updateAmortizationTable, 100);
+            });
+
+            // Initial update
+            setTimeout(updateAmortizationTable, 200);
+
+            console.log('✅ Mortgage calculator initialized');
+            console.log('Try changing the home price, down payment, or interest rate!');
+        });
+    </script>
+</body>
+</html>
