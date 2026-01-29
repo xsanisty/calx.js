@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheet.createCell() Browser Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sheet.createCell() Browser Test</h1>
+    <p>Testing the fix for "can't access property 'create', this._cells is undefined" error.</p>
+
+    <div id="results"></div>
+
+    <h2>Test Code:</h2>
+    <pre id="code"></pre>
+
+    <h2>Console Output:</h2>
+    <pre id="console-output"></pre>
+
+    <script src="../dist/calx.js"></script>
+    <script>
+        const results = document.getElementById('results');
+        const codeEl = document.getElementById('code');
+        const consoleOutput = document.getElementById('console-output');
+
+        const testCode = `
+// Create workbook
+const workbook = Calx.createWorkbook();
+console.log('Workbook created:', workbook);
+
+// Create sheet
+const sheet = workbook.createSheet('Sheet1');
+console.log('Sheet created:', sheet);
+console.log('Sheet._cells:', sheet._cells); // Check if _cells is initialized
+
+// Test 1: Create cell with address only (should now work)
+try {
+    const cell1 = sheet.createCell('A1');
+    console.log('✓ Test 1 PASSED: Created cell A1 with address only:', cell1);
+    addResult('Test 1: Create cell with address only', true, 'Cell created successfully');
+} catch (error) {
+    console.error('✗ Test 1 FAILED:', error);
+    addResult('Test 1: Create cell with address only', false, error.message);
+}
+
+// Test 2: Create cell with data
+try {
+    const cell2 = sheet.createCell('A2', { value: 42 });
+    console.log('✓ Test 2 PASSED: Created cell A2 with value:', cell2);
+    addResult('Test 2: Create cell with data', true, 'Cell created with value: ' + cell2.value);
+} catch (error) {
+    console.error('✗ Test 2 FAILED:', error);
+    addResult('Test 2: Create cell with data', false, error.message);
+}
+
+// Test 3: Create cell with formula
+try {
+    const cell3 = sheet.createCell('A3', { formula: '=A1+A2' });
+    console.log('✓ Test 3 PASSED: Created cell A3 with formula:', cell3);
+    addResult('Test 3: Create cell with formula', true, 'Cell created with formula: ' + cell3.formula);
+} catch (error) {
+    console.error('✗ Test 3 FAILED:', error);
+    addResult('Test 3: Create cell with formula', false, error.message);
+}
+
+// Test 4: Get cell (should auto-create if not exists)
+try {
+    const cell4 = sheet.getCell('B1');
+    console.log('✓ Test 4 PASSED: Got cell B1 (auto-created):', cell4);
+    addResult('Test 4: Get cell (auto-create)', true, 'Cell retrieved/created successfully');
+} catch (error) {
+    console.error('✗ Test 4 FAILED:', error);
+    addResult('Test 4: Get cell (auto-create)', false, error.message);
+}
+
+console.log('All tests completed!');
+        `;
+
+        codeEl.textContent = testCode;
+
+        // Capture console logs
+        const logs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+
+        console.log = function(...args) {
+            logs.push(args.join(' '));
+            originalLog.apply(console, args);
+        };
+
+        console.error = function(...args) {
+            logs.push('ERROR: ' + args.join(' '));
+            originalError.apply(console, args);
+        };
+
+        function addResult(testName, passed, message) {
+            const div = document.createElement('div');
+            div.className = 'test-result ' + (passed ? 'pass' : 'fail');
+            div.innerHTML = `
+                <strong>${passed ? '✓' : '✗'} ${testName}</strong><br>
+                ${message}
+            `;
+            results.appendChild(div);
+        }
+
+        // Run tests
+        try {
+            eval(testCode);
+        } catch (error) {
+            console.error('Fatal error running tests:', error);
+            addResult('Test Suite', false, 'Fatal error: ' + error.message);
+        }
+
+        // Display console output
+        setTimeout(() => {
+            consoleOutput.textContent = logs.join('\n');
+            console.log = originalLog;
+            console.error = originalError;
+        }, 100);
+    </script>
+</body>
+</html>

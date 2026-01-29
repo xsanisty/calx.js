@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Comprehensive Test Suite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7fafc;
+        }
+        .test-category {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .test-category h2 {
+            margin-top: 0;
+            color: #2d3748;
+            border-bottom: 2px solid #cbd5e0;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+        .test-section.pass {
+            border-color: #38a169;
+            background-color: #f0fff4;
+        }
+        .test-section.fail {
+            border-color: #e53e3e;
+            background-color: #fff5f5;
+        }
+        h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #4a5568;
+        }
+        .pass h3::before {
+            content: "✓ ";
+            color: #38a169;
+            font-weight: bold;
+        }
+        .fail h3::before {
+            content: "✗ ";
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .test-result {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: white;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        input, select {
+            padding: 5px 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            margin: 2px;
+        }
+        .hidden {
+            display: none;
+        }
+        #summary {
+            position: sticky;
+            top: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #summary h2 {
+            margin-top: 0;
+            color: white;
+            border: none;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <h1>jQuery Calx v3.0 - Comprehensive Test Suite</h1>
+    <p>Covering arithmetic, functions, ranges, multi-sheet, formatters, and custom features</p>
+
+<div id="summary">
+        <h2>Test Summary</h2>
+        <div class="summary-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-tests">0</div>
+                <div class="stat-label">Total Tests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="passed-tests">0</div>
+                <div class="stat-label">Passed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="failed-tests">0</div>
+                <div class="stat-label">Failed</div>
+            </div>
+        </div>
+        <div id="failed-list"></div>
+    </div>
+
+    <!-- BASIC OPERATIONS -->
+    <div class="test-category">
+        <h2>Basic Operations</h2>
+
+        <div id="test-arithmetic" class="test-section">
+            <h3>Arithmetic Operations</h3>
+            <input data-cell="A1" value="10" />
+            <input data-cell="A2" value="5" />
+            <span data-cell="A3" data-formula="A1+A2"></span>
+            <span data-cell="A4" data-formula="A1-A2"></span>
+            <span data-cell="A5" data-formula="A1*A2"></span>
+            <span data-cell="A6" data-formula="A1/A2"></span>
+            <span data-cell="A7" data-formula="A1+A2*3"></span>
+            <span data-cell="A8" data-formula="(A1+A2)*3"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-comparison" class="test-section">
+            <h3>Comparison Operations</h3>
+            <input data-cell="B1" value="10" />
+            <input data-cell="B2" value="20" />
+            <span data-cell="B3" data-formula="B1>B2"></span>
+            <span data-cell="B4" data-formula="B1<B2"></span>
+            <span data-cell="B5" data-formula="B1=B2"></span>
+            <span data-cell="B6" data-formula="B1<>B2"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-string" class="test-section">
+            <h3>String Concatenation</h3>
+            <input data-cell="C1" value="Hello" data-type="text" />
+            <input data-cell="C2" value="World" data-type="text" />
+            <span data-cell="C3" data-formula='C1&" "&C2'></span>
+            <div class="test-result"></div>
+        </div>
+    </div>
+
+    <!-- CELL REFERENCES -->
+    <div class="test-category">
+        <h2>Cell References & Ranges</h2>
+
+        <div id="test-cell-ref" class="test-section">
+            <h3>Basic Cell References</h3>
+            <input data-cell="D1" value="100" />
+            <span data-cell="D2" data-formula="D1*1.1"></span>
+            <span data-cell="D3" data-formula="$D$1*0.5"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-range" class="test-section">
+            <h3>Range Operations (SUM)</h3>
+            <input data-cell="E1" value="10" />
+            <input data-cell="E2" value="20" />
+            <input data-cell="E3" value="30" />
+            <span data-cell="E4" data-formula="SUM(E1:E3)"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-range-avg" class="test-section">
+            <h3>Range Operations (AVERAGE)</h3>
+            <input data-cell="F1" value="10" />
+            <input data-cell="F2" value="20" />
+            <input data-cell="F3" value="30" />
+            <span data-cell="F4" data-formula="AVERAGE(F1:F3)"></span>
+            <div class="test-result"></div>
+        </div>
+    </div>
+
+    <!-- FUNCTIONS -->
+    <div class="test-category">
+        <h2>Built-in Functions</h2>
+
+        <div id="test-math-funcs" class="test-section">
+            <h3>Math Functions</h3>
+            <input data-cell="G1" value="16" />
+            <span data-cell="G2" data-formula="SQRT(G1)"></span>
+            <span data-cell="G3" data-formula="POWER(G1, 2)"></span>
+            <span data-cell="G4" data-formula="ABS(-42)"></span>
+            <span data-cell="G5" data-formula="ROUND(3.7)"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-if-func" class="test-section">
+            <h3>IF Function</h3>
+            <input data-cell="H1" value="75" />
+            <span data-cell="H2" data-formula='IF(H1>=70,"Pass","Fail")'></span>
+            <span data-cell="H3" data-formula='IF(H1>100,"High",IF(H1>50,"Medium","Low"))'></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-logical-funcs" class="test-section">
+            <h3>Logical Functions</h3>
+            <input data-cell="I1" data-type="boolean" value="TRUE" />
+            <input data-cell="I2" data-type="boolean" value="FALSE" />
+            <span data-cell="I3" data-formula="AND(I1, I2)"></span>
+            <span data-cell="I4" data-formula="OR(I1, I2)"></span>
+            <span data-cell="I5" data-formula="NOT(I2)"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-text-funcs" class="test-section">
+            <h3>Text Functions</h3>
+            <input data-cell="J1" value="hello world" data-type="text" />
+            <span data-cell="J2" data-formula="UPPER(J1)"></span>
+            <span data-cell="J3" data-formula="LOWER(J1)"></span>
+            <span data-cell="J4" data-formula="LEN(J1)"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-nested-funcs" class="test-section">
+            <h3>Nested Functions</h3>
+            <input data-cell="K1" value="5" />
+            <input data-cell="K2" value="10" />
+            <span data-cell="K3" data-formula="SUM(K1, AVERAGE(K1, K2))"></span>
+            <div class="test-result"></div>
+        </div>
+    </div>
+
+    <!-- MULTI-SHEET -->
+    <div class="test-category">
+        <h2>Multi-Sheet Features</h2>
+
+        <div id="sheet-sales" class="test-section hidden">
+            <input data-cell="A1" value="1000" />
+            <input data-cell="A2" value="2000" />
+        </div>
+
+        <div id="sheet-tax" class="test-section hidden">
+            <input data-cell="B1" value="0.08" />
+        </div>
+
+        <div id="test-multisheet" class="test-section">
+            <h3>Cross-Sheet References</h3>
+            <span data-cell="L1" data-formula="sheet-sales!A1"></span>
+            <span data-cell="L2" data-formula="sheet-sales!A1+sheet-sales!A2"></span>
+            <span data-cell="L3" data-formula="sheet-sales!A1*sheet-tax!B1"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="sheet-config" class="test-section hidden">
+            <input data-cell="C1" value="0.15" />
+        </div>
+
+        <div id="test-variables" class="test-section">
+            <h3>Named Variables</h3>
+            <input data-cell="M1" value="500" />
+            <span data-cell="M2" data-formula="M1*TaxRate"></span>
+            <span data-cell="M3" data-formula="M1+M1*TaxRate"></span>
+            <div class="test-result"></div>
+        </div>
+    </div>
+
+    <!-- DATA TYPES & FORMATTING -->
+    <div class="test-category">
+        <h2>Data Types & Formatting</h2>
+
+        <div id="test-datatype-num" class="test-section">
+            <h3>Data Type: Number</h3>
+            <input data-cell="N1" data-type="number" value="42.5" />
+            <span data-cell="N2" data-formula="N1*2"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-datatype-text" class="test-section">
+            <h3>Data Type: Text</h3>
+            <input data-cell="O1" data-type="text" value="123" />
+            <span data-cell="O2" data-formula='O1&"456"'></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-formatter" class="test-section">
+            <h3>Custom Formatter</h3>
+            <input data-cell="P1" value="1234.567" />
+            <span data-cell="P2" data-formula="P1" data-format="currency"></span>
+            <span data-cell="P3" data-formula="P1" data-format="percentage"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-datatype-date" class="test-section">
+            <h3>Data Type: Date</h3>
+            <input type="date" data-cell="V1" data-type="date" value="2024-01-15" />
+            <input data-cell="V2" data-type="number" value="30" />
+            <span data-cell="V3" data-formula="V1+V2" data-format="date"></span>
+            <span data-cell="V4" data-formula="V3-V1"></span>
+            <div class="test-result"></div>
+            <!-- Note: Date is 2024-01-15 + 30 days = 2024-02-14 -->
+        </div>
+    </div>
+
+    <!-- CUSTOM FUNCTIONS -->
+    <div class="test-category">
+        <h2>Custom Functions</h2>
+
+        <div id="test-custom-func" class="test-section">
+            <h3>User-Defined Function (TRIPLE)</h3>
+            <input data-cell="Q1" value="5" />
+            <span data-cell="Q2" data-formula="TRIPLE(Q1)"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-custom-func2" class="test-section">
+            <h3>User-Defined Function (DOUBLE)</h3>
+            <input data-cell="R1" value="25" />
+            <span data-cell="R2" data-formula="DOUBLE(R1)"></span>
+            <div class="test-result"></div>
+        </div>
+    </div>
+
+    <!-- ADVANCED FEATURES -->
+    <div class="test-category">
+        <h2>Advanced Features</h2>
+
+        <div id="test-hidden-cells" class="test-section">
+            <h3>Hidden Cells (Formula-Only)</h3>
+            <input data-cell="S1" value="50" />
+            <span data-cell="S2" data-formula="S3"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-error-handling" class="test-section">
+            <h3>Error Handling (IFERROR)</h3>
+            <input data-cell="T1" value="10" />
+            <input data-cell="T2" value="0" />
+            <span data-cell="T3" data-formula="IFERROR(T1/T2, -1)"></span>
+            <div class="test-result"></div>
+        </div>
+
+        <div id="test-complex" class="test-section">
+            <h3>Complex Expression</h3>
+            <input data-cell="U1" value="100" />
+            <input data-cell="U2" value="200" />
+            <span data-cell="U3" data-formula="(U1+U2)*0.1+SUM(U1:U2)/2"></span>
+            <div class="test-result"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../dist/jquery.calx.js"></script>
+    <script>
+        const results = [];
+        let testCount = 0;
+
+        // Register custom formatters
+        $.calx.registerFormatter('currency', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                }
+                return '$0.00';
+            }
+        });
+
+        $.calx.registerFormatter('percentage', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    return (value * 100).toFixed(2) + '%';
+                }
+                return '0.00%';
+            }
+        });
+
+        $.calx.registerFormatter('date', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    // Convert Excel serial date to JavaScript Date
+                    const baseDate = new Date(1899, 11, 30);
+                    const date = new Date(baseDate.getTime() + value * 24 * 60 * 60 * 1000);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                }
+                return '-';
+            }
+        });
+
+        // Register custom functions
+        $.calx.registerFunction('TRIPLE', function(value) {
+            return value * 3;
+        });
+
+        $.calx.registerFunction('DOUBLE', function(value) {
+            return value * 2;
+        });
+
+        // Helper function for floating point comparison
+        function approxEqual(actual, expected, tolerance = 0.0001) {
+            if (typeof actual === 'number' && typeof expected === 'number') {
+                return Math.abs(actual - expected) < tolerance;
+            }
+            return actual == expected; // Use loose equality for non-numbers
+        }
+
+        function runTest(selector, testName, assertions) {
+            testCount++;
+            const delay = testCount * 50;
+
+            setTimeout(function() {
+                let allPass = true;
+                let resultHTML = '';
+                const testDetails = [];
+
+                assertions.forEach(function(assert) {
+                    const actual = assert.actual();
+                    const expected = assert.expected;
+                    const pass = assert.compare ? assert.compare(actual, expected) : actual === expected;
+
+                    if (!pass) allPass = false;
+
+                    resultHTML += `<div>${assert.label}: `;
+                    resultHTML += `Expected <strong>${expected}</strong>, `;
+                    resultHTML += `Got <strong>${actual}</strong> `;
+                    resultHTML += pass ? '✓' : '✗';
+                    resultHTML += '</div>';
+
+                    testDetails.push({
+                        label: assert.label,
+                        expected: expected,
+                        actual: actual,
+                        pass: pass
+                    });
+                });
+
+                results.push({ name: testName, pass: allPass, details: testDetails });
+                $(selector).addClass(allPass ? 'pass' : 'fail');
+                $(selector + ' .test-result').html(resultHTML);
+
+                // Console output
+                const status = allPass ? '✓ PASS' : '✗ FAIL';
+                const statusColor = allPass ? 'color: green; font-weight: bold' : 'color: red; font-weight: bold';
+                console.log(`%c${status}%c ${testName}`, statusColor, 'color: inherit');
+
+                if (!allPass) {
+                    testDetails.forEach(detail => {
+                        if (!detail.pass) {
+                            console.log(`  └─ ${detail.label}: Expected ${detail.expected}, Got ${detail.actual}`);
+                        }
+                    });
+                }
+
+                updateSummary();
+            }, delay);
+        }
+
+        function updateSummary() {
+            const total = results.length;
+            const passed = results.filter(r => r.pass).length;
+            const failed = total - passed;
+
+            $('#total-tests').text(total);
+            $('#passed-tests').text(passed);
+            $('#failed-tests').text(failed);
+
+            if (failed > 0) {
+                let failedHTML = '<h3 style="color: white; margin-top: 20px;">Failed Tests:</h3><ul style="margin: 0; padding-left: 20px;">';
+                results.filter(r => !r.pass).forEach(r => {
+                    failedHTML += `<li>${r.name}</li>`;
+                });
+                failedHTML += '</ul>';
+                $('#failed-list').html(failedHTML);
+            } else if (total > 0) {
+                $('#failed-list').html('<p style="margin-top: 20px; font-size: 18px;">🎉 All tests passed!</p>');
+            }
+
+            // Final console summary when all tests complete
+            if (total === 25) { // Expected total number of tests
+                console.log('\n' + '='.repeat(60));
+                console.log(`%cTEST SUMMARY`, 'font-size: 16px; font-weight: bold');
+                console.log('='.repeat(60));
+                console.log(`Total Tests: ${total}`);
+                console.log(`%cPassed: ${passed}`, 'color: green; font-weight: bold');
+                console.log(`%cFailed: ${failed}`, failed > 0 ? 'color: red; font-weight: bold' : 'color: green; font-weight: bold');
+                console.log('='.repeat(60));
+
+                if (failed > 0) {
+                    console.log('\n%cFailed Tests:', 'color: red; font-weight: bold');
+                    results.filter(r => !r.pass).forEach(r => {
+                        console.log(`\n❌ ${r.name}`);
+                        r.details.forEach(detail => {
+                            if (!detail.pass) {
+                                console.log(`   ${detail.label}: Expected ${detail.expected}, Got ${detail.actual}`);
+                            }
+                        });
+                    });
+                } else {
+                    console.log('\n%c🎉 ALL TESTS PASSED! 🎉', 'color: green; font-size: 18px; font-weight: bold');
+                }
+                console.log('\n');
+            }
+        }
+
+        // Initialize all sheets
+        $('#test-arithmetic, #test-comparison, #test-string, #test-cell-ref, #test-range, #test-range-avg, ' +
+          '#test-math-funcs, #test-if-func, #test-logical-funcs, #test-text-funcs, #test-nested-funcs, ' +
+          '#test-datatype-num, #test-datatype-text, #test-datatype-date, #test-formatter, #test-custom-func, #test-custom-func2, ' +
+          '#test-error-handling, #test-complex').calx({ autoCalculate: true });
+
+        // Multi-sheet initialization
+        $('#sheet-sales, #sheet-tax, #test-multisheet').calx({ autoCalculate: true });
+        $('#sheet-config, #test-variables').calx({
+            autoCalculate: true,
+            variables: { TaxRate: 'sheet-config!C1' }
+        });
+
+        // Hidden cells test
+        $('#test-hidden-cells').calx({
+            autoCalculate: true,
+            data: { S3: { formula: 'S1*2' } }
+        });
+
+        // RUN TESTS
+
+        // Basic Operations
+        runTest('#test-arithmetic', 'Arithmetic Operations', [
+            { label: 'Addition', expected: 15, actual: () => $('#test-arithmetic').calx('getCellValue', 'A3'), compare: approxEqual },
+            { label: 'Subtraction', expected: 5, actual: () => $('#test-arithmetic').calx('getCellValue', 'A4'), compare: approxEqual },
+            { label: 'Multiplication', expected: 50, actual: () => $('#test-arithmetic').calx('getCellValue', 'A5'), compare: approxEqual },
+            { label: 'Division', expected: 2, actual: () => $('#test-arithmetic').calx('getCellValue', 'A6'), compare: approxEqual },
+            { label: 'Order of Ops', expected: 25, actual: () => $('#test-arithmetic').calx('getCellValue', 'A7'), compare: approxEqual },
+            { label: 'Parentheses', expected: 45, actual: () => $('#test-arithmetic').calx('getCellValue', 'A8'), compare: approxEqual }
+        ]);
+
+        runTest('#test-comparison', 'Comparison Operations', [
+            { label: '>', expected: false, actual: () => $('#test-comparison').calx('getCellValue', 'B3') },
+            { label: '<', expected: true, actual: () => $('#test-comparison').calx('getCellValue', 'B4') },
+            { label: '=', expected: false, actual: () => $('#test-comparison').calx('getCellValue', 'B5') },
+            { label: '<>', expected: true, actual: () => $('#test-comparison').calx('getCellValue', 'B6') }
+        ]);
+
+        runTest('#test-string', 'String Concatenation', [
+            { label: 'Concat', expected: 'Hello World', actual: () => $('#test-string').calx('getCellValue', 'C3') }
+        ]);
+
+        // Cell References & Ranges
+        runTest('#test-cell-ref', 'Basic Cell References', [
+            { label: 'Relative Ref', expected: 110, actual: () => $('#test-cell-ref').calx('getCellValue', 'D2'), compare: approxEqual },
+            { label: 'Absolute Ref', expected: 50, actual: () => $('#test-cell-ref').calx('getCellValue', 'D3'), compare: approxEqual }
+        ]);
+
+        runTest('#test-range', 'Range SUM', [
+            { label: 'SUM(E1:E3)', expected: 60, actual: () => $('#test-range').calx('getCellValue', 'E4'), compare: approxEqual }
+        ]);
+
+        runTest('#test-range-avg', 'Range AVERAGE', [
+            { label: 'AVERAGE(F1:F3)', expected: 20, actual: () => $('#test-range-avg').calx('getCellValue', 'F4'), compare: approxEqual }
+        ]);
+
+        // Functions
+        runTest('#test-math-funcs', 'Math Functions', [
+            { label: 'SQRT', expected: 4, actual: () => $('#test-math-funcs').calx('getCellValue', 'G2'), compare: approxEqual },
+            { label: 'POWER', expected: 256, actual: () => $('#test-math-funcs').calx('getCellValue', 'G3'), compare: approxEqual },
+            { label: 'ABS', expected: 42, actual: () => $('#test-math-funcs').calx('getCellValue', 'G4'), compare: approxEqual },
+            { label: 'ROUND', expected: 4, actual: () => $('#test-math-funcs').calx('getCellValue', 'G5'), compare: approxEqual }
+        ]);
+
+        runTest('#test-if-func', 'IF Function', [
+            { label: 'IF Pass', expected: 'Pass', actual: () => $('#test-if-func').calx('getCellValue', 'H2') },
+            { label: 'Nested IF', expected: 'Medium', actual: () => $('#test-if-func').calx('getCellValue', 'H3') }
+        ]);
+
+        runTest('#test-logical-funcs', 'Logical Functions', [
+            { label: 'AND', expected: false, actual: () => $('#test-logical-funcs').calx('getCellValue', 'I3') },
+            { label: 'OR', expected: true, actual: () => $('#test-logical-funcs').calx('getCellValue', 'I4') },
+            { label: 'NOT', expected: true, actual: () => $('#test-logical-funcs').calx('getCellValue', 'I5') }
+        ]);
+
+        runTest('#test-text-funcs', 'Text Functions', [
+            { label: 'UPPER', expected: 'HELLO WORLD', actual: () => $('#test-text-funcs').calx('getCellValue', 'J2') },
+            { label: 'LOWER', expected: 'hello world', actual: () => $('#test-text-funcs').calx('getCellValue', 'J3') },
+            { label: 'LEN', expected: 11, actual: () => $('#test-text-funcs').calx('getCellValue', 'J4'), compare: approxEqual }
+        ]);
+
+        runTest('#test-nested-funcs', 'Nested Functions', [
+            { label: 'SUM+AVERAGE', expected: 12.5, actual: () => $('#test-nested-funcs').calx('getCellValue', 'K3'), compare: approxEqual }
+        ]);
+
+        // Multi-Sheet
+        runTest('#test-multisheet', 'Cross-Sheet References', [
+            { label: 'Sheet Ref', expected: 1000, actual: () => $('#test-multisheet').calx('getCellValue', 'L1'), compare: approxEqual },
+            { label: 'Sheet Add', expected: 3000, actual: () => $('#test-multisheet').calx('getCellValue', 'L2'), compare: approxEqual },
+            { label: 'Sheet Mult', expected: 80, actual: () => $('#test-multisheet').calx('getCellValue', 'L3'), compare: approxEqual }
+        ]);
+
+        runTest('#test-variables', 'Named Variables', [
+            { label: 'Variable Ref', expected: 75, actual: () => $('#test-variables').calx('getCellValue', 'M2'), compare: approxEqual },
+            { label: 'Variable Calc', expected: 575, actual: () => $('#test-variables').calx('getCellValue', 'M3'), compare: approxEqual }
+        ]);
+
+        // Data Types & Formatting
+        runTest('#test-datatype-num', 'Data Type Number', [
+            { label: 'Number Type', expected: 85, actual: () => $('#test-datatype-num').calx('getCellValue', 'N2'), compare: approxEqual }
+        ]);
+
+        runTest('#test-datatype-text', 'Data Type Text', [
+            { label: 'Text Type', expected: '123456', actual: () => $('#test-datatype-text').calx('getCellValue', 'O2'), compare: approxEqual }
+        ]);
+
+        runTest('#test-formatter', 'Custom Formatters', [
+            { label: 'Currency', expected: '$1,234.57', actual: () => $('#test-formatter [data-cell="P2"]').text() },
+            { label: 'Percentage', expected: '123456.70%', actual: () => $('#test-formatter [data-cell="P3"]').text() }
+        ]);
+
+        runTest('#test-datatype-date', 'Data Type Date', [
+            { label: 'Date Add', expected: '14/02/2024', actual: () => $('#test-datatype-date [data-cell="V3"]').text() },
+            { label: 'Days Between', expected: 30, actual: () => $('#test-datatype-date').calx('getCellValue', 'V4'), compare: approxEqual }
+        ]);
+
+        // Custom Functions
+        runTest('#test-custom-func', 'Custom Function TRIPLE', [
+            { label: 'TRIPLE', expected: 15, actual: () => $('#test-custom-func').calx('getCellValue', 'Q2'), compare: approxEqual }
+        ]);
+
+        runTest('#test-custom-func2', 'Custom Function DOUBLE', [
+            { label: 'DOUBLE', expected: 50, actual: () => $('#test-custom-func2').calx('getCellValue', 'R2'), compare: approxEqual }
+        ]);
+
+        // Advanced
+        runTest('#test-hidden-cells', 'Hidden Cells', [
+            { label: 'Hidden Calc', expected: 100, actual: () => $('#test-hidden-cells').calx('getCellValue', 'S2'), compare: approxEqual }
+        ]);
+
+        runTest('#test-error-handling', 'Error Handling', [
+            { label: 'IFERROR', expected: -1, actual: () => $('#test-error-handling').calx('getCellValue', 'T3'), compare: approxEqual }
+        ]);
+
+        runTest('#test-complex', 'Complex Expression', [
+            { label: 'Complex', expected: 180, actual: () => $('#test-complex').calx('getCellValue', 'U3'), compare: approxEqual }
+        ]);
+
+        console.log('Test suite initialized. Results will appear as tests complete.');
+    </script>
+</body>
+</html>

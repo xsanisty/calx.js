@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+$unminifiedFile = '../jquery-calx-2.2.8.js';
+$minifiedFile   = '../jquery-calx-2.2.8.min.js';
+
+/**
+ * gathering all js source and build into one package
+ */
+
+ob_start();
+require 'calx-build.php';
+$jsBuild = ob_get_contents();
+ob_end_clean();
+
+file_put_contents($unminifiedFile, $jsBuild);
+
+/**
+ * start minifiying completed built
+ */
+
+require 'vendor/autoload.php';
+
+use Devize\ClosureCompiler\ClosureCompiler;
+
+$compiler = new ClosureCompiler;
+$compiler->addSourceFile($unminifiedFile);
+$compiler->setTargetFile($minifiedFile);
+
+$compiler->compile();
+?>

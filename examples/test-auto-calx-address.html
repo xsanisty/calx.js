@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calx Auto-Address Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../dist/jquery.calx.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        h3 { color: #333; }
+        input { margin: 5px; padding: 8px; }
+        .result { font-weight: bold; color: #007bff; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+        td { padding: 8px; border: 1px solid #ddd; }
+        .label { background-color: #f5f5f5; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Auto-Assignment of CALX Addresses Test</h1>
+    <p>This tests that elements with <code>data-formula</code> but no <code>data-cell</code> are automatically assigned addresses like CALX1, CALX2, etc.</p>
+
+    <!-- Test 1: Elements with data-formula only (should get CALX1, CALX2, CALX3) -->
+    <div class="test-section" id="sheet1">
+        <h3>Test 1: Auto-assign CALX addresses</h3>
+        <table>
+            <tr>
+                <td class="label">Input A:</td>
+                <td><input type="number" data-formula="" value="10" /></td>
+                <td class="label">Input B:</td>
+                <td><input type="number" data-formula="" value="20" /></td>
+            </tr>
+            <tr>
+                <td class="label">Sum (auto CALX3):</td>
+                <td colspan="3"><input type="text" data-formula="=CALX1+CALX2" readonly /></td>
+            </tr>
+        </table>
+        <p><small>Expected: CALX1=10, CALX2=20, CALX3=30. The sum input should automatically get address CALX3.</small></p>
+    </div>
+
+    <!-- Test 2: Mix of explicit data-cell and auto-assigned addresses -->
+    <div class="test-section" id="sheet2">
+        <h3>Test 2: Mix of explicit and auto addresses</h3>
+        <table>
+            <tr>
+                <td class="label">Price (A1):</td>
+                <td><input type="number" data-cell="A1" value="100" /></td>
+            </tr>
+            <tr>
+                <td class="label">Quantity (B1):</td>
+                <td><input type="number" data-cell="B1" value="5" /></td>
+            </tr>
+            <tr>
+                <td class="label">Tax Rate (auto CALX1):</td>
+                <td><input type="number" data-formula="" value="0.1" /></td>
+            </tr>
+            <tr>
+                <td class="label">Subtotal (auto CALX2):</td>
+                <td><input type="text" data-formula="=A1*B1" readonly /></td>
+            </tr>
+            <tr>
+                <td class="label">Tax (auto CALX3):</td>
+                <td><input type="text" data-formula="=CALX2*CALX1" readonly /></td>
+            </tr>
+            <tr>
+                <td class="label">Total (auto CALX4):</td>
+                <td><input type="text" data-formula="=CALX2+CALX3" readonly /></td>
+            </tr>
+        </table>
+        <p><small>Expected: Total = 550 (Price*Qty + Tax)</small></p>
+    </div>
+
+    <!-- Test 3: Data from arguments should override HTML attributes -->
+    <div class="test-section" id="sheet3">
+        <h3>Test 3: Argument data overrides HTML attributes</h3>
+        <table>
+            <tr>
+                <td class="label">Base (auto CALX1, overridden to 50):</td>
+                <td><input type="number" data-formula="" value="10" /></td>
+            </tr>
+            <tr>
+                <td class="label">Multiplier (auto CALX2):</td>
+                <td><input type="number" data-formula="" value="3" /></td>
+            </tr>
+            <tr>
+                <td class="label">Result (auto CALX3):</td>
+                <td><input type="text" data-formula="=CALX1*CALX2" readonly /></td>
+            </tr>
+        </table>
+        <p><small>Expected: Result = 150 (50*3, where 50 overrides the HTML value of 10)</small></p>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Test 1: Basic auto-assignment
+            $('#sheet1').calx();
+
+            // Test 2: Mix of explicit and auto addresses
+            $('#sheet2').calx();
+
+            // Test 3: With data from arguments overriding HTML attributes
+            $('#sheet3').calx({
+                data: {
+                    'CALX1': { value: 50 }  // Override the HTML value of 10
+                }
+            });
+
+            // Debug: Log assigned addresses
+            console.log('Test 1 addresses:');
+            $('#sheet1 [data-cell]').each(function() {
+                console.log('  ', $(this).attr('data-cell'), '=', $(this).val());
+            });
+
+            console.log('Test 2 addresses:');
+            $('#sheet2 [data-cell]').each(function() {
+                console.log('  ', $(this).attr('data-cell'), '=', $(this).val());
+            });
+
+            console.log('Test 3 addresses:');
+            $('#sheet3 [data-cell]').each(function() {
+                console.log('  ', $(this).attr('data-cell'), '=', $(this).val());
+            });
+        });
+    </script>
+</body>
+</html>

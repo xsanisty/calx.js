@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Calx - Data Types Example</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Page-specific overrides */
+        .content { max-width: 900px; }
+        .example {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .example h2 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .output {
+            padding: 10px;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .number { color: #2c5282; }
+        .text { color: #38a169; }
+        .date { color: #d69e2e; }
+        .boolean { color: #805ad5; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="jquery-basic.html">Basic</a>
+                <a href="jquery-datatypes.html" class="active">Data Types</a>
+                <a href="jquery-dynamic-form.html">Dynamic Form</a>
+                <a href="jquery-formatters.html">Formatters</a>
+                <a href="jquery-multisheet.html">Multisheet</a>
+                <a href="jquery-mortgage.html">Mortgage Calculator</a>
+                <a href="jquery-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Data Types Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Data Types:</strong> Use the data-type attribute to specify explicit type casting (number, text, date, boolean).
+        </div>
+
+    <div id="DataTypeDemo" class="example">
+        <h2>Number Type Example</h2>
+        <div class="form-group">
+            <label>Price (data-type="number")</label>
+            <input data-cell="A1" data-type="number" value="299.99" />
+        </div>
+        <div class="form-group">
+            <label>Quantity (data-type="number")</label>
+            <input data-cell="A2" data-type="number" value="5" />
+        </div>
+        <div class="form-group">
+            <label>Tax Rate (data-type="number")</label>
+            <input data-cell="A3" data-type="number" value="0.08" placeholder="Enter as decimal (e.g., 0.08 for 8%)" />
+        </div>
+        <div class="output number">
+            <label>Subtotal: <span data-cell="A4" data-formula="A1*A2" data-format="currency">0</span></label>
+        </div>
+        <div class="output number">
+            <label>Tax Amount: <span data-cell="A5" data-formula="A4*A3" data-format="currency">0</span></label>
+        </div>
+        <div class="output number">
+            <label>Total: <span data-cell="A6" data-formula="A4+A5" data-format="currency">0</span></label>
+        </div>
+    </div>
+
+    <div id="TextDemo" class="example">
+        <h2>Text Type Example</h2>
+        <div class="form-group">
+            <label>First Name (data-type="text")</label>
+            <input data-cell="B1" data-type="text" value="John" />
+        </div>
+        <div class="form-group">
+            <label>Last Name (data-type="text")</label>
+            <input data-cell="B2" data-type="text" value="Doe" />
+        </div>
+        <div class="output text">
+            <label>Full Name: <span data-cell="B3" data-formula="CONCATENATE(B1, ' ', B2)">-</span></label>
+        </div>
+        <div class="output text">
+            <label>Upper Case: <span data-cell="B4" data-formula="UPPER(B3)">-</span></label>
+        </div>
+    </div>
+
+    <div id="DateDemo" class="example">
+        <h2>Date Type Example</h2>
+        <div class="form-group">
+            <label>Start Date (data-type="date")</label>
+            <input type="date" data-cell="C1" data-type="date" value="2024-01-15" />
+        </div>
+        <div class="form-group">
+            <label>Days to Add (data-type="number")</label>
+            <input data-cell="C2" data-type="number" value="30" />
+        </div>
+        <div class="output date">
+            <label>End Date: <span data-cell="C3" data-formula="C1+C2" data-format="date">-</span></label>
+        </div>
+        <div class="output number">
+            <label>Days Between: <span data-cell="C4" data-formula="C3-C1">-</span></label>
+        </div>
+    </div>
+
+    <div id="MixedDemo" class="example">
+        <h2>Mixed Types with Conditional</h2>
+        <div class="form-group">
+            <label>Order Amount (data-type="number")</label>
+            <input data-cell="D1" data-type="number" value="1500" />
+        </div>
+        <div class="form-group">
+            <label>Free Shipping Threshold (data-type="number")</label>
+            <input data-cell="D2" data-type="number" value="1000" />
+        </div>
+        <div class="form-group">
+            <label>Shipping Cost (data-type="number")</label>
+            <input data-cell="D3" data-type="number" value="50" />
+        </div>
+        <div class="output boolean">
+            <label>Eligible for Free Shipping: <span data-cell="D4" data-formula="IF(D1>=D2, 'YES', 'NO')">-</span></label>
+        </div>
+        <div class="output number">
+            <label>Actual Shipping Cost: <span data-cell="D5" data-formula="IF(D1>=D2, 0, D3)" data-format="currency">-</span></label>
+        </div>
+        <div class="output number">
+            <label>Final Total: <span data-cell="D6" data-formula="D1+D5" data-format="currency">-</span></label>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../dist/jquery.calx.js"></script>
+    <script>
+        // Register custom formatters
+        $.calx.registerFormatter('currency', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                }
+                return '$0.00';
+            }
+        });
+
+        $.calx.registerFormatter('date', {
+            format: function(value) {
+                if (typeof value === 'number') {
+                    // Convert Excel serial date to JavaScript Date
+                    const baseDate = new Date(1899, 11, 30);
+                    const date = new Date(baseDate.getTime() + value * 24 * 60 * 60 * 1000);
+                    return date.toLocaleDateString();
+                }
+                return '-';
+            }
+        });
+
+        // Initialize each demo independently
+        $('#DataTypeDemo').calx({ autoCalculate: true });
+        $('#TextDemo').calx({ autoCalculate: true });
+        $('#DateDemo').calx({ autoCalculate: true });
+        $('#MixedDemo').calx({ autoCalculate: true });
+
+        // Log cell types after initialization
+        setTimeout(function() {
+            console.log('Number cell type:', $('#DataTypeDemo').calx('getCell', 'A1').type);
+            console.log('Text cell type:', $('#TextDemo').calx('getCell', 'B1').type);
+            console.log('Date cell type:', $('#DateDemo').calx('getCell', 'C1').type);
+        }, 100);
+    </script>
+
+    <div class="footer">
+        <a href="index.html">← Back to Examples</a>
+    </div>
+    </div>
+</body>
+</html>

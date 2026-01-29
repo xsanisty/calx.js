@@ -1,4 +1,4 @@
-export default {
+export const Comparator = {
     equal(a : any, b : any) : boolean {
         /** ignore case as excel does */
         if (typeof a == 'string') {

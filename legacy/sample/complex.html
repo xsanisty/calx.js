@@ -1,0 +1,606 @@
+<html>
+<head>
+    <style>
+        body, td{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        input, select{
+            width: 120px;
+            border: solid 1px #ddd;
+            text-align: right;
+        }
+        .chead{
+            background:#ccf;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .rhead{
+            background: #cfc;
+            padding: 0 5px;
+            text-align: right;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class="rhead">Cell Address</td>
+            <td><input type="text" id="cell_address" style="text-align:left"></td>
+        </tr>
+        <tr>
+            <td class="rhead">Formula</td>
+            <td><input type="text" id="cell_formula" style="width: 300px; text-align:left"></td>
+        </tr>
+        <tr>
+            <td class="rhead">Action</td>
+            <td>
+                <button type="button" id="apply">Apply</button>
+                <button type="button" id="reset">Reset</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="button" id="enable">Enable Calx</button>
+                <button type="button" id="disable">Disable Calx</button>
+                <button type="button" id="resetsheet">Reset Sheet</button>
+            </td>
+        </tr>
+    </table>
+    <form action="" id="sheet1">
+        <table>
+            <tr>
+                <td class="chead">&nbsp;</td>
+                <td class="chead">A</td>
+                <td class="chead">B</td>
+                <td class="chead">C</td>
+                <td class="chead">D</td>
+                <td class="chead">E</td>
+                <td class="chead">F</td>
+                <td class="chead">G</td>
+                <td class="chead">H</td>
+                <td class="chead">I</td>
+                <td class="chead">J</td>
+
+                <td class="chead">K</td>
+                <td class="chead">L</td>
+                <td class="chead">M</td>
+                <td class="chead">N</td>
+                <td class="chead">O</td>
+                <td class="chead">P</td>
+                <td class="chead">Q</td>
+                <td class="chead">R</td>
+                <td class="chead">S</td>
+                <td class="chead">T</td>
+
+            </tr>
+            <tr>
+                <td class="rhead">1</td>
+                <td>
+                    <select data-formula="" data-format="0,0[.]00" data-cell="A1">
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                    </select>
+                </td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B1"></td>
+                <td><input data-formula="A1+B1" data-format="0,0[.]00" data-cell="C1"></td>
+                <td><input data-formula="C1*2" data-format="0,0[.]00" data-cell="D1"></td>
+                <td><input data-formula="C1*3" data-format="0,0[.]00" data-cell="E1"></td>
+                <td><input data-formula="C1*4" data-format="0,0[.]00" data-cell="F1"></td>
+                <td><input data-formula="D1+E1+F1" data-format="0,0[.]00" data-cell="G1"></td>
+                <td><input data-formula="CONCAT('G1 is: ', G1)" data-format="0,0[.]00" data-cell="H1"></td>
+                <td><input data-formula="G1+100" data-format="0,0[.]00" data-cell="I1"></td>
+                <td><input data-formula="D1+I1" data-format="0,0[.]00" data-cell="J1"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S1"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T1"></td>
+
+            </tr>
+
+            <tr>
+                <td class="rhead">2</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J2"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S2"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T2"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">3</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J3"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S3"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T3"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">4</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J4"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S4"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T4"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">5</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J5"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S5"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T5"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">6</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J6"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S6"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T6"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">7</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J7"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S7"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T7"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">8</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J8"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S8"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T8"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">9</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J9"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S9"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T9"></td>
+
+            </tr>
+            <tr>
+                <td class="rhead">10</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J10"></td>
+
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S10"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T10"></td>
+
+            </tr>
+
+            <tr>
+                <td class="rhead">11</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S11"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T11"></td>
+            </tr>
+            <tr>
+                <td class="rhead">12</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S12"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T12"></td>
+            </tr>
+            <tr>
+                <td class="rhead">13</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S13"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T13"></td>
+            </tr>
+            <tr>
+                <td class="rhead">14</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S14"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T14"></td>
+            </tr>
+            <tr>
+                <td class="rhead">15</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S15"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T15"></td>
+            </tr>
+            <tr>
+                <td class="rhead">16</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S16"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T16"></td>
+            </tr>
+            <tr>
+                <td class="rhead">17</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S17"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T17"></td>
+            </tr>
+            <tr>
+                <td class="rhead">18</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S18"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T18"></td>
+            </tr>
+            <tr>
+                <td class="rhead">19</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S19"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T19"></td>
+            </tr>
+            <tr>
+                <td class="rhead">20</td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="A20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="B20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="C20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="D20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="E20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="F20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="G20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="H20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="I20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="J20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="K20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="L20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="M20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="N20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="O20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="P20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="Q20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="R20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="S20"></td>
+                <td><input data-formula="" data-format="0,0[.]00" data-cell="T20"></td>
+            </tr>
+
+        </table>
+    </form>
+    <script src="jquery-calx-sample-2.2.8.min.js"></script>
+
+    <script>
+        $('#reset').click(function(){
+            $('#cell_address, #cell_formula').val('');
+        });
+
+        $('#apply').click(function(){
+            var addr    = $('#cell_address').val(),
+                formula = $('#cell_formula').val();
+
+            if($('#sheet1').calx('getSheet')){
+                $('#sheet1').calx('getCell', addr)
+                            .setFormula(formula)
+                            .calculate()
+                            .renderComputedValue();
+            }else{
+                $('input[data-cell='+addr+']').attr('data-formula', formula);
+            }
+        });
+
+        $('#enable').click(function(){
+            $('#sheet1').calx();
+        });
+
+        $('#disable').click(function(){
+            $('#sheet1').calx('destroy');
+        });
+
+        $('#resetsheet').click(function(){
+            $('#sheet1').calx('reset');
+        });
+    </script>
+</body>
+</html>

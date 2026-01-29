@@ -2,7 +2,7 @@
  * Simple event dispatcher with pause and resume.
  *
  */
-export default class EventDispatcher {
+export class EventDispatcher {
     private _listeners : Record<string, any> = {};
     private _isEventPaused : boolean = false;
 
@@ -51,7 +51,7 @@ export default class EventDispatcher {
         var listeners = this._listeners[eventName];
 
         if (listeners !== undefined) {
-            eventData.target = self;
+            eventData.target = this;
 
             var listeners = listeners.slice(0);
 

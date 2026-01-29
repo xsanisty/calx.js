@@ -8,18 +8,26 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
+        },
         exclude: [
-          /node_modules/, 
+          /node_modules/,
+          /legacy/,
           /oldsrc/,
           /dist/,
+          /test/,
+          /example.*\.ts$/
         ],
       },
     ],
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
-    
+
   },
   devtool: false,
   plugins: [

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.2.8 Sample -  Basic Calculation
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.2.8 Sample</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><a href="index.html">Index</a></li>
+                        <li class="active"><a href="#">Basic Calculation</a></li>
+                        <li><a href="dynamic_form.html">Dynamic Form</a></li>
+                        <li><a href="checkbox.html">Cehckbox, Radio, and Select</a></li>
+                        <li><a href="chart.html">Drawing Chart</a></li>
+                        <li><a href="multisheet.html">Multiple Sheet</a></li>
+                        <li><a href="formula.html">Formula Showcase</a></li>
+                        <li><a href="server_side.html">Server Side Formula</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                Sample Application
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="app/budget_planner.html">Budget Planner</a></li>
+                                <li><a href="app/amortization_schedule.html">Amortization Schedule</a></li>
+                                <li><a href="app/home_mortgage.html">Home Mortgage Calc</a></li>
+                                <li><a href="app/home_expense.html">Home Expense Calc</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper">
+
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>Basic Calculation</h2>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary pull-right" id="show_formula" data-shown="0">Show Formula</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <form id="basic_math">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Addition</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C5" name="C5" data-cell="C5" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>+</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E5" name="E5" data-cell="E5" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G5" name="G5" data-cell="G5" data-format="0,0[.]00" data-formula="C5+E5">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Subtraction</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C6" name="C6" data-cell="C6" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>-</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E6" name="E6" data-cell="E6" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G6" name="G6" data-cell="G6" data-format="0,0[.]00" data-formula="C6-E6">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Multiplication</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C5" name="C7" data-cell="C7" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>X</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E7" name="E7" data-cell="E7" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G7" name="G7" data-cell="G7" data-format="0,0[.]00" data-formula="C7*E7">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Division</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C8" name="C8" data-cell="C8" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>/</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E8" name="E8" data-cell="E8" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G8" name="G8" data-cell="G8" data-format="0,0[.]00" data-formula="C8/E8">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row space">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Add %</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C10" name="C10" data-cell="C10" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>+</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E10" name="E10" data-cell="E10" data-format="0[.]00 %" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G10" name="G10" data-cell="G10" data-format="0,0[.]00" data-formula="C10*(1+E10)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Subtract %</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C11" name="C11" data-cell="C11" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>-</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E11" name="E11" data-cell="E11" data-format="0[.]00 %" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G11" name="G11" data-cell="G11" data-format="0,0[.]00" data-formula="C11-(C11*E11)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Multiply %</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C12" name="C12" data-cell="C12" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>X</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E12" name="E12" data-cell="E12" data-format="0[.]00 %" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G12" name="G12" data-cell="G12" data-format="0,0[.]00" data-formula="C12*E12">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 box_desc">
+                                            <div class="form-group">
+                                                <label>Divide %</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C13" name="C13" data-cell="C13" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>/</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="E13" name="E13" data-cell="E13" data-format="0[.]00 %" data-formula="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 box_desc">
+                                            <div class="form-group">
+                                                <label>=</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G13" name="G13" data-cell="G13" data-format="0,0[.]00" data-formula="IF(E13 = 0,0,C13/E13)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row space">
+                                <div class="col-md-5">
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Constant %</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C15" name="C15" data-cell="C15" data-format="0[.]00 %" data-formula="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Year 1</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C16" name="C16" data-cell="C16" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Year 2</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C17" name="C17" data-cell="C17" data-format="0,0[.]00" data-formula="C16*(1+C15)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Year 3</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C18" name="C18" data-cell="C18" data-format="0,0[.]00" data-formula="C17*(1+C15)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Year 4</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C19" name="C19" data-cell="C19" data-format="0,0[.]00" data-formula="C18*(1+C15)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Year 5</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C20" name="C20" data-cell="C20" data-format="0,0[.]00" data-formula="C19*(1+C15)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 box_desc">
+                                            <div class="form-group">
+                                                <label>Year 6</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="C21" name="C21" data-cell="C21" data-format="0,0[.]00" data-formula="C20*(1+C15)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12 box_desc">
+                                            <div class="form-group">
+                                                <label>Percent Change</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 box_desc">
+                                            <div class="form-group">
+                                                <label>Value 1</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G16" name="G16" data-cell="G16" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 box_desc">
+                                            <div class="form-group">
+                                                <label>Value 2</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G17" name="G17" data-cell="G17" data-format="0,0[.]00" data-formula="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 box_desc">
+                                            <div class="form-group">
+                                                <label>% Change</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 box_input">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm text-right" id="G18" name="G18" data-cell="G18" data-format="0,0[.]00 %" data-formula="IF(G16 = 0,0,(G17/G16)-1)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-calx-sample-2.2.8.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap.js" type="text/javascript"></script>
+        <script>
+            $('#basic_math').calx();
+
+            $('#show_formula').click(function(e){
+                e.preventDefault();
+
+                if($(this).attr('data-shown') == '0'){
+                    $('[data-formula],[data-cell]').each(function(){
+                        $(this).after('<span class="formula">'+$(this).attr('data-cell')+($(this).attr('data-formula') ? ' = '+$(this).attr('data-formula') : '')+'&nbsp;</span>');
+                    });
+
+                    $(this).attr('data-shown', 1).html('Hide Formula');
+                }else{
+                    $('span.formula').remove();
+                    $(this).attr('data-shown', 0).html('Show Formula');
+                }
+            });
+        </script>
+    </body>
+</html>

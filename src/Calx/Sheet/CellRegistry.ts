@@ -1,14 +1,14 @@
-import Cell from "../Cell";
-import Sheet from "../Sheet";
-import EventDispatcher from "../Utility/EventDispatcher";
+import { Cell } from "../Cell";
+import { Sheet } from "../Sheet";
+import { EventDispatcher } from "../Utility/EventDispatcher";
 import { CellData } from "../Workbook/Data";
 import { SheetEvent } from "./SheetEvent";
 
-export default class CellRegistry {
+export class CellRegistry {
     private cells : Record<string, Cell> = {};
-    private sheet : Sheet;
 
     constructor(
+        private sheet : Sheet,
         private event : EventDispatcher
     ) {
 
@@ -30,8 +30,11 @@ export default class CellRegistry {
         if (this.cells.hasOwnProperty(address)) {
             return this.cells[address];
         } else {
-            // create new cell
-            const cell = new Cell(address, this.sheet );
+            // create new cell on-the-fly if it doesn't exist
+            const cell = new Cell(address, this.sheet);
+            this.cells[address] = cell;
+            this.event.dispatch(SheetEvent.CELL_CREATED, {cell : cell});
+            return cell;
         }
     }
 
@@ -44,7 +47,22 @@ export default class CellRegistry {
             throw new Error(`Cell ${address} already exists`);
         }
 
-        const cell = new Cell(address, this.sheet, data);
+        const cell = new Cell(address, this.sheet, data.type);
+
+        // Set cell properties from data
+        if (data.formula) {
+            cell.formula = data.formula;
+        } else if (data.value !== undefined) {
+            cell.value = data.value;
+        }
+
+        if (data.format) {
+            cell.setFormat(data.format);
+        }
+
+        if (data.formatter) {
+            cell.setFormatter(data.formatter);
+        }
 
         this.cells[cell.address] = cell;
 

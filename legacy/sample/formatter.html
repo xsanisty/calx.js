@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            jQuery Calx 2.2.8 Sample - Formatters
+        </title>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="css/sb-admin.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+        <style>
+            .formatter-example {
+                margin-bottom: 30px;
+            }
+            .formatter-example h3 {
+                margin-top: 0;
+                color: #337ab7;
+            }
+            .help-block {
+                color: #737373;
+                font-size: 13px;
+            }
+            .result-display {
+                font-size: 18px;
+                font-weight: bold;
+                padding: 10px;
+                background: #f5f5f5;
+                border-radius: 4px;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a class="navbar-brand" href="#">jQuery Calx 2.2.8 Sample</a>
+                </div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        <li><a href="index.html">Index</a></li>
+                        <li><a href="basic.html">Basic Calculation</a></li>
+                        <li><a href="dynamic_form.html">Dynamic Form</a></li>
+                        <li><a href="checkbox.html">Checkbox, Radio, and Select</a></li>
+                        <li><a href="chart.html">Drawing Chart</a></li>
+                        <li><a href="multisheet.html">Multiple Sheet</a></li>
+                        <li><a href="formula.html">Formula Showcase</a></li>
+                        <li class="active"><a href="#">Formatters</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                Sample Application
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="app/budget_planner.html">Budget Planner</a></li>
+                                <li><a href="app/amortization_schedule.html">Amortization Schedule</a></li>
+                                <li><a href="app/home_mortgage.html">Home Mortgage Calc</a></li>
+                                <li><a href="app/home_expense.html">Home Expense Calc</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Formatters <small>Value Formatting Examples</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li><a href="index.html">Home</a></li>
+                            <li class="active">Formatters</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-info">
+                            <strong>Predefined Formatters:</strong> This example demonstrates the built-in formatters (currency, percent, number, integer, text) and the focus/blur behavior for inputs.
+                        </div>
+                    </div>
+                </div>
+
+                <form id="formatter-demo">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="formatter-example">
+                                <h3>Currency Formatter</h3>
+                                <div class="form-group">
+                                    <label>Enter Amount:</label>
+                                    <input type="text" class="form-control" data-cell="A1" value="1234.56">
+                                    <span class="help-block">Focus to edit raw value, blur to see formatted value</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Formatted Output (currency):</label>
+                                    <input type="text" class="form-control" data-cell="B1" data-formula="A1" data-format="currency" readonly>
+                                    <span class="help-block">Format: $1,234.56</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Display Only:</label>
+                                    <div class="result-display" data-cell="C1" data-formula="A1" data-format="currency"></div>
+                                </div>
+                            </div>
+
+                            <div class="formatter-example">
+                                <h3>Percent Formatter</h3>
+                                <div class="form-group">
+                                    <label>Enter Decimal (e.g., 0.15 for 15%):</label>
+                                    <input type="text" class="form-control" data-cell="A2" value="0.15">
+                                </div>
+                                <div class="form-group">
+                                    <label>Formatted Output (percent):</label>
+                                    <input type="text" class="form-control" data-cell="B2" data-formula="A2" data-format="percent" readonly>
+                                    <span class="help-block">Format: 15.00%</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Display Only:</label>
+                                    <div class="result-display" data-cell="C2" data-formula="A2" data-format="percent"></div>
+                                </div>
+                            </div>
+
+                            <div class="formatter-example">
+                                <h3>Number Formatter</h3>
+                                <div class="form-group">
+                                    <label>Enter Number:</label>
+                                    <input type="text" class="form-control" data-cell="A3" value="123.456789">
+                                </div>
+                                <div class="form-group">
+                                    <label>Formatted Output (number):</label>
+                                    <input type="text" class="form-control" data-cell="B3" data-formula="A3" data-format="number" readonly>
+                                    <span class="help-block">Format: 123.46 (2 decimal places)</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Display Only:</label>
+                                    <div class="result-display" data-cell="C3" data-formula="A3" data-format="number"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="formatter-example">
+                                <h3>Integer Formatter</h3>
+                                <div class="form-group">
+                                    <label>Enter Number:</label>
+                                    <input type="text" class="form-control" data-cell="A4" value="99.876">
+                                </div>
+                                <div class="form-group">
+                                    <label>Formatted Output (integer):</label>
+                                    <input type="text" class="form-control" data-cell="B4" data-formula="A4" data-format="integer" readonly>
+                                    <span class="help-block">Format: 100 (rounded)</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Display Only:</label>
+                                    <div class="result-display" data-cell="C4" data-formula="A4" data-format="integer"></div>
+                                </div>
+                            </div>
+
+                            <div class="formatter-example">
+                                <h3>Text Formatter</h3>
+                                <div class="form-group">
+                                    <label>Enter Any Value:</label>
+                                    <input type="text" class="form-control" data-cell="A5" value="Hello Calx!">
+                                </div>
+                                <div class="form-group">
+                                    <label>Formatted Output (text):</label>
+                                    <input type="text" class="form-control" data-cell="B5" data-formula="A5" data-format="text" readonly>
+                                    <span class="help-block">Format: String conversion</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Display Only:</label>
+                                    <div class="result-display" data-cell="C5" data-formula="A5" data-format="text"></div>
+                                </div>
+                            </div>
+
+                            <div class="formatter-example">
+                                <h3>Combined Calculation</h3>
+                                <div class="form-group">
+                                    <label>Price:</label>
+                                    <input type="text" class="form-control" data-cell="D1" value="100" data-format="currency">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tax Rate:</label>
+                                    <input type="text" class="form-control" data-cell="D2" value="0.08" data-format="percent">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tax Amount:</label>
+                                    <input type="text" class="form-control" data-formula="D1*D2" data-format="currency" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Total:</label>
+                                    <input type="text" class="form-control" data-formula="D1+D1*D2" data-format="currency" readonly>
+                                    <span class="help-block">Price + Tax</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><i class="fa fa-info-circle"></i> How It Works</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <h4>Predefined Formatters</h4>
+                                    <ul>
+                                        <li><strong>currency</strong> - Formats as $1,234.56 with thousand separators</li>
+                                        <li><strong>percent</strong> - Formats as 12.34% (multiplies by 100)</li>
+                                        <li><strong>number</strong> - Formats with 2 decimal places</li>
+                                        <li><strong>integer</strong> - Rounds to whole number</li>
+                                        <li><strong>text</strong> - Converts to string</li>
+                                    </ul>
+
+                                    <h4>Focus/Blur Behavior</h4>
+                                    <p>For input and textarea elements with <code>data-format</code> attribute:</p>
+                                    <ul>
+                                        <li><strong>On Focus:</strong> Shows raw value for easy editing (e.g., 1234.56)</li>
+                                        <li><strong>On Blur:</strong> Shows formatted value (e.g., $1,234.56)</li>
+                                        <li><strong>While Typing:</strong> Raw value is maintained, preventing cursor jumping</li>
+                                    </ul>
+
+                                    <h4>Usage</h4>
+                                    <pre>&lt;!-- Input with currency formatter --&gt;
+&lt;input data-cell="A1" data-format="currency" value="1234.56"&gt;
+
+&lt;!-- Display with percent formatter --&gt;
+&lt;span data-cell="B1" data-formula="A1*0.1" data-format="percent"&gt;&lt;/span&gt;
+
+&lt;!-- Read-only input --&gt;
+&lt;input data-formula="A1+B1" data-format="currency" readonly&gt;</pre>
+
+                                    <h4>Custom Formatters</h4>
+                                    <p>You can also register custom formatters via JavaScript:</p>
+                                    <pre>$('#myform').calx({
+    formatters: {
+        phone: {
+            format: function(value) {
+                // Format as (123) 456-7890
+                var cleaned = ('' + value).replace(/\D/g, '');
+                var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+                if (match) {
+                    return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+                }
+                return value;
+            }
+        }
+    }
+});</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="js/jquery-1.10.2.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="../../dist/jquery.calx.js"></script>
+        <script>
+            $(document).ready(function() {
+                // Initialize Calx with auto-calculation
+                $('#formatter-demo').calx({
+                    autoCalculate: true
+                });
+            });
+        </script>
+    </body>
+</html>

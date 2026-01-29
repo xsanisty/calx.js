@@ -1,4 +1,4 @@
-import Cell from "../Cell";
+import { Cell } from "../Cell";
 
 /**
  * translate numeric to alphabet, like 1 => A, 27 => AA

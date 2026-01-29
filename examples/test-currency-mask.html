@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Currency Input Mask</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .content { max-width: 600px; }
+        .test-case {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 4px;
+        }
+        .result strong {
+            color: #2c5282;
+        }
+        input[readonly] {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> jQuery Calx Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="test-currency-mask.html" class="active">Currency Test</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Currency Input Mask Test</h1>
+
+        <div class="alert alert-info">
+            <strong>Test Instructions:</strong>
+            <ol>
+                <li>Type <code>$4000</code> in the input field below</li>
+                <li>Press Enter or click outside the field (blur)</li>
+                <li>The dependent cells should update automatically</li>
+                <li>The input should show formatted value: <code>$4,000.00</code></li>
+            </ol>
+        </div>
+
+        <form id="testForm" class="test-case">
+            <h3>Test Case: Currency with Dependents</h3>
+
+            <div class="form-group">
+                <label>Amount (type: $4000):</label>
+                <input type="text"
+                       data-cell="A1"
+                       data-format="currency"
+                       value="1000"
+                       placeholder="Type $4000">
+                <p class="help-text">Try typing: $4000, 4000, $4,000.00, or any variant</p>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="number" data-cell="A2" value="2">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Total (A1 * A2):</label>
+                    <input type="text"
+                           data-cell="A3"
+                           data-formula="A1*A2"
+                           data-format="currency"
+                           readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Tax (10% of Total):</label>
+                    <input type="text"
+                           data-cell="A4"
+                           data-formula="A3*0.1"
+                           data-format="currency"
+                           readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Grand Total:</label>
+                    <input type="text"
+                           data-cell="A5"
+                           data-formula="A3+A4"
+                           data-format="currency"
+                           readonly>
+                    <p class="help-text">Expected: $8,800.00 when Amount is $4000 and Quantity is 2</p>
+                </div>
+            </div>
+        </form>
+
+        <div class="alert alert-warning">
+            <strong>Debug Info:</strong>
+            <ul>
+                <li>Open browser console (F12) to see calculation logs</li>
+                <li>Check if cell values update correctly</li>
+                <li>Verify formatting appears after blur</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="index.html">← Back to Examples</a>
+    </div>
+
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load jQuery Calx -->
+    <script src="../dist/jquery.calx.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Calx
+            $('#testForm').calx({
+                autoCalculate: true
+            });
+
+            console.log('✅ Currency mask test initialized');
+            console.log('Type $4000 in the Amount field and press Enter or blur');
+
+            // Log cell values when they change
+            $('#testForm').on('blur change', 'input[data-cell="A1"]', function() {
+                setTimeout(function() {
+                    const a1 = $('#testForm').calx('getCellValue', 'A1');
+                    const a3 = $('#testForm').calx('getCellValue', 'A3');
+                    const a5 = $('#testForm').calx('getCellValue', 'A5');
+                    console.log('After blur/change:');
+                    console.log('  A1 (Amount):', a1);
+                    console.log('  A3 (Total):', a3);
+                    console.log('  A5 (Grand Total):', a5);
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
