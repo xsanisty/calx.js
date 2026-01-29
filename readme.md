@@ -210,7 +210,25 @@ npm test:watch
 
 # With coverage
 npm run test:coverage
+
+# Performance benchmarks
+npm run test:performance
 ```
+
+### Performance Benchmarks
+
+The test suite includes comprehensive performance tests that measure:
+
+- **Formula Parsing** - 1000+ formulas in <2s
+- **Calculation Speed** - 1000 cells in <1s
+- **Dependency Chains** - 100-cell chain in <500ms
+- **Large Datasets** - 10x100 grid (1000 cells) in <3s
+- **SUM Ranges** - 10 SUMs over 1000 cells in <1s
+- **Complex Formulas** - Nested IF, SUMIF, mathematical operations
+- **Multi-Sheet** - Cross-sheet references
+- **Real-World Scenarios** - Invoice calculations, mortgage amortization
+
+Run `npm run test:performance` to see detailed timing metrics for your system.
 
 ## 🤝 Contributing
 
