@@ -340,3 +340,112 @@ export function translateFormula(formula: string, cellRowOffset: number, cellCol
 
     return '=' + translated;
 }
+
+/**
+ * Update references to a moved range in a formula
+ * When a range is moved from oldRange to newRange, all formulas that reference
+ * cells in oldRange need to be updated to reference newRange instead
+ *
+ * @param formula The formula to update
+ * @param oldStartCol The starting column of the old range (e.g., 'A')
+ * @param oldStartRow The starting row of the old range (e.g., 1)
+ * @param oldEndCol The ending column of the old range (e.g., 'B')
+ * @param oldEndRow The ending row of the old range (e.g., 2)
+ * @param newStartCol The starting column of the new range
+ * @param newStartRow The starting row of the new range
+ * @param newEndCol The ending column of the new range
+ * @param newEndRow The ending row of the new range
+ * @returns The updated formula
+ *
+ * @example
+ * updateMovedReferences('=SUM(A1:B2)', 'A', 1, 'B', 2, 'C', 3, 'D', 4)
+ * // Returns '=SUM(C3:D4)'
+ *
+ * updateMovedReferences('=A1+B1', 'A', 1, 'B', 2, 'C', 3, 'D', 4)
+ * // Returns '=C3+D3'
+ */
+export function updateMovedReferences(
+    formula: string,
+    oldStartCol: string,
+    oldStartRow: number,
+    oldEndCol: string,
+    oldEndRow: number,
+    newStartCol: string,
+    newStartRow: number,
+    newEndCol: string,
+    newEndRow: number
+): string {
+    if (!formula.startsWith('=')) return formula;
+
+    const oldStartColNum = strToNum(oldStartCol);
+    const oldEndColNum = strToNum(oldEndCol);
+    const newStartColNum = strToNum(newStartCol);
+    const newEndColNum = strToNum(newEndCol);
+
+    // Normalize ranges (ensure start <= end)
+    const oldMinRow = Math.min(oldStartRow, oldEndRow);
+    const oldMaxRow = Math.max(oldStartRow, oldEndRow);
+    const oldMinCol = Math.min(oldStartColNum, oldEndColNum);
+    const oldMaxCol = Math.max(oldStartColNum, oldEndColNum);
+
+    const newMinRow = Math.min(newStartRow, newEndRow);
+    const newMaxRow = Math.max(newStartRow, newEndRow);
+    const newMinCol = Math.min(newStartColNum, newEndColNum);
+    const newMaxCol = Math.max(newStartColNum, newEndColNum);
+
+    let translated = formula.substring(1);
+
+    // Update range references (A1:B2)
+    translated = translated.replace(
+        /(?<![A-Z0-9:])(\$?)([A-Z]+)(\$?)(\d+):(\$?)([A-Z]+)(\$?)(\d+)(?![:A-Z0-9])/gi,
+        (match, col1Abs, col1, row1Abs, row1, col2Abs, col2, row2Abs, row2) => {
+            const col1Num = strToNum(col1.toUpperCase());
+            const row1Num = parseInt(row1);
+            const col2Num = strToNum(col2.toUpperCase());
+            const row2Num = parseInt(row2);
+
+            // Check if this range overlaps with the moved range
+            const rangeMinCol = Math.min(col1Num, col2Num);
+            const rangeMaxCol = Math.max(col1Num, col2Num);
+            const rangeMinRow = Math.min(row1Num, row2Num);
+            const rangeMaxRow = Math.max(row1Num, row2Num);
+
+            // If the range matches the old range exactly, update it
+            if (rangeMinCol === oldMinCol && rangeMaxCol === oldMaxCol &&
+                rangeMinRow === oldMinRow && rangeMaxRow === oldMaxRow) {
+                const newCol1 = numToStr(newMinCol);
+                const newCol2 = numToStr(newMaxCol);
+                return `${col1Abs}${newCol1}${row1Abs}${newMinRow}:${col2Abs}${newCol2}${row2Abs}${newMaxRow}`;
+            }
+
+            return match;
+        }
+    );
+
+    // Update individual cell references
+    translated = translated.replace(
+        /(?<![A-Z0-9:])(\$?)([A-Z]+)(\$?)(\d+)(?![:A-Z0-9])/gi,
+        (match, colAbs, col, rowAbs, row) => {
+            const colNum = strToNum(col.toUpperCase());
+            const rowNum = parseInt(row);
+
+            // Check if this cell is in the moved range
+            if (colNum >= oldMinCol && colNum <= oldMaxCol &&
+                rowNum >= oldMinRow && rowNum <= oldMaxRow) {
+                // Calculate relative position within old range
+                const relCol = colNum - oldMinCol;
+                const relRow = rowNum - oldMinRow;
+
+                // Apply to new range
+                const newColNum = newMinCol + relCol;
+                const newRowNum = newMinRow + relRow;
+
+                return `${colAbs}${numToStr(newColNum)}${rowAbs}${newRowNum}`;
+            }
+
+            return match;
+        }
+    );
+
+    return '=' + translated;
+}
