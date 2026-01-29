@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   roots: ['<rootDir>/test'],
   testMatch: ['**/*.test.ts'],
@@ -24,6 +24,7 @@ module.exports = {
     }]
   },
   transformIgnorePatterns: [
-    'node_modules/(?!chevrotain)'
+    'node_modules/(?!chevrotain)',
+    'node_modules/(?!(lodash-es)/)'
   ]
 };
