@@ -22,7 +22,6 @@ describe('Debug 2D Array', () => {
         const cellB1 = sheet.getCell('B1');
         console.log('Cell B1 exists:', cellB1 !== null);
         console.log('Cell B1 value:', cellB1?.value);
-        console.log('Cell B1 calculated:', cellB1?._calculated);
 
         // Check A1's spillRange
         const cellA1 = sheet.getCell('A1');

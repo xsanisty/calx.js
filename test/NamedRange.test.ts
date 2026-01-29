@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'bun:test';
+import { describe, test, expect } from '@jest/globals';
 import { Calx } from '../src/Calx';
 
 describe('Named Ranges', () => {

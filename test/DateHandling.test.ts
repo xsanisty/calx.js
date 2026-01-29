@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from 'bun:test';
+import { describe, expect, test, beforeEach } from '@jest/globals';
 import { Calx, DateUtil } from '../src/Calx';
 import { DataType } from '../src/Calx/Cell/DataType';
 

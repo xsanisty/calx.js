@@ -22,10 +22,15 @@ describe('Dynamic Updates', () => {
             // First, update the formula to include a wider range
             sheet.getCellDirect('A3').formula = '=SUM(A1:A5)';
 
+            // Temporarily disable auto-calculate to add cells without triggering calculation
+            sheet.autoCalculate = false;
+
             // Add new cells
             sheet.createCell('A4', { value: 15 });
             sheet.createCell('A5', { value: 25 });
 
+            // Re-enable auto-calculate and manually calculate
+            sheet.autoCalculate = true;
             // Just calculate, don't build again
             workbook.calculate();
 

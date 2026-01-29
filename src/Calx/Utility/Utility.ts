@@ -278,3 +278,174 @@ export function transposeTable(table: Array<Array<any>>): Array<Array<any>> {
 
     return newTable;
 }
+
+/**
+ * Translate all cell references in a formula by applying row and column offsets.
+ * Respects absolute references ($ markers) and translates both individual cells and ranges.
+ *
+ * @param formula The formula to translate (must start with =)
+ * @param cellRowOffset The row offset to apply to relative row references
+ * @param cellColOffset The column offset to apply to relative column references
+ * @returns The translated formula
+ *
+ * @example
+ * translateFormula('=A1', 1, 1) // Returns '=B2'
+ * translateFormula('=SUM(A1:B2)', 1, 1) // Returns '=SUM(B2:C3)'
+ * translateFormula('=$A$1', 1, 1) // Returns '=$A$1' (absolute reference unchanged)
+ * translateFormula('=A$1', 1, 1) // Returns '=B$1' (absolute row unchanged)
+ */
+export function translateFormula(formula: string, cellRowOffset: number, cellColOffset: number): string {
+    if (!formula.startsWith('=')) return formula;
+
+    // Remove leading =
+    let translated = formula.substring(1);
+
+    // First, match and translate cell ranges (A1:B2)
+    // We do this first to avoid double-processing individual cells in ranges
+    translated = translated.replace(
+        /(\$?)([A-Z]+)(\$?)(\d+):(\$?)([A-Z]+)(\$?)(\d+)/gi,
+        (match, col1Abs, col1, row1Abs, row1, col2Abs, col2, row2Abs, row2) => {
+            // Translate start of range
+            const col1Num = strToNum(col1.toUpperCase());
+            const row1Num = parseInt(row1);
+            const newCol1Num = col1Abs === '$' ? col1Num : col1Num + cellColOffset;
+            const newRow1Num = row1Abs === '$' ? row1Num : row1Num + cellRowOffset;
+            const newStart = `${col1Abs}${numToStr(newCol1Num)}${row1Abs}${newRow1Num}`;
+
+            // Translate end of range
+            const col2Num = strToNum(col2.toUpperCase());
+            const row2Num = parseInt(row2);
+            const newCol2Num = col2Abs === '$' ? col2Num : col2Num + cellColOffset;
+            const newRow2Num = row2Abs === '$' ? row2Num : row2Num + cellRowOffset;
+            const newEnd = `${col2Abs}${numToStr(newCol2Num)}${row2Abs}${newRow2Num}`;
+
+            return `${newStart}:${newEnd}`;
+        }
+    );
+
+    // Then match individual cell references (A1, $A$1, A$1, $A1)
+    // Use (?<![A-Z0-9]) to ensure we don't match in the middle of a word or after a colon
+    translated = translated.replace(
+        /(?<![A-Z0-9:])(\$?)([A-Z]+)(\$?)(\d+)(?![:A-Z0-9])/gi,
+        (match, colAbs, col, rowAbs, row) => {
+            const colNum = strToNum(col.toUpperCase());
+            const rowNum = parseInt(row);
+
+            const newColNum = colAbs === '$' ? colNum : colNum + cellColOffset;
+            const newRowNum = rowAbs === '$' ? rowNum : rowNum + cellRowOffset;
+
+            return `${colAbs}${numToStr(newColNum)}${rowAbs}${newRowNum}`;
+        }
+    );
+
+    return '=' + translated;
+}
+
+/**
+ * Update references to a moved range in a formula
+ * When a range is moved from oldRange to newRange, all formulas that reference
+ * cells in oldRange need to be updated to reference newRange instead
+ *
+ * @param formula The formula to update
+ * @param oldStartCol The starting column of the old range (e.g., 'A')
+ * @param oldStartRow The starting row of the old range (e.g., 1)
+ * @param oldEndCol The ending column of the old range (e.g., 'B')
+ * @param oldEndRow The ending row of the old range (e.g., 2)
+ * @param newStartCol The starting column of the new range
+ * @param newStartRow The starting row of the new range
+ * @param newEndCol The ending column of the new range
+ * @param newEndRow The ending row of the new range
+ * @returns The updated formula
+ *
+ * @example
+ * updateMovedReferences('=SUM(A1:B2)', 'A', 1, 'B', 2, 'C', 3, 'D', 4)
+ * // Returns '=SUM(C3:D4)'
+ *
+ * updateMovedReferences('=A1+B1', 'A', 1, 'B', 2, 'C', 3, 'D', 4)
+ * // Returns '=C3+D3'
+ */
+export function updateMovedReferences(
+    formula: string,
+    oldStartCol: string,
+    oldStartRow: number,
+    oldEndCol: string,
+    oldEndRow: number,
+    newStartCol: string,
+    newStartRow: number,
+    newEndCol: string,
+    newEndRow: number
+): string {
+    if (!formula.startsWith('=')) return formula;
+
+    const oldStartColNum = strToNum(oldStartCol);
+    const oldEndColNum = strToNum(oldEndCol);
+    const newStartColNum = strToNum(newStartCol);
+    const newEndColNum = strToNum(newEndCol);
+
+    // Normalize ranges (ensure start <= end)
+    const oldMinRow = Math.min(oldStartRow, oldEndRow);
+    const oldMaxRow = Math.max(oldStartRow, oldEndRow);
+    const oldMinCol = Math.min(oldStartColNum, oldEndColNum);
+    const oldMaxCol = Math.max(oldStartColNum, oldEndColNum);
+
+    const newMinRow = Math.min(newStartRow, newEndRow);
+    const newMaxRow = Math.max(newStartRow, newEndRow);
+    const newMinCol = Math.min(newStartColNum, newEndColNum);
+    const newMaxCol = Math.max(newStartColNum, newEndColNum);
+
+    let translated = formula.substring(1);
+
+    // Update range references (A1:B2)
+    translated = translated.replace(
+        /(?<![A-Z0-9:])(\$?)([A-Z]+)(\$?)(\d+):(\$?)([A-Z]+)(\$?)(\d+)(?![:A-Z0-9])/gi,
+        (match, col1Abs, col1, row1Abs, row1, col2Abs, col2, row2Abs, row2) => {
+            const col1Num = strToNum(col1.toUpperCase());
+            const row1Num = parseInt(row1);
+            const col2Num = strToNum(col2.toUpperCase());
+            const row2Num = parseInt(row2);
+
+            // Check if this range overlaps with the moved range
+            const rangeMinCol = Math.min(col1Num, col2Num);
+            const rangeMaxCol = Math.max(col1Num, col2Num);
+            const rangeMinRow = Math.min(row1Num, row2Num);
+            const rangeMaxRow = Math.max(row1Num, row2Num);
+
+            // If the range matches the old range exactly, update it
+            if (rangeMinCol === oldMinCol && rangeMaxCol === oldMaxCol &&
+                rangeMinRow === oldMinRow && rangeMaxRow === oldMaxRow) {
+                const newCol1 = numToStr(newMinCol);
+                const newCol2 = numToStr(newMaxCol);
+                return `${col1Abs}${newCol1}${row1Abs}${newMinRow}:${col2Abs}${newCol2}${row2Abs}${newMaxRow}`;
+            }
+
+            return match;
+        }
+    );
+
+    // Update individual cell references
+    translated = translated.replace(
+        /(?<![A-Z0-9:])(\$?)([A-Z]+)(\$?)(\d+)(?![:A-Z0-9])/gi,
+        (match, colAbs, col, rowAbs, row) => {
+            const colNum = strToNum(col.toUpperCase());
+            const rowNum = parseInt(row);
+
+            // Check if this cell is in the moved range
+            if (colNum >= oldMinCol && colNum <= oldMaxCol &&
+                rowNum >= oldMinRow && rowNum <= oldMaxRow) {
+                // Calculate relative position within old range
+                const relCol = colNum - oldMinCol;
+                const relRow = rowNum - oldMinRow;
+
+                // Apply to new range
+                const newColNum = newMinCol + relCol;
+                const newRowNum = newMinRow + relRow;
+
+                return `${colAbs}${numToStr(newColNum)}${rowAbs}${newRowNum}`;
+            }
+
+            return match;
+        }
+    );
+
+    return '=' + translated;
+}
