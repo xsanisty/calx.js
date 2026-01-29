@@ -24,8 +24,6 @@
     "build": "webpack && webpack --config webpack.jquery.config.js",
     "build:core": "webpack",
     "build:jquery": "webpack --config webpack.jquery.config.js",
-    "build-with-parser": "npx jison-gho ./src/Calx/Parser/Jison/Grammar/calx.jison -m commonjs -o ./src/Calx/Parser/Parser.js && webpack",
-    "build-parser": "npx jison-gho ./src/Calx/Parser/Jison/Grammar/calx.jison -m commonjs -o ./src/Calx/Parser/Parser.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
