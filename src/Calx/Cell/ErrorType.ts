@@ -5,5 +5,7 @@ export enum ErrorType {
     INVALID_VAL     = '#VALUE!',
     INVALID_NUM     = '#NUM!',
     NA              = '#N/A!',
-    NULL            = '#NULL!'
+    NULL            = '#NULL!',
+    SPILL           = '#SPILL!',
+    ERROR           = '#ERROR!'
 }

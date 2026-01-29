@@ -1,22 +1,26 @@
-import Workbook from './Workbook';
-import Cell from './Cell';
-import EventDispatcher from './Utility/EventDispatcher';
+import { Workbook } from './Workbook';
+import { Cell } from './Cell';
+import { Range } from './Range';
+import { EventDispatcher } from './Utility/EventDispatcher';
 import { SheetEvent, SheetState } from './Sheet/SheetEvent';
-import CellRegistry from './Sheet/CellRegistry';
-import DependencyTree from './Workbook/DependencyTree';
-import DependencyBuilder from './Workbook/DependencyBuilder';
+import { CellRegistry } from './Sheet/CellRegistry';
+import { DependencyTree } from './Workbook/DependencyTree';
+import { DependencyBuilder } from './Workbook/DependencyBuilder';
 import { CellData } from './Workbook/Data';
 
-export default class Sheet {
-    private _el : HTMLElement;
+export class Sheet {
+    private _el!: any;
     private _id : string;
     private _cells : CellRegistry;
     private _states : Record<string, any> = {
         calculation : SheetState.CALCULATION_IDLE,
     };
+    private _variables : Record<string, any> = {};
+    private _depTree!: DependencyTree;
+    private _autoCalculate : boolean = true;
 
-    public needCalculate : Array<string>;
-    public needRender : Array<HTMLElement>;
+    public needCalculate!: Array<string>;
+    public needRender!: Array<any>;
 
     constructor(
         private workbook : Workbook,
@@ -24,6 +28,7 @@ export default class Sheet {
         public dispatcher : EventDispatcher = new EventDispatcher
     ) {
         this._id = this._generateId();
+        this._cells = new CellRegistry(this, this.dispatcher);
     }
 
     /**
@@ -39,9 +44,25 @@ export default class Sheet {
     }
 
     /**
+     * Get autoCalculate option
+     */
+    public get autoCalculate(): boolean {
+        return this._autoCalculate;
+    }
+
+    /**
+     * Set autoCalculate option
+     * When true, changes to cell values automatically trigger recalculation of dependents
+     * When false, manual calculation is required
+     */
+    public set autoCalculate(value: boolean) {
+        this._autoCalculate = value;
+    }
+
+    /**
      * Set element where sheet should be mounted (optional)
      */
-    public set element(el : HTMLElement) {
+    public set element(el : any) {
         el.setAttribute('data-calx-id', this.id);
 
         this._el = el;
@@ -52,7 +73,7 @@ export default class Sheet {
     /**
      * Get element where sheet is mounted
      */
-    public get element() : HTMLElement {
+    public get element() : any {
         return this._el;
     }
 
@@ -80,6 +101,27 @@ export default class Sheet {
             this.dispatcher.pauseListener();
         }
 
+        // Get calculation order from dependency tree
+        if (this._depTree) {
+            const calculationOrder = this._depTree.topologicalSort();
+
+            // Calculate cells in order (level by level)
+            for (const level of calculationOrder) {
+                // Skip undefined levels
+                if (!level) continue;
+
+                for (const cell of level) {
+                    if (cell.isDirty() || !cell.isCalculated()) {
+                        cell.calculate();
+                    }
+                }
+            }
+        } else {
+            // No dependency tree, calculate all cells
+            for (const address in this.cells) {
+                this.cells[address].calculate();
+            }
+        }
 
         this.dispatcher.resumeListener();
     }
@@ -90,18 +132,46 @@ export default class Sheet {
      * @param address cell address
      */
     public requestCalculate(address : string) {
+        const cell = this.getCell(address);
+        if (cell) {
+            cell.markAsDirty();
+            cell.calculate();
 
+            // Mark dependents as dirty
+            const dependents = cell.getDependents();
+            for (const depAddress in dependents) {
+                dependents[depAddress].markAsDirty();
+            }
+        }
     }
 
     /**
-     * Get specified cell object
+     * Get range (Excel-like behavior)
+     * - Single cell: getRange('A1') returns Range containing one cell
+     * - Multiple cells: getRange('A1:B10') returns Range containing multiple cells
      */
-    public getCell(address : string) : Cell {
+    public getRange(address: string): Range {
+        return new Range(this, address);
+    }
+
+    /**
+     * Get cell object directly (internal use)
+     * For external use, prefer getRange() which is more Excel-like
+     */
+    public getCellDirect(address: string): Cell {
         return this._cells.get(address);
     }
 
-    public getCellValue(cellAddr : string) : any {
-        return this.getCell(cellAddr).value;
+    /**
+     * Alias for getRange (Excel-like)
+     * @deprecated Use getRange() instead
+     */
+    public getCell(address: string): Cell {
+        return this._cells.get(address);
+    }
+
+    public getCellValue(cellAddr: string): any {
+        return this.getRange(cellAddr).value;
     }
 
     public createCell(address : string, data : CellData) : Cell {
@@ -121,6 +191,140 @@ export default class Sheet {
      * Build dependency tree for all registered cells
      */
     public buildDependencyTree() : void {
+        const builder = new DependencyBuilder();
+        builder.setWorkbook(this.workbook);
+        this._depTree = builder.build(this._cells);
+    }
 
+    /**
+     * Get variable value
+     */
+    public getVariable(name: string): any {
+        return this._variables[name] !== undefined ? this._variables[name] : "#NAME?";
+    }
+
+    /**
+     * Set variable value
+     */
+    public setVariable(name: string, value: any): void {
+        this._variables[name] = value;
+    }
+
+    /**
+     * Get values from a range of cells
+     */
+    public getCellRangeValues(start: string, end: string): any[] {
+        // Implementation to get range of cells
+        // This should parse cell addresses and return array of values
+        const startColMatch = start.match(/[A-Z]+/);
+        const startRowMatch = start.match(/\d+/);
+        const endColMatch = end.match(/[A-Z]+/);
+        const endRowMatch = end.match(/\d+/);
+
+        if (!startColMatch || !startRowMatch || !endColMatch || !endRowMatch) {
+            throw new Error(`Invalid cell range: ${start}:${end}`);
+        }
+
+        const startCol = startColMatch[0];
+        const startRow = parseInt(startRowMatch[0]);
+        const endCol = endColMatch[0];
+        const endRow = parseInt(endRowMatch[0]);
+
+        const result: any[] = [];
+
+        // Convert column letters to numbers
+        const colToNum = (col: string) => {
+            let num = 0;
+            for (let i = 0; i < col.length; i++) {
+                num = num * 26 + (col.charCodeAt(i) - 64);
+            }
+            return num;
+        };
+
+        const numToCol = (num: number) => {
+            let col = '';
+            while (num > 0) {
+                const remainder = (num - 1) % 26;
+                col = String.fromCharCode(65 + remainder) + col;
+                num = Math.floor((num - 1) / 26);
+            }
+            return col;
+        };
+
+        const startColNum = colToNum(startCol);
+        const endColNum = colToNum(endCol);
+
+        // Return as flat array for compatibility with functions
+        for (let row = startRow; row <= endRow; row++) {
+            for (let col = startColNum; col <= endColNum; col++) {
+                const address = numToCol(col) + row;
+                const cell = this._cells.get(address);
+                result.push(cell ? cell.value : null);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get values from a range of rows
+     */
+    public getRowRangeValues(range: string): any[] {
+        // Parse range like "1:3" or "2:2"
+        const parts = range.replace(/\$/g, '').split(':');
+        const startRow = parseInt(parts[0]);
+        const endRow = parseInt(parts[1]);
+
+        const result: any[] = [];
+        const allCells = this._cells.all();
+
+        // Find all cells in the row range
+        for (const address in allCells) {
+            const rowMatch = address.match(/(\d+)$/);
+            if (rowMatch) {
+                const row = parseInt(rowMatch[1]);
+                if (row >= startRow && row <= endRow) {
+                    result.push(allCells[address].value);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get values from a range of columns
+     */
+    public getColumnRangeValues(range: string): any[] {
+        // Parse range like "A:C" or "A:A"
+        const parts = range.replace(/\$/g, '').split(':');
+        const [startCol, endCol] = parts;
+
+        const colToNum = (col: string) => {
+            let num = 0;
+            for (let i = 0; i < col.length; i++) {
+                num = num * 26 + (col.charCodeAt(i) - 64);
+            }
+            return num;
+        };
+
+        const startColNum = colToNum(startCol);
+        const endColNum = colToNum(endCol);
+
+        const result: any[] = [];
+        const allCells = this._cells.all();
+
+        // Find all cells in the column range
+        for (const address in allCells) {
+            const colMatch = address.match(/^([A-Z]+)/);
+            if (colMatch) {
+                const colNum = colToNum(colMatch[1]);
+                if (colNum >= startColNum && colNum <= endColNum) {
+                    result.push(allCells[address].value);
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -29,7 +29,7 @@ This section is targetted to developers.
 ### Class Structure
 ```
 -Calx
--- Cell
+-- Range
 -- Formulae
 -- Parser
 -- Sheet
