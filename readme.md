@@ -79,7 +79,7 @@ npm install @xsanisty/calxjs
 
 ## 📚 Documentation
 
-- **[Full Documentation](docs/index.html)** - Complete guide with API reference
+- **[Full Documentation](https://calx.xsanisty.com/)** - Complete guide with API reference
 - **[Migration Guide](docs/MIGRATION_GUIDE.md)** - Upgrading from 2.x
 - **[jQuery Plugin Guide](docs/JQUERY_PLUGIN.md)** - jQuery-specific features
 - **[TypeScript Guide](docs/TYPESCRIPT_README.md)** - Using with TypeScript
