@@ -90,13 +90,13 @@ npm install @xsanisty/calxjs
 
 Explore interactive examples in the [examples/](examples/) directory:
 
-- **[Basic Calculator](examples/jquery-basic.html)** - Simple arithmetic
-- **[Formatters & Masks](examples/jquery-formatters.html)** - Currency, percent, number formatting
-- **[Data Types](examples/jquery-datatypes.html)** - Working with different data types
-- **[Dynamic Forms](examples/jquery-dynamic-form.html)** - Adding/removing rows
-- **[Multiple Sheets](examples/jquery-multisheet.html)** - Cross-sheet references
-- **[Mortgage Calculator](examples/jquery-mortgage.html)** - Complex financial calculations
-- **[Advanced Features](examples/jquery-advanced.html)** - Custom functions and formatters
+- **[Basic Calculator](https://calx.xsanisty.com/examples/jquery-basic.html)** - Simple arithmetic
+- **[Formatters & Masks](https://calx.xsanisty.com/examples/jquery-formatters.html)** - Currency, percent, number formatting
+- **[Data Types](https://calx.xsanisty.com/examples/jquery-datatypes.html)** - Working with different data types
+- **[Dynamic Forms](https://calx.xsanisty.com/examples/jquery-dynamic-form.html)** - Adding/removing rows
+- **[Multiple Sheets](https://calx.xsanisty.com/examples/jquery-multisheet.html)** - Cross-sheet references
+- **[Mortgage Calculator](https://calx.xsanisty.com/examples/jquery-mortgage.html)** - Complex financial calculations
+- **[Advanced Features](https://calx.xsanisty.com/examples/jquery-advanced.html)** - Custom functions and formatters
 
 ## 📖 Usage
 
