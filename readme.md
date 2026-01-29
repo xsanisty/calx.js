@@ -140,6 +140,49 @@ sheet.calculate();
 console.log(sheet.getCell('A3').value); // 30
 ```
 
+### Export and Reload Workbooks
+
+```typescript
+import { Calx } from '@xsanisty/calxjs';
+
+// Create workbook with data
+const workbook = Calx.createWorkbook();
+const sheet = workbook.createSheet('Sales');
+sheet.createCell('A1', { value: 100 });
+sheet.createCell('A2', { formula: '=A1*2' });
+
+workbook.build();
+workbook.calculate();
+
+// Export to JSON
+const data = workbook.exportJSON();
+// or: const data = Calx.exportJSON(workbook);
+
+// Save to storage (localStorage, API, etc.)
+localStorage.setItem('workbook', JSON.stringify(data));
+
+// Later, reload from JSON
+const savedData = JSON.parse(localStorage.getItem('workbook'));
+const newWorkbook = Calx.createWorkbookFromData(savedData);
+
+newWorkbook.build();
+newWorkbook.calculate();
+```
+
+### Move and Copy Cell Ranges
+
+```typescript
+const sheet = workbook.createSheet('Sheet1');
+sheet.createCell('A1', { value: 10 });
+sheet.createCell('A2', { formula: '=A1*2' });
+
+// Move range (updates formulas that reference these cells)
+sheet.moveRange('A1:A2', 'C3'); // Moves A1:A2 to C3:C4
+
+// Copy range (formulas within copied cells are translated)
+sheet.copyRange('C3:C4', 'E5'); // Copies C3:C4 to E5:E6
+```
+
 ## 🔧 Development
 
 ### Prerequisites

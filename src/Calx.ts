@@ -7,6 +7,9 @@ import { DateUtil } from "./Calx/Utility/DateUtil";
 // Export utilities
 export { DateUtil };
 
+// Export types
+export type { Data };
+
 export class Calx {
 
     static formulae : Record<string, Function> = {};
@@ -44,5 +47,9 @@ export class Calx {
 
     static createInterpreter() {
         return new CalxInterpreter();
+    }
+
+    static exportJSON(workbook: Workbook): Data {
+        return workbook.exportJSON();
     }
 }

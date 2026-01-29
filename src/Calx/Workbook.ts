@@ -221,6 +221,50 @@ export class Workbook {
     }
 
     /**
+     * Export workbook to JSON Data format
+     * Returns a Data object that can be used with createWorkbookFromData()
+     */
+    public exportJSON(): Data {
+        const data: Data = {
+            sheets: {}
+        };
+
+        for (const sheetName in this._sheets) {
+            const sheet = this._sheets[sheetName];
+            const allCells = sheet.cells;
+
+            data.sheets[sheetName] = {
+                element: sheet.element,
+                cells: {},
+                variables: {}
+            };
+
+            // Export each cell's data
+            for (const address in allCells) {
+                const cell = allCells[address];
+                const cellData: CellData = {};
+
+                if (cell.formula) {
+                    cellData.formula = cell.formula;
+                } else if (cell.value !== undefined) {
+                    cellData.value = cell.value;
+                }
+
+                if (cell.type) {
+                    cellData.type = cell.type;
+                }
+
+                // Only include cells that have data
+                if (cellData.formula || cellData.value !== undefined) {
+                    data.sheets[sheetName].cells[address] = cellData;
+                }
+            }
+        }
+
+        return data;
+    }
+
+    /**
      * Create workbook object from given config
      */
     public static createFromData(data : Data) {
