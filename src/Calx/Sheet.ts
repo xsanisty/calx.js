@@ -204,6 +204,13 @@ export class Sheet {
     }
 
     /**
+     * Get a cell only if it already exists (doesn't auto-create)
+     */
+    public getCellIfExists(address: string): Cell | null {
+        return this._cells.has(address) ? this._cells.get(address) : null;
+    }
+
+    /**
      * Alias for getRange (Excel-like)
      * @deprecated Use getRange() instead
      */

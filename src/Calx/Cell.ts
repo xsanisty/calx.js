@@ -404,7 +404,7 @@ export class Cell {
         // Resolve local dependencies
         const dependencies: Record<string, Cell> = {};
         for (const address in localDeps) {
-            const precedentCell = this.sheet.getCellDirect(address);
+            const precedentCell = this.sheet.getCellIfExists(address);
             if (precedentCell) {
                 dependencies[address] = precedentCell;
                 precedentCell.addDependent(this);
@@ -419,7 +419,7 @@ export class Cell {
                 const { sheetName, cellAddress } = builder.parseRemoteReference(remoteRef);
                 const targetSheet = this.sheet.workbook.getSheet(sheetName);
                 if (targetSheet) {
-                    const targetCell = targetSheet.getCellDirect(cellAddress);
+                    const targetCell = targetSheet.getCellIfExists(cellAddress);
                     if (targetCell) {
                         targetCell.addRemoteDependent(this);
                         this.addRemotePrecedent(targetCell);
