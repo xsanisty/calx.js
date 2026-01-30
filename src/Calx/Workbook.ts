@@ -1,4 +1,5 @@
 import { Sheet } from "./Sheet";
+import { Cell } from "./Cell";
 import { CalxInterpreter } from "./Parser/Chevrotain/Interpreter";
 import { CalxParser } from "./Parser/Chevrotain/Parser";
 import { SharedContext } from "./Parser/SharedContext";
@@ -126,6 +127,121 @@ export class Workbook {
 
         // Build workbook-level dependency tree (for cross-sheet dependencies)
         // This will be implemented when we have a complete cell registry
+    }
+
+    /**
+     * Check for circular references in the workbook
+     * Must be called after build() to ensure dependency trees are constructed
+     * @throws Error if circular reference is detected
+     */
+    public checkCircularReference(): void {
+        // Ensure workbook has been built
+        if (!this._depsBuilder) {
+            throw new Error('Workbook must be built before checking for circular references. Call build() first.');
+        }
+
+        // Check each sheet for circular references
+        for (const sheetName in this._sheets) {
+            const sheet = this._sheets[sheetName];
+
+            // Get all cells from the sheet
+            const allCells = sheet.cells;
+
+            // Iterate through all cells in the sheet
+            for (const address in allCells) {
+                const cell = allCells[address];
+                if (cell.formula) {
+                    // Check for circular reference starting from this cell
+                    const visited = new Set<string>();
+                    const path: string[] = [];
+
+                    this._checkCellForCircularReference(cell, sheetName, visited, path);
+                }
+            }
+        }
+    }
+
+    /**
+     * Recursively check a cell for circular references
+     * @private
+     */
+    private _checkCellForCircularReference(
+        cell: Cell,
+        sheetName: string,
+        visited: Set<string>,
+        path: string[]
+    ): void {
+        const fullAddress = `${sheetName}!${cell.address}`;
+
+        // If we've seen this cell in the current path, we have a circular reference
+        if (path.includes(fullAddress)) {
+            // Build the circular chain message
+            const circularChain = [...path, fullAddress];
+            const chainMessage = circularChain.join(' -> ');
+            throw new Error(`Circular reference detected: ${chainMessage}`);
+        }
+
+        // If we've already fully explored this cell in another path, skip it
+        if (visited.has(fullAddress)) {
+            return;
+        }
+
+        // Add to current path
+        path.push(fullAddress);
+
+        // Get precedents (cells this cell depends on)
+        const precedents = cell.getPrecedents();
+
+        if (precedents) {
+            // Check local precedents (same sheet)
+            for (const address in precedents) {
+                const precedent = precedents[address];
+                if (precedent && precedent.formula) {
+                    this._checkCellForCircularReference(precedent, sheetName, visited, path);
+                }
+            }
+        }
+
+        // Check remote precedents (cross-sheet references)
+        // We need to access the workbook's sheets to find the cell's sheet
+        const cellSheet = this._findCellSheet(cell);
+        if (cellSheet) {
+            // Access remote precedents through type assertion since it's protected
+            const remotePrecedents = (cell as any).remotePrecedents as Record<string, Cell>;
+            if (remotePrecedents) {
+                for (const key in remotePrecedents) {
+                    const precedent = remotePrecedents[key];
+                    if (precedent && precedent.formula) {
+                        // Find which sheet this precedent belongs to
+                        const precedentSheet = this._findCellSheet(precedent);
+                        if (precedentSheet) {
+                            this._checkCellForCircularReference(precedent, precedentSheet.name, visited, path);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Remove from current path (backtrack)
+        path.pop();
+
+        // Mark as fully explored
+        visited.add(fullAddress);
+    }
+
+    /**
+     * Find which sheet a cell belongs to
+     * @private
+     */
+    private _findCellSheet(cell: Cell): Sheet | null {
+        for (const sheetName in this._sheets) {
+            const sheet = this._sheets[sheetName];
+            const cells = sheet.cells;
+            if (cells[cell.address] === cell) {
+                return sheet;
+            }
+        }
+        return null;
     }
 
     /**

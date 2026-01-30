@@ -11,6 +11,7 @@ import { DateUtil } from './Utility/DateUtil';
  */
 export class Cell {
     private _value : any;                               //Cell original value
+    private _dateValue?: Date;                          //Internal UTC Date object for DATE cells
     private _address!: string;                          //Cell address
     private _formula!: string;                          //Cell formula
     private _computed : any;                            //Result of the computed formula
@@ -103,6 +104,20 @@ export class Cell {
             const valueChanged = oldValue !== result;
 
             this._computed = result;
+
+            // For date type cells, sync internal _dateValue with computed result
+            if ((this._type === DataType.DATE || this._type === DataType.DATETIME || this._type === DataType.TIME) &&
+                typeof result === 'number' && DateUtil.isValidSerialDate(result)) {
+                const date = DateUtil.serialToDate(result);
+                const utcDate = new Date(Date.UTC(
+                    date.getUTCFullYear(),
+                    date.getUTCMonth(),
+                    date.getUTCDate(),
+                    0, 0, 0, 0
+                ));
+                this._dateValue = utcDate;
+            }
+
             this._calculated = true;
             this._dirty = false;
 
@@ -462,8 +477,11 @@ export class Cell {
             case DataType.DATE:
             case DataType.DATETIME:
             case DataType.TIME:
-                // For date types, return the Excel serial number (not converted to Date object)
-                // Users can call getDateValue() to get a JavaScript Date object
+                // For date types with internal dateValue, convert to Excel serial number
+                if (this._dateValue instanceof Date) {
+                    return DateUtil.dateToSerial(this._dateValue);
+                }
+                // Otherwise return the stored value (for backward compatibility)
                 return value;
             case DataType.ERROR:
                 return ErrorType[value as keyof typeof ErrorType];
@@ -486,32 +504,59 @@ export class Cell {
             }
         }
 
-        // Convert date strings to Excel serial numbers for DATE type cells
+        // Convert date strings/objects to UTC Date for DATE type cells
         if (this._type === DataType.DATE || this._type === DataType.DATETIME) {
             if (typeof value === 'string' && value.trim() !== '') {
                 try {
                     // Try to parse as ISO date string (YYYY-MM-DD)
-                    // Use local date to avoid timezone issues
                     const parts = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
                     if (parts) {
                         const year = parseInt(parts[1], 10);
                         const month = parseInt(parts[2], 10) - 1; // Month is 0-based
                         const day = parseInt(parts[3], 10);
-                        const date = new Date(year, month, day);
-                        const serial = DateUtil.dateToSerial(date);
-                        value = serial;
+                        // Create UTC date
+                        const date = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+                        this._dateValue = date;
+                        value = DateUtil.dateToSerial(date);
                     } else {
                         // Fallback to default Date parsing
                         const date = new Date(value);
                         if (!isNaN(date.getTime())) {
-                            value = DateUtil.dateToSerial(date);
+                            // Convert to UTC (use UTC methods to avoid timezone shifts)
+                            const utcDate = new Date(Date.UTC(
+                                date.getUTCFullYear(),
+                                date.getUTCMonth(),
+                                date.getUTCDate(),
+                                0, 0, 0, 0
+                            ));
+                            this._dateValue = utcDate;
+                            value = DateUtil.dateToSerial(utcDate);
                         }
                     }
                 } catch (e) {
                     // If parsing fails, keep original value
                 }
             } else if (value instanceof Date) {
-                value = DateUtil.dateToSerial(value);
+                // Convert to UTC
+                // When given a Date object, interpret its local date components as the intended date
+                const utcDate = new Date(Date.UTC(
+                    value.getFullYear(),
+                    value.getMonth(),
+                    value.getDate(),
+                    0, 0, 0, 0
+                ));
+                this._dateValue = utcDate;
+                value = DateUtil.dateToSerial(utcDate);
+            } else if (typeof value === 'number' && DateUtil.isValidSerialDate(value)) {
+                // Convert serial date to UTC Date object
+                const date = DateUtil.serialToDate(value);
+                const utcDate = new Date(Date.UTC(
+                    date.getUTCFullYear(),
+                    date.getUTCMonth(),
+                    date.getUTCDate(),
+                    0, 0, 0, 0
+                ));
+                this._dateValue = utcDate;
             }
         }
 
@@ -577,6 +622,11 @@ export class Cell {
         // Check if cell is a date type
         if (this._type !== DataType.DATE && this._type !== DataType.DATETIME && this._type !== DataType.TIME) {
             return null;
+        }
+
+        // Return internal UTC Date object if available
+        if (this._dateValue instanceof Date) {
+            return this._dateValue;
         }
 
         const val = this.value;
@@ -648,7 +698,17 @@ export class Cell {
         }
 
         this._type = DataType.DATE;
-        this.value = DateUtil.dateToSerial(date);
+        // Store as UTC Date object
+        // When given a Date object, interpret its local date components as the intended date
+        // (e.g., Jan 15 local time should be Jan 15 UTC, not shifted by timezone)
+        const utcDate = new Date(Date.UTC(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            0, 0, 0, 0
+        ));
+        this._dateValue = utcDate;
+        this.value = DateUtil.dateToSerial(utcDate);
     }
 
     /**
@@ -662,6 +722,15 @@ export class Cell {
         }
 
         this._type = DataType.DATE;
+        // Convert to UTC Date object and store
+        const date = DateUtil.serialToDate(serialDate);
+        const utcDate = new Date(Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            0, 0, 0, 0
+        ));
+        this._dateValue = utcDate;
         this.value = serialDate;
     }
 

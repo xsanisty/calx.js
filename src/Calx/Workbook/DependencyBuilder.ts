@@ -62,6 +62,8 @@ export class DependencyBuilder {
                             if (remoteSheet) {
                                 const remoteCellObj = remoteSheet.getCellDirect(cellAddress);
                                 if (remoteCellObj) {
+                                    // Add remote precedent to this cell
+                                    cell.addRemotePrecedent(remoteCellObj);
                                     // Add this cell as a remote dependent of the precedent cell
                                     remoteCellObj.addRemoteDependent(cell);
                                 }

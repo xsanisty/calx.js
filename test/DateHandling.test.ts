@@ -17,13 +17,13 @@ describe('Date Handling', () => {
             const serialDate = 45292;
             const date = DateUtil.serialToDate(serialDate);
 
-            expect(date.getFullYear()).toBe(2024);
-            expect(date.getMonth()).toBe(0); // January
-            expect(date.getDate()).toBe(1);
+            expect(date.getUTCFullYear()).toBe(2024);
+            expect(date.getUTCMonth()).toBe(0); // January
+            expect(date.getUTCDate()).toBe(1);
         });
 
         test('should convert JavaScript Date to Excel serial date', () => {
-            const date = new Date(2024, 0, 1); // January 1, 2024
+            const date = new Date(Date.UTC(2024, 0, 1)); // January 1, 2024 UTC
             const serialDate = DateUtil.dateToSerial(date);
 
             expect(serialDate).toBe(45292);
@@ -65,9 +65,9 @@ describe('Date Handling', () => {
             const todayDate = DateUtil.serialToDate(today);
             const now = new Date();
 
-            expect(todayDate.getFullYear()).toBe(now.getFullYear());
-            expect(todayDate.getMonth()).toBe(now.getMonth());
-            expect(todayDate.getDate()).toBe(now.getDate());
+            expect(todayDate.getUTCFullYear()).toBe(now.getUTCFullYear());
+            expect(todayDate.getUTCMonth()).toBe(now.getUTCMonth());
+            expect(todayDate.getUTCDate()).toBe(now.getUTCDate());
         });
     });
 
@@ -83,9 +83,9 @@ describe('Date Handling', () => {
 
             const retrievedDate = cell.getDateValue();
             expect(retrievedDate).not.toBeNull();
-            expect(retrievedDate!.getFullYear()).toBe(2024);
-            expect(retrievedDate!.getMonth()).toBe(0);
-            expect(retrievedDate!.getDate()).toBe(15);
+            expect(retrievedDate!.getUTCFullYear()).toBe(2024);
+            expect(retrievedDate!.getUTCMonth()).toBe(0);
+            expect(retrievedDate!.getUTCDate()).toBe(15);
         });
 
         test('should set and get date value as Excel serial number', () => {
@@ -117,9 +117,9 @@ describe('Date Handling', () => {
             expect(serialDate).not.toBeNull();
 
             const retrievedDate = cell.getDateValue();
-            expect(retrievedDate!.getFullYear()).toBe(2024);
-            expect(retrievedDate!.getMonth()).toBe(5);
-            expect(retrievedDate!.getDate()).toBe(15);
+            expect(retrievedDate!.getUTCFullYear()).toBe(2024);
+            expect(retrievedDate!.getUTCMonth()).toBe(5);
+            expect(retrievedDate!.getUTCDate()).toBe(15);
         });
 
         test('should return null for non-date cells', () => {
@@ -146,9 +146,9 @@ describe('Date Handling', () => {
             cell.type = DataType.DATE;
             const date = cell.getDateValue();
             expect(date).not.toBeNull();
-            expect(date!.getFullYear()).toBe(2024);
-            expect(date!.getMonth()).toBe(0);
-            expect(date!.getDate()).toBe(15);
+            expect(date!.getUTCFullYear()).toBe(2024);
+            expect(date!.getUTCMonth()).toBe(0);
+            expect(date!.getUTCDate()).toBe(15);
         });
 
         test('should handle date arithmetic in formulas', () => {
@@ -164,7 +164,7 @@ describe('Date Handling', () => {
             const resultCell = sheet.getCell('B1');
             resultCell.type = DataType.DATE;
             const resultDate = resultCell.getDateValue();
-            expect(resultDate!.getDate()).toBe(8);
+            expect(resultDate!.getUTCDate()).toBe(8);
         });
 
         test('should throw error for invalid date', () => {

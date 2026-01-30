@@ -3,30 +3,30 @@
  */
 export class DateUtil {
     /**
-     * Excel epoch: December 30, 1899
+     * Excel epoch: December 30, 1899 (UTC)
      * Excel uses this as day 0 for date serial numbers
      */
-    private static readonly EXCEL_EPOCH = new Date(1899, 11, 30).getTime();
+    private static readonly EXCEL_EPOCH = new Date(Date.UTC(1899, 11, 30, 0, 0, 0, 0)).getTime();
     private static readonly MS_PER_DAY = 24 * 60 * 60 * 1000;
 
     /**
-     * Convert Excel serial date number to JavaScript Date object
+     * Convert Excel serial date number to JavaScript Date object (UTC)
      * @param serialDate Excel serial date number (days since Dec 30, 1899)
-     * @returns JavaScript Date object
+     * @returns JavaScript Date object in UTC
      */
     static serialToDate(serialDate: number): Date {
         if (typeof serialDate !== 'number' || isNaN(serialDate)) {
             throw new Error('Invalid serial date: must be a number');
         }
 
-        // Excel epoch: December 30, 1899 at midnight local time
-        const epochDate = new Date(1899, 11, 30, 0, 0, 0, 0);
+        // Excel epoch: December 30, 1899 at midnight UTC
+        const epochDate = new Date(Date.UTC(1899, 11, 30, 0, 0, 0, 0));
         const ms = serialDate * DateUtil.MS_PER_DAY;
         return new Date(epochDate.getTime() + ms);
     }
 
     /**
-     * Convert JavaScript Date object to Excel serial date number
+     * Convert JavaScript Date object to Excel serial date number (using UTC)
      * @param date JavaScript Date object
      * @returns Excel serial date number (days since Dec 30, 1899)
      */
@@ -35,8 +35,8 @@ export class DateUtil {
             throw new Error('Invalid date: must be a valid Date object');
         }
 
-        // Excel epoch: December 30, 1899 at midnight local time
-        const epochDate = new Date(1899, 11, 30, 0, 0, 0, 0);
+        // Excel epoch: December 30, 1899 at midnight UTC
+        const epochDate = new Date(Date.UTC(1899, 11, 30, 0, 0, 0, 0));
         const ms = date.getTime() - epochDate.getTime();
         return Math.floor(ms / DateUtil.MS_PER_DAY);
     }
@@ -57,19 +57,19 @@ export class DateUtil {
     }
 
     /**
-     * Create Excel serial date from date components
+     * Create Excel serial date from date components (UTC)
      * @param year Full year (e.g., 2024)
      * @param month Month (1-12)
      * @param day Day of month (1-31)
      * @returns Excel serial date number
      */
     static fromComponents(year: number, month: number, day: number): number {
-        const date = new Date(year, month - 1, day);
+        const date = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
         return DateUtil.dateToSerial(date);
     }
 
     /**
-     * Get date components from Excel serial date
+     * Get date components from Excel serial date (UTC)
      * @param serialDate Excel serial date number
      * @returns Object with year, month (1-12), day, weekday (0-6, Sunday=0)
      */
@@ -84,13 +84,13 @@ export class DateUtil {
     } {
         const date = DateUtil.serialToDate(serialDate);
         return {
-            year: date.getFullYear(),
-            month: date.getMonth() + 1, // Convert to 1-based
-            day: date.getDate(),
-            weekday: date.getDay(),
-            hours: date.getHours(),
-            minutes: date.getMinutes(),
-            seconds: date.getSeconds(),
+            year: date.getUTCFullYear(),
+            month: date.getUTCMonth() + 1, // Convert to 1-based
+            day: date.getUTCDate(),
+            weekday: date.getUTCDay(),
+            hours: date.getUTCHours(),
+            minutes: date.getUTCMinutes(),
+            seconds: date.getUTCSeconds(),
         };
     }
 
@@ -118,20 +118,23 @@ export class DateUtil {
     }
 
     /**
-     * Get current date as Excel serial date
+     * Get current date as Excel serial date (UTC)
      * @returns Excel serial date number for today
      */
     static today(): number {
         const now = new Date();
-        now.setHours(0, 0, 0, 0); // Reset time to midnight
-        return DateUtil.dateToSerial(now);
+        // Create UTC date with today's date at midnight
+        const utcDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+        return DateUtil.dateToSerial(utcDate);
     }
 
     /**
-     * Get current date and time as Excel serial date (with fractional day)
+     * Get current date and time as Excel serial date (with fractional day) (UTC)
      * @returns Excel serial date number for now (includes time as fraction)
      */
     static now(): number {
-        return DateUtil.dateToSerial(new Date());
+        const now = new Date();
+        // Use current UTC time
+        return DateUtil.dateToSerial(now);
     }
 }

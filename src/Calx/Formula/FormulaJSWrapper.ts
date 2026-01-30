@@ -46,6 +46,23 @@ export class FormulaJSWrapper {
             return this.uniqueFunction.bind(this);
         }
 
+        // Date function wrappers to use UTC dates from cells
+        if (upperName === 'YEAR') {
+            return this.yearFunction.bind(this);
+        }
+        if (upperName === 'MONTH') {
+            return this.monthFunction.bind(this);
+        }
+        if (upperName === 'DAY') {
+            return this.dayFunction.bind(this);
+        }
+        if (upperName === 'DATE') {
+            return this.dateFunction.bind(this);
+        }
+        if (upperName === 'DATEVALUE') {
+            return this.dateValueFunction.bind(this);
+        }
+
         // Check if function exists in formulajs
         let fn = (formulajs as any)[upperName];
 
@@ -235,6 +252,123 @@ export class FormulaJSWrapper {
 
         // Return as 1D array if original was 1D
         return was1D ? unique.map(row => row[0]) : unique;
+    }
+
+    /**
+     * YEAR function wrapper - extracts year from date using UTC
+     * @param dateValue Excel serial number or Date object
+     */
+    private yearFunction(dateValue: any): number {
+        const date = this.convertToUTCDate(dateValue);
+        if (!date) {
+            return formulajs.YEAR(dateValue); // Fallback to FormulaJS
+        }
+        return date.getUTCFullYear();
+    }
+
+    /**
+     * MONTH function wrapper - extracts month from date using UTC
+     * @param dateValue Excel serial number or Date object
+     */
+    private monthFunction(dateValue: any): number {
+        const date = this.convertToUTCDate(dateValue);
+        if (!date) {
+            return formulajs.MONTH(dateValue); // Fallback to FormulaJS
+        }
+        return date.getUTCMonth() + 1; // Convert to 1-based month
+    }
+
+    /**
+     * DAY function wrapper - extracts day from date using UTC
+     * @param dateValue Excel serial number or Date object
+     */
+    private dayFunction(dateValue: any): number {
+        const date = this.convertToUTCDate(dateValue);
+        if (!date) {
+            return formulajs.DAY(dateValue); // Fallback to FormulaJS
+        }
+        return date.getUTCDate();
+    }
+
+    /**
+     * DATE function wrapper - creates date using UTC
+     * @param year Full year
+     * @param month Month (1-12)
+     * @param day Day of month
+     */
+    private dateFunction(year: number, month: number, day: number): number {
+        // Create UTC date
+        const date = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+
+        // Convert to Excel serial number
+        const excelEpoch = new Date(Date.UTC(1899, 11, 30, 0, 0, 0, 0));
+        const msPerDay = 24 * 60 * 60 * 1000;
+        return Math.floor((date.getTime() - excelEpoch.getTime()) / msPerDay);
+    }
+
+    /**
+     * DATEVALUE function wrapper - converts date string to serial number using UTC
+     * @param dateString Date string to parse
+     */
+    private dateValueFunction(dateString: string): number {
+        if (typeof dateString !== 'string') {
+            const result = formulajs.DATEVALUE(dateString);
+            // FormulaJS may return Date or Error, convert to number or error
+            if (result instanceof Date) {
+                return this.dateToSerial(result);
+            }
+            return result as any; // Return error as-is
+        }
+
+        // Try to parse as ISO date string (YYYY-MM-DD)
+        const parts = dateString.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (parts) {
+            const year = parseInt(parts[1], 10);
+            const month = parseInt(parts[2], 10);
+            const day = parseInt(parts[3], 10);
+            return this.dateFunction(year, month, day);
+        }
+
+        // Fallback to FormulaJS
+        const result = formulajs.DATEVALUE(dateString);
+        if (result instanceof Date) {
+            return this.dateToSerial(result);
+        }
+        return result as any; // Return error as-is
+    }
+
+    /**
+     * Helper to convert Date to Excel serial number (UTC)
+     */
+    private dateToSerial(date: Date): number {
+        const excelEpoch = new Date(Date.UTC(1899, 11, 30, 0, 0, 0, 0));
+        const msPerDay = 24 * 60 * 60 * 1000;
+        return Math.floor((date.getTime() - excelEpoch.getTime()) / msPerDay);
+    }
+
+    /**
+     * Helper to convert various date formats to UTC Date object
+     * @param value Excel serial, Date object, or Cell with date
+     */
+    private convertToUTCDate(value: any): Date | null {
+        // If it's a Cell object with getDateValue method, use that
+        if (value && typeof value === 'object' && typeof value.getDateValue === 'function') {
+            return value.getDateValue();
+        }
+
+        // If it's already a Date object
+        if (value instanceof Date) {
+            return value;
+        }
+
+        // If it's an Excel serial number
+        if (typeof value === 'number') {
+            const excelEpoch = new Date(Date.UTC(1899, 11, 30, 0, 0, 0, 0));
+            const msPerDay = 24 * 60 * 60 * 1000;
+            return new Date(excelEpoch.getTime() + value * msPerDay);
+        }
+
+        return null;
     }
 
     /**
