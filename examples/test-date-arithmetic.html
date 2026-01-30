@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Arithmetic Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../dist/jquery.calx.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+        .pass {
+            color: green;
+            font-weight: bold;
+        }
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
+        input {
+            margin: 5px;
+            padding: 5px;
+        }
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Date Arithmetic Test - UTC Implementation</h1>
+
+    <div class="test-section" id="test-date-add">
+        <h2>Test 1: Add Days to Date</h2>
+        <div>
+            <label>Start Date (V1):</label>
+            <input type="date" data-cell="V1" data-type="date" value="2024-01-15" />
+            <span>(2024-01-15)</span>
+        </div>
+        <div>
+            <label>Days to Add (V2):</label>
+            <input data-cell="V2" data-type="number" value="30" />
+            <span>(30 days)</span>
+        </div>
+        <div>
+            <label>Result (V3):</label>
+            <span data-cell="V3" data-formula="V1+V2" data-format="date"></span>
+            <span id="v3-display"></span>
+        </div>
+        <div>
+            <label>Days Between (V4):</label>
+            <span data-cell="V4" data-formula="V3-V1"></span>
+            <span id="v4-display"></span>
+        </div>
+        <div class="result" id="test1-result"></div>
+    </div>
+
+    <div class="test-section" id="test-date-subtract">
+        <h2>Test 2: Subtract Days from Date</h2>
+        <div>
+            <label>Start Date (A1):</label>
+            <input type="date" data-cell="A1" data-type="date" value="2024-02-14" />
+        </div>
+        <div>
+            <label>Days to Subtract:</label>
+            <input data-cell="A2" data-type="number" value="-30" />
+        </div>
+        <div>
+            <label>Result (A3):</label>
+            <span data-cell="A3" data-formula="A1+A2" data-format="date"></span>
+            <span id="a3-display"></span>
+        </div>
+        <div class="result" id="test2-result"></div>
+    </div>
+
+    <div class="test-section" id="test-date-chain">
+        <h2>Test 3: Chained Date Operations</h2>
+        <div>
+            <label>Start Date (B1):</label>
+            <input type="date" data-cell="B1" data-type="date" value="2024-01-01" />
+        </div>
+        <div>
+            <label>+10 days (B2):</label>
+            <span data-cell="B2" data-formula="B1+10" data-format="date"></span>
+            <span id="b2-display"></span>
+        </div>
+        <div>
+            <label>+10 more (B3):</label>
+            <span data-cell="B3" data-formula="B2+10" data-format="date"></span>
+            <span id="b3-display"></span>
+        </div>
+        <div>
+            <label>Total days (B4):</label>
+            <span data-cell="B4" data-formula="B3-B1"></span>
+            <span id="b4-display"></span>
+        </div>
+        <div class="result" id="test3-result"></div>
+    </div>
+
+    <div class="test-section" id="test-leap-year">
+        <h2>Test 4: Leap Year (2024)</h2>
+        <div>
+            <label>Feb 28, 2024 (C1):</label>
+            <input type="date" data-cell="C1" data-type="date" value="2024-02-28" />
+        </div>
+        <div>
+            <label>+1 day (C2):</label>
+            <span data-cell="C2" data-formula="C1+1" data-format="date"></span>
+            <span id="c2-display"></span>
+        </div>
+        <div>
+            <label>+1 more (C3):</label>
+            <span data-cell="C3" data-formula="C2+1" data-format="date"></span>
+            <span id="c3-display"></span>
+        </div>
+        <div class="result" id="test4-result"></div>
+    </div>
+
+    <div class="test-section" id="test-cross-year">
+        <h2>Test 5: Cross Year</h2>
+        <div>
+            <label>Dec 15, 2023 (X1):</label>
+            <input type="date" data-cell="X1" data-type="date" value="2023-12-15" />
+        </div>
+        <div>
+            <label>+30 days (X2):</label>
+            <span data-cell="X2" data-formula="X1+30" data-format="date"></span>
+            <span id="x2-display"></span>
+        </div>
+        <div>
+            <label>Days (X3):</label>
+            <span data-cell="X3" data-formula="X2-X1"></span>
+            <span id="x3-display"></span>
+        </div>
+        <div class="result" id="test5-result"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize calx on all test sections
+            $('.test-section').calx();
+
+            // Test 1: Add days to date
+            setTimeout(function() {
+                var v3Value = $('#test-date-add').calx('getCellValue', 'V3');
+                var v4Value = $('#test-date-add').calx('getCellValue', 'V4');
+                var v3Text = $('#test-date-add [data-cell="V3"]').text();
+
+                $('#v3-display').text(' = ' + v3Text);
+                $('#v4-display').text(' = ' + v4Value + ' days');
+
+                var test1Pass = v3Text === '14/02/2024' && v4Value === 30;
+                $('#test1-result').html(
+                    '<strong>Expected:</strong> V3 = 14/02/2024, V4 = 30 days<br>' +
+                    '<strong>Actual:</strong> V3 = ' + v3Text + ', V4 = ' + v4Value + ' days<br>' +
+                    '<strong>Status:</strong> <span class="' + (test1Pass ? 'pass' : 'fail') + '">' +
+                    (test1Pass ? '✓ PASS' : '✗ FAIL') + '</span>'
+                );
+            }, 500);
+
+            // Test 2: Subtract days
+            setTimeout(function() {
+                var a3Text = $('#test-date-subtract [data-cell="A3"]').text();
+
+                $('#a3-display').text(' = ' + a3Text);
+
+                var test2Pass = a3Text === '15/01/2024';
+                $('#test2-result').html(
+                    '<strong>Expected:</strong> A3 = 15/01/2024<br>' +
+                    '<strong>Actual:</strong> A3 = ' + a3Text + '<br>' +
+                    '<strong>Status:</strong> <span class="' + (test2Pass ? 'pass' : 'fail') + '">' +
+                    (test2Pass ? '✓ PASS' : '✗ FAIL') + '</span>'
+                );
+            }, 500);
+
+            // Test 3: Chained operations
+            setTimeout(function() {
+                var b2Text = $('#test-date-chain [data-cell="B2"]').text();
+                var b3Text = $('#test-date-chain [data-cell="B3"]').text();
+                var b4Value = $('#test-date-chain').calx('getCellValue', 'B4');
+
+                $('#b2-display').text(' = ' + b2Text);
+                $('#b3-display').text(' = ' + b3Text);
+                $('#b4-display').text(' = ' + b4Value + ' days');
+
+                var test3Pass = b2Text === '11/01/2024' && b3Text === '21/01/2024' && b4Value === 20;
+                $('#test3-result').html(
+                    '<strong>Expected:</strong> B2 = 11/01/2024, B3 = 21/01/2024, B4 = 20 days<br>' +
+                    '<strong>Actual:</strong> B2 = ' + b2Text + ', B3 = ' + b3Text + ', B4 = ' + b4Value + ' days<br>' +
+                    '<strong>Status:</strong> <span class="' + (test3Pass ? 'pass' : 'fail') + '">' +
+                    (test3Pass ? '✓ PASS' : '✗ FAIL') + '</span>'
+                );
+            }, 500);
+
+            // Test 4: Leap year
+            setTimeout(function() {
+                var c2Text = $('#test-leap-year [data-cell="C2"]').text();
+                var c3Text = $('#test-leap-year [data-cell="C3"]').text();
+
+                $('#c2-display').text(' = ' + c2Text);
+                $('#c3-display').text(' = ' + c3Text);
+
+                var test4Pass = c2Text === '29/02/2024' && c3Text === '01/03/2024';
+                $('#test4-result').html(
+                    '<strong>Expected:</strong> C2 = 29/02/2024 (leap day), C3 = 01/03/2024<br>' +
+                    '<strong>Actual:</strong> C2 = ' + c2Text + ', C3 = ' + c3Text + '<br>' +
+                    '<strong>Status:</strong> <span class="' + (test4Pass ? 'pass' : 'fail') + '">' +
+                    (test4Pass ? '✓ PASS' : '✗ FAIL') + '</span>'
+                );
+            }, 500);
+
+            // Test 5: Cross year
+            setTimeout(function() {
+                var x2Text = $('#test-cross-year [data-cell="X2"]').text();
+                var x3Value = $('#test-cross-year').calx('getCellValue', 'X3');
+
+                $('#x2-display').text(' = ' + x2Text);
+                $('#x3-display').text(' = ' + x3Value + ' days');
+
+                var test5Pass = x2Text === '14/01/2024' && x3Value === 30;
+                $('#test5-result').html(
+                    '<strong>Expected:</strong> X2 = 14/01/2024 (crosses year), X3 = 30 days<br>' +
+                    '<strong>Actual:</strong> X2 = ' + x2Text + ', X3 = ' + x3Value + ' days<br>' +
+                    '<strong>Status:</strong> <span class="' + (test5Pass ? 'pass' : 'fail') + '">' +
+                    (test5Pass ? '✓ PASS' : '✗ FAIL') + '</span>'
+                );
+            }, 500);
+        });
+    </script>
+</body>
+</html>

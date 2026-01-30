@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM - Data Types Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html" class="active">Data Types</a>
+                <a href="esm-dynamic-form.html">Dynamic Form</a>
+                <a href="esm-formatters.html">Formatters</a>
+                <a href="esm-multisheet.html">Multisheet</a>
+                <a href="esm-mortgage.html">Mortgage Calculator</a>
+                <a href="esm-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Data Types Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Data Types:</strong> Calx.js supports number, text, date, and boolean types via the <code>data-type</code> attribute.
+        </div>
+
+        <h2>Number Type</h2>
+        <form id="number-demo">
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="text" data-cell="A1" data-type="number" value="100">
+            </div>
+
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="text" data-cell="A2" data-type="number" value="5">
+            </div>
+
+            <div class="form-group">
+                <label>Tax Rate (%):</label>
+                <input type="text" data-cell="A3" data-type="number" value="8">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Subtotal:</label>
+                    <span data-cell="B1" data-formula="=A1*A2"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Tax:</label>
+                    <span data-cell="B2" data-formula="=B1*(A3/100)"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Total:</label>
+                    <span data-cell="B3" data-formula="=B1+B2"></span>
+                </div>
+            </div>
+        </form>
+
+        <h2>Text Type</h2>
+        <form id="text-demo">
+            <div class="form-group">
+                <label>First Name:</label>
+                <input type="text" data-cell="C1" data-type="text" value="John">
+            </div>
+
+            <div class="form-group">
+                <label>Last Name:</label>
+                <input type="text" data-cell="C2" data-type="text" value="Doe">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <span data-cell="D1" data-formula="=CONCATENATE(C1,' ',C2)"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Uppercase:</label>
+                    <span data-cell="D2" data-formula="=UPPER(D1)"></span>
+                </div>
+            </div>
+        </form>
+
+        <h2>Mixed Types</h2>
+        <form id="mixed-demo">
+            <div class="form-group">
+                <label>Score:</label>
+                <input type="text" data-cell="E1" data-type="number" value="85">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Grade:</label>
+                    <span data-cell="F1" data-formula="=IF(E1>=90,'A',IF(E1>=80,'B',IF(E1>=70,'C',IF(E1>=60,'D','F'))))"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Pass/Fail:</label>
+                    <span data-cell="F2" data-formula="=IF(E1>=60,'PASS','FAIL')"></span>
+                </div>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <p>
+                <a href="index.html">← Back to Examples</a> |
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        // Create separate workbooks for each demo
+        // Each one automatically handles input events and DOM updates
+        const numberDemo = Calx.createWorkbookFromElement(document.getElementById('number-demo'));
+        const textDemo = Calx.createWorkbookFromElement(document.getElementById('text-demo'));
+        const mixedDemo = Calx.createWorkbookFromElement(document.getElementById('mixed-demo'));
+
+        console.log('Calx.js data types examples initialized!');
+        console.log('Number demo:', numberDemo);
+        console.log('Text demo:', textDemo);
+        console.log('Mixed demo:', mixedDemo);
+    </script>
+</body>
+</html>

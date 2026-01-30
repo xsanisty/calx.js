@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM - Advanced Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html">Data Types</a>
+                <a href="esm-dynamic-form.html">Dynamic Form</a>
+                <a href="esm-formatters.html">Formatters</a>
+                <a href="esm-multisheet.html">Multisheet</a>
+                <a href="esm-mortgage.html">Mortgage Calculator</a>
+                <a href="esm-advanced.html" class="active">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Advanced Features</h1>
+
+        <div class="alert alert-info">
+            <strong>Advanced Features:</strong> Named variables, custom functions, and complex formulas.
+        </div>
+
+        <h2>Named Variables</h2>
+        <form id="advanced">
+            <div class="form-group">
+                <label>Revenue:</label>
+                <input type="number" data-cell="A1" data-var="REVENUE" value="100000">
+            </div>
+
+            <div class="form-group">
+                <label>Cost of Goods (%):</label>
+                <input type="number" data-cell="A2" data-var="COGS_PCT" value="40">
+            </div>
+
+            <div class="form-group">
+                <label>Operating Expenses:</label>
+                <input type="number" data-cell="A3" data-var="OPEX" value="20000">
+            </div>
+
+            <div class="form-group">
+                <label>Tax Rate (%):</label>
+                <input type="number" data-cell="A4" data-var="TAX_RATE" value="25">
+            </div>
+
+            <div class="result">
+                <h3>Income Statement</h3>
+
+                <div class="form-group">
+                    <label>Revenue:</label>
+                    <span data-cell="B1" data-formula="=REVENUE"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Cost of Goods:</label>
+                    <span data-cell="B2" data-formula="=REVENUE*(COGS_PCT/100)"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Gross Profit:</label>
+                    <span data-cell="B3" data-formula="=B1-B2"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Operating Expenses:</label>
+                    <span data-cell="B4" data-formula="=OPEX"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Operating Income:</label>
+                    <span data-cell="B5" data-formula="=B3-B4"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Tax:</label>
+                    <span data-cell="B6" data-formula="=B5*(TAX_RATE/100)"></span>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Net Income:</strong></label>
+                    <span data-cell="B7" data-formula="=B5-B6"></span>
+                </div>
+
+                <h3>Metrics</h3>
+
+                <div class="form-group">
+                    <label>Gross Margin (%):</label>
+                    <span data-cell="C1" data-formula="=(B3/B1)*100"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Operating Margin (%):</label>
+                    <span data-cell="C2" data-formula="=(B5/B1)*100"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Net Margin (%):</label>
+                    <span data-cell="C3" data-formula="=(B7/B1)*100"></span>
+                </div>
+            </div>
+        </form>
+
+        <h2>Array Formulas</h2>
+        <div id="array-demo" style="margin-top: 20px;">
+            <p>Sum of values 1-10: <span id="array-sum"></span></p>
+            <p>Average of values 1-10: <span id="array-avg"></span></p>
+            <p>Max value: <span id="array-max"></span></p>
+            <p>Min value: <span id="array-min"></span></p>
+        </div>
+
+        <footer class="footer">
+            <p>
+                <a href="index.html">← Back to Examples</a> |
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        function formatCurrency(value) {
+            if (value == null || isNaN(value)) return '$0.00';
+            return '$' + Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function formatPercent(value) {
+            if (value == null || isNaN(value)) return '0.00%';
+            return Number(value).toFixed(2) + '%';
+        }
+
+// Create main workbook - automatically handles input events
+        const element = document.getElementById('advanced');
+        const workbook = Calx.createWorkbookFromElement(element);
+        const sheet = workbook.getSheet('advanced');
+
+        // Format currency and percentage displays
+        function updateDisplay() {
+            // Currency cells
+            const currencyCells = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7'];
+            currencyCells.forEach(cellRef => {
+                const value = sheet.getCellValue(cellRef);
+                const elem = document.querySelector(`[data-cell="${cellRef}"]`);
+                if (elem) {
+                    elem.textContent = formatCurrency(value);
+                }
+            });
+
+            // Percentage cells
+            const percentCells = ['C1', 'C2', 'C3'];
+            percentCells.forEach(cellRef => {
+                const value = sheet.getCellValue(cellRef);
+                const elem = document.querySelector(`[data-cell="${cellRef}"]`);
+                if (elem) {
+                    elem.textContent = formatPercent(value);
+                }
+            });
+        }
+
+        // Initial display
+        updateDisplay();
+
+        // Hook into calculate to update custom formatting
+        const originalCalculate = workbook.calculate.bind(workbook);
+        workbook.calculate = function() {
+            originalCalculate();
+            updateDisplay();
+        };
+
+        // Array formulas demo (using Data parameter)
+        const arrayWorkbook = new Calx.Workbook({
+            sheets: {
+                ArraySheet: {
+                    cells: {
+                        A1: { value: 1 },
+                        A2: { value: 2 },
+                        A3: { value: 3 },
+                        A4: { value: 4 },
+                        A5: { value: 5 },
+                        A6: { value: 6 },
+                        A7: { value: 7 },
+                        A8: { value: 8 },
+                        A9: { value: 9 },
+                        A10: { value: 10 },
+                        B1: { formula: '=SUM(A1:A10)' },
+                        B2: { formula: '=AVERAGE(A1:A10)' },
+                        B3: { formula: '=MAX(A1:A10)' },
+                        B4: { formula: '=MIN(A1:A10)' }
+                    }
+                }
+            }
+        });
+
+        arrayWorkbook.build();
+        arrayWorkbook.calculate();
+
+        const arraySheet = arrayWorkbook.getSheet('ArraySheet');
+        document.getElementById('array-sum').textContent = arraySheet.getCellValue('B1');
+        document.getElementById('array-avg').textContent = arraySheet.getCellValue('B2');
+        document.getElementById('array-max').textContent = arraySheet.getCellValue('B3');
+        document.getElementById('array-min').textContent = arraySheet.getCellValue('B4');
+
+        console.log('Advanced features initialized!', workbook, arrayWorkbook);
+    </script>
+</body>
+</html>

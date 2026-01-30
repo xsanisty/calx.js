@@ -9,17 +9,20 @@
       "import": "./dist/calx.esm.js",
       "require": "./dist/index.js"
     },
-    "./jquery": "./dist/jquery.calx.js"
+    "./jquery": "./dist/jquery.calx.js",
+    "./thin": "./dist/calx.thin.js",
+    "./jquery-thin": "./dist/jquery.calx.thin.js"
   },
   "files": [
     "dist/index.js",
     "dist/jquery.calx.js",
+    "dist/calx.thin.js",
+    "dist/jquery.calx.thin.js",
     "dist/index.d.ts"
   ],
   "dependencies": {
     "@formulajs/formulajs": "^3.1.1",
-    "chevrotain": "^11.1.1",
-    "ssf": "^0.11.2"
+    "chevrotain": "^11.1.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -35,8 +38,12 @@
   },
   "scripts": {
     "build": "webpack && webpack --config webpack.jquery.config.js",
+    "build:all": "npm run build && npm run build:thin",
     "build:core": "webpack",
     "build:jquery": "webpack --config webpack.jquery.config.js",
+    "build:thin": "webpack --config webpack.thin.config.js && webpack --config webpack.jquery.thin.config.js",
+    "build:thin-core": "webpack --config webpack.thin.config.js",
+    "build:thin-jquery": "webpack --config webpack.jquery.thin.config.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

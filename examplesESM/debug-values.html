@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Initial Values</title>
+</head>
+<body>
+    <h1>Debug Initial Values</h1>
+
+    <div id="test1" class="test-section">
+        <h3>Test 1</h3>
+        <input data-cell="A1" value="10" />
+        <input data-cell="A2" value="5" />
+        <span data-cell="A3" data-formula="A1+A2"></span>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        const elements = document.querySelectorAll('.test-section');
+        const workbook = Calx.createWorkbookFromElement(elements);
+
+        console.log('=== DEBUG: Initial Values ===');
+
+        const sheet = workbook.getSheet('test1');
+        console.log('Sheet:', sheet);
+
+        const a1Cell = sheet.getCell('A1');
+        const a2Cell = sheet.getCell('A2');
+        const a3Cell = sheet.getCell('A3');
+
+        console.log('A1 cell:', { value: a1Cell.value, formula: a1Cell.formula, type: a1Cell.type });
+        console.log('A2 cell:', { value: a2Cell.value, formula: a2Cell.formula, type: a2Cell.type });
+        console.log('A3 cell:', { value: a3Cell.value, formula: a3Cell.formula, type: a3Cell.type });
+
+        const a1 = sheet.getCellValue('A1');
+        const a2 = sheet.getCellValue('A2');
+        const a3 = sheet.getCellValue('A3');
+
+        console.log('A1 getCellValue:', a1, typeof a1);
+        console.log('A2 getCellValue:', a2, typeof a2);
+        console.log('A3 getCellValue:', a3, typeof a3);
+
+        // Check the actual DOM elements
+        const input1 = document.querySelector('[data-cell="A1"]');
+        const input2 = document.querySelector('[data-cell="A2"]');
+        const span3 = document.querySelector('[data-cell="A3"]');
+        console.log('DOM input1.value:', input1.value);
+        console.log('DOM input1.getAttribute("value"):', input1.getAttribute('value'));
+        console.log('DOM input2.value:', input2.value);
+        console.log('DOM input2.getAttribute("value"):', input2.getAttribute('value'));
+        console.log('DOM span3.getAttribute("data-formula"):', span3.getAttribute('data-formula'));
+        console.log('DOM span3.textContent:', span3.textContent);
+
+        // Try to manually trigger calculation
+        console.log('\n=== After manual calculate ===');
+        workbook.calculate();
+        console.log('A3 after calculate:', sheet.getCellValue('A3'));
+    </script>
+</body>
+</html>

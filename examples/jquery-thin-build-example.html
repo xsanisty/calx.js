@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalxJS jQuery Thin Build Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .example {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input {
+            padding: 5px;
+            margin: 5px;
+        }
+        .result {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        td input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>CalxJS jQuery Thin Build Example</h1>
+
+    <div class="info">
+        <h3>About jQuery Thin Build</h3>
+        <p>
+            This example uses the <strong>jQuery thin build</strong> of CalxJS, which excludes the FormulaJS library.
+            Both jQuery and FormulaJS are loaded separately from CDN, reducing the CalxJS bundle size
+            from ~330 KB to approximately ~202 KB (39% reduction).
+        </p>
+        <p>
+            <strong>Load order:</strong> jQuery → FormulaJS → CalxJS (thin)
+        </p>
+    </div>
+
+    <div class="example">
+        <h2>Interactive Spreadsheet</h2>
+        <div id="spreadsheet">
+            <table>
+                <tr>
+                    <td><input data-cell="A1" value="100" /></td>
+                    <td><input data-cell="B1" value="200" /></td>
+                    <td><span data-cell="C1" data-formula="A1+B1" class="result"></span></td>
+                </tr>
+                <tr>
+                    <td><input data-cell="A2" value="50" /></td>
+                    <td><input data-cell="B2" value="150" /></td>
+                    <td><span data-cell="C2" data-formula="A2+B2" class="result"></span></td>
+                </tr>
+                <tr>
+                    <td><span data-cell="A3" data-formula="SUM(A1:A2)" class="result"></span></td>
+                    <td><span data-cell="B3" data-formula="SUM(B1:B2)" class="result"></span></td>
+                    <td><span data-cell="C3" data-formula="SUM(C1:C2)" class="result"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>Date Calculations</h2>
+        <div id="dates">
+            <label>Start: <input type="date" data-cell="D1" data-type="date" value="2024-01-01" /></label><br>
+            <label>End: <input type="date" data-cell="D2" data-type="date" value="2024-12-31" /></label><br>
+            <label>Days: <span data-cell="D3" data-formula="D2-D1" class="result"></span></label><br>
+            <label>Year: <span data-cell="D4" data-formula="YEAR(D1)" class="result"></span></label>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>Advanced Formulas</h2>
+        <div id="advanced">
+            <label>Values: <input data-cell="E1" value="10" /> <input data-cell="E2" value="20" /> <input data-cell="E3" value="30" /></label><br>
+            <label>Average: <span data-cell="F1" data-formula="AVERAGE(E1:E3)" class="result"></span></label><br>
+            <label>If > 15: <span data-cell="F2" data-formula="IF(F1>15,'High','Low')" class="result"></span></label><br>
+            <label>Round: <span data-cell="F3" data-formula="ROUND(F1,0)" class="result"></span></label>
+        </div>
+    </div>
+
+    <!-- Load jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load FormulaJS second -->
+    <script src="https://cdn.jsdelivr.net/npm/@formulajs/formulajs/lib/browser/formula.min.js"></script>
+
+    <!-- Load CalxJS jQuery thin build last -->
+    <script src="../dist/jquery.calx.thin.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            console.log('CalxJS jQuery thin build loaded');
+
+            // Initialize each example section with CalxJS
+            $('#spreadsheet').calx();
+            $('#dates').calx();
+            $('#advanced').calx();
+
+            console.log('All CalxJS instances initialized successfully');
+        });
+    </script>
+</body>
+</html>

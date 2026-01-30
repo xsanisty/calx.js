@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Initial Values Test - Calx.js</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .pass { background-color: #d4edda; }
+        .fail { background-color: #f8d7da; }
+        input { margin: 5px; padding: 5px; }
+        .result { font-weight: bold; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>Initial Values Test</h1>
+
+    <div class="test-section" id="test1-status">
+        <h2>Test 1: ESM Basic Example</h2>
+        <form id="test_form">
+            <div>
+                <label>Price (A1):</label>
+                <input type="number" data-cell="A1" value="100" id="price-input">
+            </div>
+            <div>
+                <label>Quantity (A2):</label>
+                <input type="number" data-cell="A2" value="5" id="qty-input">
+            </div>
+            <div>
+                <label>Subtotal (B1=A1*A2):</label>
+                <input type="text" data-cell="B1" data-formula="=A1*A2" readonly id="subtotal-input">
+            </div>
+        </form>
+        <div id="test1-result"></div>
+    </div>
+
+    <div class="test-section" id="test2-status">
+        <h2>Test 2: Formatted Values</h2>
+        <form id="test_form2">
+            <div>
+                <label>Amount:</label>
+                <input type="text" data-cell="C1" value="1000" id="amount-input">
+            </div>
+            <div>
+                <label>Percent:</label>
+                <input type="text" data-cell="C2" value="0.25" data-format="percent" id="percent-input">
+            </div>
+            <div>
+                <label>Result (currency):</label>
+                <input type="text" data-cell="C3" data-formula="=C1*C2" data-format="currency" readonly id="currency-input">
+            </div>
+        </form>
+        <div id="test2-result"></div>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        // Test 1: Basic values
+        const form1 = document.getElementById('test_form');
+        const workbook1 = Calx.createWorkbookFromElement(form1);
+        const sheet1 = workbook1.getSheet('test_form');
+
+        const a1 = sheet1.getCellValue('A1');
+        const a2 = sheet1.getCellValue('A2');
+        const b1 = sheet1.getCellValue('B1');
+
+        const priceInput = document.getElementById('price-input');
+        const qtyInput = document.getElementById('qty-input');
+        const subtotalInput = document.getElementById('subtotal-input');
+
+        let test1Pass = true;
+        let test1Details = '';
+
+        // Check initial values
+        if (a1 !== 100) {
+            test1Pass = false;
+            test1Details += `❌ A1 should be 100, got ${a1}<br>`;
+        } else {
+            test1Details += `✅ A1 = 100<br>`;
+        }
+
+        if (a2 !== 5) {
+            test1Pass = false;
+            test1Details += `❌ A2 should be 5, got ${a2}<br>`;
+        } else {
+            test1Details += `✅ A2 = 5<br>`;
+        }
+
+        if (b1 !== 500) {
+            test1Pass = false;
+            test1Details += `❌ B1 should be 500, got ${b1}<br>`;
+        } else {
+            test1Details += `✅ B1 = 500<br>`;
+        }
+
+        // Check DOM values
+        if (priceInput.value !== '100') {
+            test1Pass = false;
+            test1Details += `❌ Price input should show 100, got "${priceInput.value}"<br>`;
+        } else {
+            test1Details += `✅ Price input = 100<br>`;
+        }
+
+        if (subtotalInput.value !== '500') {
+            test1Pass = false;
+            test1Details += `❌ Subtotal input should show 500, got "${subtotalInput.value}"<br>`;
+        } else {
+            test1Details += `✅ Subtotal input = 500<br>`;
+        }
+
+        document.getElementById('test1-result').innerHTML = test1Details;
+        document.getElementById('test1-status').className = test1Pass ? 'test-section pass' : 'test-section fail';
+
+        // Test 2: Formatted values
+        const form2 = document.getElementById('test_form2');
+        const workbook2 = Calx.createWorkbookFromElement(form2);
+        const sheet2 = workbook2.getSheet('test_form2');
+
+        const c1 = sheet2.getCellValue('C1');
+        const c2 = sheet2.getCellValue('C2');
+        const c3 = sheet2.getCellValue('C3');
+
+        const currencyInput = document.getElementById('currency-input');
+        const percentInput = document.getElementById('percent-input');
+
+        let test2Pass = true;
+        let test2Details = '';
+
+        if (c1 !== 1000) {
+            test2Pass = false;
+            test2Details += `❌ C1 should be 1000, got ${c1}<br>`;
+        } else {
+            test2Details += `✅ C1 = 1000<br>`;
+        }
+
+        if (c2 !== 0.25) {
+            test2Pass = false;
+            test2Details += `❌ C2 should be 0.25, got ${c2}<br>`;
+        } else {
+            test2Details += `✅ C2 = 0.25<br>`;
+        }
+
+        if (c3 !== 250) {
+            test2Pass = false;
+            test2Details += `❌ C3 should be 250, got ${c3}<br>`;
+        } else {
+            test2Details += `✅ C3 = 250<br>`;
+        }
+
+        // Check formatted display
+        if (percentInput.value !== '25.00%') {
+            test2Pass = false;
+            test2Details += `❌ Percent should display "25.00%", got "${percentInput.value}"<br>`;
+        } else {
+            test2Details += `✅ Percent displays as 25.00%<br>`;
+        }
+
+        if (currencyInput.value !== '$250.00') {
+            test2Pass = false;
+            test2Details += `❌ Currency should display "$250.00", got "${currencyInput.value}"<br>`;
+        } else {
+            test2Details += `✅ Currency displays as $250.00<br>`;
+        }
+
+        document.getElementById('test2-result').innerHTML = test2Details;
+        document.getElementById('test2-status').className = test2Pass ? 'test-section pass' : 'test-section fail';
+
+        // Summary
+        const allPass = test1Pass && test2Pass;
+        document.title = allPass ? '✅ All Tests Passed' : '❌ Some Tests Failed';
+
+        console.log('Test 1:', test1Pass ? 'PASS' : 'FAIL');
+        console.log('Test 2:', test2Pass ? 'FAIL' : 'FAIL');
+        console.log('Overall:', allPass ? 'ALL TESTS PASSED ✅' : 'SOME TESTS FAILED ❌');
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM - Multisheet Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html">Data Types</a>
+                <a href="esm-dynamic-form.html">Dynamic Form</a>
+                <a href="esm-formatters.html">Formatters</a>
+                <a href="esm-multisheet.html" class="active">Multisheet</a>
+                <a href="esm-mortgage.html">Mortgage Calculator</a>
+                <a href="esm-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Multisheet Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Multiple Sheets:</strong> Reference cells across sheets using <code>SheetName!CellRef</code> syntax.
+        </div>
+
+        <h2>Sales Sheet</h2>
+        <form id="sales" data-sheet="Sales">
+            <div class="form-group">
+                <label>Product A Sales:</label>
+                <input type="number" data-cell="A1" value="1000">
+            </div>
+
+            <div class="form-group">
+                <label>Product B Sales:</label>
+                <input type="number" data-cell="A2" value="1500">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Total Sales:</label>
+                    <span data-cell="A3" data-formula="=A1+A2"></span>
+                </div>
+            </div>
+        </form>
+
+        <h2>Expenses Sheet</h2>
+        <form id="expenses" data-sheet="Expenses">
+            <div class="form-group">
+                <label>Rent:</label>
+                <input type="number" data-cell="B1" value="500">
+            </div>
+
+            <div class="form-group">
+                <label>Utilities:</label>
+                <input type="number" data-cell="B2" value="150">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Total Expenses:</label>
+                    <span data-cell="B3" data-formula="=B1+B2"></span>
+                </div>
+            </div>
+        </form>
+
+        <h2>Summary Sheet</h2>
+        <form id="summary" data-sheet="Summary">
+            <div class="result">
+                <div class="form-group">
+                    <label>Total Sales:</label>
+                    <span data-cell="C1" data-formula="=Sales!A3"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Expenses:</label>
+                    <span data-cell="C2" data-formula="=Expenses!B3"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Net Profit:</label>
+                    <span data-cell="C3" data-formula="=C1-C2"></span>
+                </div>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <p>
+                <a href="index.html">← Back to Examples</a> |
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        // Create workbook from Data with multiple sheets
+        const workbook = new Calx.Workbook({
+            sheets: {
+                Sales: {},
+                Expenses: {},
+                Summary: {}
+            }
+        });
+
+        // Attach each form element to its sheet
+        const salesForm = document.getElementById('sales');
+        const expensesForm = document.getElementById('expenses');
+        const summaryForm = document.getElementById('summary');
+
+        // Process data attributes for each form
+        workbook._processDataAttributes(salesForm, workbook.getSheet('Sales'));
+        workbook._processDataAttributes(expensesForm, workbook.getSheet('Expenses'));
+        workbook._processDataAttributes(summaryForm, workbook.getSheet('Summary'));
+
+        // Setup event listeners for each form
+        workbook._setupEventListeners(salesForm, workbook.getSheet('Sales'));
+        workbook._setupEventListeners(expensesForm, workbook.getSheet('Expenses'));
+        workbook._setupEventListeners(summaryForm, workbook.getSheet('Summary'));
+
+        // Calculate and update
+        workbook.build();
+        workbook.calculate();
+        workbook._updateAllCells(salesForm, workbook.getSheet('Sales'));
+        workbook._updateAllCells(expensesForm, workbook.getSheet('Expenses'));
+        workbook._updateAllCells(summaryForm, workbook.getSheet('Summary'));
+
+        console.log('Multisheet workbook initialized!', workbook);
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalxJS Thin Build Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .example {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input {
+            padding: 5px;
+            margin: 5px;
+        }
+        .result {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CalxJS Thin Build Example</h1>
+
+    <div class="info">
+        <h3>About Thin Build</h3>
+        <p>
+            This example uses the <strong>thin build</strong> of CalxJS, which excludes the FormulaJS library.
+            The FormulaJS library is loaded separately from CDN, reducing the initial CalxJS bundle size
+            from ~323 KB to approximately ~195 KB (40% reduction).
+        </p>
+        <p>
+            <strong>Load order:</strong> FormulaJS must be loaded <em>before</em> CalxJS.
+        </p>
+    </div>
+
+    <div class="example">
+        <h2>Basic Calculation Example</h2>
+        <div id="calc-example">
+            <label>Value A: <input data-cell="A1" value="10" /></label><br>
+            <label>Value B: <input data-cell="B1" value="20" /></label><br>
+            <label>Sum (A1+B1): <span data-cell="C1" data-formula="A1+B1" class="result"></span></label><br>
+            <label>Product (A1*B1): <span data-cell="D1" data-formula="A1*B1" class="result"></span></label><br>
+            <label>Average: <span data-cell="E1" data-formula="AVERAGE(A1,B1)" class="result"></span></label>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>Date Calculation Example</h2>
+        <div id="date-example">
+            <label>Start Date: <input type="date" data-cell="F1" data-type="date" value="2024-01-15" /></label><br>
+            <label>Days to Add: <input data-cell="G1" value="30" /></label><br>
+            <label>End Date: <span data-cell="H1" data-formula="F1+G1" data-format="date" class="result"></span></label><br>
+            <label>Days Between: <span data-cell="I1" data-formula="H1-F1" class="result"></span></label>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>Statistical Functions</h2>
+        <div id="stats-example">
+            <label>Numbers: <input data-cell="J1" value="10" /> <input data-cell="J2" value="20" /> <input data-cell="J3" value="30" /> <input data-cell="J4" value="40" /> <input data-cell="J5" value="50" /></label><br>
+            <label>SUM: <span data-cell="K1" data-formula="SUM(J1:J5)" class="result"></span></label><br>
+            <label>AVERAGE: <span data-cell="K2" data-formula="AVERAGE(J1:J5)" class="result"></span></label><br>
+            <label>MAX: <span data-cell="K3" data-formula="MAX(J1:J5)" class="result"></span></label><br>
+            <label>MIN: <span data-cell="K4" data-formula="MIN(J1:J5)" class="result"></span></label><br>
+            <label>STDEV: <span data-cell="K5" data-formula="STDEV(J1:J5)" class="result"></span></label>
+        </div>
+    </div>
+
+    <!-- Load FormulaJS first -->
+    <script src="https://cdn.jsdelivr.net/npm/@formulajs/formulajs/lib/browser/formula.min.js"></script>
+
+    <!-- Then load CalxJS thin build -->
+    <script src="../dist/calx.thin.js"></script>
+
+    <script>
+        // Initialize CalxJS
+        const Calx = window.Calx || window.CalxJS;
+
+        if (!Calx) {
+            console.error('CalxJS not loaded!');
+            document.body.innerHTML = '<div style="color: red; padding: 20px;">Error: CalxJS not loaded!</div>';
+        } else if (!Calx.DataType) {
+            console.error('CalxJS.DataType not available!');
+            document.body.innerHTML = '<div style="color: red; padding: 20px;">Error: CalxJS.DataType not available!</div>';
+        } else {
+            console.log('CalxJS thin build loaded successfully');
+            console.log('DataType available:', Calx.DataType);
+
+            // Create workbook and sheet
+            const workbook = Calx.createWorkbook();
+            const sheet = workbook.createSheet('Sheet1');
+
+            // Initialize all examples
+            ['calc-example', 'date-example', 'stats-example'].forEach(exampleId => {
+                const container = document.getElementById(exampleId);
+                const inputs = container.querySelectorAll('[data-cell]');
+
+                inputs.forEach(el => {
+                    const address = el.getAttribute('data-cell');
+                    const formula = el.getAttribute('data-formula');
+                    const type = el.getAttribute('data-type');
+                    const format = el.getAttribute('data-format');
+
+                    if (formula) {
+                        // Create formula cell
+                        const cell = sheet.createCell(address, { formula: '=' + formula });
+                        if (type) cell.type = Calx.DataType[type.toUpperCase()];
+                    } else {
+                        // Create value cell
+                        const value = el.tagName === 'INPUT' ? el.value : '';
+                        const cell = sheet.createCell(address, { value });
+                        if (type) cell.type = Calx.DataType[type.toUpperCase()];
+
+                        // Add input event listener
+                        if (el.tagName === 'INPUT') {
+                            el.addEventListener('input', () => {
+                                sheet.getCell(address).value = el.value;
+                                updateDisplays();
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Build and calculate
+            workbook.build();
+            workbook.calculate();
+
+            // Update display cells
+            function updateDisplays() {
+                document.querySelectorAll('[data-formula]').forEach(el => {
+                    const address = el.getAttribute('data-cell');
+                    const format = el.getAttribute('data-format');
+                    const cell = sheet.getCell(address);
+
+                    if (format === 'date') {
+                        const dateValue = cell.getDateValue();
+                        if (dateValue) {
+                            // Format as DD/MM/YYYY
+                            const day = String(dateValue.getUTCDate()).padStart(2, '0');
+                            const month = String(dateValue.getUTCMonth() + 1).padStart(2, '0');
+                            const year = dateValue.getUTCFullYear();
+                            el.textContent = `${day}/${month}/${year}`;
+                        }
+                    } else {
+                        const value = cell.value;
+                        el.textContent = typeof value === 'number' ? value.toFixed(2) : value;
+                    }
+                });
+            }
+
+            updateDisplays();
+        }
+    </script>
+</body>
+</html>

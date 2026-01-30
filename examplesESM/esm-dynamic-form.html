@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM - Dynamic Form Example</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .row-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .row-controls {
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html">Data Types</a>
+                <a href="esm-dynamic-form.html" class="active">Dynamic Form</a>
+                <a href="esm-formatters.html">Formatters</a>
+                <a href="esm-multisheet.html">Multisheet</a>
+                <a href="esm-mortgage.html">Mortgage Calculator</a>
+                <a href="esm-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Dynamic Form Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Dynamic Forms:</strong> Add or remove rows dynamically and recalculate totals.
+        </div>
+
+        <form id="invoice">
+            <div id="items-container"></div>
+
+            <button type="button" class="btn" onclick="addRow()">+ Add Item</button>
+
+            <div class="result" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label>Subtotal:</label>
+                    <span id="subtotal" data-cell="SUBTOTAL" data-formula="=SUM(A1:A100)">$0.00</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Tax (8%):</label>
+                    <span id="tax" data-cell="TAX" data-formula="=SUBTOTAL*0.08">$0.00</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Total:</label>
+                    <span id="total" data-cell="TOTAL" data-formula="=SUBTOTAL+TAX">$0.00</span>
+                </div>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <p>
+                <a href="index.html">← Back to Examples</a> |
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        let workbook = null;
+        let sheet = null;
+        let rowCount = 0;
+
+        function formatCurrency(value) {
+            if (value == null || isNaN(value)) return '$0.00';
+            return '$' + Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function initWorkbook() {
+            const element = document.getElementById('invoice');
+            workbook = Calx.createWorkbookFromElement(element);
+            sheet = workbook.getSheet('invoice');
+        }
+
+        function rebuildWorkbook() {
+            // Destroy existing workbook
+            if (workbook) {
+                workbook.destroy();
+            }
+
+            // Recreate from DOM
+            initWorkbook();
+            updateTotals();
+        }
+
+        window.addRow = function() {
+            rowCount++;
+            const container = document.getElementById('items-container');
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'row-item';
+            rowDiv.id = 'row-' + rowCount;
+            rowDiv.innerHTML = `
+                <div class="form-group">
+                    <label>Item ${rowCount}:</label>
+                    <input type="text" placeholder="Item name" style="width: 200px;">
+                </div>
+                <div class="form-group">
+                    <label>Price:</label>
+                    <input type="number" data-cell="P${rowCount}" value="0" step="0.01" style="width: 100px;">
+                </div>
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <input type="number" data-cell="Q${rowCount}" value="1" style="width: 80px;">
+                </div>
+                <div class="form-group">
+                    <label>Amount:</label>
+                    <span data-cell="A${rowCount}" data-formula="=P${rowCount}*Q${rowCount}">$0.00</span>
+                </div>
+                <div class="row-controls">
+                    <button type="button" class="btn btn-danger" onclick="removeRow(${rowCount})">Remove</button>
+                </div>
+            `;
+            container.appendChild(rowDiv);
+
+            rebuildWorkbook();
+        };
+
+        window.removeRow = function(id) {
+            const row = document.getElementById('row-' + id);
+            if (row) {
+                row.remove();
+                rebuildWorkbook();
+            }
+        };
+
+        function updateTotals() {
+            const subtotal = sheet.getCellValue('SUBTOTAL');
+            const tax = sheet.getCellValue('TAX');
+            const total = sheet.getCellValue('TOTAL');
+
+            document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('tax').textContent = formatCurrency(tax);
+            document.getElementById('total').textContent = formatCurrency(total);
+        }
+
+        // Initialize
+        initWorkbook();
+        addRow(); // Add first row
+        addRow(); // Add second row
+
+        console.log('Dynamic form initialized!', workbook);
+    </script>
+</body>
+</html>

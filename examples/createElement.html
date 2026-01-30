@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js - Create Workbook From Element Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        input {
+            padding: 5px;
+            width: 200px;
+        }
+        .result {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calx.js - Create Workbook From Element</h1>
+    <p>This example demonstrates how to create a workbook from HTML elements with data attributes.</p>
+
+    <div id="calculator">
+        <div class="form-group">
+            <label>Price:</label>
+            <input type="number" data-cell="A1" data-var="PRICE" value="100" />
+        </div>
+
+        <div class="form-group">
+            <label>Quantity:</label>
+            <input type="number" data-cell="A2" data-var="QUANTITY" value="5" />
+        </div>
+
+        <div class="form-group">
+            <label>Subtotal:</label>
+            <input type="text" data-cell="A3" data-formula="=PRICE*QUANTITY" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>Tax Rate (%):</label>
+            <input type="number" data-cell="A4" data-var="TAX_RATE" value="10" />
+        </div>
+
+        <div class="form-group">
+            <label>Tax Amount:</label>
+            <input type="text" data-cell="A5" data-formula="=A3*A4/100" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>Total:</label>
+            <input type="text" data-cell="A6" data-formula="=A3+A5" readonly />
+        </div>
+
+        <!-- Auto-assigned CALX address -->
+        <div class="result">
+            <strong>Discount (20%):</strong>
+            <span data-formula="=A6*0.2"></span>
+        </div>
+
+        <div class="result">
+            <strong>Final Price:</strong>
+            <span data-formula="=A6-CALX1"></span>
+        </div>
+    </div>
+
+    <button onclick="destroy()">Destroy Workbook</button>
+    <button onclick="exportData()">Export to JSON</button>
+
+    <div id="output" class="result" style="display: none;">
+        <h3>Exported Data:</h3>
+        <pre id="json-output"></pre>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        // Create workbook from the calculator element
+        const calculator = document.getElementById('calculator');
+        window.workbook = Calx.createWorkbookFromElement(calculator);
+
+        console.log('Workbook created:', window.workbook);
+        console.log('Sheet:', window.workbook.getSheet('calculator'));
+
+        // Make functions available globally
+        window.destroy = function() {
+            window.workbook.destroy();
+            alert('Workbook destroyed! Event listeners removed.');
+        };
+
+        window.exportData = function() {
+            const data = window.workbook.exportJSON();
+            document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('output').style.display = 'block';
+        };
+    </script>
+</body>
+</html>

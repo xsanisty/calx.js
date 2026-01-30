@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM Examples - Modern Spreadsheet for the Web</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html">Data Types</a>
+                <a href="esm-dynamic-form.html">Dynamic Form</a>
+                <a href="esm-formatters.html">Formatters</a>
+                <a href="esm-multisheet.html">Multisheet</a>
+                <a href="esm-mortgage.html">Mortgage Calculator</a>
+                <a href="esm-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content wide">
+        <h1>Calx.js ESM - Interactive Examples</h1>
+
+        <div class="alert alert-info">
+            <strong>Welcome!</strong> Calx.js is a powerful spreadsheet-like calculation engine for the web.
+            These examples demonstrate the ES Module implementation without jQuery.
+            Explore the examples below to see what you can build with it.
+        </div>
+
+        <h2>📚 Getting Started</h2>
+        <div class="container">
+            <div class="card">
+                <h3><span class="card-icon">🎯</span> Basic Example</h3>
+                <p class="card-description">
+                    Learn the fundamentals of Calx.js with simple calculations.
+                    Perfect for beginners to understand data-cell and data-formula attributes.
+                </p>
+                <a href="esm-basic.html" class="card-link">View Example →</a>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🔢</span> Data Types</h3>
+                <p class="card-description">
+                    Explore how Calx.js handles different data types including numbers, text,
+                    dates, and booleans with automatic type conversion.
+                </p>
+                <a href="esm-datatypes.html" class="card-link">View Example →</a>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">📋</span> Dynamic Forms</h3>
+                <p class="card-description">
+                    Build dynamic forms that add and remove rows on the fly while maintaining
+                    calculations across all elements.
+                </p>
+                <a href="esm-dynamic-form.html" class="card-link">View Example →</a>
+            </div>
+        </div>
+
+        <h2>🎨 Advanced Features</h2>
+        <div class="container">
+            <div class="card">
+                <h3><span class="card-icon">💰</span> Formatters & Value Display</h3>
+                <p class="card-description">
+                    Master value formatting with currency, percent, and number formatters.
+                    Learn how to display calculated values in the DOM.
+                </p>
+                <a href="esm-formatters.html" class="card-link">View Example →</a>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">📊</span> Multiple Sheets</h3>
+                <p class="card-description">
+                    Work with multiple calculation sheets and reference cells across sheets
+                    using Sheet1!A1 notation.
+                </p>
+                <a href="esm-multisheet.html" class="card-link">View Example →</a>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🏠</span> Mortgage Calculator</h3>
+                <p class="card-description">
+                    Real-world complex example with PMT function, named variables, currency formatting,
+                    and amortization schedule. Perfect for understanding advanced calculations!
+                </p>
+                <a href="esm-mortgage.html" class="card-link">View Example →</a>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🚀</span> Advanced Features</h3>
+                <p class="card-description">
+                    Explore complex formulas, named ranges, custom functions, and advanced
+                    calculation patterns for real-world applications.
+                </p>
+                <a href="esm-advanced.html" class="card-link">View Example →</a>
+            </div>
+        </div>
+
+        <h2>📖 Key Differences from jQuery Version</h2>
+        <div class="container">
+            <div class="feature-box">
+                <h3>✅ No jQuery Required</h3>
+                <p>Uses native ES modules and DOM APIs - lightweight and modern</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>🎯 Direct API Access</h3>
+                <p>Full programmatic control via <code>Calx.createWorkbookFromElement()</code></p>
+            </div>
+
+            <div class="feature-box">
+                <h3>🔧 Manual Updates</h3>
+                <p>DOM updates require explicit code - gives you full control</p>
+            </div>
+        </div>
+
+        <h2>🛠️ Basic Usage Pattern</h2>
+        <pre><code>&lt;!-- HTML with data attributes --&gt;
+&lt;div id="calculator"&gt;
+    &lt;input data-cell="A1" value="10" /&gt;
+    &lt;input data-cell="A2" data-formula="=A1*2" /&gt;
+&lt;/div&gt;
+
+&lt;!-- ES Module Script --&gt;
+&lt;script type="module"&gt;
+    import { Calx } from '../dist/calx.esm.js';
+
+    const element = document.getElementById('calculator');
+    const workbook = Calx.createWorkbookFromElement(element);
+
+    console.log('Workbook created!', workbook);
+&lt;/script&gt;</code></pre>
+
+        <footer class="footer">
+            <p>
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a> |
+                <a href="../examples/index.html">jQuery Version →</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

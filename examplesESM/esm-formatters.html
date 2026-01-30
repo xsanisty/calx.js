@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM - Formatters Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html">Data Types</a>
+                <a href="esm-dynamic-form.html">Dynamic Form</a>
+                <a href="esm-formatters.html" class="active">Formatters</a>
+                <a href="esm-multisheet.html">Multisheet</a>
+                <a href="esm-mortgage.html">Mortgage Calculator</a>
+                <a href="esm-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Formatters Example</h1>
+
+        <div class="alert alert-info">
+            <strong>Note:</strong> In ESM mode, formatting is done programmatically. This example shows how to manually format and update values.
+        </div>
+
+        <form id="calculator">
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number" data-cell="A1" value="1234.56">
+            </div>
+
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="number" data-cell="A2" value="5">
+            </div>
+
+            <div class="form-group">
+                <label>Tax Rate (as decimal, e.g., 0.08 for 8%):</label>
+                <input type="number" data-cell="A3" value="0.08" step="0.01">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Subtotal:</label>
+                    <input type="text" data-cell="B1" data-formula="=A1*A2" readonly>
+                    <div id="subtotal-formatted" class="display-value"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tax Amount:</label>
+                    <input type="text" data-cell="B2" data-formula="=B1*A3" readonly>
+                    <div id="tax-formatted" class="display-value"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total:</label>
+                    <input type="text" data-cell="B3" data-formula="=B1+B2" readonly>
+                    <div id="total-formatted" class="display-value"></div>
+                </div>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <p>
+                <a href="index.html">← Back to Examples</a> |
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        // Helper formatter functions
+        function formatCurrency(value) {
+            if (value == null || isNaN(value)) return '$0.00';
+            return '$' + Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function formatPercent(value) {
+            if (value == null || isNaN(value)) return '0.00%';
+            return (Number(value) * 100).toFixed(2) + '%';
+        }
+
+// Create workbook - automatically handles input events and calculations
+        const element = document.getElementById('calculator');
+        const workbook = Calx.createWorkbookFromElement(element);
+        const sheet = workbook.getSheet('calculator');
+
+        // Function to update formatted displays
+        function updateFormattedDisplays() {
+            const subtotal = sheet.getCellValue('B1');
+            const tax = sheet.getCellValue('B2');
+            const total = sheet.getCellValue('B3');
+
+            document.getElementById('subtotal-formatted').textContent =
+                'Formatted: ' + formatCurrency(subtotal);
+            document.getElementById('tax-formatted').textContent =
+                'Formatted: ' + formatCurrency(tax);
+            document.getElementById('total-formatted').textContent =
+                'Formatted: ' + formatCurrency(total);
+        }
+
+        // Initial display
+        updateFormattedDisplays();
+
+        // Listen to custom events or override calculate method if needed
+        const originalCalculate = workbook.calculate.bind(workbook);
+        workbook.calculate = function() {
+            originalCalculate();
+            updateFormattedDisplays();
+        };
+
+        console.log('Calx.js with formatters initialized!', workbook);
+    </script>
+</body>
+</html>

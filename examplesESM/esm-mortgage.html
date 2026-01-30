@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calx.js ESM - Mortgage Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>📊</span> Calx.js ESM Examples
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Home</a>
+                <a href="esm-basic.html">Basic</a>
+                <a href="esm-datatypes.html">Data Types</a>
+                <a href="esm-dynamic-form.html">Dynamic Form</a>
+                <a href="esm-formatters.html">Formatters</a>
+                <a href="esm-multisheet.html">Multisheet</a>
+                <a href="esm-mortgage.html" class="active">Mortgage Calculator</a>
+                <a href="esm-advanced.html">Advanced</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content narrow">
+        <h1>Mortgage Calculator</h1>
+
+        <div class="alert alert-info">
+            <strong>Real-World Example:</strong> Calculate monthly mortgage payments using PMT formula.
+        </div>
+
+        <form id="mortgage">
+            <div class="form-group">
+                <label>Home Price:</label>
+                <input type="number" data-cell="A1" data-var="HOME_PRICE" value="300000" step="1000">
+            </div>
+
+            <div class="form-group">
+                <label>Down Payment (%):</label>
+                <input type="number" data-cell="A2" data-var="DOWN_PAYMENT_PCT" value="20" step="1" min="0" max="100">
+            </div>
+
+            <div class="form-group">
+                <label>Interest Rate (Annual %):</label>
+                <input type="number" data-cell="A3" data-var="INTEREST_RATE" value="4.5" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label>Loan Term (Years):</label>
+                <input type="number" data-cell="A4" data-var="LOAN_TERM" value="30" step="1">
+            </div>
+
+            <div class="result">
+                <div class="form-group">
+                    <label>Down Payment Amount:</label>
+                    <span data-cell="B1" data-formula="=HOME_PRICE*(DOWN_PAYMENT_PCT/100)"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Loan Amount:</label>
+                    <span data-cell="B2" data-formula="=HOME_PRICE-B1"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Monthly Interest Rate:</label>
+                    <span data-cell="B3" data-formula="=INTEREST_RATE/100/12"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Payments:</label>
+                    <span data-cell="B4" data-formula="=LOAN_TERM*12"></span>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Monthly Payment:</strong></label>
+                    <span data-cell="B5" data-formula="=PMT(B3,B4,B2)"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Paid:</label>
+                    <span data-cell="B6" data-formula="=B5*B4"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Interest:</label>
+                    <span data-cell="B7" data-formula="=B6-B2"></span>
+                </div>
+            </div>
+        </form>
+
+        <footer class="footer">
+            <p>
+                <a href="index.html">← Back to Examples</a> |
+                <a href="https://github.com/xsanisty/calx.js" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { Calx } from '../dist/calx.esm.js';
+
+        function formatCurrency(value) {
+            if (value == null || isNaN(value)) return '$0.00';
+            // Handle negative values for PMT (payment)
+            const absValue = Math.abs(Number(value));
+            return '$' + absValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+// Create workbook - automatically handles input events
+        const element = document.getElementById('mortgage');
+        const workbook = Calx.createWorkbookFromElement(element);
+        const sheet = workbook.getSheet('mortgage');
+
+        // Format currency display
+        function updateDisplay() {
+            const cells = ['B1', 'B2', 'B5', 'B6', 'B7'];
+            cells.forEach(cellRef => {
+                const value = sheet.getCellValue(cellRef);
+                const elem = document.querySelector(`[data-cell="${cellRef}"]`);
+                if (elem) {
+                    elem.textContent = formatCurrency(value);
+                }
+            });
+
+            // Format percentage and number displays
+            const b3Value = sheet.getCellValue('B3');
+            const b3Elem = document.querySelector('[data-cell="B3"]');
+            if (b3Elem && b3Value != null) {
+                b3Elem.textContent = (b3Value * 100).toFixed(4) + '%';
+            }
+
+            const b4Value = sheet.getCellValue('B4');
+            const b4Elem = document.querySelector('[data-cell="B4"]');
+            if (b4Elem && b4Value != null) {
+                b4Elem.textContent = b4Value.toFixed(0);
+            }
+        }
+
+        // Initial display
+        updateDisplay();
+
+        // Hook into calculate to update custom formatting
+        const originalCalculate = workbook.calculate.bind(workbook);
+        workbook.calculate = function() {
+            originalCalculate();
+            updateDisplay();
+        };
+
+        console.log('Mortgage calculator initialized!', workbook);
+    </script>
+</body>
+</html>
