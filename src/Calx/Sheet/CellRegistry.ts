@@ -49,6 +49,11 @@ export class CellRegistry {
 
         const cell = new Cell(address, this.sheet, data.type);
 
+        // Add cell to registry FIRST, before setting any properties
+        // This prevents issues where setting a value triggers auto-calculation
+        // which might reference this cell before it's fully initialized
+        this.cells[cell.address] = cell;
+
         // Set cell properties from data
         if (data.formula) {
             cell.formula = data.formula;
@@ -63,8 +68,6 @@ export class CellRegistry {
         if (data.formatter) {
             cell.setFormatter(data.formatter);
         }
-
-        this.cells[cell.address] = cell;
 
         this.event.dispatch(SheetEvent.CELL_CREATED, {cell : cell});
 

@@ -157,6 +157,12 @@ export class Sheet {
                     cell.calculate();
                 }
             });
+
+            // Handle circular references if enabled
+            const circularConfig = this._depTree.getCircularReferenceConfig();
+            if (circularConfig.enabled && this._depTree.checkCircularReference()) {
+                this._depTree.resolveCircularReferences();
+            }
         } else {
             // No dependency tree, calculate all cells
             for (const address in this.cells) {
@@ -244,9 +250,82 @@ export class Sheet {
      * Build dependency tree for all registered cells
      */
     public buildDependencyTree() : void {
-        const builder = new DependencyBuilder();
-        builder.setWorkbook(this.workbook);
-        this._depTree = builder.build(this._cells);
+        // Preserve circular reference configuration if dependency tree already exists
+        const circularConfig = this._depTree ? this._depTree.getCircularReferenceConfig() : undefined;
+
+        this._depTree = this.workbook.dependencyBuilder.build(this._cells);
+
+        // Restore circular reference configuration after rebuilding
+        if (circularConfig) {
+            this._depTree.configureCircularReference(circularConfig);
+        }
+    }
+
+    /**
+     * Rebuild dependencies for a specific cell based on its current formula
+     * Called when a cell's formula changes
+     * @param cell The cell whose dependencies need to be rebuilt
+     */
+    public rebuildCellDependencies(cell: Cell): void {
+        if (!cell.formula) return;
+
+        const builder = this.workbook.dependencyBuilder;
+        const { localDeps, remoteDeps } = builder.getFormulaDependencies(cell.formula);
+
+        // Resolve local dependencies
+        const dependencies: Record<string, Cell> = {};
+        for (const address in localDeps) {
+            const precedentCell = this.getCellIfExists(address);
+            if (precedentCell) {
+                dependencies[address] = precedentCell;
+                precedentCell.addDependent(cell);
+            }
+        }
+
+        cell.setPrecedents(dependencies);
+
+        // Handle remote (cross-sheet) dependencies
+        for (const remoteRef in remoteDeps) {
+            try {
+                const { sheetName, cellAddress } = builder.parseRemoteReference(remoteRef);
+                const targetSheet = this.workbook.getSheet(sheetName);
+                if (targetSheet) {
+                    const targetCell = targetSheet.getCellIfExists(cellAddress);
+                    if (targetCell) {
+                        targetCell.addRemoteDependent(cell);
+                        cell.addRemotePrecedent(targetCell);
+                    }
+                }
+            } catch (e) {
+                // Ignore errors for invalid references
+            }
+        }
+    }
+
+    /**
+     * Configure circular reference handling for this sheet
+     * @param config Configuration for iterative calculation
+     */
+    public configureCircularReference(config: Partial<import('./Workbook/CircularReferenceConfig').CircularReferenceConfig>): void {
+        if (this._depTree) {
+            this._depTree.configureCircularReference(config);
+        }
+    }
+
+    /**
+     * Get circular reference configuration
+     */
+    public getCircularReferenceConfig(): import('./Workbook/CircularReferenceConfig').CircularReferenceConfig | null {
+        return this._depTree ? this._depTree.getCircularReferenceConfig() : null;
+    }
+
+    /**
+     * Check if a cell is part of a circular reference
+     * @param cell The cell to check (can be Cell object or address string)
+     * @returns true if the cell is in a circular reference chain
+     */
+    public isInCircularReference(cell: Cell | string): boolean {
+        return this._depTree ? this._depTree.isInCircularReference(cell) : false;
     }
 
     /**
@@ -690,5 +769,164 @@ export class Sheet {
 
         // Rebuild dependency tree
         this.buildDependencyTree();
+    }
+
+    /**
+     * Make the current cell's value spill into adjacent cells (for array formulas)
+     * Returns true if spill was successful, false if blocked (#SPILL! error)
+     *
+     * @param anchorAddress The anchor cell address where the array formula lives
+     * @param values 2D array of values to spill
+     * @returns true if successful, false if blocked
+     */
+    public spill(anchorAddress: string, values: any[][]): boolean {
+        if (!Array.isArray(values) || values.length === 0) {
+            return true; // Empty array, nothing to spill
+        }
+
+        // Parse anchor address
+        const anchorMatch = anchorAddress.match(/^([A-Z]+)(\d+)$/i);
+        if (!anchorMatch) {
+            return false;
+        }
+
+        const anchorCol = anchorMatch[1].toUpperCase();
+        const anchorRow = parseInt(anchorMatch[2]);
+        const anchorColNum = strToNum(anchorCol);
+
+        // Determine spill dimensions
+        const rows = values.length;
+        const cols = values[0].length || 1;
+
+        // Calculate spill range
+        const spillEndCol = numToStr(anchorColNum + cols - 1);
+        const spillEndRow = anchorRow + rows - 1;
+        const spillRange = `${anchorAddress}:${spillEndCol}${spillEndRow}`;
+
+        // Check if anchor itself is valid (not a spill result from another anchor)
+        if (this._cells.has(anchorAddress)) {
+            const anchorCell = this._cells.get(anchorAddress);
+            if (anchorCell.isSpillResult() && anchorCell.getSpillAnchor() !== anchorAddress) {
+                return false; // Can't use a spill result as an anchor
+            }
+        }
+
+        // Check if spill range is blocked (except the anchor cell itself)
+        for (let rowIdx = 0; rowIdx < rows; rowIdx++) {
+            for (let colIdx = 0; colIdx < cols; colIdx++) {
+                const targetCol = numToStr(anchorColNum + colIdx);
+                const targetRow = anchorRow + rowIdx;
+                const targetAddress = `${targetCol}${targetRow}`;
+
+                // Skip anchor cell
+                if (targetAddress === anchorAddress) {
+                    continue;
+                }
+
+                // Check if cell exists and has a value (blocks spill)
+                if (this._cells.has(targetAddress)) {
+                    const existingCell = this._cells.get(targetAddress);
+                    // Cell blocks spill if it has its own formula or non-empty value
+                    // But allow overwriting previous spill results
+                    if (existingCell.formula || (existingCell.value !== null && existingCell.value !== undefined && existingCell.value !== '')) {
+                        // Check if it's not a spill result from this anchor
+                        if (!existingCell.isSpillResult() || existingCell.getSpillAnchor() !== anchorAddress) {
+                            return false; // Blocked - return #SPILL! error
+                        }
+                    }
+                }
+            }
+        }
+
+        // Clear any previous spill results from this anchor
+        this.clearSpillResults(anchorAddress);
+
+        // Create/update spill cells
+        for (let rowIdx = 0; rowIdx < rows; rowIdx++) {
+            const row = values[rowIdx];
+            if (!Array.isArray(row)) continue;
+
+            for (let colIdx = 0; colIdx < row.length; colIdx++) {
+                const value = row[colIdx];
+                const targetCol = numToStr(anchorColNum + colIdx);
+                const targetRow = anchorRow + rowIdx;
+                const targetAddress = `${targetCol}${targetRow}`;
+
+                if (targetAddress === anchorAddress) {
+                    // Update anchor cell with first value
+                    const anchorCell = this._cells.get(anchorAddress);
+                    anchorCell.value = value; // Set the anchor's value to the first array value
+                    anchorCell.setSpillRange(spillRange);
+                    anchorCell.setArrayAnchor(true);
+                } else {
+                    // Create/update spill result cell
+                    let spillCell: Cell;
+                    if (this._cells.has(targetAddress)) {
+                        spillCell = this._cells.get(targetAddress);
+                    } else {
+                        spillCell = this.createCell(targetAddress, {});
+                    }
+
+                    spillCell.setAsSpillResult(anchorAddress, value);
+                }
+            }
+        }
+
+        return true; // Success
+    }
+
+    /**
+     * Clear all spill result cells for a given anchor
+     */
+    public clearSpillResults(anchorAddress: string): void {
+        const cellsToRemove: Cell[] = [];
+
+        this._cells.each((cell: Cell) => {
+            if (cell.isSpillResult() && cell.getSpillAnchor() === anchorAddress) {
+                cellsToRemove.push(cell);
+            }
+        });
+
+        // Remove the spill result cells
+        cellsToRemove.forEach(cell => {
+            this._cells.remove(cell);
+        });
+
+        // Clear anchor cell's array properties
+        if (this._cells.has(anchorAddress)) {
+            const anchorCell = this._cells.get(anchorAddress);
+            anchorCell.setArrayAnchor(false);
+            anchorCell.setSpillRange(undefined);
+        }
+    }
+
+    /**
+     * Get the spill range for a given anchor address
+     * Returns null if the cell is not an array anchor
+     */
+    public getSpillRange(anchorAddress: string): string | null {
+        if (!this._cells.has(anchorAddress)) {
+            return null;
+        }
+
+        const cell = this._cells.get(anchorAddress);
+        return cell.getSpillRange() || null;
+    }
+
+    /**
+     * Check if an address is within a spill range
+     * Returns the anchor address if true, null otherwise
+     */
+    public findSpillAnchor(address: string): string | null {
+        if (!this._cells.has(address)) {
+            return null;
+        }
+
+        const cell = this._cells.get(address);
+        if (cell.isSpillResult()) {
+            return cell.getSpillAnchor();
+        }
+
+        return null;
     }
 }

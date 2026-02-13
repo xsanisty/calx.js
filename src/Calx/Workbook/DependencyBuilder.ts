@@ -95,6 +95,7 @@ export class DependencyBuilder {
 
         // Remove leading '=' if present
         let cleanFormula = formula.startsWith('=') ? formula.substring(1) : formula;
+        const originalFormula = cleanFormula; // Keep original for function detection
 
         // Process patterns in order, replacing matched portions to prevent overlapping matches
         // Order matters: match more specific patterns first (e.g., ranges before individual cells)
@@ -158,7 +159,7 @@ export class DependencyBuilder {
         if (cellMatches) {
             cellMatches.forEach(match => {
                 // Filter out function names and keywords
-                if (!this.isFunctionOrKeyword(match)) {
+                if (!this.isFunctionOrKeyword(match, originalFormula)) {
                     localDeps[match] = true;
                 }
             });
@@ -172,7 +173,7 @@ export class DependencyBuilder {
             if (identifierMatches) {
                 identifierMatches.forEach(identifier => {
                     // Skip if it's a function or keyword
-                    if (this.isFunctionOrKeyword(identifier)) {
+                    if (this.isFunctionOrKeyword(identifier, originalFormula)) {
                         return;
                     }
 
@@ -209,13 +210,23 @@ export class DependencyBuilder {
         return { localDeps, remoteDeps };
     }
 
-    private isFunctionOrKeyword(text: string): boolean {
-        const keywords = [
-            'SUM', 'AVERAGE', 'MAX', 'MIN', 'COUNT', 'IF', 'AND', 'OR',
-            'VLOOKUP', 'HLOOKUP', 'INDEX', 'MATCH', 'CONCATENATE',
-            'TRUE', 'FALSE', 'NULL'
-        ];
-        return keywords.includes(text.toUpperCase());
+    /**
+     * Check if text is a function or keyword
+     * Functions are detected by the pattern FUNCNAME(...)
+     * Keywords are checked against a static list
+     */
+    private isFunctionOrKeyword(text: string, formula: string): boolean {
+        // Static keywords that are not functions
+        const keywords = ['TRUE', 'FALSE', 'NULL'];
+
+        if (keywords.includes(text.toUpperCase())) {
+            return true;
+        }
+
+        // Check if this text appears followed by an opening parenthesis in the formula
+        // This indicates it's a function call
+        const funcPattern = new RegExp(`\\b${text}\\s*\\(`, 'i');
+        return funcPattern.test(formula);
     }
 
     /**

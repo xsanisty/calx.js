@@ -40,6 +40,12 @@ const CellRef = createToken({
     pattern: /\$?[A-Za-z]+\$?\d+/
 });
 
+// Spill range reference operator (e.g., A1#)
+const SpillRef = createToken({
+    name: "SpillRef",
+    pattern: /\$?[A-Za-z]+\$?\d+#/
+});
+
 const StringLiteral = createToken({
     name: "StringLiteral",
     pattern: /(["'])(?:(?!\1).)*\1/  // Matches either quote style and captures everything between matching quotes
@@ -153,6 +159,7 @@ export const allTokens = [
     ColumnRange,    // Try column range first
     RowRange,       // Then row range
     CellRange,      // Then cell range
+    SpillRef,       // Spill reference (A1#) before plain cell ref
     CellRef,        // Then cell reference
     RangeIntersect, // Then range intersection
 
@@ -173,7 +180,7 @@ export const allTokens = [
 export const CalxTokens = {
     Plus, Minus, Mult, Div, LParen, RParen, Comma,
     RowRange, NumberLiteral, Variable, SheetName,
-    CellRange, CellRef, StringLiteral, Concat,
+    CellRange, CellRef, SpillRef, StringLiteral, Concat,
     FunctionName, WhiteSpace, GreaterThan, LessThan,
     GreaterThanEqual, LessThanEqual, Equal, NotEqual,
     IfFunction, TrueKeyword, FalseKeyword, NullKeyword,

@@ -1,2 +1,4 @@
 /node_modules/
 /oldsrc/
+#any node_modules folder in subdirectories
+**/node_modules/**

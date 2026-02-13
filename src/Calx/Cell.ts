@@ -128,10 +128,13 @@ export class Cell {
             });
 
             // If value changed, mark dependents as dirty and recalculate if auto-calculate is enabled
+            // However, skip auto-recalculation if this cell is part of a circular reference
+            // Circular cells are handled separately via resolveCircularReferences()
             if (valueChanged) {
                 this._markDependentsAsDirty();
 
-                if (this.sheet.autoCalculate) {
+                // Only auto-recalculate if not part of a circular reference
+                if (this.sheet.autoCalculate && !this.sheet.isInCircularReference(this)) {
                     this._recalculateDependents();
                 }
             }
@@ -162,10 +165,10 @@ export class Cell {
             return this._computed;
         }
 
-        // Check if we can spill
-        const canSpill = this.checkSpillRange(arrayResult);
+        // Try to spill using the Sheet's spill method
+        const spillSuccess = this.sheet.spill(this.address, arrayResult.values);
 
-        if (!canSpill) {
+        if (!spillSuccess) {
             // Return SPILL error
             this._computed = ErrorType.SPILL;
             this._calculated = true;
@@ -173,67 +176,12 @@ export class Cell {
             return this._computed;
         }
 
-        // Spill the array into cells
-        this.spillArray(arrayResult);
-
-        // Return the value for this anchor cell
+        // Return the value for this anchor cell (first element)
         this._computed = arrayResult.getValue(0, 0);
         this._calculated = true;
         this._dirty = false;
 
         return this._computed;
-    }
-
-    /**
-     * Check if the array can spill without blocking
-     */
-    private checkSpillRange(arrayResult: ArrayResult): boolean {
-        const {row: startRow, col: startCol} = this.getCellCoordinates(this.address);
-
-        // Check each cell in the spill range
-        for (let r = 0; r < arrayResult.rows; r++) {
-            for (let c = 0; c < arrayResult.cols; c++) {
-                // Skip the anchor cell
-                if (r === 0 && c === 0) continue;
-
-                const targetAddress = this.coordinatesToAddress(startRow + r, startCol + c);
-                const targetCell = this.sheet.getCell(targetAddress);
-
-                // If cell exists and has value or formula, it's blocking
-                if (targetCell && (!targetCell.isEmpty() || targetCell.formula)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Spill array values into cells
-     */
-    private spillArray(arrayResult: ArrayResult): void {
-        const {row: startRow, col: startCol} = this.getCellCoordinates(this.address);
-        const endRow = startRow + arrayResult.rows - 1;
-        const endCol = startCol + arrayResult.cols - 1;
-
-        // Store spill range
-        this._spillRange = `${this.address}:${this.coordinatesToAddress(endRow, endCol)}`;
-
-        // Spill values into cells
-        for (let r = 0; r < arrayResult.rows; r++) {
-            for (let c = 0; c < arrayResult.cols; c++) {
-                // Skip the anchor cell
-                if (r === 0 && c === 0) continue;
-
-                const targetAddress = this.coordinatesToAddress(startRow + r, startCol + c);
-                const value = arrayResult.getValue(r, c);
-
-                // Get or create the cell and set its value
-                const cell = this.sheet.getCell(targetAddress);
-                cell.value = value;
-            }
-        }
     }
 
     /**
@@ -269,20 +217,6 @@ export class Cell {
         }
 
         return colStr + row;
-    }
-
-    /**
-     * Check if this cell is an array anchor
-     */
-    public isArrayAnchor(): boolean {
-        return this._isArrayAnchor;
-    }
-
-    /**
-     * Get the spill range if this is an array anchor
-     */
-    public getSpillRange(): string | undefined {
-        return this._spillRange;
     }
 
     /**
@@ -401,48 +335,7 @@ export class Cell {
 
         // Trigger immediate dependency rebuild if workbook has been built
         if (this.sheet.workbook && formula) {
-            this.rebuildDependencies();
-        }
-    }
-
-    /**
-     * Rebuild dependencies for this cell based on current formula
-     */
-    private rebuildDependencies(): void {
-        if (!this._formula) return;
-
-        const builder = new (require('./Workbook/DependencyBuilder').DependencyBuilder)();
-        builder.setWorkbook(this.sheet.workbook);
-
-        const { localDeps, remoteDeps } = builder.getFormulaDependencies(this._formula);
-
-        // Resolve local dependencies
-        const dependencies: Record<string, Cell> = {};
-        for (const address in localDeps) {
-            const precedentCell = this.sheet.getCellIfExists(address);
-            if (precedentCell) {
-                dependencies[address] = precedentCell;
-                precedentCell.addDependent(this);
-            }
-        }
-
-        this.setPrecedents(dependencies);
-
-        // Handle remote (cross-sheet) dependencies
-        for (const remoteRef in remoteDeps) {
-            try {
-                const { sheetName, cellAddress } = builder.parseRemoteReference(remoteRef);
-                const targetSheet = this.sheet.workbook.getSheet(sheetName);
-                if (targetSheet) {
-                    const targetCell = targetSheet.getCellIfExists(cellAddress);
-                    if (targetCell) {
-                        targetCell.addRemoteDependent(this);
-                        this.addRemotePrecedent(targetCell);
-                    }
-                }
-            } catch (e) {
-                // Ignore errors for invalid references
-            }
+            this.sheet.rebuildCellDependencies(this);
         }
     }
 
@@ -581,27 +474,41 @@ export class Cell {
 
     /**
      * Mark all dependent cells as dirty
+     * Uses a visited set to prevent infinite recursion in circular references
      */
-    private _markDependentsAsDirty() {
+    private _markDependentsAsDirty(visited: Set<string> = new Set()) {
+        // Prevent infinite recursion - if we've already visited this cell in this traversal, skip it
+        if (visited.has(this.address)) {
+            return;
+        }
+        visited.add(this.address);
+
         const dependents = this.getDependents();
         for (const address in dependents) {
             const dependent = dependents[address];
             dependent.markAsDirty();
-            // Recursively mark their dependents as dirty
-            dependent._markDependentsAsDirty();
+            // Recursively mark their dependents as dirty with the same visited set
+            dependent._markDependentsAsDirty(visited);
         }
     }
 
     /**
      * Recalculate all dependent cells
+     * Uses a visited set to prevent infinite recursion in circular references
      */
-    private _recalculateDependents() {
+    private _recalculateDependents(visited: Set<string> = new Set()) {
+        // Prevent infinite recursion - if we've already calculated this cell in this traversal, skip it
+        if (visited.has(this.address)) {
+            return;
+        }
+        visited.add(this.address);
+
         const dependents = this.getDependents();
         for (const address in dependents) {
             const dependent = dependents[address];
             dependent.calculate();
-            // Recursively recalculate their dependents
-            dependent._recalculateDependents();
+            // Recursively recalculate their dependents with the same visited set
+            dependent._recalculateDependents(visited);
         }
     }
 
@@ -890,4 +797,78 @@ export class Cell {
         }
         return num;
     }
+
+    // ========== Array Formula / Spill Methods ==========
+
+    /**
+     * Mark this cell as an array formula anchor
+     */
+    public setArrayAnchor(isAnchor: boolean): void {
+        this._isArrayAnchor = isAnchor;
+    }
+
+    /**
+     * Check if this cell is an array formula anchor
+     */
+    public isArrayAnchor(): boolean {
+        return this._isArrayAnchor;
+    }
+
+    /**
+     * Set the spill range for this array anchor
+     */
+    public setSpillRange(range: string): void {
+        this._spillRange = range;
+    }
+
+    /**
+     * Get the spill range if this is an array anchor
+     */
+    public getSpillRange(): string | undefined {
+        return this._spillRange;
+    }
+
+    /**
+     * Mark this cell as a spill result from an anchor cell
+     * Spill result cells don't have formulas, they just display values
+     * @param anchorAddress The address of the array formula anchor
+     * @param value The value for this spill cell
+     */
+    public setAsSpillResult(anchorAddress: string, value: any): void {
+        // Store reference to anchor
+        this._arrayResult = ArrayResult.fromSingleValue(anchorAddress as any); // Hack: store anchor address
+        this._value = value;
+        this._computed = value;
+        this._calculated = true;
+        this._formula = ''; // Spill results don't have their own formulas
+        this._dirty = false;
+
+        // Store anchor address separately since we're misusing ArrayResult
+        (this._arrayResult as any).anchorAddress = anchorAddress;
+    }
+
+    /**
+     * Check if this cell is a spill result
+     */
+    public isSpillResult(): boolean {
+        return this._arrayResult !== undefined && (this._arrayResult as any).anchorAddress !== undefined;
+    }
+
+    /**
+     * Get the anchor address if this is a spill result
+     */
+    public getSpillAnchor(): string | null {
+        if (this._arrayResult && (this._arrayResult as any).anchorAddress) {
+            return (this._arrayResult as any).anchorAddress;
+        }
+        return null;
+    }
+
+    /**
+     * Clear spill result status
+     */
+    public clearSpillResult(): void {
+        this._arrayResult = undefined;
+    }
 }
+

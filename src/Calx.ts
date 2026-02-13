@@ -4,6 +4,7 @@ import { Workbook } from "./Calx/Workbook";
 import { Data } from "./Calx/Workbook/Data";
 import { DateUtil } from "./Calx/Utility/DateUtil";
 import { DataType } from "./Calx/Cell/DataType";
+import { CalxElement } from "./Calx/Workbook/CalxElement";
 
 // Export utilities
 export { DateUtil };
@@ -13,6 +14,9 @@ export { DataType };
 
 // Export types
 export type { Data };
+
+// Export classes
+export { CalxElement, Workbook };
 
 export class Calx {
 
@@ -44,7 +48,7 @@ export class Calx {
         return Workbook.createFromData(data);
     }
 
-    static createWorkbookFromElement(element : any, data ?: Data) {
+    static createWorkbookFromElement(element : string | HTMLElement, data ?: Data) {
         return Workbook.createFromElement(element, data);
     }
 

@@ -45,6 +45,7 @@ export type SharedContextInterface = {
     getRowRange?: (range: string, sheetName?: string) => any[];
     getColumnRange?: (range: string, sheetName?: string) => any[];
     getNamedRange?: (name: string) => any;
+    getSpillRange?: (cellAddress: string, sheetName?: string) => any[];
 }
 
 export class SharedContext implements SharedContextInterface {
@@ -158,5 +159,24 @@ export class SharedContext implements SharedContextInterface {
             return this.workbook.nameManager.resolve(name);
         }
         return "#NAME?";
+    }
+
+    getSpillRange(cellAddress: string, sheetName?: string): any[] {
+        const sheet = sheetName ? this.sheets[sheetName] : this.activeSheet;
+        if (sheet) {
+            // Get the spill range for the given anchor cell
+            const cell = sheet.getCellDirect(cellAddress);
+            if (cell && cell.isArrayAnchor()) {
+                const spillRange = cell.getSpillRange();
+                if (spillRange) {
+                    // Parse the spill range (e.g., "A1:C1") and return all values
+                    const [start, end] = spillRange.split(':');
+                    return sheet.getCellRangeValues(start, end);
+                }
+            }
+            // If not an array anchor or no spill range, return just the cell value
+            return [[sheet.getCellValue(cellAddress)]];
+        }
+        return [];
     }
 }

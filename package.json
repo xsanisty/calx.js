@@ -30,6 +30,7 @@
     "@types/node": "^20.11.19",
     "browserify": "^17.0.0",
     "jest": "^29.5.1",
+    "jest-environment-jsdom": "^30.2.0",
     "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",

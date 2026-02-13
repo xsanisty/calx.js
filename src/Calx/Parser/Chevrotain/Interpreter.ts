@@ -8,7 +8,6 @@ const parserInstance = new CalxParser();
 
 export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructorWithDefaults() {
     private context?: SharedContext;
-    public yy?: SharedContext;
 
     constructor() {
         super();
@@ -17,7 +16,6 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
 
     setContext(context: SharedContext) {
         this.context = context;
-        this.yy = context;
     }
 
     getContext(): SharedContext | undefined {
@@ -63,10 +61,10 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
             const rows: any[][] = [];
             let currentRow: any[] = [];
 
-            for (let i = 0; i < ctx.expression.length; i++) {
-                currentRow.push(this.visit(ctx.expression[i]));
+            for (let i = 0; i < ctx.comparisonExpression.length; i++) {
+                currentRow.push(this.visit(ctx.comparisonExpression[i]));
 
-                // Check what separator comes after this expression (if any)
+                // Check what separator comes after this comparisonExpression (if any)
                 if (i < separators.length) {
                     if (separators[i].type === 'semicolon') {
                         // Semicolon means end of current row
@@ -86,7 +84,7 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
         }
 
         // Single row array: {1,2,3} or single value {5}
-        const expressions = ctx.expression.map((exp: any) => this.visit(exp));
+        const expressions = ctx.comparisonExpression.map((exp: any) => this.visit(exp));
 
         if (expressions.length === 1) {
             const result = expressions[0];
@@ -119,22 +117,26 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
 
         const right = this.visit(ctx.rhs[0]);
 
-        // Handle different comparison operators
+        // Determine the comparison operation
+        let operation: (a: any, b: any) => boolean;
         if (ctx.GreaterThan) {
-            return left > right;
+            operation = (a, b) => a > b;
         } else if (ctx.LessThan) {
-            return left < right;
+            operation = (a, b) => a < b;
         } else if (ctx.GreaterThanEqual) {
-            return left >= right;
+            operation = (a, b) => a >= b;
         } else if (ctx.LessThanEqual) {
-            return left <= right;
+            operation = (a, b) => a <= b;
         } else if (ctx.Equal) {
-            return left === right;
+            operation = (a, b) => a === b;
         } else if (ctx.NotEqual) {
-            return left !== right;
+            operation = (a, b) => a !== b;
+        } else {
+            return left; // Fallback
         }
 
-        return left; // Fallback
+        // Use arrayOperation to handle both scalar and array comparisons
+        return this.arrayOperation(left, right, operation);
     }
 
     additionExpression(ctx: any) {
@@ -179,6 +181,14 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
      * Perform array operation - applies operation element-wise if either operand is an array
      */
     private arrayOperation(left: any, right: any, operation: (a: any, b: any) => any): any {
+        // Unwrap ArrayResult objects
+        if (left instanceof ArrayResult) {
+            left = left.values;
+        }
+        if (right instanceof ArrayResult) {
+            right = right.values;
+        }
+
         // Check for error values first
         if (this.isError(left)) return left;
         if (this.isError(right)) return right;
@@ -188,9 +198,33 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
             return operation(left, right);
         }
 
-        // Convert to arrays if needed
-        const leftArray = Array.isArray(left) ? left : [left];
-        const rightArray = Array.isArray(right) ? right : [right];
+        // Check if either is a 2D array
+        const leftIs2D = Array.isArray(left) && Array.isArray(left[0]);
+        const rightIs2D = Array.isArray(right) && Array.isArray(right[0]);
+
+        // If both are 2D arrays, perform element-wise operation
+        if (leftIs2D && rightIs2D) {
+            const rows = Math.max(left.length, right.length);
+            const cols = Math.max(
+                left[0]?.length || 0,
+                right[0]?.length || 0
+            );
+            const result = [];
+            for (let r = 0; r < rows; r++) {
+                const row = [];
+                for (let c = 0; c < cols; c++) {
+                    const leftVal = left[r]?.[c] ?? left[Math.min(r, left.length - 1)]?.[Math.min(c, (left[0]?.length || 1) - 1)];
+                    const rightVal = right[r]?.[c] ?? right[Math.min(r, right.length - 1)]?.[Math.min(c, (right[0]?.length || 1) - 1)];
+                    row.push(operation(leftVal, rightVal));
+                }
+                result.push(row);
+            }
+            return ArrayResult.from2DArray(result);
+        }
+
+        // Convert to 1D arrays if needed
+        const leftArray = leftIs2D ? this.flattenArray(left) : (Array.isArray(left) ? left : [left]);
+        const rightArray = rightIs2D ? this.flattenArray(right) : (Array.isArray(right) ? right : [right]);
 
         // Determine the result size
         const resultLength = Math.max(leftArray.length, rightArray.length);
@@ -318,7 +352,7 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
         }
 
         // Handle cell references and variables
-        if (ctx.Variable || ctx.CellRef || ctx.CellRange || ctx.RowRange || ctx.ColumnRange) {
+        if (ctx.Variable || ctx.CellRef || ctx.SpillRef || ctx.CellRange || ctx.RowRange || ctx.ColumnRange) {
             let ref;
             let sheetName = '';
 
@@ -332,6 +366,12 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
             if (ctx.Variable && ctx.Variable.length > 0) {
                 ref = ctx.Variable[0].image;
                 return this.resolveVariable(ref, sheetName);
+            } else if (ctx.SpillRef && ctx.SpillRef.length > 0) {
+                // Handle spill reference (e.g., A1#)
+                ref = ctx.SpillRef[0].image;
+                // Remove the # suffix
+                const cellAddress = ref.substring(0, ref.length - 1);
+                return this.resolveSpillReference(cellAddress, sheetName);
             } else if (ctx.CellRef && ctx.CellRef.length > 0) {
                 ref = ctx.CellRef[0].image;
                 return this.resolveCellReference(ref, sheetName);
@@ -345,6 +385,11 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
                 ref = ctx.ColumnRange[0].image;
                 return this.resolveColumnRange(ref, sheetName);
             }
+        }
+
+        // Handle array formulas
+        if (ctx.arrayFormula) {
+            return this.visit(ctx.arrayFormula[0]);
         }
 
         // Handle function calls
@@ -373,6 +418,56 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
     ifFunctionCall(ctx: any) {
         const condition = this.visit(ctx.condition[0]);
 
+        // Check if condition is an array (range comparison)
+        if (Array.isArray(condition)) {
+            // Unwrap ArrayResult if present
+            let conditionArray = condition;
+            if (condition instanceof ArrayResult) {
+                conditionArray = condition.values;
+            }
+
+            // For array conditions, check if we need both branches
+            // Flatten to check if we need to evaluate both true and false branches
+            const flatConditions = Array.isArray(conditionArray[0])
+                ? conditionArray.flat()
+                : conditionArray;
+
+            const hasTruthy = flatConditions.some((c: any) => this.isTruthy(c));
+            const hasFalsy = flatConditions.some((c: any) => !this.isTruthy(c));
+
+            // Short-circuit: only evaluate branches that are actually needed
+            const trueValue = hasTruthy && ctx.whenTrue
+                ? this.visit(ctx.whenTrue[0])
+                : undefined;
+            const falseValue = hasFalsy && ctx.whenFalse && ctx.whenFalse.length > 0
+                ? this.visit(ctx.whenFalse[0])
+                : undefined;
+
+            // Use defaults if not evaluated
+            const trueBranchValue = trueValue !== undefined ? trueValue : true;
+            const falseBranchValue = falseValue !== undefined ? falseValue : false;
+
+            // Check if condition is 2D
+            const is2D = Array.isArray(conditionArray[0]);
+
+            if (is2D) {
+                // Apply IF to each element in 2D array
+                const result = conditionArray.map((row: any[]) =>
+                    row.map((cell: any) =>
+                        this.isTruthy(cell) ? trueBranchValue : falseBranchValue
+                    )
+                );
+                return ArrayResult.from2DArray(result);
+            } else {
+                // Apply IF to each element in 1D array
+                const result = conditionArray.map((cell: any) =>
+                    this.isTruthy(cell) ? trueBranchValue : falseBranchValue
+                );
+                return ArrayResult.fromVerticalArray(result);
+            }
+        }
+
+        // Scalar condition - properly short-circuits
         if (this.isTruthy(condition)) {
             return this.visit(ctx.whenTrue[0]);
         } else if (ctx.whenFalse && ctx.whenFalse.length > 0) {
@@ -390,7 +485,23 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
         // Collect all arguments
         if (ctx.expression) {
             for (const expr of ctx.expression) {
-                args.push(this.visit(expr));
+                const val = this.visit(expr);
+                // Unwrap ArrayResult to 2D array for function arguments
+                if (val instanceof ArrayResult) {
+                    args.push(val.values);
+                } else {
+                    args.push(val);
+                }
+            }
+        }
+
+        // Check if this is an array-aware function that should apply element-wise
+        const arrayAwareFunctions = ['SQRT', 'ABS', 'ROUND', 'INT', 'FLOOR', 'CEIL'];
+        if (arrayAwareFunctions.includes(funcName)) {
+            // If any argument is an array, apply the function element-wise
+            const hasArrayArg = args.some(arg => Array.isArray(arg));
+            if (hasArrayArg) {
+                return this.applyFunctionToArray(funcName, args);
             }
         }
 
@@ -561,6 +672,15 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
         return "#REF!";
     }
 
+    private resolveSpillReference(cellAddress: string, sheetName: string = ''): any {
+        // Resolve a spill reference (e.g., A1# refers to the entire spilled range from A1)
+        if (this.context && typeof this.context.getSpillRange === 'function') {
+            return this.context.getSpillRange(cellAddress, sheetName);
+        }
+        // Fallback: treat it as a regular cell reference
+        return this.resolveCellReference(cellAddress, sheetName);
+    }
+
     private isTruthy(value: any): boolean {
         if (typeof value === 'boolean') {
             return value;
@@ -583,6 +703,37 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
         ];
 
         return errorValues.includes(value);
+    }
+
+    private applyFunctionToArray(funcName: string, args: any[]): ArrayResult {
+        // Apply a function element-wise to array arguments
+        // For now, handle single array argument (like SQRT({1,4,9}))
+        const arrayArg = args.find(arg => Array.isArray(arg));
+        if (!arrayArg) {
+            // No array arg, shouldn't happen but handle gracefully
+            return ArrayResult.fromSingleValue(this.executeBuiltInFunction(funcName, args));
+        }
+
+        // Check if 2D array
+        const is2D = Array.isArray(arrayArg[0]);
+
+        if (is2D) {
+            // Apply to 2D array
+            const result = arrayArg.map((row: any[]) =>
+                row.map((cell: any) => {
+                    const cellArgs = [cell, ...args.slice(1)];
+                    return this.executeBuiltInFunction(funcName, cellArgs);
+                })
+            );
+            return ArrayResult.from2DArray(result);
+        } else {
+            // Apply to 1D array (treat as horizontal)
+            const result = arrayArg.map((cell: any) => {
+                const cellArgs = [cell, ...args.slice(1)];
+                return this.executeBuiltInFunction(funcName, cellArgs);
+            });
+            return ArrayResult.fromHorizontalArray(result);
+        }
     }
 
     private executeBuiltInFunction(name: string, args: any[]): any {
@@ -672,6 +823,27 @@ export class CalxInterpreter extends parserInstance.getBaseCstVisitorConstructor
 
             case "OR":
                 return args.some(val => this.isTruthy(val));
+
+            case "SQRT":
+                // Simple square root - should be available via context.callFunction
+                // But as fallback, handle it here for array-aware processing
+                return Math.sqrt(Number(args[0]));
+
+            case "ABS":
+                return Math.abs(Number(args[0]));
+
+            case "ROUND":
+                const digits = args[1] !== undefined ? Number(args[1]) : 0;
+                return Math.round(Number(args[0]) * Math.pow(10, digits)) / Math.pow(10, digits);
+
+            case "INT":
+                return Math.floor(Number(args[0]));
+
+            case "FLOOR":
+                return Math.floor(Number(args[0]));
+
+            case "CEIL":
+                return Math.ceil(Number(args[0]));
 
             default:
                 return "#NAME?"; // Unknown function

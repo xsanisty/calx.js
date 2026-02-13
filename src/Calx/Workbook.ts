@@ -10,6 +10,7 @@ import { CellData, Data } from "./Workbook/Data";
 import { Comparator } from "./Utility/Comparator";
 import { DependencyTree } from "./Workbook/DependencyTree";
 import { DependencyBuilder } from "./Workbook/DependencyBuilder";
+import type { CalxElement } from "./Workbook/CalxElement";
 
 /**
  * Create parser instance with shared context
@@ -27,9 +28,14 @@ export class Workbook {
     private _dispatcher : EventDispatcher;
     private _nameManager : NameManager
     private _autoCalculate : boolean = true;
+    private _element?: CalxElement;
 
     private _deps!: DependencyTree;
-    private _depsBuilder!: DependencyBuilder;
+    private _dependencyBuilder: DependencyBuilder;
+    private _built: boolean = false;
+
+    /** Set of cell addresses that are part of circular references (format: "SheetName!Address") */
+    private _circularCells: Set<string> = new Set();
 
     private constructor(
         parser      : CalxInterpreter,
@@ -40,6 +46,8 @@ export class Workbook {
         this._parser        = parser;
         this._dispatcher    = dispatcher;
         this._nameManager   = nameManager;
+        this._dependencyBuilder = new DependencyBuilder();
+        this._dependencyBuilder.setWorkbook(this);
 
         this._nameManager.setContext(this);
     }
@@ -57,6 +65,34 @@ export class Workbook {
      */
     public get nameManager(): NameManager {
         return this._nameManager;
+    }
+
+    /**
+     * Get the dependency builder for this workbook
+     */
+    public get dependencyBuilder(): DependencyBuilder {
+        return this._dependencyBuilder;
+    }
+
+    /**
+     * Get the CalxElement instance if the workbook has been mounted to a DOM element
+     */
+    public getElement(): CalxElement | undefined {
+        return this._element;
+    }
+
+    /**
+     * Mount the workbook to a DOM element
+     * Creates a CalxElement instance to bind the workbook to DOM elements
+     *
+     * @param element - DOM element ID string or HTMLElement to mount
+     */
+    public mount(element: string | HTMLElement): void {
+        // Import CalxElement dynamically to avoid circular dependency
+        const { CalxElement } = require("./Workbook/CalxElement");
+
+        // Create CalxElement with this workbook instance
+        this._element = new CalxElement(element, this);
     }
 
     /**
@@ -91,7 +127,7 @@ export class Workbook {
     }
 
     public getActiveSheet() {
-        return this._parser.yy?.activeSheet;
+        return this._parser.getContext()?.activeSheet;
     }
 
     public isValidCellAddress(address : string) {
@@ -117,13 +153,16 @@ export class Workbook {
      * Build the workbook, create dependency tree, and other necessary things
      */
     public build() {
-        // Initialize dependency builder
-        this._depsBuilder = new DependencyBuilder();
+        // Mark as built
+        this._built = true;
 
         // Build dependency trees for each sheet
         for (const sheetName in this._sheets) {
             this._sheets[sheetName].buildDependencyTree();
         }
+
+        // Check for circular references across all sheets
+        this.checkCircularReference();
 
         // Build workbook-level dependency tree (for cross-sheet dependencies)
         // This will be implemented when we have a complete cell registry
@@ -132,13 +171,16 @@ export class Workbook {
     /**
      * Check for circular references in the workbook
      * Must be called after build() to ensure dependency trees are constructed
-     * @throws Error if circular reference is detected
+     * Marks circular cells for tracking instead of throwing errors
      */
     public checkCircularReference(): void {
         // Ensure workbook has been built
-        if (!this._depsBuilder) {
+        if (!this._built) {
             throw new Error('Workbook must be built before checking for circular references. Call build() first.');
         }
+
+        // Clear existing circular cells
+        this._circularCells.clear();
 
         // Check each sheet for circular references
         for (const sheetName in this._sheets) {
@@ -163,6 +205,7 @@ export class Workbook {
 
     /**
      * Recursively check a cell for circular references
+     * Marks all cells in circular chains for tracking
      * @private
      */
     private _checkCellForCircularReference(
@@ -175,10 +218,13 @@ export class Workbook {
 
         // If we've seen this cell in the current path, we have a circular reference
         if (path.includes(fullAddress)) {
-            // Build the circular chain message
-            const circularChain = [...path, fullAddress];
-            const chainMessage = circularChain.join(' -> ');
-            throw new Error(`Circular reference detected: ${chainMessage}`);
+            // Mark all cells in the circular chain as circular
+            const startIndex = path.indexOf(fullAddress);
+            for (let i = startIndex; i < path.length; i++) {
+                this._circularCells.add(path[i]);
+            }
+            this._circularCells.add(fullAddress);
+            return; // Don't continue exploring this path
         }
 
         // If we've already fully explored this cell in another path, skip it
@@ -225,8 +271,31 @@ export class Workbook {
         // Remove from current path (backtrack)
         path.pop();
 
-        // Mark as fully explored
+        // Mark as fully visited
         visited.add(fullAddress);
+    }
+
+    /**
+     * Check if a cell is part of a circular reference (cross-sheet or within-sheet)
+     * @param cell The cell to check (Cell object)
+     * @param sheetName The sheet name containing the cell
+     * @returns true if the cell is in a circular reference chain
+     */
+    public isInCircularReference(cell: Cell, sheetName: string): boolean {
+        const fullAddress = `${sheetName}!${cell.address}`;
+
+        // Check workbook-level circular references (cross-sheet)
+        if (this._circularCells.has(fullAddress)) {
+            return true;
+        }
+
+        // Check sheet-level circular references (within-sheet)
+        const sheet = this._sheets[sheetName];
+        if (sheet && sheet.isInCircularReference(cell)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -296,8 +365,9 @@ export class Workbook {
         }
 
         this._sheets[name] = sheet;
-        if (this._parser && this._parser.yy) {
-            this._parser.yy.sheets[name] = sheet;
+        const context = this._parser?.getContext();
+        if (context) {
+            context.sheets[name] = sheet;
         }
 
         return sheet;
@@ -406,23 +476,18 @@ export class Workbook {
 
     /**
      * Create workbook object from given element, and parse related data-tag
+     * Creates a new workbook and mounts it to the specified DOM element
+     *
+     * @param element - DOM element ID string or HTMLElement to mount
+     * @param data - Optional initial data configuration
+     * @returns Workbook instance with element mounted
      */
-    public static createFromElement(element : any, data ?: Data) {
-        const parser = createParser(new SharedContext({
-            sheets : {},
-            utility : Utility,
-            comparator : null,
-        }));
+    public static createFromElement(element : string | HTMLElement, data ?: Data) {
+        // Create workbook from data if provided, otherwise create empty workbook
+        const workbook = data ? Workbook.createFromData(data) : Workbook.createFromData({ sheets: {} });
 
-        const dispatcher    = new EventDispatcher();
-        const nameManager   = new NameManager();
-        const workbook      = new Workbook(parser, nameManager, dispatcher);
-
-        /** TODO : traverse element and read the configuration and configure the workbook */
-
-        if (data) {
-            workbook.loadData(data);
-        }
+        // Mount the workbook to the element
+        workbook.mount(element);
 
         return workbook;
     }

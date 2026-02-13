@@ -37,25 +37,19 @@ class CalxParser extends CstParser {
 
         // Update the expression rule to start with comparison
         $.RULE("expression", () => {
-            $.OR([
-                { ALT: () => $.SUBRULE($.arrayFormula) },
-                { ALT: () => $.SUBRULE($.comparisonExpression) }
-            ]);
+            $.SUBRULE($.comparisonExpression);
         });
 
-        // Add array formula rule
+        // Add array formula rule for array constants like {1,2,3}
         $.RULE("arrayFormula", () => {
             $.CONSUME(token.LCurly);
-            $.OPTION(() => {
-                $.CONSUME(token.Equal);
-            });
-            $.SUBRULE($.expression);
+            $.SUBRULE($.comparisonExpression);
             $.MANY(() => {
                 $.OR([
                     { ALT: () => $.CONSUME(token.Comma) },
                     { ALT: () => $.CONSUME(token.ArrayRowSep) }
                 ]);
-                $.SUBRULE2($.expression);
+                $.SUBRULE2($.comparisonExpression);
             });
             $.CONSUME(token.RCurly);
         });
@@ -140,12 +134,14 @@ class CalxParser extends CstParser {
                     });
                     $.OR1([
                         { ALT: () => $.CONSUME(token.Variable) },
+                        { ALT: () => $.CONSUME(token.SpillRef) },  // Spill reference before CellRef
                         { ALT: () => $.CONSUME(token.CellRef) },
                         { ALT: () => $.CONSUME(token.CellRange) },
                         { ALT: () => $.CONSUME(token.RowRange) },
                         { ALT: () => $.CONSUME(token.ColumnRange) }
                     ]);
                 }},
+                { ALT: () => $.SUBRULE($.arrayFormula) },  // Add array constant support
                 { ALT: () => $.SUBRULE($.ifFunctionCall) },  // Try IF function first
                 { ALT: () => $.SUBRULE($.functionCall) },
                 { ALT: () => $.CONSUME(token.ErrorConstant) },
